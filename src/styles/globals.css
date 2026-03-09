@@ -1,0 +1,290 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: #FFFFFF;
+        /* Clean white background for neubrutalist contrast */
+        --foreground: #000000;
+        --primary: #F3E84A;
+        /* Cyber Yellow (New Primary) */
+        --accent: #A855F7;
+        /* Electric Purple (New Accent) */
+        --secondary: #FF2A2A;
+        /* Aggressive Red (New Secondary) */
+        --pink: #FF4D6D;
+        /* Neon Pink */
+        --success: #22C55E;
+        /* Lime Green */
+        --surface: #FFFFFF;
+        --border-width: 4px;
+        /* Chunkier borders */
+    }
+
+    body {
+        background: var(--background);
+        color: var(--foreground);
+        @apply font-sans antialiased selection:bg-black selection:text-white;
+        cursor: default;
+    }
+
+    ::selection {
+        background: var(--foreground);
+        color: var(--background);
+    }
+}
+
+@layer utilities {
+    /* ── Neubrutalist Utilities ── */
+
+    /* Hard Border Rule */
+    .brutalist-border {
+        border: var(--border-width) solid var(--foreground);
+    }
+
+    /* Hard Black Shadows - No Blur */
+    .brutalist-shadow-sm {
+        box-shadow: 4px 4px 0px 0px var(--foreground);
+    }
+
+    .brutalist-shadow {
+        box-shadow: 8px 8px 0px 0px var(--foreground);
+    }
+
+    .brutalist-shadow-large {
+        box-shadow: 16px 16px 0px 0px var(--foreground);
+    }
+
+    .brutalist-shadow-primary {
+        box-shadow: 8px 8px 0px 0px var(--primary);
+    }
+
+    .brutalist-shadow-accent {
+        box-shadow: 8px 8px 0px 0px var(--accent);
+    }
+
+    /* Sticker Animation */
+    @keyframes sticker-float {
+
+        0%,
+        100% {
+            transform: translateY(0) rotate(-2deg);
+        }
+
+        50% {
+            transform: translateY(-10px) rotate(2deg);
+        }
+    }
+
+    .sticker-float {
+        animation: sticker-float 4s ease-in-out infinite;
+    }
+
+    /* Architectural Typography */
+    .heading-massive {
+        @apply font-heading font-black uppercase leading-[0.85] tracking-tighter;
+        font-size: clamp(3.5rem, 18vw, 15rem);
+    }
+
+    /* Card System */
+    .brutalist-card {
+        @apply bg-white brutalist-border rounded-2xl transition-all duration-300;
+        box-shadow: 8px 8px 0px 0px var(--foreground);
+    }
+
+    .brutalist-card:hover {
+        transform: translate(-4px, -4px);
+        box-shadow: 12px 12px 0px 0px var(--foreground);
+    }
+
+    /* Button System */
+    .btn-brutalist {
+        @apply brutalist-border px-10 py-5 font-black uppercase tracking-widest transition-all inline-flex items-center justify-center gap-4 active:translate-x-1 active:translate-y-1 active:shadow-none bg-white;
+        box-shadow: 6px 6px 0px 0px var(--foreground);
+    }
+
+    .btn-brutalist-primary {
+        @apply bg-primary text-white;
+    }
+
+    .btn-brutalist-accent {
+        @apply bg-accent text-black;
+    }
+
+    /* Sticker Variations */
+    @keyframes sticker-pulse {
+
+        0%,
+        100% {
+            transform: scale(1) rotate(2deg);
+        }
+
+        50% {
+            transform: scale(1.05) rotate(-2deg);
+        }
+    }
+
+    @keyframes sticker-shake {
+
+        0%,
+        100% {
+            transform: translateX(0) rotate(0deg);
+        }
+
+        25% {
+            transform: translateX(-2px) rotate(-1deg);
+        }
+
+        75% {
+            transform: translateX(2px) rotate(1deg);
+        }
+    }
+
+    .sticker-pulse {
+        animation: sticker-pulse 3s ease-in-out infinite;
+    }
+
+    .sticker-shake:hover {
+        animation: sticker-shake 0.3s ease-in-out infinite;
+    }
+
+    /* Physical Peeling Effect */
+    .sticker-peel {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sticker-peel::after {
+        content: "";
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        width: 30px;
+        height: 30px;
+        background: rgba(0, 0, 0, 0.1);
+        transform: rotate(45deg);
+        box-shadow: -2px 2px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Kinetic Scale Utility */
+    .kinetic-scale {
+        @apply transition-transform duration-300;
+    }
+
+    .kinetic-scale:hover {
+        transform: scale(1.02);
+    }
+
+    .kinetic-scale:active {
+        transform: scale(0.98);
+    }
+
+    /* Noise Overlay System */
+    .noise-overlay {
+        position: relative;
+    }
+
+    .noise-overlay::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.08;
+        z-index: 100;
+        background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+    }
+
+    /* Perspective System for 3D tilts */
+    .perspective-1000 {
+        perspective: 1000px;
+    }
+
+    /* High Performance Halftone */
+    .halftone-overlay {
+        background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1.5px);
+        background-size: 6px 6px;
+        pointer-events: none;
+    }
+
+    /* Command Center HUD Styles */
+    .hud-glass {
+        @apply bg-white/40 backdrop-blur-md border-[2px] border-black/10;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .hud-dot {
+        @apply w-1.5 h-1.5 rounded-full;
+        box-shadow: 0 0 10px currentColor;
+    }
+
+    /* Hand-Drawn / Rough Edge Effect */
+    .rough-border {
+        border: 3px solid black;
+        border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    }
+
+    /* Optimized Text Mask */
+    .text-mask-image {
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        background-size: 200% 200%;
+        will-change: background-position;
+    }
+
+    .gpu-accelerated {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        will-change: transform;
+    }
+
+    /* Outline Text Utility */
+    .outline-text {
+        -webkit-text-stroke: 1px currentColor;
+        color: transparent;
+    }
+
+    /* Custom Scrollbar - NEUBRUTALIST Style */
+    ::-webkit-scrollbar {
+        width: 16px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: white;
+        border-left: 4px solid black;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border: 4px solid black;
+        box-shadow: inset -4px -4px 0px black;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--accent);
+    }
+}
+
+/* ── Custom Animations ── */
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    animation: marquee 30s linear infinite;
+}
+
+.animate-marquee-slow {
+    animation: marquee 50s linear infinite;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
+}

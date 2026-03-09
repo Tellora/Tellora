@@ -1,0 +1,17 @@
+# Dependencies
+node_modules
+
+# Next.js build output
+.next
+out
+
+# Large video files — host these on Cloudflare R2 or another CDN instead
+# Cloudflare Pages has a hard 25 MB per-file limit
+public/reels/*.mp4
+public/reels/*.mov
+public/reels/*.webm
+
+# Misc
+.DS_Store
+*.pem
+.env*.local
