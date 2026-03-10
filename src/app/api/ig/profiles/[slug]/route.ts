@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getProfile, addPost, updateProfile, removePost } from "@/lib/igStorage";
+import { getProfile, addPost, updateProfile, removePost, listProfiles } from "@/lib/igStorage";
+
+export async function generateStaticParams() {
+    const profiles = listProfiles();
+    return profiles.map((p) => ({
+        slug: p.slug,
+    }));
+}
 
 export async function GET(request: NextRequest, { params }: { params: { slug: string } }) {
     const profile = getProfile(params.slug);

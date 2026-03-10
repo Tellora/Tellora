@@ -1,7 +1,15 @@
 import React from "react";
+import { getProfile, listProfiles } from "@/lib/igStorage";
 
 interface PageProps {
     params: { slug: string };
+}
+
+export async function generateStaticParams() {
+    const profiles = listProfiles();
+    return profiles.map((p) => ({
+        slug: p.slug,
+    }));
 }
 
 export const metadata = {
@@ -12,15 +20,7 @@ export const metadata = {
 };
 
 export default async function PreviewPage({ params }: PageProps) {
-    let profile = null;
-    try {
-        const res = await fetch(`http://localhost:3000/api/ig/profiles/${params.slug}`, { cache: 'no-store' });
-        if (res.ok) {
-            profile = await res.json();
-        }
-    } catch (err) {
-        // ignore
-    }
+    const profile = getProfile(params.slug);
 
     if (!profile) {
         return <p className="p-8 text-center text-white">Profile not found</p>;

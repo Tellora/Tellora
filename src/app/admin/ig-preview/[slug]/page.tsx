@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Trash2, Plus, Edit2 } from "lucide-react";
+import { listProfiles } from "@/lib/igStorage";
 
 interface Profile {
     slug: string;
@@ -20,10 +21,16 @@ interface Post {
     createdAt: string;
 }
 
-export default function EditProfile() {
+export async function generateStaticParams() {
+    const profiles = listProfiles();
+    return profiles.map((p) => ({
+        slug: p.slug,
+    }));
+}
+
+export default function EditProfile({ params }: { params: { slug: string } }) {
     const router = useRouter();
-    const pathname = usePathname();
-    const slug = pathname.split("/").pop() || "";
+    const { slug } = params;
 
     const [profile, setProfile] = useState<Profile | null>(null);
     const [name, setName] = useState("");

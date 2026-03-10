@@ -1,0 +1,37 @@
+{
+  "name": "tellora-media",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.105.6",
+    "@react-three/fiber": "^9.5.0",
+    "@studio-freight/react-lenis": "^0.0.47",
+    "@types/d3": "^7.4.3",
+    "autoprefixer": "^10.4.27",
+    "clsx": "^2.1.1",
+    "d3": "^7.9.0",
+    "framer-motion": "^11.16.1",
+    "gsap": "^3.14.2",
+    "lucide-react": "^0.471.2",
+    "next": "^14.2.35",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-intersection-observer": "^10.0.3",
+    "tailwind-merge": "^2.6.1",
+    "three": "^0.183.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5"
+  }
+}
