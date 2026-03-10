@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "touch out/.nojekyll",
+    "deploy": "wrangler pages deploy out --project-name tellora-media",
     "start": "next start",
     "lint": "next lint"
   },
@@ -32,6 +34,7 @@
     "@types/react-dom": "^18.3.7",
     "postcss": "^8.5.8",
     "tailwindcss": "^3.4.19",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.71.0"
   }
 }
