@@ -7,6 +7,9 @@ interface PageProps {
 
 export async function generateStaticParams() {
     const profiles = listProfiles();
+    if (profiles.length === 0) {
+        return [{ slug: "no-profiles" }];
+    }
     return profiles.map((p) => ({
         slug: p.slug,
     }));
