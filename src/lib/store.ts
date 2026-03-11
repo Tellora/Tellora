@@ -1,4 +1,4 @@
-"use server";
+// Client-side store for Admin Panel data
 
 // ── Tellora Global Admin Data Store ─────────────────────────────────────────
 // All admin panel data is persisted via JSON files on the server globally.

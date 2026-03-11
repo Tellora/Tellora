@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+// Client-side Instagram profile storage using localStorage
+// This allows for static site export.
 
 export type IGPost = {
     id: string;
@@ -21,25 +21,25 @@ export type IGData = {
     profiles: IGProfile[];
 };
 
-const DATA_PATH = path.join(process.cwd(), "data", "igProfiles.json");
+const KEY = "tellora_ig_profiles_v2";
 
 function readData(): IGData {
+    if (typeof window === "undefined") return { profiles: [] };
     try {
-        const raw = fs.readFileSync(DATA_PATH, "utf-8");
-        return JSON.parse(raw) as IGData;
+        const raw = localStorage.getItem(KEY);
+        return raw ? JSON.parse(raw) : { profiles: [] };
     } catch (err) {
-        // if file doesn't exist or is malformed, start fresh
         return { profiles: [] };
     }
 }
 
 function writeData(data: IGData) {
-    fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2), "utf-8");
+    if (typeof window === "undefined") return;
+    localStorage.setItem(KEY, JSON.stringify(data));
 }
 
 export function listProfiles(): IGProfile[] {
-    const d = readData();
-    return d.profiles;
+    return readData().profiles;
 }
 
 export function getProfile(slug: string): IGProfile | null {
@@ -91,7 +91,6 @@ export function addPost(slug: string, post: { type: "image" | "video"; src: stri
     return newPost;
 }
 
-// Optionally a removePost function
 export function removePost(slug: string, postId: string): boolean {
     const d = readData();
     const prof = d.profiles.find((p) => p.slug === slug);
