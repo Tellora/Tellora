@@ -19,8 +19,18 @@ export const metadata: Metadata = {
         template: "%s | Tellora Media"
     },
     description: "Tellora Media is an elite digital growth agency specialized in high-frequency SEO, performance marketing, and architecture-driven brand scaling. Turn your vision into market dominance.",
-    keywords: ["Digital Growth Agency", "SEO Optimization", "Performance Marketing", "Social Media Strategy", "Growth Architecture", "Brand Scaling", "Tellora Media"],
-    authors: [{ name: "Tellora Media Team" }],
+    keywords: [
+        "Digital Growth Agency", 
+        "High-Frequency SEO", 
+        "Elite Performance Marketing", 
+        "Growth Architecture", 
+        "Revenue Scaling Systems", 
+        "Next.js Web Design", 
+        "Tellora Media Dominance",
+        "Technical SEO Experts",
+        "Conversion Rate Optimization Agency"
+    ],
+    authors: [{ name: "Tellora Media Growth Architects" }],
     creator: "Tellora Media",
     publisher: "Tellora Media",
     formatDetection: {
@@ -34,20 +44,20 @@ export const metadata: Metadata = {
         url: "https://tellora.media",
         siteName: "Tellora Media",
         title: "Tellora Media | Architecting Digital Domination",
-        description: "Scale your business with elite level SEO, performance marketing, and creative strategy from the architects of growth.",
+        description: "Scale your revenue with elite level SEO, performance marketing, and creative growth architecture. Turn your brand into a high-frequency growth engine.",
         images: [
             {
                 url: "/tellora-logo.png",
                 width: 1200,
                 height: 630,
-                alt: "Tellora Media - Digital Growth Agency",
+                alt: "Tellora Media - Digital Growth Architects",
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
         title: "Tellora Media | Digital Growth Agency",
-        description: "Elite digital growth agency specialized in high-frequency SEO and performance marketing.",
+        description: "Elite digital growth agency specialized in high-frequency SEO and performance marketing systems.",
         images: ["/tellora-logo.png"],
         creator: "@telloramedia",
     },
@@ -64,8 +74,19 @@ export const metadata: Metadata = {
         },
     },
     icons: {
-        icon: "/tellora-logo.png",
-        apple: "/tellora-logo.png",
+        icon: [
+            { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+        ],
+        shortcut: "/favicon-32x32.png",
+        apple: [
+            { url: "/tellora-logo.png", sizes: "180x180", type: "image/png" },
+        ],
+        other: [
+            {
+                rel: "mask-icon",
+                url: "/tellora-logo.png",
+            },
+        ],
     },
 };
 
@@ -79,15 +100,16 @@ const jsonLd = {
         "https://www.instagram.com/tellora.media",
         "https://www.linkedin.com/company/tellora-media"
     ],
-    "description": "Tellora Media is a premier digital marketing agency transforming businesses with SEO, social media, and performance marketing.",
+    "description": "Tellora Media is an elite digital growth agency transforming businesses with high-frequency SEO, performance marketing, and architecture-driven scaling.",
+    "priceRange": "$$$",
     "address": {
         "@type": "PostalAddress",
-        "addressCountry": "Remote / worldwide"
+        "addressCountry": "Remote / Worldwide"
     },
     "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+91-98115-39510",
-        "contactType": "sales",
+        "contactType": "Strategy Consult",
         "areaServed": "Worldwide",
         "availableLanguage": "English"
     }

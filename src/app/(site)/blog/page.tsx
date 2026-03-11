@@ -2,8 +2,9 @@ import BlogClient from "./BlogClient";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "The Growth Lab | Digital Marketing Insights & SEO Strategy",
-    description: "Deep dives into the latest SEO strategies, performance marketing trends, and technical growth hacks from the Tellora Media team.",
+    title: "The Growth Lab | Marketing Intelligence & SEO Strategy Insights",
+    description: "Deep dive into the tactical strategies driving modern digital brand dominance. Explore proprietary research on SEO, Paid Performance, and high-frequency growth hacks.",
+    keywords: ["Digital Marketing Lab", "Strategic SEO Insights", "Growth Hacking Case Studies", "Marketing Intelligence Reports", "Tellora Media Blog", "Performance Advertising Research"],
 };
 
 export default function BlogPage() {

@@ -2,8 +2,9 @@ import AboutClient from "./AboutClient";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "About Us | Architects of Digital Growth",
-    description: "Learn about Tellora Media's philosophy, team, and the data-driven principles that fuel our high-performance marketing and design systems.",
+    title: "About Us | The Architects of Digital Growth & High-Performance Design",
+    description: "Meet the collective of designers, developers, and strategists at Tellora Media. We merge high-end aesthetic design with aggressive performance marketing to build systems, not just campaigns.",
+    keywords: ["Growth Architecture Team", "Tellora Media Philosophy", "Data-Driven Growth Principles", "Digital Strategy Experts", "Strategic Marketing Collective"],
 };
 
 export default function AboutPage() {
