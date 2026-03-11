@@ -1,4 +1,10 @@
-name = "tellora-media"
-pages_build_output_dir = "out"
+name = "tellora"
+main = "src/worker.js"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./out"
+binding = "ASSETS"
+# We use 'ASSETS' here because in a Worker (non-Pages) project, 
+# this is the standard naming for the asset binding.
