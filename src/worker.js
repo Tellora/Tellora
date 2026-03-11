@@ -25,7 +25,13 @@ export default {
             }
         }
 
-        // Default to serving static assets
-        return env.ASSETS.fetch(request);
+        // Default to serving static assets from the binding
+        // Renamed from ASSETS to STATIC_ASSETS to avoid Cloudflare Pages reservation conflict
+        if (env.STATIC_ASSETS) {
+            return env.STATIC_ASSETS.fetch(request);
+        }
+
+        // Fallback or error if binding is missing
+        return new Response("Static assets binding not found", { status: 500 });
     }
 };
