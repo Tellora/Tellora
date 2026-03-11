@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Trophy, Target } from "lucide-react";
 import { DecodeText, ParallaxImage } from "@/components/animations/ScrollChoreography";
@@ -116,48 +117,53 @@ export default function WorkShowcase() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
                     <AnimatePresence mode="popLayout">
                         {filteredProjects.map((project) => (
-                            <motion.div
+                            <Link
                                 key={project.id}
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                transition={{ duration: 0.4 }}
-                                whileHover={{ y: -10, zIndex: 10 }}
-                                className="group relative aspect-[4/5] brutalist-card overflow-hidden cursor-crosshair bg-white gpu-accelerated"
+                                href="/case-studies"
+                                className="block"
                             >
-                                <div className="absolute inset-0 w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 opacity-90 group-hover:opacity-100 mix-blend-multiply">
-                                    <ParallaxImage
-                                        src={project.image}
-                                        alt={project.title}
-                                    />
-                                </div>
-
-                                <div className="absolute top-6 right-6 z-30 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <div className="px-4 py-2 bg-accent text-black font-black uppercase text-[10px] tracking-widest brutalist-border shadow-[4px_4px_0px_#000] rotate-6">
-                                        {project.badge}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                    transition={{ duration: 0.4 }}
+                                    whileHover={{ y: -10, zIndex: 10 }}
+                                    className="group relative aspect-[4/5] brutalist-card overflow-hidden cursor-crosshair bg-white gpu-accelerated h-full"
+                                >
+                                    <div className="absolute inset-0 w-full h-full grayscale group-hover:grayscale-0 transition-all duration-700 opacity-90 group-hover:opacity-100 mix-blend-multiply">
+                                        <ParallaxImage
+                                            src={project.image}
+                                            alt={project.title}
+                                        />
                                     </div>
-                                </div>
 
-                                <div className="absolute inset-0 p-8 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10">
-                                    <div className="flex flex-col gap-2">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-[1.5px] bg-primary" />
-                                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">
-                                                {project.label}
-                                            </span>
-                                        </div>
-                                        <h3 className="text-4xl md:text-5xl font-heading font-black text-white uppercase leading-[0.9] tracking-tighter">
-                                            {project.title}
-                                        </h3>
-                                        <div className="flex items-center gap-4 text-white pt-4">
-                                            <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                                                <Target size={14} /> OPEN INTEL
-                                            </span>
-                                            <ArrowRight size={20} className="opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-2" />
+                                    <div className="absolute top-6 right-6 z-30 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <div className="px-4 py-2 bg-accent text-black font-black uppercase text-[10px] tracking-widest brutalist-border shadow-[4px_4px_0px_#000] rotate-6">
+                                            {project.badge}
                                         </div>
                                     </div>
-                                </div>
-                            </motion.div>
+
+                                    <div className="absolute inset-0 p-8 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10">
+                                        <div className="flex flex-col gap-2">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-[1.5px] bg-primary" />
+                                                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">
+                                                    {project.label}
+                                                </span>
+                                            </div>
+                                            <h3 className="text-4xl md:text-5xl font-heading font-black text-white uppercase leading-[0.9] tracking-tighter">
+                                                {project.title}
+                                            </h3>
+                                            <div className="flex items-center gap-4 text-white pt-4">
+                                                <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                                                    <Target size={14} /> OPEN INTEL
+                                                </span>
+                                                <ArrowRight size={20} className="opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-2" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </Link>
                         ))}
                     </AnimatePresence>
                 </div>

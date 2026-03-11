@@ -9,13 +9,13 @@ export default function ContactForm() {
     const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
     const formRef = useRef<HTMLFormElement>(null);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setStatus("loading");
         const formData = new FormData(e.currentTarget);
 
         // Save to localStorage store so it appears in admin inbox
-        submitContactForm({
+        await submitContactForm({
             name: formData.get("name") as string,
             email: formData.get("email") as string,
             company: formData.get("company") as string,

@@ -46,6 +46,7 @@ export default function Header() {
         { name: "Home", href: "/" },
         { name: "Services", href: "/services" },
         { name: "Cases", href: "/case-studies" },
+        { name: "SEO Audit", href: "/seo-checker" },
         { name: "Team", href: "/about" },
         { name: "Careers", href: "/careers" },
         { name: "Blog", href: "/blog" },
@@ -111,6 +112,16 @@ export default function Header() {
                 </nav>
 
                 <div className="flex items-center gap-6">
+                    {/* SEO Audit - High Priority Action */}
+                    <Magnetic>
+                        <Link
+                            href="/seo-checker"
+                            className="hidden xl:flex items-center gap-4 px-8 py-5 bg-primary brutalist-border shadow-[8px_8px_0px_#000] text-[11px] font-black uppercase tracking-widest hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_#000] active:translate-y-1 transition-all group"
+                        >
+                            FREE AUDIT <Zap size={18} className="text-black group-hover:scale-125 transition-transform" />
+                        </Link>
+                    </Magnetic>
+
                     {/* Action Button - Dynamic Angle */}
                     <Magnetic>
                         <Link

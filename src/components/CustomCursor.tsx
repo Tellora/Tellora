@@ -7,9 +7,14 @@ export default function CustomCursor() {
     const [isHovering, setIsHovering] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [cursorText, setCursorText] = useState("");
+    const [isMounted, setIsMounted] = useState(false);
 
     const mouseX = useMotionValue(-100);
     const mouseY = useMotionValue(-100);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const springConfig = { stiffness: 600, damping: 40, mass: 0.1 };
     const ringX = useSpring(mouseX, springConfig);
@@ -46,7 +51,7 @@ export default function CustomCursor() {
         };
     }, [isVisible]);
 
-    if (!isVisible) return null;
+    if (!isMounted || !isVisible) return null;
 
     return (
         <div className="fixed inset-0 pointer-events-none z-[99999] hidden lg:block mix-blend-difference">

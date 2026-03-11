@@ -23,11 +23,11 @@ export default function CTA() {
                     initial={{ opacity: 0, scale: 0.94, y: 40 }}
                     whileInView={{ opacity: 1, scale: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="relative p-12 md:p-32 text-center brutalist-card bg-primary overflow-hidden shadow-[20px_20px_0px_#000] group"
+                    className="relative p-12 md:p-24 text-center brutalist-card !bg-primary overflow-hidden shadow-[12px_12px_0px_#000] transition-colors"
                 >
                     {/* Background Decorative Elements */}
                     <motion.div
-                        className="absolute top-10 left-10 text-white/20"
+                        className="absolute top-10 left-10 text-black/10"
                         animate={{ rotate: 360 }}
                         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
                     >
@@ -35,7 +35,7 @@ export default function CTA() {
                     </motion.div>
 
                     <motion.div
-                        className="absolute bottom-10 right-10 text-white/20"
+                        className="absolute bottom-10 right-10 text-black/10"
                         animate={{ y: [0, -20, 0] }}
                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                     >
@@ -48,11 +48,12 @@ export default function CTA() {
                             <span className="font-black uppercase tracking-widest text-[12px]">Final Growth Step</span>
                         </div>
 
-                        <h2 className="text-6xl md:text-[10rem] font-heading font-black text-white mb-12 leading-none tracking-tighter drop-shadow-[10px_10px_0px_#000]">
-                            READY TO <br /> <span className="italic">IGNITE?</span>
+                        <h2 className="text-6xl md:text-[9.5rem] xl:text-[11rem] font-heading font-black text-black mb-12 leading-[0.9] tracking-tighter">
+                            READY TO <br /> 
+                            <span className="italic">IGNITE?</span>
                         </h2>
 
-                        <p className="text-xl md:text-3xl font-black text-black uppercase leading-tight mb-16 max-w-3xl mx-auto opacity-80">
+                        <p className="text-xl md:text-3xl font-black text-black uppercase leading-tight mb-16 max-w-3xl mx-auto">
                             Stop wasting budget on strategies that don&apos;t scale. Build a predictable engine for massive revenue impact.
                         </p>
 
@@ -67,8 +68,8 @@ export default function CTA() {
                                 <ArrowRight size={32} className="group-hover:translate-x-3 transition-transform" />
                             </motion.a>
 
-                            <div className="hidden lg:block rotate-12 bg-black text-white px-6 py-2 brutalist-border">
-                                <span className="text-xs font-black uppercase whitespace-nowrap">No CC required</span>
+                            <div className="sm:rotate-12 bg-black text-white px-6 py-4 brutalist-border shadow-[4px_4px_0px_white]">
+                                <span className="text-sm font-black uppercase whitespace-nowrap">No CC required</span>
                             </div>
                         </div>
                     </div>

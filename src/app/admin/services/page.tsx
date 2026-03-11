@@ -26,7 +26,7 @@ export default function AdminServices() {
     const [editingService, setEditingService] = useState<Service | null>(null);
     const [form, setForm] = useState(emptyService());
 
-    const reload = () => setServices(getServices());
+    const reload = async () => setServices(await getServices());
 
     useEffect(() => { reload(); }, []);
 
@@ -49,7 +49,7 @@ export default function AdminServices() {
         setIsModalOpen(true);
     };
 
-    const handleSave = (e: React.FormEvent) => {
+    const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         const cleanedFeatures = form.features.filter((f) => f.trim() !== "");
         const svc: Service = {
@@ -62,19 +62,19 @@ export default function AdminServices() {
             reach: form.reach,
             createdAt: editingService ? editingService.createdAt : Date.now(),
         };
-        upsertService(svc);
-        reload();
+        await upsertService(svc);
+        await reload();
         setIsModalOpen(false);
     };
 
-    const handleDelete = (id: string) => {
-        deleteService(id);
-        reload();
+    const handleDelete = async (id: string) => {
+        await deleteService(id);
+        await reload();
     };
 
-    const toggleStatus = (svc: Service) => {
-        upsertService({ ...svc, status: svc.status === "Active" ? "Draft" : "Active" });
-        reload();
+    const toggleStatus = async (svc: Service) => {
+        await upsertService({ ...svc, status: svc.status === "Active" ? "Draft" : "Active" });
+        await reload();
     };
 
     const filtered = services.filter(
@@ -116,7 +116,7 @@ export default function AdminServices() {
                     { label: "Total Services", value: services.length, icon: Layers, color: "#2e7dbf" },
                     { label: "Draft Services", value: services.length - activeCount, icon: Globe, color: "#7dd4f0" },
                 ].map((stat, i) => (
-                    <div key={i} className="bg-[#0D121F]/60 backdrop-blur-xl border border-white/10 p-10 rounded-[2.5rem] flex items-center justify-between group hover:border-primary/20 transition-all">
+                    <div key={i} className="bg-[#0D121F]/60 backdrop-blur-xl border border-white/10 p-6 md:p-10 rounded-3xl md:rounded-[2.5rem] flex items-center justify-between group hover:border-primary/20 transition-all">
                         <div>
                             <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-2">{stat.label}</p>
                             <h3 className="text-4xl font-black text-white italic">{stat.value}</h3>
@@ -129,8 +129,8 @@ export default function AdminServices() {
             </div>
 
             {/* Table */}
-            <div className="bg-[#0D121F]/60 backdrop-blur-2xl border border-white/10 rounded-[4rem] overflow-hidden shadow-2xl">
-                <div className="p-10 border-b border-white/5 flex gap-6 items-center">
+            <div className="bg-[#0D121F]/60 backdrop-blur-2xl border border-white/10 rounded-[2rem] md:rounded-[4rem] overflow-hidden shadow-2xl">
+                <div className="p-6 md:p-10 border-b border-white/5 flex gap-6 items-center">
                     <div className="flex-1 relative">
                         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20" size={20} />
                         <input
@@ -147,12 +147,12 @@ export default function AdminServices() {
                     <table className="w-full text-left">
                         <thead>
                             <tr className="text-[11px] font-black uppercase tracking-[0.3em] text-white/20 border-b border-white/5">
-                                <th className="p-8">Service</th>
-                                <th className="p-8">Category</th>
-                                <th className="p-8">Features</th>
-                                <th className="p-8">Reach</th>
-                                <th className="p-8">Status</th>
-                                <th className="p-8 text-right">Actions</th>
+                                <th className="p-4 md:p-8 whitespace-nowrap">Service</th>
+                                <th className="p-4 md:p-8 whitespace-nowrap">Category</th>
+                                <th className="p-4 md:p-8 whitespace-nowrap">Features</th>
+                                <th className="p-4 md:p-8 whitespace-nowrap">Reach</th>
+                                <th className="p-4 md:p-8 whitespace-nowrap">Status</th>
+                                <th className="p-4 md:p-8 text-right whitespace-nowrap">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
@@ -171,21 +171,21 @@ export default function AdminServices() {
                                         transition={{ delay: i * 0.04 }}
                                         className="group hover:bg-white/[0.04] transition-all"
                                     >
-                                        <td className="p-8">
-                                            <div className="flex items-center gap-6">
-                                                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/10 shrink-0">
-                                                    <Layers size={24} />
+                                        <td className="p-4 md:p-8">
+                                            <div className="flex items-center gap-4 md:gap-6">
+                                                <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/10 shrink-0">
+                                                    <Layers size={20} className="md:w-6 md:h-6" />
                                                 </div>
                                                 <div>
-                                                    <h4 className="text-lg font-black text-white group-hover:text-primary transition-colors italic tracking-tight">{svc.title}</h4>
-                                                    <p className="text-[10px] text-white/30 mt-1 max-w-xs truncate">{svc.description}</p>
+                                                    <h4 className="text-sm md:text-lg font-black text-white group-hover:text-primary transition-colors italic tracking-tight">{svc.title}</h4>
+                                                    <p className="text-[10px] text-white/30 mt-1 max-w-[150px] md:max-w-xs truncate">{svc.description}</p>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="p-8">
-                                            <span className="px-4 py-2 rounded-xl bg-white/5 text-white/50 text-[10px] font-black uppercase tracking-widest border border-white/5">{svc.category}</span>
+                                        <td className="p-4 md:p-8">
+                                            <span className="px-3 md:px-4 py-2 rounded-xl bg-white/5 text-white/50 text-[9px] md:text-[10px] font-black uppercase tracking-widest border border-white/5 whitespace-nowrap">{svc.category}</span>
                                         </td>
-                                        <td className="p-8">
+                                        <td className="p-4 md:p-8 hidden md:table-cell">
                                             <div className="flex flex-col gap-1">
                                                 {svc.features.slice(0, 2).map((f, fi) => (
                                                     <span key={fi} className="text-[10px] text-white/30 font-black uppercase tracking-wider">• {f}</span>
@@ -195,25 +195,25 @@ export default function AdminServices() {
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="p-8">
-                                            <div className="flex items-center gap-3">
+                                        <td className="p-4 md:p-8">
+                                            <div className="flex items-center gap-2 md:gap-3">
                                                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                                <span className="text-sm font-black text-white italic">{svc.reach}</span>
+                                                <span className="text-xs md:text-sm font-black text-white italic whitespace-nowrap">{svc.reach}</span>
                                             </div>
                                         </td>
-                                        <td className="p-8">
+                                        <td className="p-4 md:p-8">
                                             <button
                                                 onClick={() => toggleStatus(svc)}
-                                                className={`flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all ${svc.status === "Active" ? "text-green-400" : "text-orange-400"}`}
+                                                className={`flex items-center gap-1 md:gap-2 text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${svc.status === "Active" ? "text-green-400" : "text-orange-400"}`}
                                             >
-                                                {svc.status === "Active" ? <ToggleRight size={20} /> : <ToggleLeft size={20} />}
+                                                {svc.status === "Active" ? <ToggleRight size={18} className="md:w-5 md:h-5" /> : <ToggleLeft size={18} className="md:w-5 md:h-5" />}
                                                 {svc.status}
                                             </button>
                                         </td>
-                                        <td className="p-8 text-right">
-                                            <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button onClick={() => openEdit(svc)} className="p-4 rounded-xl bg-white/5 text-white/20 hover:text-white hover:bg-white/10 transition-all"><Edit2 size={18} /></button>
-                                                <button onClick={() => handleDelete(svc.id)} className="p-4 rounded-xl bg-white/5 text-white/20 hover:text-red-400 hover:bg-red-400/10 transition-all"><Trash2 size={18} /></button>
+                                        <td className="p-4 md:p-8 text-right">
+                                            <div className="flex justify-end gap-2 md:gap-3 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button onClick={() => openEdit(svc)} className="p-3 md:p-4 rounded-xl bg-white/5 text-white/20 hover:text-white hover:bg-white/10 transition-all"><Edit2 size={16} className="md:w-[18px] md:h-[18px]" /></button>
+                                                <button onClick={() => handleDelete(svc.id)} className="p-3 md:p-4 rounded-xl bg-white/5 text-white/20 hover:text-red-400 hover:bg-red-400/10 transition-all"><Trash2 size={16} className="md:w-[18px] md:h-[18px]" /></button>
                                             </div>
                                         </td>
                                     </motion.tr>
@@ -232,13 +232,13 @@ export default function AdminServices() {
                             initial={{ scale: 0.9, opacity: 0, y: 30 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 30 }}
-                            className="w-full max-w-2xl bg-[#0D121F] border border-white/10 rounded-[4rem] p-12 relative overflow-hidden my-8"
+                            className="w-full max-w-2xl bg-[#0D121F] border border-white/10 rounded-[2rem] md:rounded-[4rem] p-6 md:p-12 relative overflow-hidden my-4 md:my-8"
                         >
-                            <button onClick={() => setIsModalOpen(false)} className="absolute top-8 right-8 p-3 text-white/30 hover:text-white"><X size={24} /></button>
+                            <button onClick={() => setIsModalOpen(false)} className="absolute top-4 md:top-8 right-4 md:right-8 p-3 text-white/30 hover:text-white"><X size={24} /></button>
 
-                            <form onSubmit={handleSave} className="space-y-8">
-                                <div className="text-center mb-8">
-                                    <div className="w-16 h-16 bg-primary/10 rounded-[2rem] flex items-center justify-center text-primary mx-auto mb-4">
+                            <form onSubmit={handleSave} className="space-y-6 md:space-y-8">
+                                <div className="text-center mb-6 md:mb-8">
+                                    <div className="w-12 h-12 md:w-16 md:h-16 bg-primary/10 rounded-2xl md:rounded-[2rem] flex items-center justify-center text-primary mx-auto mb-4">
                                         <Layers size={32} />
                                     </div>
                                     <h2 className="text-3xl font-black text-white tracking-tighter italic">{editingService ? "Update Service" : "Deploy New Service"}</h2>
@@ -270,7 +270,7 @@ export default function AdminServices() {
                                 </div>
 
                                 {/* Category + Reach */}
-                                <div className="grid grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">Category</label>
                                         <select
@@ -333,7 +333,7 @@ export default function AdminServices() {
                                 </div>
 
                                 {/* Status */}
-                                <div className="space-y-2">
+                                <div className="space-y-2 mb-6">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">Publish Status</label>
                                     <div className="flex gap-4">
                                         {(["Active", "Draft"] as const).map((s) => (
@@ -341,7 +341,7 @@ export default function AdminServices() {
                                                 key={s}
                                                 type="button"
                                                 onClick={() => setForm({ ...form, status: s })}
-                                                className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${form.status === s ? "bg-primary text-white" : "bg-white/5 text-white/30 hover:text-white"}`}
+                                                className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex-1 ${form.status === s ? "bg-primary text-white" : "bg-white/5 text-white/30 hover:text-white"}`}
                                             >
                                                 {s}
                                             </button>
@@ -349,8 +349,8 @@ export default function AdminServices() {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-6 pt-4">
-                                    <button type="button" onClick={() => setIsModalOpen(false)} className="py-5 rounded-[2rem] border border-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/5 transition-all">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 pt-4">
+                                    <button type="button" onClick={() => setIsModalOpen(false)} className="py-4 md:py-5 rounded-2xl md:rounded-[2rem] border border-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/5 transition-all">
                                         Cancel
                                     </button>
                                     <button type="submit" className="py-5 rounded-[2rem] bg-primary text-white font-black text-[10px] uppercase tracking-widest hover:shadow-2xl hover:shadow-primary/40 transition-all flex items-center justify-center gap-3">

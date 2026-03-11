@@ -7,17 +7,16 @@ import { Sparkles, Cpu, Activity } from "lucide-react";
 
 export function Preloader() {
     // Start as TRUE — we want it visible immediately on mount.
-    // We'll handle the hydration mismatch by keeping the server
-    // render empty via a `mounted` guard.
-    const [mounted, setMounted] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [progress, setProgress] = useState(0);
     const [status, setStatus] = useState("Initializing Core...");
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
-        // This only runs on the client, avoiding SSR mismatch
-        setMounted(true);
+        setIsMounted(true);
+    }, []);
 
+    useEffect(() => {
         const statuses = [
             "Initializing Core...",
             "Loading Growth Intel...",
@@ -32,7 +31,7 @@ export function Preloader() {
                 idx++;
                 setStatus(statuses[idx]);
             }
-        }, 400);
+        }, 200);
 
         const progressTimer = setInterval(() => {
             setProgress((p) => {
@@ -44,11 +43,11 @@ export function Preloader() {
             });
         }, 60);
 
-        // Dismiss after 2.5 s
+        // Dismiss after 1.2 s
         const done = setTimeout(() => {
             setProgress(100);
             setTimeout(() => setIsLoading(false), 200);
-        }, 2500);
+        }, 1200);
 
         return () => {
             clearInterval(statusTimer);
@@ -57,8 +56,7 @@ export function Preloader() {
         };
     }, []);
 
-    // Don't render anything on the server or before hydration
-    if (!mounted) return null;
+    if (!isMounted) return null;
 
     return (
         <AnimatePresence>

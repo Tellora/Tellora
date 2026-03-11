@@ -35,11 +35,10 @@ export default function SiteLayout({
                 </div>
             </div>
 
+            <Preloader />
+            <CustomCursor />
             <SmoothScroll>
-                <Preloader />
                 <ScrollProgress />
-                <CustomCursor />
-
                 <main className="relative min-h-screen">
                     {children}
                 </main>

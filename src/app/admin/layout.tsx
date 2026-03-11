@@ -25,7 +25,13 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== "undefined" && window.innerWidth >= 768) {
+            setIsSidebarOpen(true);
+        }
+    }, []);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const pathname = usePathname();
     const router = useRouter();
@@ -63,11 +69,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     return (
         <div className="min-h-screen bg-[#080B12] text-white flex overflow-hidden">
+            {/* Mobile Sidebar Overlay */}
+            {isSidebarOpen && (
+                <div 
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
+
             {/* Sidebar */}
             <motion.aside
                 initial={false}
                 animate={{ width: isSidebarOpen ? 280 : 80 }}
-                className="relative z-50 h-screen bg-[#0D121F]/80 backdrop-blur-xl border-r border-white/5 flex flex-col transition-all duration-300 ease-in-out"
+                className={`fixed md:relative z-50 h-screen bg-[#0D121F]/80 backdrop-blur-xl border-r border-white/5 flex flex-col transition-transform duration-300 ease-in-out md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
             >
                 <div className="p-6 flex items-center justify-between overflow-hidden whitespace-nowrap">
                     <Link href="/admin/dashboard" className="flex items-center gap-3">
@@ -139,8 +153,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col h-screen overflow-hidden">
                 {/* Top Header */}
-                <header className="h-20 border-b border-white/5 flex items-center justify-between px-8 bg-[#080B12]/50 backdrop-blur-md z-40">
-                    <div className="flex items-center gap-4">
+                <header className="h-20 border-b border-white/5 flex items-center justify-between px-4 md:px-8 bg-[#080B12]/50 backdrop-blur-md z-30">
+                    <div className="flex items-center gap-2 md:gap-4">
                         <button
                             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                             className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-all"
@@ -157,12 +171,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-6">
-                        <button className="relative p-2 rounded-lg bg-white/5 text-white/60 hover:bg-white/10 hover:text-white transition-all">
+                    <div className="flex items-center gap-4 md:gap-6">
+                        <button className="relative p-2 rounded-lg bg-white/5 text-white/60 hover:bg-white/10 hover:text-white transition-all hidden sm:block">
                             <Bell size={20} />
                             <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full ring-4 ring-[#080B12]" />
                         </button>
-                        <div className="h-8 w-px bg-white/5 mx-2" />
+                        <div className="h-8 w-px bg-white/5 mx-0 md:mx-2 hidden sm:block" />
                         <div className="flex items-center gap-3">
                             <div className="text-right hidden sm:block">
                                 <p className="text-xs font-black text-white">ADMINISTRATOR</p>
@@ -178,7 +192,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </header>
 
                 {/* Dynamic content */}
-                <main className="flex-1 overflow-y-auto scrollbar-hide p-8 relative">
+                <main className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide p-4 md:p-8 relative">
                     {children}
 
                     {/* Ambient Background Glow */}

@@ -11,8 +11,8 @@ import { DecodeText } from "@/components/animations/ScrollChoreography";
 const reels = [
     { id: 1, src: "/reels/1.mp4", title: "Creative Shoot #01", author: "@tellora", tag: "BTS", likes: "18.2k", color: "#F3E84A" },
     { id: 2, src: "/reels/2.mp4", title: "Studio Magic", author: "@tellora", tag: "Studio", likes: "12.5k", color: "#A855F7" },
-    { id: 3, src: "/reels/3.mp4", title: "Strategy Session", author: "@tellora", tag: "Strategy", likes: "9.1k", color: "#22C55E" },
-    { id: 4, src: "/reels/4.mp4", title: "Win Highlight", author: "@tellora", tag: "Case Study", likes: "21.4k", color: "#FFFFFF" },
+    { id: 3, src: "/reels/10.mp4", title: "Strategy Session", author: "@tellora", tag: "Strategy", likes: "9.1k", color: "#22C55E" },
+    { id: 4, src: "/reels/14.mp4", title: "Win Highlight", author: "@tellora", tag: "Case Study", likes: "21.4k", color: "#FFFFFF" },
     { id: 8, src: "/reels/8.mp4", title: "High-End Optic", author: "@tellora", tag: "Production", likes: "14.7k", color: "#FF4D6D" },
 ];
 

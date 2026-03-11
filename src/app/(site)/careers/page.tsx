@@ -23,6 +23,7 @@ import {
     RotateCw,
     Plus
 } from "lucide-react";
+import { getAdminData, saveAdminData } from "@/lib/serverDb";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Magnetic from "@/components/animations/Magnetic";
@@ -64,17 +65,19 @@ export default function CareersPage() {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        const savedJobs = localStorage.getItem("tellora_jobs");
-        if (savedJobs) {
-            setJobs(JSON.parse(savedJobs).filter((j: any) => j.status === "Published"));
-        } else {
-            const initialJobs = [
-                { id: 1, title: "Creative Director", department: "Design", location: "Remote", type: "Full-time", status: "Published", description: "Lead our creative vision. You'll be responsible for oversight of all visual assets and brand resonance strategies.", requirements: "8+ years experience in digital design, mastery of Figma/Adobe CC.", benefits: "Health, Equity, Remote-first" },
-                { id: 2, title: "Senior Performance Engineer", department: "Engineering", location: "Global (Remote)", type: "Contract", status: "Published", description: "Optimize web performance and lead our technical architecture transitions.", requirements: "Deep knowledge of Next.js, Three.js, and browser rendering engines.", benefits: "Competitive pay, flexible hours" }
-            ];
-            setJobs(initialJobs);
-            localStorage.setItem("tellora_jobs", JSON.stringify(initialJobs));
-        }
+        const fetchJobs = async () => {
+            const savedJobs = await getAdminData("recruitment_jobs", []);
+            if (savedJobs.length > 0) {
+                setJobs(savedJobs.filter((j: any) => j.status === "Published"));
+            } else {
+                const initialJobs = [
+                    { id: 1, title: "Creative Director", department: "Design", location: "Remote", type: "Full-time", status: "Published", description: "Lead our creative vision. You'll be responsible for oversight of all visual assets and brand resonance strategies.", requirements: "8+ years experience in digital design, mastery of Figma/Adobe CC.", benefits: "Health, Equity, Remote-first" },
+                    { id: 2, title: "Senior Performance Engineer", department: "Engineering", location: "Global (Remote)", type: "Contract", status: "Published", description: "Optimize web performance and lead our technical architecture transitions.", requirements: "Deep knowledge of Next.js, Three.js, and browser rendering engines.", benefits: "Competitive pay, flexible hours" }
+                ];
+                setJobs(initialJobs);
+            }
+        };
+        fetchJobs();
     }, []);
 
     const handleApply = async (e: React.FormEvent) => {
@@ -99,8 +102,8 @@ export default function CareersPage() {
             date: new Date().toISOString().split('T')[0]
         };
 
-        const savedApps = JSON.parse(localStorage.getItem("tellora_applications") || "[]");
-        localStorage.setItem("tellora_applications", JSON.stringify([application, ...savedApps]));
+        const savedApps = await getAdminData("recruitment_apps", []);
+        await saveAdminData("recruitment_apps", [application, ...savedApps]);
 
         setTimeout(() => {
             setIsLoading(false);

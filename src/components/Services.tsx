@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Search, Share2, Monitor, Speaker, PenTool, Users, ArrowRight, Sparkles, Zap } from "lucide-react";
 
@@ -107,48 +108,53 @@ export default function Services() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {services.map((service, idx) => (
-                        <motion.div
+                        <Link
                             key={idx}
-                            initial={{ opacity: 0, y: 30, rotate: 0 }}
-                            whileInView={{ opacity: 1, y: 0, rotate: service.rotate }}
-                            viewport={{ once: true }}
-                            transition={{ delay: idx * 0.1 }}
-                            whileHover={{
-                                scale: 1.02,
-                                rotate: "0deg",
-                                zIndex: 20
-                            }}
-                            className="p-8 md:p-10 brutalist-card h-full flex flex-col group relative cursor-pointer"
-                            style={{
-                                background: service.color,
-                                color: service.color === "#000000" ? "#FFF" : "#000"
-                            }}
+                            href="/services"
+                            className="block h-full"
                         >
-                            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Sparkles size={24} style={{ color: service.accent }} />
-                            </div>
-
-                            <div
-                                className="w-12 h-12 md:w-16 md:h-16 brutalist-border flex items-center justify-center mb-6 md:mb-8 transition-all group-hover:scale-110"
-                                style={{ background: service.accent, color: service.color === "#000000" ? "#000" : "#FFF" }}
+                            <motion.div
+                                initial={{ opacity: 0, y: 30, rotate: 0 }}
+                                whileInView={{ opacity: 1, y: 0, rotate: service.rotate }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.1 }}
+                                whileHover={{
+                                    scale: 1.02,
+                                    rotate: "0deg",
+                                    zIndex: 20
+                                }}
+                                className="p-8 md:p-10 brutalist-card h-full flex flex-col group relative cursor-pointer"
+                                style={{
+                                    background: service.color,
+                                    color: service.color === "#000000" ? "#FFF" : "#000"
+                                }}
                             >
-                                {service.icon}
-                            </div>
-
-                            <h3 className="text-2xl md:text-3xl font-heading font-black uppercase mb-4 tracking-tighter">
-                                {service.title}
-                            </h3>
-                            <p className="font-black text-xs md:text-sm uppercase leading-relaxed mb-auto opacity-80">
-                                {service.description}
-                            </p>
-
-                            <div className="mt-8 md:mt-10 pt-6 md:pt-8 border-t-[2px] border-current flex items-center justify-between">
-                                <span className="text-[10px] font-black uppercase tracking-widest group-hover:text-primary transition-colors">Launch Project</span>
-                                <div className="w-8 h-8 rounded-full brutalist-border flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
-                                    <ArrowRight size={14} />
+                                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Sparkles size={24} style={{ color: service.accent }} />
                                 </div>
-                            </div>
-                        </motion.div>
+
+                                <div
+                                    className="w-12 h-12 md:w-16 md:h-16 brutalist-border flex items-center justify-center mb-6 md:mb-8 transition-all group-hover:scale-110"
+                                    style={{ background: service.accent, color: service.color === "#000000" ? "#000" : "#FFF" }}
+                                >
+                                    {service.icon}
+                                </div>
+
+                                <h3 className="text-2xl md:text-3xl font-heading font-black uppercase mb-4 tracking-tighter">
+                                    {service.title}
+                                </h3>
+                                <p className="font-black text-xs md:text-sm uppercase leading-relaxed mb-auto opacity-80">
+                                    {service.description}
+                                </p>
+
+                                <div className="mt-8 md:mt-10 pt-6 md:pt-8 border-t-[2px] border-current flex items-center justify-between">
+                                    <span className="text-[10px] font-black uppercase tracking-widest group-hover:text-primary transition-colors">Launch Project</span>
+                                    <div className="w-8 h-8 rounded-full brutalist-border flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+                                        <ArrowRight size={14} />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </Link>
                     ))}
                 </div>
             </div>

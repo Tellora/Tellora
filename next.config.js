@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: "export",       // Static HTML export enabled for production builds
-    trailingSlash: true,    // Ensures index.html is generated for every route
+    trailingSlash: true,
     images: {
-        unoptimized: true,    // next/image optimisation is server-side; disable for static export
+        unoptimized: true,
     },
 };
 

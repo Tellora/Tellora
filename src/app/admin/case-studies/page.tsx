@@ -27,7 +27,7 @@ export default function AdminCaseStudies() {
     const [form, setForm] = useState(empty());
     const [tagsInput, setTagsInput] = useState("");
 
-    const reload = () => setCases(getCaseStudies());
+    const reload = async () => setCases(await getCaseStudies());
     useEffect(() => { reload(); }, []);
 
     const openCreate = () => {
@@ -55,7 +55,7 @@ export default function AdminCaseStudies() {
         setIsModalOpen(true);
     };
 
-    const handleSave = (e: React.FormEvent) => {
+    const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         const parsedTags = tagsInput.split(",").map((t) => t.trim()).filter(Boolean);
         const cs: CaseStudy = {
@@ -71,19 +71,19 @@ export default function AdminCaseStudies() {
             status: form.status,
             createdAt: current ? current.createdAt : Date.now(),
         };
-        upsertCaseStudy(cs);
-        reload();
+        await upsertCaseStudy(cs);
+        await reload();
         setIsModalOpen(false);
     };
 
-    const handleDelete = (id: string) => {
-        deleteCaseStudy(id);
-        reload();
+    const handleDelete = async (id: string) => {
+        await deleteCaseStudy(id);
+        await reload();
     };
 
-    const toggleStatus = (cs: CaseStudy) => {
-        upsertCaseStudy({ ...cs, status: cs.status === "Published" ? "Draft" : "Published" });
-        reload();
+    const toggleStatus = async (cs: CaseStudy) => {
+        await upsertCaseStudy({ ...cs, status: cs.status === "Published" ? "Draft" : "Published" });
+        await reload();
     };
 
     const filtered = cases.filter(
@@ -133,7 +133,7 @@ export default function AdminCaseStudies() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: i * 0.05 }}
-                        className="bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 rounded-[3.5rem] group hover:border-primary/30 transition-all p-10 relative overflow-hidden flex flex-col min-h-[380px] shadow-2xl"
+                        className="bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 rounded-3xl md:rounded-[3.5rem] group hover:border-primary/30 transition-all p-6 md:p-10 relative overflow-hidden flex flex-col min-h-[380px] shadow-2xl"
                     >
                         {/* Image preview */}
                         {item.image && (
@@ -197,10 +197,10 @@ export default function AdminCaseStudies() {
                 {/* Add card */}
                 <motion.div
                     onClick={openCreate}
-                    className="border-2 border-dashed border-white/5 rounded-[3.5rem] flex flex-col items-center justify-center text-white/10 hover:text-primary hover:border-primary/20 hover:bg-primary/5 cursor-pointer transition-all min-h-[380px] group"
+                    className="border-2 border-dashed border-white/5 rounded-3xl md:rounded-[3.5rem] flex flex-col items-center justify-center text-white/10 hover:text-primary hover:border-primary/20 hover:bg-primary/5 cursor-pointer transition-all min-h-[380px] group p-6"
                 >
-                    <div className="w-20 h-20 rounded-[2.5rem] border-2 border-current flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-12 transition-all">
-                        <Plus size={40} />
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-[2rem] md:rounded-[2.5rem] border-2 border-current flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-12 transition-all">
+                        <Plus size={32} className="md:w-10 md:h-10" />
                     </div>
                     <span className="text-[11px] font-black uppercase tracking-[0.4em] italic">New Case Study</span>
                 </motion.div>
@@ -214,9 +214,9 @@ export default function AdminCaseStudies() {
                             initial={{ scale: 0.9, opacity: 0, y: 30 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 30 }}
-                            className="w-full max-w-2xl bg-[#0D121F] border border-white/10 rounded-[4rem] p-12 relative overflow-hidden my-8"
+                            className="w-full max-w-2xl bg-[#0D121F] border border-white/10 rounded-[2rem] md:rounded-[4rem] p-6 md:p-12 relative overflow-hidden my-4 md:my-8"
                         >
-                            <button onClick={() => setIsModalOpen(false)} className="absolute top-8 right-8 p-3 text-white/30 hover:text-white"><X size={24} /></button>
+                            <button onClick={() => setIsModalOpen(false)} className="absolute top-4 md:top-8 right-4 md:right-8 p-3 text-white/30 hover:text-white"><X size={24} /></button>
 
                             <form onSubmit={handleSave} className="space-y-7">
                                 <div className="text-center mb-6">
@@ -237,18 +237,18 @@ export default function AdminCaseStudies() {
                                         placeholder="What did you achieve for this client?" />
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">Category</label>
                                         <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}
-                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white outline-none appearance-none cursor-pointer">
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 text-white outline-none appearance-none cursor-pointer">
                                             {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
                                         </select>
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">Tag / Industry</label>
                                         <input value={form.tag} onChange={(e) => setForm({ ...form, tag: e.target.value })}
-                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white outline-none focus:border-primary transition-all font-medium"
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 text-white outline-none focus:border-primary transition-all font-medium"
                                             placeholder="Enterprise" />
                                     </div>
                                 </div>
@@ -291,21 +291,21 @@ export default function AdminCaseStudies() {
                                         placeholder="SEO, Web Development, UI/UX" />
                                 </div>
 
-                                <div className="space-y-2">
+                                <div className="space-y-2 mb-6">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">Status</label>
                                     <div className="flex gap-4">
                                         {(["Draft", "Published"] as const).map((s) => (
                                             <button key={s} type="button" onClick={() => setForm({ ...form, status: s })}
-                                                className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${form.status === s ? "bg-primary text-white" : "bg-white/5 text-white/30 hover:text-white"}`}>
+                                                className={`flex-1 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${form.status === s ? "bg-primary text-white" : "bg-white/5 text-white/30 hover:text-white"}`}>
                                                 {s}
                                             </button>
                                         ))}
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-6 pt-4">
-                                    <button type="button" onClick={() => setIsModalOpen(false)} className="py-5 rounded-[2rem] border border-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/5 transition-all">Cancel</button>
-                                    <button type="submit" className="py-5 rounded-[2rem] bg-primary text-white font-black text-[10px] uppercase tracking-widest hover:shadow-2xl hover:shadow-primary/40 transition-all flex items-center justify-center gap-3">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 pt-4">
+                                    <button type="button" onClick={() => setIsModalOpen(false)} className="py-4 md:py-5 rounded-2xl md:rounded-[2rem] border border-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/5 transition-all">Cancel</button>
+                                    <button type="submit" className="py-4 md:py-5 rounded-2xl md:rounded-[2rem] bg-primary text-white font-black text-[10px] uppercase tracking-widest hover:shadow-2xl hover:shadow-primary/40 transition-all flex items-center justify-center gap-3">
                                         {current ? "Save Changes" : "Publish Study"} <ArrowRight size={16} />
                                     </button>
                                 </div>

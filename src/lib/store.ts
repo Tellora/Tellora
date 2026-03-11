@@ -1,6 +1,10 @@
-// ── Tellora Admin Data Store ──────────────────────────────────────────────────
-// All admin panel data is persisted via localStorage.
-// This file provides typed helpers to read/write each data domain.
+"use server";
+
+// ── Tellora Global Admin Data Store ─────────────────────────────────────────
+// All admin panel data is persisted via JSON files on the server globally.
+// This file provides Server Actions to read/write each data domain.
+
+import { getAdminData, saveAdminData } from "./serverDb";
 
 export interface ContactMessage {
     id: string;
@@ -85,63 +89,47 @@ const KEYS = {
     settings: "tellora_site_settings",
 };
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-function get<T>(key: string, fallback: T): T {
-    if (typeof window === "undefined") return fallback;
-    try {
-        const raw = localStorage.getItem(key);
-        return raw ? (JSON.parse(raw) as T) : fallback;
-    } catch {
-        return fallback;
-    }
-}
-
-function set<T>(key: string, value: T): void {
-    if (typeof window === "undefined") return;
-    localStorage.setItem(key, JSON.stringify(value));
-}
-
 // ── Activity Logs ─────────────────────────────────────────────────────────────
-export function getActivityLogs(): ActivityLog[] {
-    return get<ActivityLog[]>(KEYS.activity, []);
+export async function getActivityLogs(): Promise<ActivityLog[]> {
+    return getAdminData(KEYS.activity, []);
 }
 
-export function addActivityLog(log: Omit<ActivityLog, "id">): void {
-    const logs = getActivityLogs();
-    set(KEYS.activity, [{ ...log, id: Date.now().toString() }, ...logs].slice(0, 20));
+export async function addActivityLog(log: Omit<ActivityLog, "id">): Promise<void> {
+    const logs = await getActivityLogs();
+    await saveAdminData(KEYS.activity, [{ ...log, id: Date.now().toString() }, ...logs].slice(0, 20));
 }
 
 // ── Messages (Inbox) ──────────────────────────────────────────────────────────
-export function getMessages(): ContactMessage[] {
-    return get<ContactMessage[]>(KEYS.messages, []);
+export async function getMessages(): Promise<ContactMessage[]> {
+    return getAdminData(KEYS.messages, []);
 }
 
-export function saveMessage(msg: ContactMessage): void {
-    const msgs = getMessages();
-    // Check duplicate by id
+export async function saveMessage(msg: ContactMessage): Promise<void> {
+    const msgs = await getMessages();
     const exists = msgs.findIndex((m) => m.id === msg.id);
     if (exists >= 0) {
         msgs[exists] = msg;
-        set(KEYS.messages, msgs);
+        await saveAdminData(KEYS.messages, msgs);
     } else {
-        set(KEYS.messages, [msg, ...msgs]);
+        await saveAdminData(KEYS.messages, [msg, ...msgs]);
     }
 }
 
-export function deleteMessage(id: string): void {
-    const msgs = getMessages().filter((m) => m.id !== id);
-    set(KEYS.messages, msgs);
+export async function deleteMessage(id: string): Promise<void> {
+    const msgs = await getMessages();
+    await saveAdminData(KEYS.messages, msgs.filter((m) => m.id !== id));
 }
 
-export function markMessageRead(id: string): void {
-    const msgs = getMessages().map((m) =>
+export async function markMessageRead(id: string): Promise<void> {
+    const msgs = await getMessages();
+    await saveAdminData(KEYS.messages, msgs.map((m) =>
         m.id === id ? { ...m, status: "Read" as const } : m
-    );
-    set(KEYS.messages, msgs);
+    ));
 }
 
-export function addReply(id: string, replyText: string): void {
-    const msgs = getMessages().map((m) => {
+export async function addReply(id: string, replyText: string): Promise<void> {
+    const msgs = await getMessages();
+    await saveAdminData(KEYS.messages, msgs.map((m) => {
         if (m.id !== id) return m;
         return {
             ...m,
@@ -151,17 +139,16 @@ export function addReply(id: string, replyText: string): void {
                 { text: replyText, sentAt: new Date().toLocaleString() },
             ],
         };
-    });
-    set(KEYS.messages, msgs);
+    }));
 }
 
-export function submitContactForm(data: {
+export async function submitContactForm(data: {
     name: string;
     email: string;
     company: string;
     service: string;
     message: string;
-}): void {
+}): Promise<void> {
     const id = Date.now().toString();
     const initials = data.name
         .split(" ")
@@ -186,8 +173,8 @@ export function submitContactForm(data: {
         replyHistory: [],
     };
 
-    saveMessage(msg);
-    addActivityLog({
+    await saveMessage(msg);
+    await addActivityLog({
         type: "create",
         item: `New inquiry from ${data.name}`,
         user: "Public",
@@ -233,24 +220,24 @@ const defaultServices: Service[] = [
     },
 ];
 
-export function getServices(): Service[] {
-    return get<Service[]>(KEYS.services, defaultServices);
+export async function getServices(): Promise<Service[]> {
+    return getAdminData(KEYS.services, defaultServices);
 }
 
-export function saveServices(services: Service[]): void {
-    set(KEYS.services, services);
+export async function saveServices(services: Service[]): Promise<void> {
+    await saveAdminData(KEYS.services, services);
 }
 
-export function upsertService(service: Service): void {
-    const all = getServices();
+export async function upsertService(service: Service): Promise<void> {
+    const all = await getServices();
     const idx = all.findIndex((s) => s.id === service.id);
     if (idx >= 0) {
         all[idx] = service;
     } else {
         all.unshift(service);
     }
-    saveServices(all);
-    addActivityLog({
+    await saveServices(all);
+    await addActivityLog({
         type: idx >= 0 ? "update" : "create",
         item: `Service: ${service.title}`,
         user: "Admin",
@@ -259,11 +246,12 @@ export function upsertService(service: Service): void {
     });
 }
 
-export function deleteService(id: string): void {
-    const svc = getServices().find((s) => s.id === id);
-    saveServices(getServices().filter((s) => s.id !== id));
+export async function deleteService(id: string): Promise<void> {
+    const all = await getServices();
+    const svc = all.find((s) => s.id === id);
+    await saveServices(all.filter((s) => s.id !== id));
     if (svc) {
-        addActivityLog({ type: "delete", item: `Service removed: ${svc.title}`, user: "Admin", time: "Just Now", status: "Removed" });
+        await addActivityLog({ type: "delete", item: `Service removed: ${svc.title}`, user: "Admin", time: "Just Now", status: "Removed" });
     }
 }
 
@@ -305,24 +293,24 @@ const defaultCases: CaseStudy[] = [
     },
 ];
 
-export function getCaseStudies(): CaseStudy[] {
-    return get<CaseStudy[]>(KEYS.cases, defaultCases);
+export async function getCaseStudies(): Promise<CaseStudy[]> {
+    return getAdminData(KEYS.cases, defaultCases);
 }
 
-export function saveCaseStudies(cases: CaseStudy[]): void {
-    set(KEYS.cases, cases);
+export async function saveCaseStudies(cases: CaseStudy[]): Promise<void> {
+    await saveAdminData(KEYS.cases, cases);
 }
 
-export function upsertCaseStudy(cs: CaseStudy): void {
-    const all = getCaseStudies();
+export async function upsertCaseStudy(cs: CaseStudy): Promise<void> {
+    const all = await getCaseStudies();
     const idx = all.findIndex((c) => c.id === cs.id);
     if (idx >= 0) {
         all[idx] = cs;
     } else {
         all.unshift(cs);
     }
-    saveCaseStudies(all);
-    addActivityLog({
+    await saveCaseStudies(all);
+    await addActivityLog({
         type: idx >= 0 ? "update" : "create",
         item: `Case Study: ${cs.title}`,
         user: "Admin",
@@ -331,11 +319,12 @@ export function upsertCaseStudy(cs: CaseStudy): void {
     });
 }
 
-export function deleteCaseStudy(id: string): void {
-    const cs = getCaseStudies().find((c) => c.id === id);
-    saveCaseStudies(getCaseStudies().filter((c) => c.id !== id));
+export async function deleteCaseStudy(id: string): Promise<void> {
+    const all = await getCaseStudies();
+    const cs = all.find((c) => c.id === id);
+    await saveCaseStudies(all.filter((c) => c.id !== id));
     if (cs) {
-        addActivityLog({ type: "delete", item: `Case Study removed: ${cs.title}`, user: "Admin", time: "Just Now", status: "Removed" });
+        await addActivityLog({ type: "delete", item: `Case Study removed: ${cs.title}`, user: "Admin", time: "Just Now", status: "Removed" });
     }
 }
 
@@ -345,24 +334,24 @@ const defaultReels: Reel[] = [
     { id: "reel-2", title: "Success Showcase", embedUrl: "", tag: "Case Study", likes: "21.4k", views: "1.1M", status: "Live", createdAt: Date.now() - 172800000 },
 ];
 
-export function getReels(): Reel[] {
-    return get<Reel[]>(KEYS.reels, defaultReels);
+export async function getReels(): Promise<Reel[]> {
+    return getAdminData(KEYS.reels, defaultReels);
 }
 
-export function saveReels(reels: Reel[]): void {
-    set(KEYS.reels, reels);
+export async function saveReels(reels: Reel[]): Promise<void> {
+    await saveAdminData(KEYS.reels, reels);
 }
 
-export function upsertReel(reel: Reel): void {
-    const all = getReels();
+export async function upsertReel(reel: Reel): Promise<void> {
+    const all = await getReels();
     const idx = all.findIndex((r) => r.id === reel.id);
     if (idx >= 0) {
         all[idx] = reel;
     } else {
         all.unshift(reel);
     }
-    saveReels(all);
-    addActivityLog({
+    await saveReels(all);
+    await addActivityLog({
         type: idx >= 0 ? "update" : "create",
         item: `Reel: ${reel.title}`,
         user: "Admin",
@@ -371,11 +360,12 @@ export function upsertReel(reel: Reel): void {
     });
 }
 
-export function deleteReel(id: string): void {
-    const reel = getReels().find((r) => r.id === id);
-    saveReels(getReels().filter((r) => r.id !== id));
+export async function deleteReel(id: string): Promise<void> {
+    const all = await getReels();
+    const reel = all.find((r) => r.id === id);
+    await saveReels(all.filter((r) => r.id !== id));
     if (reel) {
-        addActivityLog({ type: "delete", item: `Reel removed: ${reel.title}`, user: "Admin", time: "Just Now", status: "Removed" });
+        await addActivityLog({ type: "delete", item: `Reel removed: ${reel.title}`, user: "Admin", time: "Just Now", status: "Removed" });
     }
 }
 
@@ -393,13 +383,13 @@ const defaultSettings: SiteSettings = {
     deepLinkSync: true,
 };
 
-export function getSettings(): SiteSettings {
-    return get<SiteSettings>(KEYS.settings, defaultSettings);
+export async function getSettings(): Promise<SiteSettings> {
+    return getAdminData(KEYS.settings, defaultSettings);
 }
 
-export function saveSettings(settings: SiteSettings): void {
-    set(KEYS.settings, settings);
-    addActivityLog({
+export async function saveSettings(settings: SiteSettings): Promise<void> {
+    await saveAdminData(KEYS.settings, settings);
+    await addActivityLog({
         type: "update",
         item: "Site Settings updated",
         user: "Admin",
@@ -407,3 +397,4 @@ export function saveSettings(settings: SiteSettings): void {
         status: "Saved",
     });
 }
+

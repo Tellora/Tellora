@@ -27,6 +27,8 @@ import {
     Binary
 } from "lucide-react";
 
+import { getAdminData } from "@/lib/serverDb";
+
 // Count-up animation component
 const NumberTicker = ({ value, suffix = "", decimals = 0 }: { value: number, suffix?: string, decimals?: number }) => {
     const [displayValue, setDisplayValue] = useState(0);
@@ -62,20 +64,20 @@ export default function AdminDashboard() {
     const [isSyncing, setIsSyncing] = useState(false);
     const [systemParams, setSystemParams] = useState<any[]>([]);
 
-    const refreshSystemState = () => {
+    const refreshSystemState = async () => {
         setIsSyncing(true);
 
         // 1. Sync counts from actual data arrays
-        const teamData = JSON.parse(localStorage.getItem('tellora_team') || '[]');
+        const teamData = await getAdminData('team', []);
         const teamCount = teamData.length || 4;
 
-        const servicesData = JSON.parse(localStorage.getItem('tellora_services') || '[]');
+        const servicesData = await getAdminData('tellora_services_v2', []);
         const servicesCount = servicesData.length || 5;
 
-        const caseStudiesData = JSON.parse(localStorage.getItem('tellora_case_studies') || '[]');
+        const caseStudiesData = await getAdminData('tellora_case_studies_v2', []);
         const caseStudiesCount = caseStudiesData.length || 3;
 
-        const reelsData = JSON.parse(localStorage.getItem('tellora_reels') || '[]');
+        const reelsData = await getAdminData('tellora_reels_v2', []);
         const reelsCount = reelsData.length || 4;
 
         // 2. Derive "Realtime" metrics
@@ -104,7 +106,7 @@ export default function AdminDashboard() {
         ]);
 
         // 4. Activity Logs
-        const customLogs = JSON.parse(localStorage.getItem('tellora_activity_logs') || '[]');
+        const customLogs = await getAdminData('tellora_activity_logs', []);
         const combinedLogs = [...customLogs, { id: 's1', type: "sync", item: `Neural Sync: ${teamCount} Personnel Online`, user: "Root", time: "Just Now", status: "Verified" }].slice(0, 5);
         setRecentActivity(combinedLogs);
 
@@ -127,7 +129,7 @@ export default function AdminDashboard() {
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-[#0D121F]/80 backdrop-blur-2xl border border-primary/20 p-5 px-10 rounded-3xl flex items-center justify-between overflow-hidden relative group"
+                className="bg-[#0D121F]/80 backdrop-blur-2xl border border-primary/20 p-4 md:p-5 px-6 md:px-10 rounded-[2rem] flex items-center justify-between overflow-hidden relative group flex-col sm:flex-row gap-4"
             >
                 <div className="flex items-center gap-5 relative z-10">
                     <div className={`w-3 h-3 rounded-full shadow-[0_0_20px_rgba(74,192,228,0.5)] ${isSyncing ? 'bg-primary animate-spin' : 'bg-primary animate-pulse'}`} />
@@ -145,10 +147,10 @@ export default function AdminDashboard() {
             </motion.div>
 
             {/* Welcome & Tracker Header */}
-            <div className="flex flex-col xl:flex-row gap-12 justify-between items-start">
+            <div className="flex flex-col xl:flex-row gap-8 xl:gap-12 justify-between items-start">
                 <div className="space-y-4">
-                    <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-white italic leading-[0.85]">Ecosystem <span className="text-primary italic font-black">Matrix</span></h1>
-                    <p className="text-white/30 font-medium text-sm tracking-wide max-w-2xl italic border-l-2 border-primary/40 pl-8 py-2">Deep-field telemetry synchronized with active network assets. Real-time engagement analytics filtered through the Tellora Core Engine.</p>
+                    <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter text-white italic leading-[0.85]">Ecosystem <br className="hidden sm:block" /><span className="text-primary italic font-black">Matrix</span></h1>
+                    <p className="text-white/30 font-medium text-xs sm:text-sm tracking-wide max-w-2xl italic border-l-2 border-primary/40 pl-6 sm:pl-8 py-2">Deep-field telemetry synchronized with active network assets. Real-time engagement analytics filtered through the Tellora Core Engine.</p>
                 </div>
 
                 {/* Real Parameters Tracker Group */}
@@ -175,14 +177,14 @@ export default function AdminDashboard() {
             </div>
 
             {/* Main Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
                 {stats.map((stat, i) => (
                     <motion.div
                         key={stat.label}
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.1 }}
-                        className="bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 p-12 rounded-[5rem] group hover:bg-white/[0.04] transition-all relative overflow-hidden shadow-3xl hover:border-primary/40"
+                        className="bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 p-8 md:p-12 rounded-[2.5rem] md:rounded-[5rem] group hover:bg-white/[0.04] transition-all relative overflow-hidden shadow-3xl hover:border-primary/40"
                     >
                         <div className="flex items-center justify-between mb-16">
                             <div className="w-20 h-20 rounded-[2rem] bg-white/5 border border-white/10 flex items-center justify-center text-primary shadow-inner group-hover:scale-110 group-hover:rotate-6 transition-all">
@@ -207,22 +209,22 @@ export default function AdminDashboard() {
                 ))}
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-12">
+            <div className="grid lg:grid-cols-3 gap-8 md:gap-12 w-full max-w-[100vw]">
                 {/* Interaction Density */}
-                <div className="lg:col-span-2 bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 p-16 rounded-[6rem] relative overflow-hidden group shadow-3xl">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-24 gap-12 px-4">
-                        <div className="flex items-center gap-10">
-                            <div className="w-20 h-20 rounded-[2rem] bg-primary/10 flex items-center justify-center text-primary group-hover:rotate-12 transition-transform shadow-inner border border-primary/20">
-                                <LucideLineChart size={40} />
+                <div className="lg:col-span-2 bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 p-6 md:p-16 rounded-3xl md:rounded-[6rem] relative overflow-hidden group shadow-3xl flex flex-col">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 md:mb-24 gap-6 md:gap-12 px-2 md:px-4">
+                        <div className="flex items-center gap-6 md:gap-10">
+                            <div className="w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-2xl md:rounded-[2rem] bg-primary/10 flex items-center justify-center text-primary group-hover:rotate-12 transition-transform shadow-inner border border-primary/20">
+                                <LucideLineChart size={32} className="md:w-10 md:h-10" />
                             </div>
                             <div>
-                                <h3 className="text-4xl font-black text-white italic tracking-tight italic">Interaction Density</h3>
-                                <p className="text-[11px] font-black text-white/20 uppercase tracking-[0.6em] mt-4 italic">Neural Network Pulse Monitor</p>
+                                <h3 className="text-2xl md:text-4xl font-black text-white italic tracking-tight">Interaction Density</h3>
+                                <p className="text-[9px] md:text-[11px] font-black text-white/20 uppercase tracking-[0.4em] md:tracking-[0.6em] mt-2 md:mt-4 italic line-clamp-1">Neural Network Pulse Monitor</p>
                             </div>
                         </div>
-                        <div className="flex bg-[#080B12]/80 p-3 rounded-[2.5rem] border border-white/10 shadow-inner backdrop-blur-md">
+                        <div className="flex w-full md:w-auto bg-[#080B12]/80 p-2 md:p-3 rounded-2xl md:rounded-[2.5rem] border border-white/10 shadow-inner backdrop-blur-md overflow-x-auto scrollbar-hide shrink-0">
                             {['Daily', 'Weekly', 'Monthly'].map((t) => (
-                                <button key={t} className={`px-12 py-5 rounded-[2rem] text-[11px] font-black uppercase tracking-widest transition-all ${t === 'Weekly' ? 'bg-primary text-white shadow-2xl shadow-primary/40' : 'text-white/30 hover:text-white hover:bg-white/5'}`}>
+                                <button key={t} className={`px-6 md:px-12 py-3 md:py-5 rounded-xl md:rounded-[2rem] text-[10px] md:text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${t === 'Weekly' ? 'bg-primary text-white shadow-lg md:shadow-2xl shadow-primary/40' : 'text-white/30 hover:text-white hover:bg-white/5'}`}>
                                     {t}
                                 </button>
                             ))}
@@ -252,40 +254,40 @@ export default function AdminDashboard() {
                         </div>
                     </div>
 
-                    <div className="flex justify-between mt-20 px-12">
+                    <div className="flex justify-between mt-10 md:mt-20 px-2 md:px-12 opacity-50 md:opacity-100 hidden sm:flex">
                         {['L-MON', 'L-TUE', 'L-WED', 'L-THU', 'L-FRI', 'L-SAT', 'L-SUN'].map(d => (
-                            <span key={d} className="text-[11px] font-black text-white/5 uppercase tracking-[0.5em] font-mono italic">{d}</span>
+                            <span key={d} className="text-[8px] md:text-[11px] font-black text-white/50 md:text-white/5 uppercase tracking-widest md:tracking-[0.5em] font-mono italic">{d}</span>
                         ))}
                     </div>
                 </div>
 
                 {/* Audit Trail */}
-                <div className="bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 p-16 rounded-[6rem] shadow-3xl flex flex-col">
-                    <div className="flex items-center gap-10 mb-24">
-                        <div className="w-20 h-20 rounded-[2rem] bg-orange-500/10 flex items-center justify-center text-orange-400 group-hover:scale-110 transition-transform shadow-inner border border-orange-400/20">
-                            <Clock size={40} />
+                <div className="bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 p-6 md:p-16 rounded-3xl md:rounded-[6rem] shadow-3xl flex flex-col">
+                    <div className="flex items-center gap-6 md:gap-10 mb-10 md:mb-24">
+                        <div className="w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-2xl md:rounded-[2rem] bg-orange-500/10 flex items-center justify-center text-orange-400 group-hover:scale-110 transition-transform shadow-inner border border-orange-400/20">
+                            <Clock size={32} className="md:w-10 md:h-10" />
                         </div>
                         <div>
-                            <h3 className="text-4xl font-black text-white italic tracking-tight italic">Audit Trail</h3>
-                            <p className="text-[11px] font-black text-white/20 uppercase tracking-[0.6em] mt-4 italic">Live Delta Log Entry</p>
+                            <h3 className="text-2xl md:text-4xl font-black text-white italic tracking-tight">Audit Trail</h3>
+                            <p className="text-[9px] md:text-[11px] font-black text-white/20 uppercase tracking-[0.4em] md:tracking-[0.6em] mt-2 md:mt-4 italic">Live Delta Log Entry</p>
                         </div>
                     </div>
 
-                    <div className="space-y-12 relative before:absolute before:left-10 before:top-4 before:bottom-4 before:w-px before:bg-white/5 flex-1">
+                    <div className="space-y-6 md:space-y-12 relative before:absolute before:left-6 md:before:left-10 before:top-4 before:bottom-4 before:w-px before:bg-white/5 flex-1">
                         {recentActivity.map((log) => (
                             <motion.div
                                 key={log.id}
                                 initial={{ opacity: 0, x: 30 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="flex gap-12 group cursor-pointer relative z-10 p-6 -m-6 rounded-[3rem] hover:bg-white/[0.04] transition-all"
+                                className="flex gap-4 md:gap-12 group cursor-pointer relative z-10 p-4 -m-4 md:p-6 md:-m-6 rounded-2xl md:rounded-[3rem] hover:bg-white/[0.04] transition-all"
                             >
-                                <div className={`w-20 h-20 rounded-[2.5rem] flex items-center justify-center border-8 border-[#0D121F] shadow-4xl shrink-0 transition-transform group-hover:scale-110 ${log.type === 'update' ? 'bg-primary' : log.type === 'create' ? 'bg-green-500' : log.type === 'media' ? 'bg-purple-500' : 'bg-primary-dark'
+                                <div className={`w-12 h-12 md:w-20 md:h-20 rounded-xl md:rounded-[2.5rem] flex items-center justify-center border-4 md:border-8 border-[#0D121F] shadow-4xl shrink-0 transition-transform group-hover:scale-110 ${log.type === 'update' ? 'bg-primary' : log.type === 'create' ? 'bg-green-500' : log.type === 'media' ? 'bg-purple-500' : 'bg-primary-dark'
                                     }`}>
-                                    {log.type === 'update' ? <RefreshCcw size={24} className="text-white" /> : <CheckCircle2 size={24} className="text-white" />}
+                                    {log.type === 'update' ? <RefreshCcw size={18} className="text-white md:w-6 md:h-6" /> : <CheckCircle2 size={18} className="text-white md:w-6 md:h-6" />}
                                 </div>
 
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex justify-between items-start mb-4 gap-10">
+                                <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 md:mb-4 gap-2 md:gap-10">
                                         <h4 className="text-lg font-black text-white group-hover:text-primary transition-colors truncate italic tracking-tighter">{log.item}</h4>
                                         <span className="text-[11px] font-black text-white/10 uppercase whitespace-nowrap tracking-[0.4em] font-mono">{log.time}</span>
                                     </div>
@@ -310,7 +312,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Matrix Action Panel */}
-            <div className="grid md:grid-cols-3 gap-12">
+            <div className="grid md:grid-cols-3 gap-6 md:gap-12">
                 {[
                     { title: "Live Sync", desc: "Deploy global changes to Tellora production edge nodes.", icon: Globe, variant: "primary", path: "/admin/settings" },
                     { title: "Growth Engine", desc: "Initialize the Revenue Growth Simulator v4.0.", icon: Zap, variant: "dark", path: "/#roi-calculator" },
@@ -318,19 +320,19 @@ export default function AdminDashboard() {
                 ].map((action, i) => (
                     <motion.div
                         key={i}
-                        whileHover={{ y: -20, scale: 1.02 }}
+                        whileHover={{ y: -10, scale: 1.02 }}
                         onClick={() => action.path && (window.location.href = action.path)}
-                        className={`p-16 rounded-[6rem] relative overflow-hidden group cursor-pointer shadow-4xl transition-all duration-500 ${action.variant === 'primary' ? 'bg-primary text-white shadow-primary/30 border-t-2 border-white/20' : 'bg-[#111827] border border-white/10 text-white hover:border-primary/30'
+                        className={`p-8 md:p-16 rounded-3xl md:rounded-[6rem] relative overflow-hidden group cursor-pointer shadow-4xl transition-all duration-500 ${action.variant === 'primary' ? 'bg-primary text-white shadow-primary/30 border-t-2 border-white/20' : 'bg-[#111827] border border-white/10 text-white hover:border-primary/30'
                             }`}
                     >
                         <action.icon size={260} className={`absolute -bottom-24 -right-24 opacity-[0.03] group-hover:opacity-[0.15] group-hover:rotate-12 transition-all duration-1000 ${action.variant === 'primary' ? 'text-white' : 'text-primary'
                             }`} />
-                        <div className={`w-28 h-28 rounded-[3.5rem] flex items-center justify-center mb-16 shadow-3xl relative z-10 ${action.variant === 'primary' ? 'bg-white/10 border border-white/20' : 'bg-primary/10 text-primary border border-primary/20'
+                        <div className={`w-16 h-16 md:w-28 md:h-28 rounded-2xl md:rounded-[3.5rem] flex items-center justify-center mb-8 md:mb-16 shadow-3xl relative z-10 ${action.variant === 'primary' ? 'bg-white/10 border border-white/20' : 'bg-primary/10 text-primary border border-primary/20'
                             }`}>
-                            <action.icon size={52} />
+                            <action.icon size={32} className="md:w-[52px] md:h-[52px]" />
                         </div>
-                        <h3 className="text-5xl font-black mb-8 tracking-tighter italic relative z-10">{action.title}</h3>
-                        <p className={`text-lg font-medium mb-24 max-w-[300px] leading-relaxed relative z-10 italic ${action.variant === 'primary' ? 'text-white/80' : 'text-white/40'}`}>
+                        <h3 className="text-3xl md:text-5xl font-black mb-4 md:mb-8 tracking-tighter italic relative z-10">{action.title}</h3>
+                        <p className={`text-sm md:text-lg font-medium mb-12 md:mb-24 max-w-[300px] leading-relaxed relative z-10 italic ${action.variant === 'primary' ? 'text-white/80' : 'text-white/40'}`}>
                             {action.desc}
                         </p>
                         <div className={`inline-flex items-center gap-8 text-[13px] font-black uppercase tracking-[0.5em] italic relative z-10 ${action.variant === 'primary' ? 'text-white' : 'text-primary'

@@ -285,6 +285,22 @@
     animation: marquee 50s linear infinite;
 }
 
+/* Reddish Live Gradient Animation */
+@keyframes red-gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.animate-red-gradient {
+    background: linear-gradient(-45deg, #FF2A2A, #FF4D6D, #C72C41, #FF2A2A);
+    background-size: 300% 300%;
+    animation: red-gradient 3s ease infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
 .animate-marquee:hover {
     animation-play-state: paused;
 }

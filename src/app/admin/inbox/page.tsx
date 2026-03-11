@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     MessageSquare, Clock, Search, Filter,
     Send, Mail, Sparkles, Trash2, Reply, MoreHorizontal,
-    Inbox, ChevronDown, ExternalLink, Tag, RefreshCw
+    Inbox, ChevronDown, ExternalLink, Tag, RefreshCw, X
 } from "lucide-react";
 import {
     ContactMessage, getMessages, deleteMessage,
@@ -25,7 +25,7 @@ export default function AdminInbox() {
     const [sent, setSent] = useState(false);
     const replyRef = useRef<HTMLInputElement>(null);
 
-    const loadMessages = () => setMessages(getMessages());
+    const loadMessages = async () => setMessages(await getMessages());
 
     useEffect(() => {
         loadMessages();
@@ -42,36 +42,38 @@ export default function AdminInbox() {
         }
     }, [messages]);
 
-    const handleSelect = (msg: ContactMessage) => {
+    const handleSelect = async (msg: ContactMessage) => {
         setSelectedMsg(msg);
         setSent(false);
         setReplyText("");
         if (msg.status === "Unread") {
-            markMessageRead(msg.id);
-            setMessages(getMessages());
+            await markMessageRead(msg.id);
+            setMessages(await getMessages());
         }
     };
 
-    const handleDelete = (id: string) => {
-        deleteMessage(id);
+    const handleDelete = async (id: string) => {
+        await deleteMessage(id);
         if (selectedMsg?.id === id) setSelectedMsg(null);
-        loadMessages();
+        await loadMessages();
     };
 
-    const handleArchive = (id: string) => {
-        const msgs = getMessages().map((m) =>
-            m.id === id ? { ...m, status: "Archived" as const } : m
-        );
-        localStorage.setItem("tellora_inbox_messages", JSON.stringify(msgs));
-        loadMessages();
+    const handleArchive = async (id: string) => {
+        const msg = messages.find((m) => m.id === id);
+        if (msg) {
+            import('@/lib/store').then(async ({ saveMessage }) => {
+                await saveMessage({ ...msg, status: "Archived" });
+                await loadMessages();
+            });
+        }
     };
 
     const handleSend = () => {
         if (!replyText.trim() || !selectedMsg) return;
         setSending(true);
-        setTimeout(() => {
-            addReply(selectedMsg.id, replyText);
-            addActivityLog({
+        setTimeout(async () => {
+            await addReply(selectedMsg.id, replyText);
+            await addActivityLog({
                 type: "reply",
                 item: `Replied to: ${selectedMsg.sender}`,
                 user: "Admin",
@@ -81,7 +83,7 @@ export default function AdminInbox() {
             setReplyText("");
             setSending(false);
             setSent(true);
-            loadMessages();
+            await loadMessages();
             setTimeout(() => setSent(false), 3000);
         }, 800);
     };
@@ -115,46 +117,46 @@ export default function AdminInbox() {
                         <Mail size={14} className="text-primary" />
                         <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary">Inter-Matrix Dialogue</span>
                     </div>
-                    <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-white italic leading-none">
+                    <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter text-white italic leading-none">
                         Dialogue <span className="text-primary italic">Vault</span>
                     </h1>
-                    <p className="text-white/30 font-medium text-sm mt-6 tracking-wide max-w-xl italic border-l-2 border-primary/20 pl-8 py-2">
+                    <p className="text-white/30 font-medium text-xs sm:text-sm mt-4 md:mt-6 tracking-wide max-w-xl italic border-l-2 border-primary/20 pl-6 md:pl-8 py-2">
                         Real-time communications from website visitors. Contact form submissions appear here instantly.
                     </p>
                 </div>
 
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-6 bg-[#0D121F]/60 border border-white/10 rounded-[2.5rem] p-4 px-8 shadow-2xl focus-within:border-primary/40 transition-all group">
-                        <Search size={22} className="text-white/10 group-focus-within:text-primary transition-colors" />
+                <div className="flex items-center gap-4 md:gap-6 w-full md:w-auto">
+                    <div className="flex-1 flex items-center gap-3 md:gap-6 bg-[#0D121F]/60 border border-white/10 rounded-2xl md:rounded-[2.5rem] p-3 md:p-4 px-4 md:px-8 shadow-2xl focus-within:border-primary/40 transition-all group">
+                        <Search size={22} className="text-white/10 group-focus-within:text-primary transition-colors shrink-0" />
                         <input
                             type="text"
-                            placeholder="Search by name, email, subject..."
+                            placeholder="Search inbox..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="bg-transparent border-none outline-none text-base font-black italic text-white placeholder:text-white/10 w-64"
+                            className="bg-transparent border-none outline-none text-sm md:text-base font-black italic text-white placeholder:text-white/10 w-full md:w-64"
                         />
                     </div>
                     <button
                         onClick={loadMessages}
-                        className="p-6 bg-primary/20 border border-primary/20 text-primary rounded-[2rem] hover:bg-primary hover:text-white transition-all active:scale-95"
+                        className="p-4 md:p-6 bg-primary/20 border border-primary/20 text-primary rounded-xl md:rounded-[2rem] hover:bg-primary hover:text-white transition-all active:scale-95 shrink-0"
                         title="Refresh"
                     >
-                        <RefreshCw size={24} />
+                        <RefreshCw size={24} className="md:w-6 md:h-6 w-5 h-5" />
                     </button>
                 </div>
             </div>
 
-            <div className="flex-1 grid lg:grid-cols-12 gap-12" style={{ minHeight: 750 }}>
+            <div className="flex-1 grid lg:grid-cols-12 gap-6 md:gap-12" style={{ minHeight: 750 }}>
                 {/* List Pane */}
-                <div className={`${selectedMsg ? "lg:col-span-5" : "lg:col-span-12"} bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 rounded-[5rem] overflow-hidden flex flex-col shadow-4xl transition-all duration-700`}>
+                <div className={`${selectedMsg ? "hidden lg:flex lg:col-span-5" : "flex lg:col-span-12"} bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 rounded-3xl md:rounded-[5rem] overflow-hidden flex-col shadow-4xl transition-all duration-700`}>
                     {/* Tabs */}
-                    <div className="p-10 border-b border-white/5 flex flex-wrap justify-between items-center gap-6">
-                        <div className="flex bg-[#080B12]/80 p-2 rounded-[2rem] border border-white/5 shadow-inner flex-wrap gap-1">
+                    <div className="p-4 md:p-10 border-b border-white/5 flex flex-wrap justify-between items-center gap-4 md:gap-6">
+                        <div className="flex bg-[#080B12]/80 p-2 rounded-2xl md:rounded-[2rem] border border-white/5 shadow-inner flex-wrap gap-1 w-full md:w-auto justify-center">
                             {FILTERS.map((t) => (
                                 <button
                                     key={t}
                                     onClick={() => setActiveFilter(t)}
-                                    className={`px-8 py-3.5 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all ${activeFilter === t ? "bg-primary text-white shadow-2xl shadow-primary/30" : "text-white/30 hover:text-white hover:bg-white/5"}`}
+                                    className={`px-4 md:px-8 py-2 md:py-3.5 rounded-xl md:rounded-[1.5rem] text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeFilter === t ? "bg-primary text-white shadow-lg md:shadow-2xl shadow-primary/30" : "text-white/30 hover:text-white hover:bg-white/5"}`}
                                 >
                                     {t}
                                     {t === "Unread" && unreadCount > 0 && (
@@ -187,31 +189,33 @@ export default function AdminInbox() {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: i * 0.04 }}
                                     onClick={() => handleSelect(msg)}
-                                    className={`group p-8 rounded-[3.5rem] border transition-all cursor-pointer flex items-center gap-8 relative overflow-hidden ${selectedMsg?.id === msg.id
+                                    className={`group p-4 md:p-8 rounded-3xl md:rounded-[3.5rem] border transition-all cursor-pointer flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 relative overflow-hidden ${selectedMsg?.id === msg.id
                                             ? "bg-primary/20 border-primary/40 shadow-inner"
                                             : msg.status === "Unread"
                                                 ? "bg-primary/5 border-primary/20"
                                                 : "bg-[#080B12]/20 border-white/5 hover:border-primary/20 hover:bg-white/[0.03]"
                                         }`}
                                 >
-                                    {/* Avatar */}
-                                    <div className={`w-16 h-16 rounded-[2rem] flex items-center justify-center font-black text-lg italic shadow-inner shrink-0 ${msg.status === "Unread" ? "bg-primary text-white" : "bg-white/5 text-white/30 border border-white/5"}`}>
-                                        {msg.avatar}
-                                    </div>
-
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <h4 className="text-xl font-black text-white italic tracking-tight flex items-center gap-3">
-                                                {msg.sender}
-                                                {msg.status === "Unread" && <span className="w-2.5 h-2.5 bg-primary rounded-full shadow-[0_0_10px_#4ac0e4]" />}
-                                                {msg.status === "Replied" && <span className="text-[9px] px-3 py-1 bg-green-500/20 text-green-400 rounded-full font-black uppercase tracking-wider">Replied</span>}
-                                            </h4>
-                                            <span className="text-[11px] font-black text-white/20 uppercase tracking-[0.3em] font-mono shrink-0">{msg.time}</span>
+                                    <div className="flex items-center gap-4 md:gap-8 w-full">
+                                        {/* Avatar */}
+                                        <div className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-[2rem] flex items-center justify-center font-black text-base md:text-lg italic shadow-inner shrink-0 ${msg.status === "Unread" ? "bg-primary text-white" : "bg-white/5 text-white/30 border border-white/5"}`}>
+                                            {msg.avatar}
                                         </div>
-                                        <h5 className="text-sm font-black text-primary/80 mb-1.5 truncate italic">{msg.subject}</h5>
-                                        <div className="flex items-center gap-4">
-                                            <span className="px-3 py-1 rounded-xl bg-white/5 text-[9px] font-black text-white/30 uppercase tracking-widest border border-white/5 shrink-0">{msg.service}</span>
-                                            <p className="text-sm text-white/40 truncate italic font-medium">{msg.message}</p>
+
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex justify-between items-start mb-1 md:mb-2">
+                                                <h4 className="text-lg md:text-xl font-black text-white italic tracking-tight flex flex-wrap items-center gap-2 md:gap-3">
+                                                    {msg.sender}
+                                                    {msg.status === "Unread" && <span className="w-2 md:w-2.5 h-2 md:h-2.5 bg-primary rounded-full shadow-[0_0_10px_#4ac0e4]" />}
+                                                    {msg.status === "Replied" && <span className="text-[8px] md:text-[9px] px-2 md:px-3 py-0.5 md:py-1 bg-green-500/20 text-green-400 rounded-full font-black uppercase tracking-wider">Replied</span>}
+                                                </h4>
+                                                <span className="text-[9px] md:text-[11px] font-black text-white/20 uppercase tracking-widest md:tracking-[0.3em] font-mono shrink-0 ml-2">{msg.time}</span>
+                                            </div>
+                                            <h5 className="text-xs md:text-sm font-black text-primary/80 mb-1 md:mb-1.5 truncate italic">{msg.subject}</h5>
+                                            <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-0">
+                                                <span className="px-2 md:px-3 py-1 rounded-lg md:rounded-xl bg-white/5 text-[8px] md:text-[9px] font-black text-white/30 uppercase tracking-widest border border-white/5 shrink-0 hidden sm:inline-block">{msg.service}</span>
+                                                <p className="text-xs md:text-sm text-white/40 truncate italic font-medium">{msg.message}</p>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -240,12 +244,19 @@ export default function AdminInbox() {
                             initial={{ opacity: 0, scale: 0.95, x: 50 }}
                             animate={{ opacity: 1, scale: 1, x: 0 }}
                             exit={{ opacity: 0, scale: 0.95, x: 50 }}
-                            className="lg:col-span-7 bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 rounded-[5rem] p-12 flex flex-col shadow-5xl relative overflow-hidden"
+                            className="lg:col-span-7 bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 rounded-3xl md:rounded-[5rem] p-6 md:p-12 flex flex-col shadow-5xl relative overflow-hidden"
                         >
+                            <button
+                                onClick={() => setSelectedMsg(null)}
+                                className="absolute top-4 right-4 p-3 bg-white/5 rounded-2xl text-white/40 hover:text-white transition-all xl:hidden z-50"
+                            >
+                                <X size={20} />
+                            </button>
+
                             {/* Sender Info */}
-                            <div className="flex justify-between items-start mb-12">
-                                <div className="flex items-center gap-8">
-                                    <div className="w-20 h-20 rounded-[3rem] bg-primary flex items-center justify-center text-white text-2xl font-black italic shadow-4xl shadow-primary/30 shrink-0">
+                            <div className="flex flex-col md:flex-row justify-between items-start mb-8 md:mb-12 gap-6">
+                                <div className="flex items-center gap-4 md:gap-8">
+                                    <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-[3rem] bg-primary flex items-center justify-center text-white text-xl md:text-2xl font-black italic shadow-2xl md:shadow-4xl shadow-primary/30 shrink-0">
                                         {selectedMsg.avatar}
                                     </div>
                                     <div>
@@ -265,10 +276,10 @@ export default function AdminInbox() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex gap-3">
+                                <div className="flex gap-2 md:gap-3 w-full md:w-auto">
                                     <button
                                         onClick={() => handleArchive(selectedMsg.id)}
-                                        className="p-4 bg-white/5 rounded-2xl text-white/30 hover:text-orange-400 hover:bg-orange-400/10 transition-all text-[9px] font-black uppercase tracking-wider"
+                                        className="flex-1 md:flex-none p-3 md:p-4 bg-white/5 rounded-xl md:rounded-2xl text-white/30 hover:text-orange-400 hover:bg-orange-400/10 transition-all text-[9px] font-black uppercase tracking-wider flex justify-center items-center"
                                         title="Archive"
                                     >
                                         Archive
@@ -278,11 +289,11 @@ export default function AdminInbox() {
                                         className="p-4 bg-white/5 rounded-2xl text-white/30 hover:text-red-400 hover:bg-red-400/10 transition-all"
                                         title="Delete"
                                     >
-                                        <Trash2 size={18} />
+                                        <Trash2 size={16} className="md:w-[18px] md:h-[18px]" />
                                     </button>
                                     <button
                                         onClick={() => setSelectedMsg(null)}
-                                        className="px-5 py-4 bg-white/5 rounded-2xl text-white/40 hover:text-white transition-all font-black text-[10px] uppercase tracking-wider"
+                                        className="hidden xl:flex px-5 py-4 bg-white/5 rounded-2xl text-white/40 hover:text-white transition-all font-black text-[10px] uppercase tracking-wider"
                                     >
                                         Close
                                     </button>
@@ -323,7 +334,7 @@ export default function AdminInbox() {
                                         ✓ Reply saved to thread
                                     </motion.p>
                                 )}
-                                <div className="bg-[#080B12]/60 rounded-[3rem] p-4 flex items-center gap-4 shadow-inner border border-white/5">
+                                <div className="bg-[#080B12]/60 rounded-3xl md:rounded-[3rem] p-2 md:p-4 flex items-center gap-2 md:gap-4 shadow-inner border border-white/5">
                                     <input
                                         ref={replyRef}
                                         type="text"
@@ -336,9 +347,9 @@ export default function AdminInbox() {
                                     <button
                                         onClick={handleSend}
                                         disabled={!replyText.trim() || sending}
-                                        className="h-16 w-16 rounded-[2rem] bg-primary text-white flex items-center justify-center hover:shadow-primary/40 hover:scale-105 active:scale-95 transition-all disabled:opacity-40"
+                                        className="h-12 w-12 md:h-16 md:w-16 rounded-2xl md:rounded-[2rem] bg-primary text-white flex items-center justify-center hover:shadow-primary/40 hover:scale-105 active:scale-95 transition-all disabled:opacity-40 shrink-0"
                                     >
-                                        {sending ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send size={24} />}
+                                        {sending ? <div className="w-4 h-4 md:w-5 md:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send size={20} className="md:w-6 md:h-6" />}
                                     </button>
                                 </div>
                                 <div className="flex justify-center gap-8 mt-6">

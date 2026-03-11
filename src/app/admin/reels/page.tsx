@@ -47,7 +47,7 @@ export default function AdminReels() {
     const [form, setForm] = useState(emptyReel());
     const [previewReel, setPreviewReel] = useState<Reel | null>(null);
 
-    const reload = () => setReels(getReels());
+    const reload = async () => setReels(await getReels());
     useEffect(() => { reload(); }, []);
 
     const openCreate = () => {
@@ -62,7 +62,7 @@ export default function AdminReels() {
         setIsModalOpen(true);
     };
 
-    const handleSave = (e: React.FormEvent) => {
+    const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         const reel: Reel = {
             id: editingReel ? editingReel.id : `reel-${Date.now()}`,
@@ -74,14 +74,14 @@ export default function AdminReels() {
             status: form.status,
             createdAt: editingReel ? editingReel.createdAt : Date.now(),
         };
-        upsertReel(reel);
-        reload();
+        await upsertReel(reel);
+        await reload();
         setIsModalOpen(false);
     };
 
-    const handleDelete = (id: string) => {
-        deleteReel(id);
-        reload();
+    const handleDelete = async (id: string) => {
+        await deleteReel(id);
+        await reload();
         if (previewReel?.id === id) setPreviewReel(null);
     };
 
@@ -128,7 +128,7 @@ export default function AdminReels() {
                     { label: "Live Reels", value: reels.filter((r) => r.status === "Live").length, icon: Zap, color: "#2e7dbf" },
                     { label: "Total Assets", value: reels.length, icon: Video, color: "#ff4d6d" },
                 ].map((stat, i) => (
-                    <div key={i} className="bg-[#0D121F]/60 border border-white/10 p-10 rounded-[3rem] flex items-center justify-between group hover:border-primary/20 transition-all">
+                    <div key={i} className="bg-[#0D121F]/60 border border-white/10 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] flex items-center justify-between group hover:border-primary/20 transition-all">
                         <div>
                             <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-2">{stat.label}</p>
                             <h3 className="text-4xl font-black text-white italic">{stat.value}</h3>
@@ -163,7 +163,7 @@ export default function AdminReels() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.05 }}
-                            className="bg-[#0D121F]/60 border border-white/10 rounded-[3rem] overflow-hidden group hover:border-primary/30 transition-all"
+                            className="bg-[#0D121F]/60 border border-white/10 rounded-[2rem] md:rounded-[3rem] overflow-hidden group hover:border-primary/30 transition-all"
                         >
                             {/* Thumbnail / Preview */}
                             <div
@@ -191,7 +191,7 @@ export default function AdminReels() {
                                 </div>
                             </div>
 
-                            <div className="p-8">
+                            <div className="p-6 md:p-8">
                                 <h3 className="text-lg font-black text-white italic tracking-tight leading-tight mb-3">{reel.title}</h3>
                                 <div className="flex items-center gap-6 mb-6">
                                     <span className="text-[9px] font-black uppercase tracking-widest text-primary px-4 py-1.5 bg-primary/10 rounded-full border border-primary/20">{reel.tag}</span>
@@ -236,7 +236,7 @@ export default function AdminReels() {
                 {/* Add card */}
                 <div
                     onClick={openCreate}
-                    className="border-2 border-dashed border-white/5 rounded-[3rem] flex flex-col items-center justify-center text-white/10 hover:text-primary hover:border-primary/20 hover:bg-primary/5 cursor-pointer transition-all group p-12"
+                    className="border-2 border-dashed border-white/5 rounded-[2rem] md:rounded-[3rem] flex flex-col items-center justify-center text-white/10 hover:text-primary hover:border-primary/20 hover:bg-primary/5 cursor-pointer transition-all group p-6 md:p-12"
                     style={{ minHeight: 300 }}
                 >
                     <div className="w-16 h-16 rounded-[2rem] border-2 border-current flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-12 transition-all">
@@ -258,7 +258,7 @@ export default function AdminReels() {
                             onClick={(e) => e.stopPropagation()}
                         >
                             <button onClick={() => setPreviewReel(null)} className="absolute -top-12 right-0 p-3 text-white/50 hover:text-white"><X size={28} /></button>
-                            <div className="w-full rounded-[3rem] overflow-hidden bg-black" style={{ aspectRatio: "9/16", maxHeight: "80vh" }}>
+                            <div className="w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-black" style={{ aspectRatio: "9/16", maxHeight: "80vh" }}>
                                 <iframe
                                     src={getEmbedUrl(previewReel.embedUrl) || ""}
                                     className="w-full h-full"
@@ -280,11 +280,11 @@ export default function AdminReels() {
                             initial={{ scale: 0.9, opacity: 0, y: 30 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 30 }}
-                            className="w-full max-w-lg bg-[#0D121F] border border-white/10 rounded-[4rem] p-12 relative overflow-hidden my-8"
+                            className="w-full max-w-lg bg-[#0D121F] border border-white/10 rounded-[2rem] md:rounded-[4rem] p-6 md:p-12 relative overflow-hidden my-4 md:my-8"
                         >
-                            <button onClick={() => setIsModalOpen(false)} className="absolute top-8 right-8 p-3 text-white/30 hover:text-white"><X size={24} /></button>
+                            <button onClick={() => setIsModalOpen(false)} className="absolute top-4 md:top-8 right-4 md:right-8 p-3 text-white/30 hover:text-white"><X size={24} /></button>
 
-                            <form onSubmit={handleSave} className="space-y-7">
+                            <form onSubmit={handleSave} className="space-y-6 md:space-y-7">
                                 <div className="text-center mb-6">
                                     <div className="w-16 h-16 bg-primary/10 rounded-[2rem] flex items-center justify-center text-primary mx-auto mb-4">
                                         <Video size={32} />
@@ -312,18 +312,18 @@ export default function AdminReels() {
                                     )}
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">Category Tag</label>
                                         <select value={form.tag} onChange={(e) => setForm({ ...form, tag: e.target.value })}
-                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white outline-none appearance-none cursor-pointer">
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 text-white outline-none appearance-none cursor-pointer">
                                             {TAGS.map((t) => <option key={t}>{t}</option>)}
                                         </select>
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">Status</label>
                                         <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as Reel["status"] })}
-                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white outline-none appearance-none cursor-pointer">
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 text-white outline-none appearance-none cursor-pointer">
                                             <option value="Live">Live</option>
                                             <option value="Review">In Review</option>
                                             <option value="Archived">Archived</option>
@@ -331,24 +331,24 @@ export default function AdminReels() {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">Views (display)</label>
                                         <input value={form.views} onChange={(e) => setForm({ ...form, views: e.target.value })}
-                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white outline-none focus:border-primary transition-all font-medium"
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 text-white outline-none focus:border-primary transition-all font-medium"
                                             placeholder="450k" />
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">Likes (display)</label>
                                         <input value={form.likes} onChange={(e) => setForm({ ...form, likes: e.target.value })}
-                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white outline-none focus:border-primary transition-all font-medium"
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 text-white outline-none focus:border-primary transition-all font-medium"
                                             placeholder="18.2k" />
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-6 pt-4">
-                                    <button type="button" onClick={() => setIsModalOpen(false)} className="py-5 rounded-[2rem] border border-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/5 transition-all">Cancel</button>
-                                    <button type="submit" className="py-5 rounded-[2rem] bg-primary text-white font-black text-[10px] uppercase tracking-widest hover:shadow-2xl hover:shadow-primary/40 transition-all flex items-center justify-center gap-3">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 pt-4">
+                                    <button type="button" onClick={() => setIsModalOpen(false)} className="py-4 md:py-5 rounded-2xl md:rounded-[2rem] border border-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/5 transition-all">Cancel</button>
+                                    <button type="submit" className="py-4 md:py-5 rounded-2xl md:rounded-[2rem] bg-primary text-white font-black text-[10px] uppercase tracking-widest hover:shadow-2xl hover:shadow-primary/40 transition-all flex items-center justify-center gap-3">
                                         {editingReel ? "Save Changes" : "Add Reel"} <ArrowRight size={16} />
                                     </button>
                                 </div>

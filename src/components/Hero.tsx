@@ -17,6 +17,7 @@ const stats = [
 export default function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [isMounted, setIsMounted] = useState(false);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -28,6 +29,7 @@ export default function Hero() {
     const yHero = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
     useEffect(() => {
+        setIsMounted(true);
         const handleMouseMove = (e: MouseEvent) => {
             // Throttled mouse move for performance
             requestAnimationFrame(() => {
@@ -40,8 +42,8 @@ export default function Hero() {
 
     // Optimized interactive mouse parallax with dampened springs
     const springConfig = { stiffness: 50, damping: 20, mass: 0.5 };
-    const interactiveX = useSpring((mousePos.x - (typeof window !== 'undefined' ? window.innerWidth / 2 : 0)) * 0.015, springConfig);
-    const interactiveY = useSpring((mousePos.y - (typeof window !== 'undefined' ? window.innerHeight / 2 : 0)) * 0.015, springConfig);
+    const interactiveX = useSpring((mousePos.x - (isMounted ? window.innerWidth / 2 : 0)) * 0.015, springConfig);
+    const interactiveY = useSpring((mousePos.y - (isMounted ? window.innerHeight / 2 : 0)) * 0.015, springConfig);
 
     return (
         <section
@@ -118,7 +120,7 @@ export default function Hero() {
                         <div className="relative group">
                             <h1 className="text-[18vw] md:text-[20rem] font-heading font-black tracking-tighter leading-[0.85] md:leading-none text-black selection:bg-accent select-none uppercase relative z-20">
                                 TELLORA <br />
-                                <span className="text-mask-image bg-gradient-to-br from-primary via-secondary to-accent drop-shadow-[4px_4px_0px_#000] md:drop-shadow-[10px_10px_0px_#000] inline-block -translate-y-2 md:-translate-y-8 gpu-accelerated">
+                                <span className="animate-red-gradient drop-shadow-[4px_4px_0px_#000] md:drop-shadow-[10px_10px_0px_#000] inline-block -translate-y-2 md:-translate-y-8 gpu-accelerated">
                                     MEDIA
                                 </span>
                             </h1>

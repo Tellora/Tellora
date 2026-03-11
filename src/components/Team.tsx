@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Linkedin, Twitter, ExternalLink, Sparkles, Users } from "lucide-react";
+import { Linkedin, Twitter, ExternalLink, Sparkles, Users, Instagram } from "lucide-react";
 import Image from "next/image";
 
 const team = [
@@ -10,28 +10,36 @@ const team = [
         role: "Co-Founder · Tech",
         image: "/teams/abhay tellora.png",
         color: "#A855F7", /* Purple */
-        rotate: "-2deg"
+        rotate: "-2deg",
+        linkedin: "https://www.linkedin.com/in/abhaysehdev",
+        instagram: "https://www.instagram.com/abhays3hdev/"
     },
     {
         name: "Prakhar Saxena",
         role: "Co-Founder · Content",
         image: "/teams/prakhar tellora.png",
         color: "#22C55E", /* Green */
-        rotate: "1.5deg"
+        rotate: "1.5deg",
+        linkedin: "https://www.linkedin.com/in/prakhar-saxena-a13876274?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
+        instagram: "https://www.instagram.com/_prakkhar_?igsh=MTEyYTRmZ3dyd3VnMg%3D%3D&utm_source=qr"
     },
     {
         name: "Vansh Sharma",
         role: "Co-Founder · Sales",
         image: "/teams/vansh tellora.png",
         color: "#F3E84A", /* Yellow */
-        rotate: "-1.2deg"
+        rotate: "-1.2deg",
+        linkedin: "https://www.linkedin.com/in/vansh-sharma-3b6b0a3b5?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+        instagram: "https://www.instagram.com/vanssh._.sharma?igsh=cXFpOTZnbnc2eDNw&utm_source=qr"
     },
     {
         name: "Nandini",
         role: "Design Lead",
         image: "/teams/nandini tellora.png",
         color: "#FFFFFF", /* White */
-        rotate: "2.5deg"
+        rotate: "2.5deg",
+        linkedin: "#",
+        instagram: "#"
     }
 ];
 
@@ -107,11 +115,15 @@ function TeamCard({ member, idx }: { member: any; idx: number }) {
 
                     {/* Social Stickers */}
                     <div className="absolute top-6 right-6 flex flex-col gap-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-12 transition-all duration-500">
-                        {[Linkedin, Twitter, ExternalLink].map((Icon, i) => (
-                            <button key={i} className="w-10 h-10 rounded-full bg-white brutalist-border flex items-center justify-center hover:bg-black hover:text-white transition-all">
-                                <Icon size={16} />
-                            </button>
-                        ))}
+                        <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white brutalist-border flex items-center justify-center hover:bg-black hover:text-white transition-all">
+                            <Linkedin size={16} />
+                        </a>
+                        <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white brutalist-border flex items-center justify-center hover:bg-black hover:text-white transition-all">
+                            <Instagram size={16} />
+                        </a>
+                        <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white brutalist-border flex items-center justify-center hover:bg-black hover:text-white transition-all">
+                            <ExternalLink size={16} />
+                        </a>
                     </div>
 
                     {/* Badge */}
