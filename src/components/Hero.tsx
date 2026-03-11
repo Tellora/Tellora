@@ -124,9 +124,9 @@ export default function Hero() {
                                     MEDIA
                                 </span>
                             </h1>
-
+                            <span className="sr-only">Tellora Media - Premier Digital Growth Agency and SEO Experts</span>
                             <div className="absolute -top-6 md:-top-12 left-1/2 -translate-x-1/2 px-4 md:px-6 py-2 bg-black text-white text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] rough-border shadow-[4px_4px_0px_#F3E84A] md:shadow-[8px_8px_0px_#F3E84A] rotate-2 animate-bounce flex items-center whitespace-nowrap">
-                                Tellora Groups
+                                Global Digital Growth Agency
                             </div>
                         </div>
                     </motion.div>
