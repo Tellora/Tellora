@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Sparkles, Star } from "lucide-react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export function PageHeader({ title, subtitle, breadcrumb }: { title: string, subtitle?: string, breadcrumb?: string }) {
     return (
@@ -15,6 +16,7 @@ export function PageHeader({ title, subtitle, breadcrumb }: { title: string, sub
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="flex flex-col items-center">
+                    <Breadcrumbs />
                     {breadcrumb && (
                         <motion.div
                             initial={{ opacity: 0, scale: 0.8, rotate: -5 }}

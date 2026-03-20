@@ -65,7 +65,7 @@ export default function BlogPage() {
                             <div className="h-full min-h-[500px] overflow-hidden relative">
                                 <img
                                     src={blogPosts[0].image}
-                                    alt="Featured"
+                                    alt={blogPosts[0].title}
                                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-r from-slate-50/20 to-transparent"></div>

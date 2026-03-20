@@ -7,6 +7,8 @@ import { Zap, Home, ArrowLeft } from "lucide-react";
 export default function NotFound() {
     return (
         <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            <title>404 - Page Not Found | Tellora Media</title>
+            <meta name="robots" content="noindex, follow" />
             {/* Background Noise & Overlays */}
             <div className="absolute inset-0 noise-overlay opacity-5 mix-blend-overlay pointer-events-none" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#F3F4F6_100%)] pointer-events-none" />

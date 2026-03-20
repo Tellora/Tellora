@@ -12,13 +12,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/case-studies',
         '/careers',
         '/blog',
-        '/instagram-preview',
-    ].map((route) => ({
-        url: `${baseUrl}${route}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: route === '' ? 1 : 0.8,
-    }));
+    ].map((route) => {
+        const priority = route === '' ? 1 :
+            ['/services', '/about', '/contact', '/case-studies'].includes(route) ? 0.9 :
+            ['/blog', '/careers', '/seo-checker'].includes(route) ? 0.8 : 0.7;
+
+        return {
+            url: `${baseUrl}${route}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly' as const,
+            priority,
+        };
+    });
 
     return routes;
 }

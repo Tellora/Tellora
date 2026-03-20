@@ -15,8 +15,32 @@ export default function SiteLayout({
 }: {
     children: React.ReactNode;
 }) {
+    // Global Organization JSON-LD Strategy
+    const orgJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Tellora Media",
+        "url": "https://tellora.media",
+        "logo": "https://tellora.media/logo.png",
+        "description": "Premium digital marketing agency and growth architecture firm specializing in technical SEO, PPC, and performance web design.",
+        "sameAs": [
+            "https://twitter.com/telloramedia",
+            "https://linkedin.com/company/telloramedia"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "email": "hello@tellora.media"
+        }
+    };
+
     return (
         <div className="bg-background text-foreground noise-overlay overflow-x-hidden min-h-screen relative selection:bg-black selection:text-white">
+            <meta name="google-site-verification" content="INSERT_GSC_VERIFICATION_TAG_HERE" />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+            />
             {/* Secret admin access — keyboard shortcut & mobile logo tap */}
             <SecretAdminAccess />
             {/* ── Optimized Global Architecture ── */}
