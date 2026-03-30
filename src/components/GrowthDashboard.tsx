@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import { TrendingUp, Users, DollarSign, MousePointer2 } from "lucide-react";
 
 const stats = [
-    { label: "Active Revenue", value: "$452,102", change: "+24%", icon: <DollarSign className="text-green-400" /> },
-    { label: "Total Sessions", value: "1.2M", change: "+12%", icon: <Users className="text-blue-400" /> },
-    { label: "Conversion Rate", value: "8.4%", change: "+3.2%", icon: <TrendingUp className="text-primary" /> },
-    { label: "Cost Per Click", value: "$0.42", change: "-15%", icon: <MousePointer2 className="text-purple-400" /> }
+    { label: "Active Revenue", value: "Tracking", change: "Live", icon: <DollarSign className="text-green-400" /> },
+    { label: "Total Sessions", value: "Live", change: "Sync", icon: <Users className="text-blue-400" /> },
+    { label: "Conversion Rate", value: "Scale", change: "Active", icon: <TrendingUp className="text-primary" /> },
+    { label: "Cost Per Click", value: "Optmized", change: "Active", icon: <MousePointer2 className="text-purple-400" /> }
 ];
 
 export function GrowthDashboard() {
@@ -59,8 +59,8 @@ export function GrowthDashboard() {
                     />
                 </div>
                 <div className="flex justify-between mt-5">
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Target ROAS: 10.0x</p>
-                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] animate-pulse">Current: 8.4x</p>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Target ROAS: High</p>
+                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] animate-pulse">Current: Scaling</p>
                 </div>
             </div>
         </div>

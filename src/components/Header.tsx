@@ -154,7 +154,7 @@ export default function Header() {
                     >
                         {/* Background kinetic text */}
                         <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 opacity-5 pointer-events-none -rotate-12">
-                            <span className="text-[40vw] font-heading font-black uppercase leading-none whitespace-nowrap">
+                            <span className="text-[25vw] sm:text-[30vw] md:text-[40vw] font-heading font-black uppercase leading-none whitespace-nowrap">
                                 NAVIGATE •
                             </span>
                         </div>
@@ -178,7 +178,7 @@ export default function Header() {
                                         initial={{ opacity: 0, x: -50 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: 0.1 * idx }}
-                                        className="flex items-center gap-4 md:gap-8"
+                                        className="flex items-baseline gap-4 md:gap-8"
                                     >
                                         <span className="text-[10px] md:text-[12px] font-black opacity-40 uppercase tracking-[0.5em]">0{idx + 1}</span>
                                         <span className="text-4xl md:text-9xl font-heading font-black uppercase leading-[0.85] tracking-tighter group-hover:text-primary transition-all duration-300 md:group-hover:translate-x-10">
@@ -193,7 +193,7 @@ export default function Header() {
                             <Link
                                 href="/contact"
                                 onClick={() => setMobileOpen(false)}
-                                className="block w-full text-center py-6 md:py-10 bg-accent brutalist-border shadow-[8px_8px_0px_#000] md:shadow-[12px_12px_0px_#000] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-lg md:text-2xl hover:bg-white transition-all sticker-pulse"
+                                className="block w-full text-center py-4 md:py-10 bg-accent brutalist-border shadow-[8px_8px_0px_#000] md:shadow-[12px_12px_0px_#000] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-base md:text-2xl hover:bg-white transition-all sticker-pulse"
                             >
                                 DEPLOY LOGIC! 🔥
                             </Link>

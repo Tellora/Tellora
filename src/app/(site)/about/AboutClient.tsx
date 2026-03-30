@@ -4,8 +4,25 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
 import { motion } from "framer-motion";
-import { Target, Users, Zap, Shield, Rocket, Heart } from "lucide-react";
+import { Target, Users, Zap, Shield, Rocket, Heart, Code, Coffee, MonitorPlay, LineChart, Code2, Globe, Sparkles } from "lucide-react";
 import { TiltCard } from "@/components/animations/TiltCard";
+import Team from "@/components/Team";
+import { DecodeText } from "@/components/animations/ScrollChoreography";
+
+// Relatable Data
+const relatableData = [
+    { value: "400+", label: "Creative Iterations / Mo", icon: <MonitorPlay className="w-5 h-5" /> },
+    { value: "70+", label: "Live A/B Tests", icon: <LineChart className="w-5 h-5" /> },
+    { value: "12,400+", label: "Lines of Custom Code", icon: <Code className="w-5 h-5" /> },
+    { value: "Infinite", label: "Cups of Coffee", icon: <Coffee className="w-5 h-5" /> }
+];
+
+const capabilities = [
+    { title: "Performance Architecture", desc: "Meta & TikTok Native Ad Buyers", tech: ["Ads Manager", "Pixels"] },
+    { title: "Technical Dev", desc: "Next.js & Frontend Physics", tech: ["React", "TypeScript", "Tailwind"] },
+    { title: "Design Systems", desc: "Brutalist, high-converting UI", tech: ["Figma", "Framer Motion"] },
+    { title: "Content Physics", desc: "Short-form kinetic storytelling", tech: ["Premiere Pro", "CapCut"] }
+];
 
 const values = [
     {
@@ -26,10 +43,10 @@ const values = [
 ];
 
 const stats = [
-    { value: "200+", label: "Projects Completed" },
-    { value: "98%", label: "Client Retention" },
-    { value: "50M+", label: "Ad Spend Managed" },
-    { value: "10+", label: "Industry Awards" }
+    { value: "Elite", label: "Talent Roster" },
+    { value: "100%", label: "Data-Driven" },
+    { value: "High", label: "Conversion Rates" },
+    { value: "A+", label: "Client Satisfaction" }
 ];
 
 export default function AboutPage() {
@@ -55,19 +72,24 @@ export default function AboutPage() {
                             >
                                 <span className="text-primary font-black tracking-[0.4em] uppercase text-[10px]">Beyond The Agency</span>
                                 <h2 className="text-4xl md:text-6xl font-heading font-black text-text-main mt-6 mb-8 leading-tight">
-                                    A Modern Approach to <span className="text-gradient-primary">Digital Dominance</span>
+                                    The <span className="text-gradient-primary">Engine Room</span>
                                 </h2>
+                                <p className="text-text-muted text-lg mb-6 leading-relaxed font-medium">
+                                    Tellora started with a singular, quiet frustration: the traditional agency model is broken. Most marketing shops sell "branding" without performance, or "performance" ad-buying without scalable technical architecture.
+                                </p>
                                 <p className="text-text-muted text-lg mb-8 leading-relaxed font-medium">
-                                    Founded with a clear mission: to bridge the gap between high-end aesthetic design and aggressive performance marketing. We realized that beauty without conversions is a hobby, and conversions without brand equity are short-lived.
+                                    We decided to build an anomaly. A collective of Next.js super-developers, TikTok/Meta ad-buyers, and hardcore UI designers functioning as one unit. We don't use templates. We write custom code. We edit brutalist motion graphics. We buy ads natively. This is our standard.
                                 </p>
-                                <p className="text-text-muted text-lg mb-12 leading-relaxed font-medium">
-                                    At Tellora Media, we merge these two worlds into a singular, cohesive growth engine for our clients.
-                                </p>
-                                <div className="grid grid-cols-2 gap-6">
-                                    {stats.map((stat, i) => (
-                                        <div key={i} className="p-8 rounded-[2rem] bg-slate-50 border border-slate-100 shadow-sm transition-all hover:shadow-md group">
-                                            <p className="text-4xl font-black text-text-main mb-2 font-heading group-hover:text-primary transition-colors">{stat.value}</p>
-                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{stat.label}</p>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {relatableData.map((stat, i) => (
+                                        <div key={i} className="p-6 rounded-[2rem] bg-slate-50 border border-slate-100 shadow-sm transition-all hover:shadow-md group flex flex-col justify-between">
+                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-primary border border-slate-200 shadow-sm mb-4 group-hover:scale-110 transition-transform">
+                                                {stat.icon}
+                                            </div>
+                                            <div>
+                                                <p className="text-3xl font-black text-text-main mb-1 font-heading group-hover:text-primary transition-colors">{stat.value}</p>
+                                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">{stat.label}</p>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
@@ -155,6 +177,46 @@ export default function AboutPage() {
                         </div>
                     </div>
                 </section>
+                
+                {/* Tech Stack & Deep Execution Grid */}
+                <section className="py-24 bg-slate-50 border-t border-slate-100 overflow-hidden relative">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+                    <div className="container mx-auto px-4 md:px-6 relative z-10">
+                        <div className="mb-16">
+                            <h2 className="text-3xl md:text-5xl font-heading font-black text-text-main mb-4 leading-tight">
+                                Our Execution <span className="text-gradient-primary">Matrix</span>
+                            </h2>
+                            <p className="text-text-muted font-medium max-w-2xl text-lg">
+                                We don't just strategize. We build. Here's a transparent look at the exact technical architectures and production engines we use to dominate the timeline and scale your revenue.
+                            </p>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {capabilities.map((cap, i) => (
+                                <div key={i} className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                                    <h3 className="text-xl font-heading font-black text-text-main mb-2">{cap.title}</h3>
+                                    <p className="text-text-muted text-sm font-medium mb-6">{cap.desc}</p>
+                                    
+                                    <div className="space-y-3 mt-auto">
+                                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Core Tech & Tools</div>
+                                        <div className="flex flex-wrap gap-2">
+                                            {cap.tech.map((t, idx) => (
+                                                <span key={idx} className="px-3 py-1 bg-slate-50 border border-slate-100 rounded-full text-[10px] font-black text-text-main uppercase tracking-widest group-hover:border-primary group-hover:text-primary transition-colors">
+                                                    {t}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+                
+                {/* Integrated 3D Squad Section */}
+                <div className="bg-background pt-12 text-black border-y-[4px] border-black pb-12">
+                    <Team />
+                </div>
             </main>
 
             <Footer />

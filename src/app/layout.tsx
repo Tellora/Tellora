@@ -126,7 +126,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${plusJakartaSans.variable} ${outfit.variable} antialiased selection:bg-primary/20`}
+                className={`${plusJakartaSans.variable} ${outfit.variable} antialiased selection:bg-primary/20 overflow-x-hidden`}
             >
                 <script
                     type="application/ld+json"

@@ -67,13 +67,13 @@ export default function AnimatedFeatures() {
                     {/* BENTO 1: Data Analytics */}
                     <Link href="/services" className="lg:col-span-2 relative group h-full block">
                         <AdvancedCard className="h-full bg-white/5 backdrop-blur-md !border-[2px] !border-primary/30 text-white min-h-[350px] md:min-h-[400px]">
-                            <div className="p-10 md:p-14 h-full flex flex-col relative z-10 w-full">
+                            <div className="p-6 md:p-14 h-full flex flex-col relative z-10 w-full">
                                 <div className="absolute top-8 right-8 text-primary opacity-50">
                                     <Activity size={64} className="animate-pulse" />
                                 </div>
                                 <div className="mt-auto">
                                     <div className="text-xs font-black uppercase tracking-[0.4em] text-accent mb-4">Module_01</div>
-                                    <h3 className="text-4xl md:text-5xl font-heading font-black uppercase mb-4 tracking-tighter leading-none">
+                                    <h3 className="text-3xl md:text-5xl font-heading font-black uppercase mb-4 tracking-tighter leading-none">
                                         Predictive Analytics
                                     </h3>
                                     <p className="text-xs md:text-sm uppercase tracking-widest leading-relaxed max-w-md opacity-70">
@@ -88,17 +88,17 @@ export default function AnimatedFeatures() {
                     {/* BENTO 2: Automation */}
                     <Link href="/services" className="relative group h-full block">
                         <AdvancedCard className="h-full bg-primary !border-none text-white min-h-[350px] md:min-h-[400px] shadow-[8px_8px_0px_#000]">
-                            <div className="p-10 md:p-14 h-full flex flex-col items-start justify-end relative z-10 overflow-hidden w-full">
+                            <div className="p-6 md:p-14 h-full flex flex-col items-start justify-end relative z-10 overflow-hidden w-full">
                                 <div className="absolute -top-10 -right-10 w-48 h-48 border-[12px] border-black/10 rounded-full group-hover:scale-125 group-hover:rotate-12 transition-transform duration-700 pointer-events-none" />
 
                                 <div className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-black mb-4 bg-white px-3 py-1 brutalist-border shadow-[4px_4px_0px_#000]">Module_02</div>
-                                <h3 className="text-4xl md:text-5xl font-heading font-black uppercase tracking-tighter text-black leading-none">
+                                <h3 className="text-3xl md:text-5xl font-heading font-black uppercase tracking-tighter text-black leading-none">
                                     Autonomous Scale
                                 </h3>
 
                                 <Magnetic>
                                     <div className="mt-8 w-14 h-14 bg-black rounded-full flex items-center justify-center text-white brutalist-border shadow-[4px_4px_0px_#FFF] hover:bg-white hover:text-black hover:shadow-[4px_4px_0px_#000] transition-colors pointer-events-auto">
-                                        <ArrowRight size={24} className="-rotate-45 group-hover/button:-rotate-0 transition-transform" />
+                                        <ArrowRight size={24} className="rotate-0 md:-rotate-45 group-hover/button:-rotate-0 transition-transform" />
                                     </div>
                                 </Magnetic>
                             </div>
@@ -108,7 +108,7 @@ export default function AnimatedFeatures() {
                     {/* BENTO 3: Conversion Architect */}
                     <Link href="/services" className="relative group h-full block">
                         <AdvancedCard className="h-full bg-[#111] !border-[2px] !border-white/10 text-white min-h-[350px] md:min-h-[400px]">
-                            <div className="p-10 md:p-14 h-full flex flex-col justify-end relative z-10 w-full group-hover:bg-[#1a1a1a] transition-colors duration-500 rounded-[3rem]">
+                            <div className="p-6 md:p-14 h-full flex flex-col justify-end relative z-10 w-full group-hover:bg-[#1a1a1a] transition-colors duration-500 rounded-[3rem]">
                                 <Terminal size={48} className="text-secondary mb-auto mt-4 group-hover:rotate-12 transition-transform duration-500" />
                                 <div className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-secondary mb-4 mt-8">Module_03</div>
                                 <h3 className="text-3xl md:text-4xl font-heading font-black uppercase tracking-tighter leading-none">
@@ -122,10 +122,10 @@ export default function AnimatedFeatures() {
                     {/* BENTO 4: Omnichannel Sync */}
                     <Link href="/services" className="lg:col-span-2 relative group h-full block">
                         <AdvancedCard className="h-full bg-accent !border-none text-black min-h-[350px] md:min-h-[400px] overflow-hidden shadow-[8px_8px_0px_#000]">
-                            <div className="p-10 md:p-14 h-full flex flex-col lg:flex-row items-start lg:items-end justify-between relative z-10 gap-8 w-full">
+                            <div className="p-6 md:p-14 h-full flex flex-col lg:flex-row items-start lg:items-end justify-between relative z-10 gap-8 w-full">
                                 <div className="max-w-md mt-auto">
                                     <div className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-white bg-black px-3 py-1 w-max brutalist-border mb-4 shadow-[4px_4px_0px_#FFF]">Module_04</div>
-                                    <h3 className="text-4xl md:text-5xl font-heading font-black uppercase tracking-tighter mb-4 leading-none">
+                                    <h3 className="text-3xl md:text-5xl font-heading font-black uppercase tracking-tighter mb-4 leading-none">
                                         Omnichannel Sync
                                     </h3>
                                     <p className="text-xs md:text-sm font-black uppercase tracking-widest leading-relaxed opacity-80">

@@ -10,36 +10,42 @@ import { ScrollLine, HorizontalReveal, FloatingElement, MagneticElement, Paralla
 const caseStudies = [
     {
         title: "JS Wedding Services",
-        impact: "+187% Organic Traffic",
+        impact: "Organic Dominance",
         description: "How we transformed a regional wedding boutique into a national digital authority using semantic SEO and high-performance WebGL design.",
+        challenge: "Stuck in local search algorithms with poor visibility and low-quality lead capture.",
+        execution: "Completely rebuilt the frontend architecture using Next.js and deployed a semantic content cluster targeting high-intent keywords.",
         tags: ["SEO", "Web Development", "UI/UX"],
         stats: [
-            { label: "Rev Growth", value: "3.5x" },
-            { label: "CPA Reduction", value: "42%" }
+            { label: "Search Vis.", value: "Tier 1" },
+            { label: "CPA Reduction", value: "Massive" }
         ],
         image: "https://images.unsplash.com/photo-1562577309-4932fdd64cd1?auto=format&fit=crop&w=1200&q=80",
         color: "#A855F7" // Primary
     },
     {
         title: "Astrology Light",
-        impact: "15k+ New Acquisitions",
+        impact: "Viral Expansion",
         description: "Architecting a viral social growth engine that fueled a subscription-based platform's expansion into new continental markets.",
+        challenge: "Saturating existing audiences with fatigue leading to rapidly increasing Customer Acquisition Costs.",
+        execution: "Deployed an aggressive TikTok structural testing framework, cutting losing creatives in 24 hours and scaling winning hooks exponentially.",
         tags: ["Social Media", "Paid Performance", "Scaling"],
         stats: [
-            { label: "CAC", value: "$1.20" },
-            { label: "MAU Increase", value: "310%" }
+            { label: "Scale", value: "Global" },
+            { label: "Viral Impact", value: "High" }
         ],
         image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1200&q=80",
         color: "#F3E84A" // Accent
     },
     {
         title: "FinTech Pro",
-        impact: "Zero-Friction Funnel",
+        impact: "Frictionless Funnel",
         description: "Redesigning a high-intent financial services funnel using Next.js and complex state management for instantaneous decision results.",
+        challenge: "60%+ drop-off rate at the final step of their multi-page application process due to slow load times.",
+        execution: "Engineered a single-page localized application with brutalist UI patterns to establish extreme trust and zero wait times.",
         tags: ["Product Design", "Next.js", "Analytics"],
         stats: [
-            { label: "Conv Rate", value: "18.4%" },
-            { label: "Load Time", value: "0.2s" }
+            { label: "Conv Rate", value: "Peak" },
+            { label: "Load Time", value: "Instant" }
         ],
         image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
         color: "#22C55E" // Success
@@ -118,21 +124,33 @@ export default function CaseStudiesPage() {
                                             ))}
                                         </div>
 
-                                        <h2 className="text-6xl md:text-[8rem] font-heading font-black text-black mb-12 leading-none tracking-tighter uppercase group-hover:text-primary transition-all duration-500 drop-shadow-[5px_5px_0px_rgba(0,0,0,0.1)]">
+                                        <h2 className="text-6xl md:text-[8rem] font-heading font-black text-black mb-10 leading-none tracking-tighter uppercase group-hover:text-primary transition-all duration-500 drop-shadow-[5px_5px_0px_rgba(0,0,0,0.1)]">
                                             {study.title}
                                         </h2>
 
-                                        <p className="text-black font-black uppercase leading-tight opacity-60 mb-16 max-w-lg text-lg">
+                                        <p className="text-black font-black uppercase leading-tight opacity-60 mb-8 max-w-lg text-lg">
                                             {study.description}
                                         </p>
 
+                                        <div className="bg-slate-50 p-6 brutalist-border mb-12 shadow-[4px_4px_0px_#000]">
+                                            <div className="mb-6">
+                                                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-2 flex items-center gap-2"><Zap size={10} /> The Challenge</h4>
+                                                <p className="text-sm font-medium text-black/80">{study.challenge}</p>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-success mb-2 flex items-center gap-2"><Sparkles size={10} /> The Execution</h4>
+                                                <p className="text-sm font-medium text-black/80">{study.execution}</p>
+                                            </div>
+                                        </div>
+
                                         <div className="grid grid-cols-2 gap-12 mb-16 py-12 border-y-[4px] border-black relative overflow-hidden">
                                             {study.stats.map((stat, sIdx) => (
-                                                <div key={sIdx} className="flex flex-col">
-                                                    <p className="text-5xl font-heading font-black text-black mb-3 leading-none group-hover:text-primary transition-colors italic shadow-white text-shadow-sm">{stat.value}</p>
+                                                <div key={sIdx} className="flex flex-col z-10">
+                                                    <p className="text-4xl lg:text-5xl font-heading font-black text-black mb-3 leading-none group-hover:text-primary transition-colors italic shadow-white text-shadow-sm">{stat.value}</p>
                                                     <p className="text-[10px] font-black text-black/40 uppercase tracking-[0.4em]">{stat.label}</p>
                                                 </div>
                                             ))}
+
                                         </div>
 
                                         <MagneticElement>

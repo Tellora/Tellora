@@ -9,7 +9,7 @@ export default function Testimonials() {
         {
             name: "Sarah Jenkins",
             role: "CMO, TechNova",
-            content: "Tellora completely transformed our online presence. Our inbound leads increased by 150% in just 3 months. Their data-driven approach is absolute magic.",
+            content: "Tellora completely transformed our online presence. Our inbound leads increased significantly. Their data-driven approach is absolute magic.",
             initials: "SJ",
             color: "#A855F7",
             rotate: "-2deg"

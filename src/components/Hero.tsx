@@ -9,9 +9,9 @@ import { DecodeText } from "@/components/animations/ScrollChoreography";
 import { TiltCard } from "@/components/animations/TiltCard";
 
 const stats = [
-    { value: "500+", label: "Brands Scaled", color: "#A855F7" },
-    { value: "4.9×", label: "Avg ROI", color: "#22C55E" },
-    { value: "98%", label: "Retention Rate", color: "#F3E84A" },
+    { value: "5+", label: "Core Partners", color: "#A855F7" },
+    { value: "Data", label: "Driven Growth", color: "#22C55E" },
+    { value: "100%", label: "Performance", color: "#F3E84A" },
 ];
 
 export default function Hero() {
@@ -82,7 +82,7 @@ export default function Hero() {
                 <div className="flex flex-col items-center text-center">
 
                     {/* Decorative Background Ornaments - GPU Accelerated */}
-                    <motion.div style={{ x: interactiveX, y: interactiveY }} className="absolute -z-10 w-full h-[150%] pointer-events-none translate-z-0 overflow-visible">
+                    <motion.div style={{ x: interactiveX, y: interactiveY }} className="absolute -z-10 w-full h-[150%] pointer-events-none translate-z-0 overflow-visible hidden md:block">
                         <div className="absolute top-[5%] left-[10%] bg-primary p-12 brutalist-border shadow-[12px_12px_0px_#000] rotate-12 opacity-40 animate-float translate-z-0">
                             <Globe size={120} className="text-black" />
                         </div>
@@ -117,15 +117,15 @@ export default function Hero() {
                         style={{ y: yHero }}
                         className="relative mb-12 md:mb-20 translate-z-0 mt-16 md:mt-0"
                     >
-                        <div className="relative group">
-                            <h1 className="text-[18vw] md:text-[20rem] font-heading font-black tracking-tighter leading-[0.85] md:leading-none text-black selection:bg-accent select-none uppercase relative z-20">
+                        <div className="relative group mt-8 md:mt-0">
+                            <h1 className="text-[15vw] md:text-[20rem] font-heading font-black tracking-tighter leading-[0.85] md:leading-none text-black selection:bg-accent select-none uppercase relative z-20">
                                 TELLORA <br />
                                 <span className="animate-red-gradient drop-shadow-[4px_4px_0px_#000] md:drop-shadow-[10px_10px_0px_#000] inline-block -translate-y-2 md:-translate-y-8 gpu-accelerated">
                                     MEDIA
                                 </span>
                             </h1>
                             <span className="sr-only">Tellora Media - Premier Digital Growth Agency and SEO Experts</span>
-                            <div className="absolute -top-6 md:-top-12 left-1/2 -translate-x-1/2 px-4 md:px-6 py-2 bg-black text-white text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] rough-border shadow-[4px_4px_0px_#F3E84A] md:shadow-[8px_8px_0px_#F3E84A] rotate-2 animate-bounce flex items-center whitespace-nowrap">
+                            <div className="absolute -top-10 md:-top-12 left-1/2 -translate-x-1/2 px-4 md:px-6 py-2 bg-black text-white text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] rough-border shadow-[4px_4px_0px_#F3E84A] md:shadow-[8px_8px_0px_#F3E84A] rotate-2 animate-bounce flex items-center whitespace-nowrap">
                                 Global Digital Growth Agency
                             </div>
                         </div>
@@ -138,7 +138,7 @@ export default function Hero() {
                         className="max-w-5xl mb-16 md:mb-24"
                     >
                         <p className="text-xl sm:text-2xl md:text-5xl font-black uppercase tracking-tighter leading-[1.2] md:leading-[0.9] text-black">
-                            <DecodeText text="Engineering" /> <span className="bg-primary text-black rough-border px-3 md:px-6 py-2 md:py-3 rotate-[-1.5deg] inline-block mx-2 md:mx-4 shadow-[5px_5px_0px_#F3E84A] md:shadow-[10px_10px_0px_#F3E84A]"><DecodeText text="DOPAMINE-DRIVEN" /></span> growth with <span className="text-black underline decoration-secondary decoration-[4px] md:decoration-[10px] underline-offset-[4px] md:underline-offset-[8px] italic"><DecodeText text="absolute intent." /></span>
+                            <DecodeText text="Engineering" /> <span className="bg-primary text-black rough-border px-2 py-1 md:px-6 md:py-3 rotate-[-1.5deg] inline-block mx-1 md:mx-4 shadow-[4px_4px_0px_#F3E84A] md:shadow-[10px_10px_0px_#F3E84A]"><DecodeText text="DOPAMINE-DRIVEN" /></span> growth with <span className="text-black underline decoration-secondary decoration-[4px] md:decoration-[10px] underline-offset-[4px] md:underline-offset-[8px] italic"><DecodeText text="absolute intent." /></span>
                         </p>
                     </motion.div>
 

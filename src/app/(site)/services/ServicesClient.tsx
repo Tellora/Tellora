@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
 import { motion } from "framer-motion";
-import { Search, Share2, Monitor, PenTool, ArrowRight, BarChart3, Lightbulb, Zap, Sparkles, Star } from "lucide-react";
+import { Search, Share2, Monitor, PenTool, ArrowRight, BarChart3, Lightbulb, Zap, Sparkles, Star, Database, Cpu, Target, CheckCircle2 } from "lucide-react";
 import { GrowthDashboard } from "@/components/GrowthDashboard";
 import { ScrollLine, HorizontalReveal, FloatingElement, MagneticElement, ScrollConnector } from "@/components/animations/ScrollChoreography";
 
@@ -58,6 +58,32 @@ const allServices = [
                 icon: <Lightbulb size={24} />,
                 features: ["Visual Identity Systems", "Brand Positioning", "Market Differentiation"],
                 color: "#22C55E"
+            }
+        ]
+    },
+    {
+        category: "Analytics & Automation",
+        items: [
+            {
+                title: "Data Architecture",
+                description: "Centralized, real-time tracking systems bridging Meta, Google, and CRM data into a single definitive source of truth.",
+                icon: <Database size={24} />,
+                features: ["Server-Side Tracking", "Predictive Dashboards", "Cross-Channel Attribution"],
+                color: "#4AC0E4"
+            },
+            {
+                title: "AI Workflows",
+                description: "Custom AI deployment to automate lead scoring, dynamic creative generation, and high-speed internal CRM routing.",
+                icon: <Cpu size={24} />,
+                features: ["Zapier/Make Automation", "LLM-Powered Content", "Dynamic Pricing Tech"],
+                color: "#14B8A6"
+            },
+            {
+                title: "Conversion Architecture",
+                description: "Relentless A/B testing of deep funnel mechanics. We manipulate user psychology to maximize absolute cart value.",
+                icon: <Target size={24} />,
+                features: ["A/B Split Testing", "Heatmap Analysis", "Checkout Friction Removal"],
+                color: "#F43F5E"
             }
         ]
     }
@@ -131,6 +157,41 @@ export default function ServicesPage() {
                                 </div>
                             </div>
                         </HorizontalReveal>
+                    </div>
+                </section>
+
+                {/* Methodology Section */}
+                <section className="py-32 relative bg-black text-white overflow-hidden border-y-[6px] border-primary">
+                    <div className="absolute inset-0 noise-overlay opacity-10 pointer-events-none" />
+                    <div className="container mx-auto px-6 relative z-10">
+                        <div className="mb-20">
+                            <div className="inline-flex items-center gap-4 mb-6 px-6 py-2 bg-white text-black brutalist-border rounded-full rotate-2 shadow-[4px_4px_0px_#A855F7]">
+                                <Sparkles size={14} className="text-primary fill-current" />
+                                <span className="font-black uppercase tracking-widest text-[10px]">Standard Operating Procedure</span>
+                            </div>
+                            <h2 className="text-5xl md:text-7xl font-heading font-black tracking-tighter uppercase mb-6 leading-none">
+                                The Deployment <br /> <span className="text-primary italic">Protocol</span>
+                            </h2>
+                            <p className="max-w-2xl text-white/60 font-medium text-lg leading-relaxed">
+                                Standard agencies guess. We execute a rigorous, battle-tested operating procedure to guarantee zero wasted ad spend, surgical precision in development, and maximum architectural stability.
+                            </p>
+                        </div>
+                        <div className="grid md:grid-cols-4 gap-6">
+                            {[
+                                { step: "01", title: "Forensic Audit", desc: "A ruthless breakdown of your entire tech stack, ad accounts, and SEO architecture to find immediate leaks." },
+                                { step: "02", title: "Growth Blueprint", desc: "We map out the exact predictive mathematical model and technical roadmap required to hit your target ROI." },
+                                { step: "03", title: "Hard Execution", desc: "Our team builds the Next.js landing pages, creates the brutalist motion art, and launches the live ad campaigns." },
+                                { step: "04", title: "Infinite Scale", desc: "Daily multivariate testing. We cut losing variants aggressively and pour budget directly into winning formulas." }
+                            ].map((phase, i) => (
+                                <div key={i} className="p-8 brutalist-card bg-[#111] hover:bg-primary transition-colors group shadow-[8px_8px_0px_#A855F7] md:hover:-translate-y-4 duration-300">
+                                    <div className="text-4xl font-heading font-black text-white/20 mb-6 group-hover:text-black/50 transition-colors">{phase.step}</div>
+                                    <h3 className="text-2xl font-black uppercase tracking-tight mb-4 group-hover:text-black mt-auto">{phase.title}</h3>
+                                    <p className="text-xs font-medium text-white/60 group-hover:text-black uppercase tracking-widest leading-relaxed">
+                                        {phase.desc}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </section>
 

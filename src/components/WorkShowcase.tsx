@@ -14,7 +14,7 @@ const projects = [
         color: "#F3E84A",
         label: "Web & SEO",
         image: "https://images.unsplash.com/photo-1562577309-4932fdd64cd1?auto=format&fit=crop&w=800&q=80",
-        badge: "CONV: +120%",
+        badge: "CONV. SCALE",
         rotate: "-2deg"
     },
     {
@@ -34,7 +34,7 @@ const projects = [
         color: "#22C55E",
         label: "UI/UX Design",
         image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=800&q=80",
-        badge: "ROAS: 12.5x",
+        badge: "HIGH ROAS",
         rotate: "-1deg"
     },
     {
