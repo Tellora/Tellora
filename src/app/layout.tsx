@@ -118,6 +118,8 @@ const jsonLd = {
     }
 };
 
+import Script from "next/script";
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -125,24 +127,23 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <head>
-                {/* Google tag (gtag.js) */}
-                <script async src="https://www.googletagmanager.com/gtag/js?id=G-BVWRJPJRZ1"></script>
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `
-                        window.dataLayer = window.dataLayer || [];
-                        function gtag(){dataLayer.push(arguments);}
-                        gtag('js', new Date());
-
-                        gtag('config', 'G-BVWRJPJRZ1');
-                        `
-                    }}
-                />
-            </head>
             <body
                 className={`${plusJakartaSans.variable} ${outfit.variable} antialiased selection:bg-primary/20 overflow-x-hidden`}
             >
+                {/* Google tag (gtag.js) */}
+                <Script 
+                    strategy="afterInteractive" 
+                    src="https://www.googletagmanager.com/gtag/js?id=G-BVWRJPJRZ1" 
+                />
+                <Script id="google-analytics" strategy="afterInteractive">
+                    {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+
+                    gtag('config', 'G-BVWRJPJRZ1');
+                    `}
+                </Script>
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
