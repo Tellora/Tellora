@@ -109,10 +109,10 @@ export default function AdminTeam() {
                 <div className="w-full">
                     <div className="flex items-center gap-2 mb-2">
                         <Users size={14} className="text-primary" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Personnel Command</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Team Management</span>
                     </div>
-                    <h1 className="text-3xl sm:text-4xl font-black tracking-tighter text-white">Visionary <span className="text-primary">Squad</span></h1>
-                    <p className="text-white/40 font-medium text-xs sm:text-sm mt-1">Personnel management and network authority levels.</p>
+                    <h1 className="text-3xl sm:text-4xl font-black tracking-tighter text-white">Agency <span className="text-primary">Team</span></h1>
+                    <p className="text-white/40 font-medium text-xs sm:text-sm mt-1">Manage team members and authorization levels.</p>
                 </div>
 
                 <div className="flex gap-4 w-full md:w-auto">
@@ -120,7 +120,7 @@ export default function AdminTeam() {
                         onClick={() => { setEditingMember(null); setIsModalOpen(true); }}
                         className="w-full md:w-auto flex justify-center items-center gap-2 md:gap-3 px-6 md:px-8 py-4 bg-primary text-white rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest hover:shadow-[0_8px_25px_rgba(74,192,228,0.4)] transition-all active:scale-95"
                     >
-                        <Plus size={16} className="md:w-[18px] md:h-[18px]" /> Deploy New Specialist
+                        <Plus size={16} className="md:w-[18px] md:h-[18px]" /> Add Team Member
                     </button>
                 </div>
             </div>
@@ -144,14 +144,13 @@ export default function AdminTeam() {
                 ))}
             </div>
 
-            {/* Matrix View Filter */}
             <div className="bg-[#0D121F]/60 backdrop-blur-2xl border border-white/10 rounded-3xl md:rounded-[3.5rem] overflow-hidden shadow-2xl">
                 <div className="p-4 md:p-8 border-b border-white/5 flex flex-col sm:flex-row gap-4 md:gap-6 items-center">
                     <div className="flex-1 relative w-full">
                         <Search className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 text-white/20 w-4 h-4 md:w-[18px] md:h-[18px]" />
                         <input
                             type="text"
-                            placeholder="Query personnel matrix by ID or Role..."
+                            placeholder="Search team members by Name or Role..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl py-3 md:py-4 pl-12 md:pl-14 pr-4 md:pr-6 text-white font-medium outline-none focus:border-primary/30 transition-all text-sm"
@@ -166,11 +165,11 @@ export default function AdminTeam() {
                     <table className="w-full text-left min-w-[600px]">
                         <thead>
                             <tr className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-white/20 border-b border-white/5">
-                                <th className="p-4 md:p-6 whitespace-nowrap">Personnel Node</th>
-                                <th className="p-4 md:p-6 whitespace-nowrap hidden sm:table-cell">Direct Role</th>
+                                <th className="p-4 md:p-6 whitespace-nowrap">Member Name</th>
+                                <th className="p-4 md:p-6 whitespace-nowrap hidden sm:table-cell">Role</th>
                                 <th className="p-4 md:p-6 whitespace-nowrap">Performance</th>
-                                <th className="p-4 md:p-6 whitespace-nowrap hidden md:table-cell">Auth Status</th>
-                                <th className="p-4 md:p-6 text-right whitespace-nowrap">Terminal</th>
+                                <th className="p-4 md:p-6 whitespace-nowrap hidden md:table-cell">Status</th>
+                                <th className="p-4 md:p-6 text-right whitespace-nowrap">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
@@ -238,17 +237,17 @@ export default function AdminTeam() {
                                     <div className="w-16 h-16 md:w-20 md:h-20 bg-primary/10 rounded-2xl md:rounded-[2rem] flex items-center justify-center text-primary mx-auto mb-4 md:mb-6 shadow-2xl">
                                         <Shield size={28} className="md:w-8 md:h-8" />
                                     </div>
-                                    <h2 className="text-2xl md:text-3xl font-black text-white tracking-tighter italic">{editingMember ? "Override Node" : "Ingest Specialist"}</h2>
-                                    <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-white/20 mt-1 md:mt-2">Personnel Sync Protocol</p>
+                                    <h2 className="text-2xl md:text-3xl font-black text-white tracking-tighter italic">{editingMember ? "Edit Member" : "Add Team Member"}</h2>
+                                    <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] text-white/20 mt-1 md:mt-2">Member Configuration</p>
                                 </div>
 
                                 <div className="space-y-4 md:space-y-6">
                                     <div className="space-y-2">
-                                        <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-primary ml-1">Personnel Legal Name</label>
+                                        <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-primary ml-1">Full Name</label>
                                         <input name="name" defaultValue={editingMember?.name} required className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl p-4 md:p-5 text-sm md:text-base text-white outline-none focus:border-primary transition-all font-medium" placeholder="E.g. Vansh Gupta" />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-primary ml-1">Operational Designation</label>
+                                        <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-primary ml-1">Role & Title</label>
                                         <input name="role" defaultValue={editingMember?.role} required className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl p-4 md:p-5 text-sm md:text-base text-white outline-none focus:border-primary transition-all font-medium" placeholder="E.g. Creative Specialist" />
                                     </div>
                                 </div>

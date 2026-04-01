@@ -125,6 +125,21 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <head>
+                {/* Google tag (gtag.js) */}
+                <script async src="https://www.googletagmanager.com/gtag/js?id=G-BVWRJPJRZ1"></script>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('js', new Date());
+
+                        gtag('config', 'G-BVWRJPJRZ1');
+                        `
+                    }}
+                />
+            </head>
             <body
                 className={`${plusJakartaSans.variable} ${outfit.variable} antialiased selection:bg-primary/20 overflow-x-hidden`}
             >
@@ -133,6 +148,33 @@ export default function RootLayout({
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
                 {children}
+
+                {/* Axeptio Cookie Setup */}
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                        window.axeptioSettings = {
+                            clientId: "69cd47d9268b590b51f2ad12",
+                            cookiesVersion: "eaa4ce71-6984-4cd8-b8f9-29a5f714f67a",
+                            googleConsentMode: {
+                                default: {
+                                    analytics_storage: "denied",
+                                    ad_storage: "denied",
+                                    ad_user_data: "denied",
+                                    ad_personalization: "denied",
+                                    wait_for_update: 500
+                                }
+                            }
+                        };
+                        
+                        (function(d, s) {
+                            var t = d.getElementsByTagName(s)[0], e = d.createElement(s);
+                            e.async = true; e.src = "//static.axept.io/sdk.js";
+                            t.parentNode.insertBefore(e, t);
+                        })(document, "script");
+                        `
+                    }}
+                />
             </body>
         </html>
     );

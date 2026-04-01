@@ -112,7 +112,7 @@ export default function RecruitmentAdmin() {
     };
 
     const handleDeleteJob = async (id: number) => {
-        if (confirm("Permanently archive this opportunity node?")) {
+        if (confirm("Permanently archive this job opening?")) {
             const job = jobs.find(j => j.id === id);
             await saveJobs(jobs.filter(j => j.id !== id));
             await helperRecordActivity('Archive', `Job: ${job?.title}`);
@@ -220,7 +220,7 @@ export default function RecruitmentAdmin() {
                                         <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 text-white/10">
                                             <Briefcase size={40} />
                                         </div>
-                                        <p className="text-white/20 font-black uppercase tracking-widest text-[10px]">No active opportunity nodes</p>
+                                        <p className="text-white/20 font-black uppercase tracking-widest text-[10px]">No active job openings</p>
                                     </div>
                                 )}
                             </div>
@@ -314,8 +314,8 @@ export default function RecruitmentAdmin() {
                             <form onSubmit={handleSaveJob} className="space-y-6 md:space-y-8">
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <h2 className="text-2xl md:text-3xl font-black text-white tracking-tighter italic">{editingJob ? "Update Role" : "Open Opportunity"}</h2>
-                                        <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-white/20 mt-1 md:mt-2">Opportunity Configuration</p>
+                                        <h2 className="text-2xl md:text-3xl font-black text-white tracking-tighter italic">{editingJob ? "Update Role" : "Add Job"}</h2>
+                                        <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-white/20 mt-1 md:mt-2">Job Configuration</p>
                                     </div>
                                     <button onClick={() => setIsJobModalOpen(false)} type="button" className="p-2 md:p-3 bg-white/5 rounded-xl md:rounded-2xl text-white/40 hover:text-white transition-all"><X size={20} className="w-4 h-4 md:w-5 md:h-5" /></button>
                                 </div>
