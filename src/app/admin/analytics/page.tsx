@@ -24,11 +24,35 @@ export default function AdminAnalytics() {
     useEffect(() => {
         const loadStats = async () => {
             // These will be replaced by Google Analytics Data API queries
+            try {
+                const res = await fetch("/api/admin/analytics");
+                if (res.ok) {
+                    const data = await res.json();
+                    
+                    // Format duration from seconds (e.g., 141) to "2m 21s"
+                    const durationStr = () => {
+                        const secs = parseInt(data.durationSecs || 0);
+                        return `${Math.floor(secs / 60)}m ${secs % 60}s`;
+                    };
+
+                    setStats([
+                        { label: "Total Pageviews", value: parseInt(data.pageviews).toLocaleString(), change: "Live", trend: 'up', color: '#4ac0e4', icon: Eye },
+                        { label: "Unique Visitors", value: parseInt(data.visitors).toLocaleString(), change: "Live", trend: 'up', color: '#2e7dbf', icon: Users },
+                        { label: "Avg. Session Duration", value: durationStr(), change: "Live", trend: 'up', color: '#7dd4f0', icon: Clock },
+                        { label: "Bounce Rate", value: `${parseFloat(data.bounce).toFixed(1)}%`, change: "Live", trend: 'neutral', color: '#4ac0e4', icon: MousePointer2 },
+                    ]);
+                    return;
+                }
+            } catch (e) {
+                console.log("Analytics loading in Dev Isolation or Proxy Unreachable:", e);
+            }
+
+            // Local development payload fallback
             setStats([
-                { label: "Total Pageviews", value: "0", change: "Pending API", trend: 'neutral', color: '#4ac0e4', icon: Eye },
-                { label: "Unique Visitors", value: "0", change: "Pending API", trend: 'neutral', color: '#2e7dbf', icon: Users },
-                { label: "Avg. Session Duration", value: "0m 0s", change: "Pending API", trend: 'neutral', color: '#7dd4f0', icon: Clock },
-                { label: "Bounce Rate", value: "0%", change: "Pending API", trend: 'neutral', color: '#4ac0e4', icon: MousePointer2 },
+                { label: "Total Pageviews", value: "0", change: "Prod Only", trend: 'neutral', color: '#4ac0e4', icon: Eye },
+                { label: "Unique Visitors", value: "0", change: "Prod Only", trend: 'neutral', color: '#2e7dbf', icon: Users },
+                { label: "Avg. Session Duration", value: "0m 0s", change: "Prod Only", trend: 'neutral', color: '#7dd4f0', icon: Clock },
+                { label: "Bounce Rate", value: "0%", change: "Prod Only", trend: 'neutral', color: '#4ac0e4', icon: MousePointer2 },
             ]);
         };
         loadStats();
