@@ -26,6 +26,37 @@ export default {
             }
         }
 
+        // --- Global Database Proxy (KV) ---
+        // Interfaces with Cloudflare KV to provide a globally synced database for the purely static frontend
+        if (url.pathname.startsWith("/api/admin/db/")) {
+            const collection = url.pathname.replace("/api/admin/db/", "");
+            
+            if (!env.TELLORA_DB) {
+                return new Response(JSON.stringify({ error: "Database not bound. Create KV and bind as TELLORA_DB." }), {
+                    status: 500, headers: { "Access-Control-Allow-Origin": "*" }
+                });
+            }
+
+            if (request.method === "GET") {
+                const data = await env.TELLORA_DB.get(`collection_${collection}`);
+                return new Response(data || '[]', {
+                    headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+                });
+            }
+
+            if (request.method === "POST" || request.method === "PUT") {
+                try {
+                    const reqJson = await request.json();
+                    await env.TELLORA_DB.put(`collection_${collection}`, JSON.stringify(reqJson.data));
+                    return new Response(JSON.stringify({ success: true }), {
+                        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+                    });
+                } catch(e) {
+                    return new Response(JSON.stringify({ error: "KV Write Error" }), { status: 500 });
+                }
+            }
+        }
+
         // --- Google Analytics API Proxy ---
         // Securely signs JWT on the Edge and fetches real-time traffic data natively
         if (url.pathname === "/api/admin/analytics") {

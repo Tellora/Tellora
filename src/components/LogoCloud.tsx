@@ -1,23 +1,24 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRef } from "react";
-import { ArrowRight, Award, Sparkles, Zap } from "lucide-react";
-
-const clients = [
-    { name: "Client 1", logo: "/clients/client logo (10).png" },
-    { name: "Client 2", logo: "/clients/clientLogo (2).png" },
-    { name: "Client 3", logo: "/clients/clientlogo (3).png" },
-    { name: "Client 4", logo: "/clients/clientlogo (4).png" },
-    { name: "Client 5", logo: "/clients/clientlogo (5).png" },
-    { name: "Client 6", logo: "/clients/clientlogo (6).png" },
-    { name: "Client 7", logo: "/clients/clientlogo (7).png" },
-    { name: "Client 8", logo: "/clients/clientlogo (8).png" },
-    { name: "Client 9", logo: "/clients/clientlogo (9).png" },
-    { name: "Client 10", logo: "/clients/clientlogo.png" },
-];
+import { useEffect, useState } from "react";
+import { ArrowRight, Award, Zap } from "lucide-react";
+import Link from "next/link";
+import { getClients } from "@/lib/store";
 
 export default function LogoCloud() {
+    const [clients, setClients] = useState<{ name: string; logo_url: string }[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getClients().then(data => {
+            setClients(data || []);
+            setLoading(false);
+        });
+    }, []);
+
+    if (loading || clients.length === 0) return null;
+
     return (
         <section
             id="partners"
@@ -47,7 +48,7 @@ export default function LogoCloud() {
                                         className="px-12 py-8 brutalist-border bg-white hover:bg-gray-50 hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_#A855F7] transition-all group flex items-center justify-center min-w-[280px]"
                                     >
                                         <img
-                                            src={client.logo}
+                                            src={client.logo_url}
                                             alt={client.name}
                                             className="h-20 md:h-24 w-auto object-contain transition-all hover:scale-110"
                                         />
@@ -106,5 +107,3 @@ export default function LogoCloud() {
         </section>
     );
 }
-
-import Link from "next/link";

@@ -1,95 +1,64 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
 import { motion } from "framer-motion";
-import { Search, Share2, Monitor, PenTool, ArrowRight, BarChart3, Lightbulb, Zap, Sparkles, Star, Database, Cpu, Target, CheckCircle2 } from "lucide-react";
+import { 
+    Search, Share2, Monitor, PenTool, ArrowRight, BarChart3, 
+    Lightbulb, Zap, Sparkles, Star, Database, Cpu, Target, 
+    CheckCircle2, Globe, Shield, Rocket, Layout, Code, Play
+} from "lucide-react";
 import { GrowthDashboard } from "@/components/GrowthDashboard";
 import { ScrollLine, HorizontalReveal, FloatingElement, MagneticElement, ScrollConnector } from "@/components/animations/ScrollChoreography";
+import { getServices, Service } from "@/lib/store";
 
-const allServices = [
-    {
-        category: "Traffic & Visibility",
-        items: [
-            {
-                title: "SEO Optimization",
-                description: "Drive compounding organic growth with technical SEO, semantic content strategies, and high-authority link building that dominates SERPs.",
-                icon: <Search size={24} />,
-                features: ["Semantic Content Mapping", "Technical Core Web Vitals", "Authority Network Growth"],
-                color: "#A855F7" // Primary
-            },
-            {
-                title: "Paid Search (PPC)",
-                description: "Maximize ROAS through hyper-targeted Google & Bing Ads campaigns utilizing machine learning bidding and expert keyword management.",
-                icon: <BarChart3 size={24} />,
-                features: ["ML Bidding Optimization", "Competitor Conquesting", "Search Query Mining"],
-                color: "#F3E84A" // Accent
-            },
-            {
-                title: "Social Media Ads",
-                description: "Engage and convert across Meta, LinkedIn, and TikTok with high-impact creative and precision demographic targeting.",
-                icon: <Share2 size={24} />,
-                features: ["Dynamic Creative Testing", "Lookalike Audience Scaling", "Retargeting Funnels"],
-                color: "#22C55E" // Success
-            }
-        ]
-    },
-    {
-        category: "Creative & Development",
-        items: [
-            {
-                title: "High-End Web Design",
-                description: "Award-winning, conversion-focused websites built with modern frameworks like Next.js for insane speed and 3D interactivity.",
-                icon: <Monitor size={24} />,
-                features: ["Next.js Performance", "3D WebGL Integration", "Conversion Rate Optimization"],
-                color: "#F3E84A"
-            },
-            {
-                title: "Content Marketing",
-                description: "Building brand authority through editorial-grade content that educates your audience and positions you as a market leader.",
-                icon: <PenTool size={24} />,
-                features: ["Thought Leadership Blogs", "Whitepaper Production", "Email Automation Strategy"],
-                color: "#A855F7"
-            },
-            {
-                title: "Branding & Identity",
-                description: "Crafting distinct, unignorable brand identities that resonate with your target audience and stand the test of time.",
-                icon: <Lightbulb size={24} />,
-                features: ["Visual Identity Systems", "Brand Positioning", "Market Differentiation"],
-                color: "#22C55E"
-            }
-        ]
-    },
-    {
-        category: "Analytics & Automation",
-        items: [
-            {
-                title: "Data Architecture",
-                description: "Centralized, real-time tracking systems bridging Meta, Google, and CRM data into a single definitive source of truth.",
-                icon: <Database size={24} />,
-                features: ["Server-Side Tracking", "Predictive Dashboards", "Cross-Channel Attribution"],
-                color: "#4AC0E4"
-            },
-            {
-                title: "AI Workflows",
-                description: "Custom AI deployment to automate lead scoring, dynamic creative generation, and high-speed internal CRM routing.",
-                icon: <Cpu size={24} />,
-                features: ["Zapier/Make Automation", "LLM-Powered Content", "Dynamic Pricing Tech"],
-                color: "#14B8A6"
-            },
-            {
-                title: "Conversion Architecture",
-                description: "Relentless A/B testing of deep funnel mechanics. We manipulate user psychology to maximize absolute cart value.",
-                icon: <Target size={24} />,
-                features: ["A/B Split Testing", "Heatmap Analysis", "Checkout Friction Removal"],
-                color: "#F43F5E"
-            }
-        ]
-    }
-];
+// Icon mapping helper
+const IconMap: Record<string, React.ReactNode> = {
+    Search: <Search size={24} />,
+    BarChart3: <BarChart3 size={24} />,
+    Share2: <Share2 size={24} />,
+    Monitor: <Monitor size={24} />,
+    PenTool: <PenTool size={24} />,
+    Lightbulb: <Lightbulb size={24} />,
+    Database: <Database size={24} />,
+    Cpu: <Cpu size={24} />,
+    Target: <Target size={24} />,
+    Globe: <Globe size={24} />,
+    Shield: <Shield size={24} />,
+    Rocket: <Rocket size={24} />,
+    Layout: <Layout size={24} />,
+    Code: <Code size={24} />,
+    Play: <Play size={24} />
+};
 
 export default function ServicesPage() {
+    const [services, setServices] = useState<Service[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getServices().then((data) => {
+            setServices(data || []);
+            setLoading(false);
+        });
+    }, []);
+
+    // Group services by category
+    const categories = Array.from(new Set(services.map(s => s.category)));
+    const groupedServices = categories.map(cat => ({
+        category: cat,
+        items: services.filter(s => s.category === cat)
+    }));
+
+    if (loading) {
+        return (
+            <div className="bg-background min-h-screen flex items-center justify-center">
+                <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+        );
+    }
+
     return (
         <div className="bg-background text-foreground min-h-screen relative overflow-x-hidden">
             {/* Background Marquee Text */}
@@ -144,7 +113,6 @@ export default function ServicesPage() {
                                     <div className="p-8 brutalist-border bg-black/5 rotate-1 group-hover:rotate-0 transition-transform shadow-[15px_15px_0px_#000]">
                                         <GrowthDashboard />
                                     </div>
-                                    {/* Stickers */}
                                     <motion.div
                                         className="absolute -top-10 -right-10 hidden lg:block"
                                         animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
@@ -160,7 +128,6 @@ export default function ServicesPage() {
                     </div>
                 </section>
 
-                {/* Methodology Section */}
                 <section className="py-32 relative bg-black text-white overflow-hidden border-y-[6px] border-primary">
                     <div className="absolute inset-0 noise-overlay opacity-10 pointer-events-none" />
                     <div className="container mx-auto px-6 relative z-10">
@@ -197,7 +164,7 @@ export default function ServicesPage() {
 
                 <ScrollConnector />
 
-                {allServices.map((group, idx) => (
+                {groupedServices.map((group, idx) => (
                     <section key={idx} className="py-40 relative">
                         <div className="container mx-auto px-6">
                             <div className="mb-32">
@@ -205,7 +172,9 @@ export default function ServicesPage() {
                                     <Star size={14} className="text-accent fill-current" />
                                     <span className="text-[10px] font-black uppercase tracking-[0.4em]">{group.category} Expertise</span>
                                 </div>
-                                <h2 className="text-6xl md:text-[10rem] font-heading font-black text-black leading-none tracking-tighter uppercase whitespace-normal">{group.category === "Traffic & Visibility" ? "Traffic & Organic Domination" : "Creative & Technical Innovation"} <br /> <span className="text-primary italic">Solutions</span></h2>
+                                <h2 className="text-6xl md:text-[10rem] font-heading font-black text-black leading-none tracking-tighter uppercase whitespace-normal">
+                                    {group.category} <br /> <span className="text-primary italic">Solutions</span>
+                                </h2>
                             </div>
 
                             <div className="grid lg:grid-cols-3 gap-12">
@@ -223,7 +192,7 @@ export default function ServicesPage() {
                                             style={{ backgroundColor: service.color }}
                                         >
                                             <div className="text-black group-hover:scale-125 transition-transform duration-500">
-                                                {service.icon}
+                                                {IconMap[service.icon] || <Zap size={24} />}
                                             </div>
                                         </div>
 
@@ -254,7 +223,7 @@ export default function ServicesPage() {
                                 ))}
                             </div>
                         </div>
-                        {idx === 0 && <ScrollConnector />}
+                        {idx !== groupedServices.length - 1 && <ScrollConnector />}
                     </section>
                 ))}
 
@@ -262,7 +231,6 @@ export default function ServicesPage() {
 
                 <section className="py-64 relative bg-black text-white">
                     <div className="absolute inset-0 noise-overlay opacity-10 pointer-events-none" />
-
                     <div className="container mx-auto px-6 text-center relative z-10">
                         <div className="flex flex-col items-center">
                             <motion.div
@@ -275,7 +243,6 @@ export default function ServicesPage() {
                             <span className="text-primary font-black tracking-[0.6em] uppercase text-xs mb-10 block">Global Dominance Matrix</span>
                             <h2 className="text-6xl md:text-[12rem] font-heading font-black text-white mb-16 leading-none tracking-tighter uppercase drop-shadow-[10px_10px_0px_#A855F7]">READY TO <br /><span className="italic underline decoration-accent decoration-[12px] underline-offset-12">DOMINATE?</span></h2>
                             <p className="text-white font-black uppercase leading-tight opacity-60 max-w-2xl mx-auto mb-20 text-xl">Our growth stacks are designed for maximum impact with zero friction. Let's build your dominance today.</p>
-
                             <MagneticElement>
                                 <a href="/contact" className="px-16 py-10 bg-white text-black font-black brutalist-border shadow-[12px_12px_0px_#A855F7] hover:shadow-[18px_18px_0px_#A855F7] hover:-translate-y-2 inline-block uppercase tracking-widest text-sm transition-all">
                                     INITIALIZE AUDIT
@@ -285,7 +252,6 @@ export default function ServicesPage() {
                     </div>
                 </section>
             </main>
-
             <Footer />
         </div>
     );

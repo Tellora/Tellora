@@ -7,13 +7,13 @@ import { CaseStudy, getCaseStudies, upsertCaseStudy, deleteCaseStudy } from "@/l
 
 const CATEGORIES = ["Social Growth", "Performance", "Content", "Design", "SEO", "Product"];
 
-const empty = (): Omit<CaseStudy, "id" | "createdAt"> => ({
+const empty = (): Omit<CaseStudy, "id" | "created_at"> => ({
     title: "",
     description: "",
     category: "Social Growth",
     impact: "",
     tag: "",
-    image: "",
+    image_url: "",
     stats: [{ label: "", value: "" }, { label: "", value: "" }],
     tags: [],
     status: "Draft",
@@ -46,7 +46,7 @@ export default function AdminCaseStudies() {
             category: cs.category,
             impact: cs.impact,
             tag: cs.tag,
-            image: cs.image,
+            image_url: cs.image_url,
             stats: cs.stats.length >= 2 ? cs.stats : [...cs.stats, { label: "", value: "" }].slice(0, 2),
             tags: cs.tags,
             status: cs.status,
@@ -65,11 +65,10 @@ export default function AdminCaseStudies() {
             category: form.category,
             impact: form.impact,
             tag: form.tag,
-            image: form.image,
+            image_url: form.image_url,
             stats: form.stats.filter((s) => s.label && s.value),
             tags: parsedTags,
             status: form.status,
-            createdAt: current ? current.createdAt : Date.now(),
         };
         await upsertCaseStudy(cs);
         await reload();
@@ -136,9 +135,9 @@ export default function AdminCaseStudies() {
                         className="bg-[#0D121F]/60 backdrop-blur-3xl border border-white/10 rounded-3xl md:rounded-[3.5rem] group hover:border-primary/30 transition-all p-6 md:p-10 relative overflow-hidden flex flex-col min-h-[380px] shadow-2xl"
                     >
                         {/* Image preview */}
-                        {item.image && (
+                        {item.image_url && (
                             <div className="w-full h-40 rounded-[2rem] overflow-hidden mb-6 bg-white/5">
-                                <img src={item.image} alt={item.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
+                                <img src={item.image_url} alt={item.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
                             </div>
                         )}
 
@@ -279,7 +278,7 @@ export default function AdminCaseStudies() {
 
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">Cover Image URL</label>
-                                    <input value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })}
+                                    <input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })}
                                         className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white outline-none focus:border-primary transition-all font-medium text-sm"
                                         placeholder="https://images.unsplash.com/..." />
                                 </div>

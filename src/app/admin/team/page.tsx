@@ -18,13 +18,12 @@ import {
     X,
     Filter
 } from "lucide-react";
-import { getAdminData, saveAdminData } from "@/lib/serverDb";
-
-const initialTeam = [
-    { id: 1, name: "Vansh Gupta", role: "Specialist", performance: "99%", status: "Active" },
-    { id: 2, name: "Nandini Mittal", role: "Creative Strategist", performance: "98%", status: "Active" },
-    { id: 3, name: "Pranjit Singh", role: "Analyst", performance: "97%", status: "Active" },
-];
+import { 
+    getTeam, 
+    upsertTeamMember, 
+    deleteTeamMember, 
+    addActivityLog,
+} from "@/lib/store";
 
 export default function AdminTeam() {
     const [members, setMembers] = useState<any[]>([]);
@@ -32,30 +31,14 @@ export default function AdminTeam() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingMember, setEditingMember] = useState<any>(null);
 
-    // Persistence
     const loadTeam = async () => {
-        const data = await getAdminData("team", initialTeam);
+        const data = await getTeam();
         setMembers(data);
     };
 
     useEffect(() => {
         loadTeam();
-        const interval = setInterval(loadTeam, 5000); // Sync across active sessions
-        return () => clearInterval(interval);
     }, []);
-
-    const helperRecordActivity = async (action: string, item: string) => {
-        const logs = await getAdminData("activity", []);
-        const newLog = {
-            id: Date.now().toString(),
-            type: action === 'Update' ? 'update' : action === 'Create' ? 'create' : 'delete',
-            item: item,
-            user: "Admin",
-            time: "Just Now",
-            status: action === 'Delete' ? "Removed" : action === 'Update' ? "Verified" : "Live"
-        };
-        await saveAdminData("activity", [newLog, ...logs].slice(0, 5));
-    };
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -63,37 +46,37 @@ export default function AdminTeam() {
         const name = formData.get('name') as string;
         const role = formData.get('role') as string;
 
-        let updatedMembers;
+        const memberData = {
+            id: editingMember?.id || undefined,
+            name,
+            role,
+            status: "Active"
+        };
 
-        if (editingMember) {
-            updatedMembers = members.map(m => m.id === editingMember.id ? { ...editingMember, name, role } : m);
-            setMembers(updatedMembers);
-            await saveAdminData("team", updatedMembers);
-            await helperRecordActivity('Update', `Team Node: ${name}`);
-        } else {
-            const newMember = {
-                id: Date.now(),
-                name,
-                role,
-                performance: "98%",
-                status: "Active"
-            };
-            updatedMembers = [...members, newMember];
-            setMembers(updatedMembers);
-            await saveAdminData("team", updatedMembers);
-            await helperRecordActivity('Create', `Personnel: ${name}`);
-        }
+        await upsertTeamMember(memberData as any);
+        await addActivityLog({
+            type: editingMember ? "update" : "create",
+            item: `Team Node: ${name}`,
+            user_name: "Admin",
+            status: "Live"
+        });
+        
+        await loadTeam();
         setIsModalOpen(false);
         setEditingMember(null);
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         const member = members.find(m => m.id === id);
         if (confirm(`De-authorize ${member?.name}?`)) {
-            const updatedMembers = members.filter(m => m.id !== id);
-            setMembers(updatedMembers);
-            await saveAdminData("team", updatedMembers);
-            await helperRecordActivity('Delete', `Removed: ${member?.name}`);
+            await deleteTeamMember(id);
+            await addActivityLog({
+                type: "delete",
+                item: `Removed: ${member?.name}`,
+                user_name: "Admin",
+                status: "Removed"
+            });
+            await loadTeam();
         }
     };
 

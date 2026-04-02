@@ -52,15 +52,14 @@ export default function AdminServices() {
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         const cleanedFeatures = form.features.filter((f) => f.trim() !== "");
-        const svc: Service = {
-            id: editingService ? editingService.id : `svc-${Date.now()}`,
+        const svc: any = {
+            id: editingService ? editingService.id : undefined,
             title: form.title,
             description: form.description,
             category: form.category,
             features: cleanedFeatures,
             status: form.status,
             reach: form.reach,
-            createdAt: editingService ? editingService.createdAt : Date.now(),
         };
         await upsertService(svc);
         await reload();

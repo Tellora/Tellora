@@ -1,10 +1,18 @@
 // Client-side store for Admin Panel data
+// Powered by Supabase Relational Tables
 
-// ── Tellora Global Admin Data Store ─────────────────────────────────────────
-// All admin panel data is persisted via JSON files on the server globally.
-// This file provides Server Actions to read/write each data domain.
-
-import { getAdminData, saveAdminData } from "./serverDb";
+import { 
+    supabase, 
+    fetchTableData, 
+    upsertTableData, 
+    deleteTableData,
+    DbService,
+    DbTeamMember,
+    DbCaseStudy,
+    DbReel,
+    DbTestimonial,
+    DbFAQ
+} from "./supabase";
 
 export interface ContactMessage {
     id: string;
@@ -14,387 +22,212 @@ export interface ContactMessage {
     service: string;
     subject: string;
     message: string;
-    time: string;
-    timestamp: number;
     status: "Unread" | "Read" | "Replied" | "Archived";
-    avatar: string;
-    category: string;
-    replyHistory: { text: string; sentAt: string }[];
+    reply_history: { text: string; sentAt: string }[];
+    created_at: string;
 }
 
-export interface Service {
-    id: string;
-    title: string;
-    description: string;
-    category: string;
-    features: string[];
-    status: "Active" | "Draft";
-    reach: string;
-    createdAt: number;
-}
-
-export interface CaseStudy {
-    id: string;
-    title: string;
-    description: string;
-    category: string;
-    impact: string;
-    tag: string;
-    image: string;
-    stats: { label: string; value: string }[];
-    tags: string[];
-    status: "Published" | "Draft";
-    createdAt: number;
-}
-
-export interface Reel {
-    id: string;
-    title: string;
-    embedUrl: string;
-    tag: string;
-    likes: string;
-    views: string;
-    status: "Live" | "Review" | "Archived";
-    createdAt: number;
-}
+export interface Service extends DbService {}
+export interface CaseStudy extends DbCaseStudy {}
+export interface Reel extends DbReel {}
 
 export interface ActivityLog {
     id: string;
     type: "create" | "update" | "delete" | "reply" | "login";
     item: string;
-    user: string;
-    time: string;
+    user_name: string;
     status: string;
+    created_at: string;
 }
 
 export interface SiteSettings {
-    siteTitle: string;
-    metaDescription: string;
+    // Core identity (snake_case matching Supabase columns)
+    site_title: string;
+    meta_description: string;
     keywords: string[];
-    adminPassword: string;
-    brandAccent: string;
-    autoOptimization: boolean;
-    neuralCache: boolean;
-    stealthMode: boolean;
-    deepLinkSync: boolean;
+    admin_password: string;
+    brand_accent: string;
+    auto_optimization: boolean;
+    neural_cache: boolean;
+    stealth_mode: boolean;
+    deep_link_sync: boolean;
+    // Hero content
+    hero_title?: string;
+    hero_subtitle?: string;
+    cta_text?: string;
+    // Infrastructure (stored locally, not in Supabase)
+    supabase_url?: string;
+    supabase_anon_key?: string;
+    storage_mode?: "Local" | "Cloud";
 }
 
-// ── Keys ─────────────────────────────────────────────────────────────────────
-const KEYS = {
-    messages: "tellora_inbox_messages",
-    services: "tellora_services_v2",
-    cases: "tellora_case_studies_v2",
-    reels: "tellora_reels_v2",
-    activity: "tellora_activity_logs",
-    settings: "tellora_site_settings",
-};
+export interface CompanyStat {
+    label: string;
+    value: string;
+    color: string;
+}
 
 // ── Activity Logs ─────────────────────────────────────────────────────────────
 export async function getActivityLogs(): Promise<ActivityLog[]> {
-    return getAdminData(KEYS.activity, []);
+    return fetchTableData("activity_logs", []);
 }
 
-export async function addActivityLog(log: Omit<ActivityLog, "id">): Promise<void> {
-    const logs = await getActivityLogs();
-    await saveAdminData(KEYS.activity, [{ ...log, id: Date.now().toString() }, ...logs].slice(0, 20));
+export async function addActivityLog(log: Omit<ActivityLog, "id" | "created_at">): Promise<void> {
+    await upsertTableData("activity_logs", { ...log, created_at: new Date().toISOString() });
 }
 
 // ── Messages (Inbox) ──────────────────────────────────────────────────────────
 export async function getMessages(): Promise<ContactMessage[]> {
-    return getAdminData(KEYS.messages, []);
+    return fetchTableData("inbox_messages", []);
 }
 
 export async function saveMessage(msg: ContactMessage): Promise<void> {
-    const msgs = await getMessages();
-    const exists = msgs.findIndex((m) => m.id === msg.id);
-    if (exists >= 0) {
-        msgs[exists] = msg;
-        await saveAdminData(KEYS.messages, msgs);
-    } else {
-        await saveAdminData(KEYS.messages, [msg, ...msgs]);
-    }
+    await upsertTableData("inbox_messages", msg);
 }
 
 export async function deleteMessage(id: string): Promise<void> {
-    const msgs = await getMessages();
-    await saveAdminData(KEYS.messages, msgs.filter((m) => m.id !== id));
+    await deleteTableData("inbox_messages", { id });
 }
 
 export async function markMessageRead(id: string): Promise<void> {
-    const msgs = await getMessages();
-    await saveAdminData(KEYS.messages, msgs.map((m) =>
-        m.id === id ? { ...m, status: "Read" as const } : m
-    ));
+    await upsertTableData("inbox_messages", { id, status: "Read" });
 }
 
 export async function addReply(id: string, replyText: string): Promise<void> {
-    const msgs = await getMessages();
-    await saveAdminData(KEYS.messages, msgs.map((m) => {
-        if (m.id !== id) return m;
-        return {
-            ...m,
-            status: "Replied" as const,
-            replyHistory: [
-                ...(m.replyHistory || []),
-                { text: replyText, sentAt: new Date().toLocaleString() },
-            ],
-        };
-    }));
+    const { data: msg } = await supabase.from("inbox_messages").select("reply_history").eq("id", id).single();
+    const history = msg?.reply_history || [];
+    await upsertTableData("inbox_messages", {
+        id,
+        status: "Replied",
+        reply_history: [...history, { text: replyText, sentAt: new Date().toISOString() }]
+    });
 }
 
-export async function submitContactForm(data: {
-    name: string;
-    email: string;
-    company: string;
-    service: string;
-    message: string;
-}): Promise<void> {
-    const id = Date.now().toString();
-    const initials = data.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2);
-
-    const msg: ContactMessage = {
-        id,
+export async function submitContactForm(data: any): Promise<void> {
+    const msg = {
         sender: data.name,
         email: data.email,
         company: data.company || "N/A",
         service: data.service,
         subject: `Inquiry: ${data.service}`,
         message: data.message,
-        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        timestamp: Date.now(),
         status: "Unread",
-        avatar: initials,
-        category: "Business",
-        replyHistory: [],
+        created_at: new Date().toISOString()
     };
-
-    await saveMessage(msg);
+    await upsertTableData("inbox_messages", msg);
     await addActivityLog({
         type: "create",
         item: `New inquiry from ${data.name}`,
-        user: "Public",
-        time: "Just Now",
-        status: "Unread",
+        user_name: "Public",
+        status: "Unread"
     });
 }
 
 // ── Services ──────────────────────────────────────────────────────────────────
-const defaultServices: Service[] = [
-    {
-        id: "svc-1",
-        title: "High-Performance SEO",
-        description:
-            "Drive compounding organic growth with technical SEO, semantic content strategies, and high-authority link building.",
-        category: "Growth",
-        features: ["Semantic Content Mapping", "Technical Core Web Vitals", "Authority Network Growth"],
-        status: "Active",
-        reach: "+240%",
-        createdAt: Date.now() - 86400000,
-    },
-    {
-        id: "svc-2",
-        title: "Social Resonance Strategy",
-        description:
-            "Engage and convert across Meta, LinkedIn, and TikTok with high-impact creative and precision demographic targeting.",
-        category: "Media",
-        features: ["Dynamic Creative Testing", "Lookalike Audience Scaling", "Retargeting Funnels"],
-        status: "Active",
-        reach: "+180%",
-        createdAt: Date.now() - 172800000,
-    },
-    {
-        id: "svc-3",
-        title: "Neural Brand Identity",
-        description:
-            "Crafting distinct, unignorable brand identities that resonate with your target audience and stand the test of time.",
-        category: "Design",
-        features: ["Visual Identity Systems", "Brand Positioning", "Market Differentiation"],
-        status: "Active",
-        reach: "+310%",
-        createdAt: Date.now() - 259200000,
-    },
-];
-
 export async function getServices(): Promise<Service[]> {
-    return getAdminData(KEYS.services, defaultServices);
-}
-
-export async function saveServices(services: Service[]): Promise<void> {
-    await saveAdminData(KEYS.services, services);
+    return fetchTableData("services", []);
 }
 
 export async function upsertService(service: Service): Promise<void> {
-    const all = await getServices();
-    const idx = all.findIndex((s) => s.id === service.id);
-    if (idx >= 0) {
-        all[idx] = service;
-    } else {
-        all.unshift(service);
-    }
-    await saveServices(all);
+    await upsertTableData("services", service);
     await addActivityLog({
-        type: idx >= 0 ? "update" : "create",
+        type: "update",
         item: `Service: ${service.title}`,
-        user: "Admin",
-        time: "Just Now",
-        status: service.status,
+        user_name: "Admin",
+        status: service.status
     });
 }
 
 export async function deleteService(id: string): Promise<void> {
-    const all = await getServices();
-    const svc = all.find((s) => s.id === id);
-    await saveServices(all.filter((s) => s.id !== id));
-    if (svc) {
-        await addActivityLog({ type: "delete", item: `Service removed: ${svc.title}`, user: "Admin", time: "Just Now", status: "Removed" });
-    }
+    await deleteTableData("services", { id });
 }
 
 // ── Case Studies ──────────────────────────────────────────────────────────────
-const defaultCases: CaseStudy[] = [
-    {
-        id: "cs-1",
-        title: "JS Wedding Services",
-        description:
-            "How we transformed a regional wedding boutique into a national digital authority using semantic SEO and high-performance WebGL design.",
-        category: "Social Growth",
-        impact: "+187% Organic Traffic",
-        tag: "Enterprise",
-        image: "https://images.unsplash.com/photo-1562577309-4932fdd64cd1?auto=format&fit=crop&w=1200&q=80",
-        stats: [
-            { label: "Rev Growth", value: "3.5x" },
-            { label: "CPA Reduction", value: "42%" },
-        ],
-        tags: ["SEO", "Web Development", "UI/UX"],
-        status: "Published",
-        createdAt: Date.now() - 86400000,
-    },
-    {
-        id: "cs-2",
-        title: "Astrology Light",
-        description:
-            "Architecting a viral social growth engine that fueled a subscription-based platform's expansion into new continental markets.",
-        category: "Performance",
-        impact: "15k+ New Acquisitions",
-        tag: "Startup",
-        image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1200&q=80",
-        stats: [
-            { label: "CAC", value: "$1.20" },
-            { label: "MAU Increase", value: "310%" },
-        ],
-        tags: ["Social Media", "Paid Performance", "Scaling"],
-        status: "Published",
-        createdAt: Date.now() - 172800000,
-    },
-];
-
 export async function getCaseStudies(): Promise<CaseStudy[]> {
-    return getAdminData(KEYS.cases, defaultCases);
-}
-
-export async function saveCaseStudies(cases: CaseStudy[]): Promise<void> {
-    await saveAdminData(KEYS.cases, cases);
+    return fetchTableData("case_studies", []);
 }
 
 export async function upsertCaseStudy(cs: CaseStudy): Promise<void> {
-    const all = await getCaseStudies();
-    const idx = all.findIndex((c) => c.id === cs.id);
-    if (idx >= 0) {
-        all[idx] = cs;
-    } else {
-        all.unshift(cs);
-    }
-    await saveCaseStudies(all);
-    await addActivityLog({
-        type: idx >= 0 ? "update" : "create",
-        item: `Case Study: ${cs.title}`,
-        user: "Admin",
-        time: "Just Now",
-        status: cs.status,
-    });
+    await upsertTableData("case_studies", cs);
 }
 
 export async function deleteCaseStudy(id: string): Promise<void> {
-    const all = await getCaseStudies();
-    const cs = all.find((c) => c.id === id);
-    await saveCaseStudies(all.filter((c) => c.id !== id));
-    if (cs) {
-        await addActivityLog({ type: "delete", item: `Case Study removed: ${cs.title}`, user: "Admin", time: "Just Now", status: "Removed" });
-    }
+    await deleteTableData("case_studies", { id });
 }
 
 // ── Reels ─────────────────────────────────────────────────────────────────────
-const defaultReels: Reel[] = [
-    { id: "reel-1", title: "Creative Shoot #01", embedUrl: "", tag: "BTS", likes: "18.2k", views: "450k", status: "Live", createdAt: Date.now() - 86400000 },
-    { id: "reel-2", title: "Success Showcase", embedUrl: "", tag: "Case Study", likes: "21.4k", views: "1.1M", status: "Live", createdAt: Date.now() - 172800000 },
-];
-
 export async function getReels(): Promise<Reel[]> {
-    return getAdminData(KEYS.reels, defaultReels);
-}
-
-export async function saveReels(reels: Reel[]): Promise<void> {
-    await saveAdminData(KEYS.reels, reels);
+    return fetchTableData("reels", []);
 }
 
 export async function upsertReel(reel: Reel): Promise<void> {
-    const all = await getReels();
-    const idx = all.findIndex((r) => r.id === reel.id);
-    if (idx >= 0) {
-        all[idx] = reel;
-    } else {
-        all.unshift(reel);
-    }
-    await saveReels(all);
-    await addActivityLog({
-        type: idx >= 0 ? "update" : "create",
-        item: `Reel: ${reel.title}`,
-        user: "Admin",
-        time: "Just Now",
-        status: reel.status,
-    });
+    await upsertTableData("reels", reel);
 }
 
 export async function deleteReel(id: string): Promise<void> {
-    const all = await getReels();
-    const reel = all.find((r) => r.id === id);
-    await saveReels(all.filter((r) => r.id !== id));
-    if (reel) {
-        await addActivityLog({ type: "delete", item: `Reel removed: ${reel.title}`, user: "Admin", time: "Just Now", status: "Removed" });
-    }
+    await deleteTableData("reels", { id });
 }
 
 // ── Settings ──────────────────────────────────────────────────────────────────
-const defaultSettings: SiteSettings = {
-    siteTitle: "Tellora Media | Digital Growth Agency",
-    metaDescription:
-        "Tellora is a high-performance creative media lab specializing in high-end SEO, social growth, and brand identity for global enterprises.",
-    keywords: ["SEO Engine", "Global Scale", "Visual Lab", "Delhi NCR", "Tellora Core"],
-    adminPassword: "admin123",
-    brandAccent: "#4ac0e4",
-    autoOptimization: true,
-    neuralCache: true,
-    stealthMode: false,
-    deepLinkSync: true,
-};
-
 export async function getSettings(): Promise<SiteSettings> {
-    return getAdminData(KEYS.settings, defaultSettings);
+    const data = await fetchTableData("site_settings", []);
+    return (data as any)[0] || {};
 }
 
 export async function saveSettings(settings: SiteSettings): Promise<void> {
-    await saveAdminData(KEYS.settings, settings);
-    await addActivityLog({
-        type: "update",
-        item: "Site Settings updated",
-        user: "Admin",
-        time: "Just Now",
-        status: "Saved",
-    });
+    await upsertTableData("site_settings", { ...settings, id: 1 });
+}
+
+// ── Additional Entities ──────────────────────────────────────────────────────
+export async function getTeam(): Promise<DbTeamMember[]> {
+    return fetchTableData("team_members", []);
+}
+
+export async function upsertTeamMember(member: DbTeamMember): Promise<void> {
+    await upsertTableData("team_members", member);
+}
+
+export async function deleteTeamMember(id: string): Promise<void> {
+    await deleteTableData("team_members", { id });
+}
+
+export async function getFAQs(): Promise<DbFAQ[]> {
+    return fetchTableData("faqs", []);
+}
+
+export async function upsertFAQ(faq: DbFAQ): Promise<void> {
+    await upsertTableData("faqs", faq);
+}
+
+export async function deleteFAQ(id: string): Promise<void> {
+    await deleteTableData("faqs", { id });
+}
+
+export async function getTestimonials(): Promise<DbTestimonial[]> {
+    return fetchTableData("testimonials", []);
+}
+
+export async function upsertTestimonial(test: DbTestimonial): Promise<void> {
+    await upsertTableData("testimonials", test);
+}
+
+export async function deleteTestimonial(id: string): Promise<void> {
+    await deleteTableData("testimonials", { id });
+}
+
+export async function getClients(): Promise<{ name: string; logo_url: string }[]> {
+    return fetchTableData("clients", []);
+}
+
+export async function upsertClient(client: any): Promise<void> {
+    await upsertTableData("clients", client);
+}
+
+export async function getCompanyStats(): Promise<CompanyStat[]> {
+    return fetchTableData("company_stats", []);
+}
+
+export async function upsertCompanyStat(stat: CompanyStat): Promise<void> {
+    await upsertTableData("company_stats", stat);
 }
 

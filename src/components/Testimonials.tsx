@@ -1,36 +1,21 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Quote, Star, Sparkles, Zap } from "lucide-react";
+import { getTestimonials } from "@/lib/store";
+import { DbTestimonial } from "@/lib/supabase";
 
 export default function Testimonials() {
-    const testimonials = [
-        {
-            name: "Sarah Jenkins",
-            role: "CMO, TechNova",
-            content: "Tellora completely transformed our online presence. Our inbound leads increased significantly. Their data-driven approach is absolute magic.",
-            initials: "SJ",
-            color: "#A855F7",
-            rotate: "-2deg"
-        },
-        {
-            name: "David Chen",
-            role: "Founder, Apex",
-            content: "The ROI we've seen since partnering with Tellora is staggering. Their team doesn't just run ads; they engineer growth engines. 10/10 recommended.",
-            initials: "DC",
-            color: "#F3E84A",
-            rotate: "1.5deg"
-        },
-        {
-            name: "Emily Rod",
-            role: "Director, Bloom",
-            content: "Not only is their creative work stunning, but the backend analytics integration gave us visibility we never had before. A truly visionary agency.",
-            initials: "ER",
-            color: "#22C55E",
-            rotate: "-1deg"
-        }
-    ];
+    const [testimonials, setTestimonials] = useState<DbTestimonial[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getTestimonials().then(data => {
+            setTestimonials(data || []);
+            setLoading(false);
+        });
+    }, []);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
@@ -40,6 +25,12 @@ export default function Testimonials() {
 
     const yTitle = useTransform(scrollYProgress, [0, 1], [100, -100]);
     const xMarquee = useTransform(scrollYProgress, [0, 1], [150, -150]);
+
+    if (loading || testimonials.length === 0) return null;
+
+    // Helper for initials and color
+    const getInitials = (name: string) => name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+    const colors = ["#A855F7", "#F3E84A", "#22C55E", "#4AC0E4"];
 
     return (
         <section ref={containerRef} id="testimonials" className="py-32 relative z-10 bg-background border-y-[4px] border-black overflow-hidden">
@@ -69,7 +60,7 @@ export default function Testimonials() {
                     {testimonials.map((test, idx) => (
                         <motion.div
                             key={idx}
-                            initial={{ opacity: 0, scale: 0.9, rotate: test.rotate }}
+                            initial={{ opacity: 0, scale: 0.9, rotate: idx % 2 === 0 ? "-2deg" : "1.5deg" }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.15, type: "spring" }}
@@ -85,22 +76,28 @@ export default function Testimonials() {
                                 </div>
 
                                 <div className="mb-8 flex gap-2">
-                                    {[...Array(5)].map((_, i) => (
+                                    {[...Array(test.rating || 5)].map((_, i) => (
                                         <Star key={i} size={14} fill="currentColor" className="text-primary sticker-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
                                     ))}
                                 </div>
 
                                 <p className="text-lg font-black uppercase leading-tight mb-12 italic opacity-80">
-                                    &ldquo;{test.content}&rdquo;
+                                    &ldquo;{test.quote}&rdquo;
                                 </p>
 
                                 <div className="mt-auto flex items-center gap-6">
-                                    <div
-                                        className="w-16 h-16 brutalist-border flex items-center justify-center text-white font-black text-xl rotate-3 group-hover:rotate-0 transition-transform"
-                                        style={{ background: test.color }}
-                                    >
-                                        {test.initials}
-                                    </div>
+                                    {test.image_url ? (
+                                        <div className="w-16 h-16 brutalist-border overflow-hidden rotate-3 group-hover:rotate-0 transition-transform">
+                                            <img src={test.image_url} alt={test.name} className="w-full h-full object-cover" />
+                                        </div>
+                                    ) : (
+                                        <div
+                                            className="w-16 h-16 brutalist-border flex items-center justify-center text-white font-black text-xl rotate-3 group-hover:rotate-0 transition-transform"
+                                            style={{ background: colors[idx % colors.length] }}
+                                        >
+                                            {getInitials(test.name)}
+                                        </div>
+                                    )}
                                     <div>
                                         <h4 className="font-heading font-black text-2xl uppercase tracking-tighter leading-none mb-1">
                                             {test.name}
@@ -108,7 +105,7 @@ export default function Testimonials() {
                                         <div className="flex items-center gap-2">
                                             <Zap size={10} className="text-primary" />
                                             <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
-                                                {test.role}
+                                                {test.role} {test.company ? `· ${test.company}` : ''}
                                             </p>
                                         </div>
                                     </div>

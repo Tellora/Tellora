@@ -6,8 +6,8 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-    const profiles = listProfiles();
-    if (profiles.length === 0) {
+    const profiles = await listProfiles();
+    if (!profiles || profiles.length === 0) {
         return [{ slug: "no-profiles" }];
     }
     return profiles.map((p) => ({
@@ -23,7 +23,7 @@ export const metadata = {
 };
 
 export default async function PreviewPage({ params }: PageProps) {
-    const profile = getProfile(params.slug);
+    const profile = await getProfile(params.slug);
 
     if (!profile) {
         return <p className="p-8 text-center text-white">Profile not found</p>;

@@ -4,8 +4,8 @@ import EditProfileClient from "./EditProfileClient";
 
 export async function generateStaticParams() {
     try {
-        const profiles = listProfiles();
-        if (profiles.length === 0) {
+        const profiles = await listProfiles();
+        if (!profiles || profiles.length === 0) {
             // Return at least one dummy path to satisfy "output: export" requirement for dynamic routes
             return [{ slug: "no-profiles" }];
         }

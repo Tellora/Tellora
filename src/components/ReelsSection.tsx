@@ -64,19 +64,19 @@ export default function ReelsSection() {
             try {
                 const adminReels = await getReels();
                 const liveAdminReels = adminReels
-                    .filter(r => r.status === "Live" && r.embedUrl)
+                    .filter(r => r.status === "Live" && r.embed_url)
                     .map(r => {
-                        const isMp4 = r.embedUrl.toLowerCase().endsWith('.mp4');
+                        const isMp4 = r.embed_url!.toLowerCase().endsWith('.mp4');
                         return {
                             id: r.id,
-                            src: isMp4 ? (r.embedUrl.startsWith('/') ? r.embedUrl : `/reels/${r.embedUrl}`) : undefined,
-                            embedUrl: isMp4 ? undefined : r.embedUrl,
+                            src: isMp4 ? (r.embed_url!.startsWith('/') ? r.embed_url : `/reels/${r.embed_url}`) : undefined,
+                            embedUrl: isMp4 ? undefined : r.embed_url,
                             title: r.title,
                             author: "@tellora",
                             tag: r.tag,
                             likes: r.likes,
-                            comments: Math.floor(parseInt(r.likes || "100") * 0.1).toString(), 
-                            color: "#" + Math.floor(Math.random()*16777215).toString(16), 
+                            comments: Math.floor(parseInt(r.likes || "100") * 0.1).toString(),
+                            color: "#" + Math.floor(Math.random()*16777215).toString(16),
                             isEmbed: !isMp4
                         };
                     });

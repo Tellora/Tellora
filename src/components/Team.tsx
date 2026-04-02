@@ -1,74 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Linkedin, Twitter, ExternalLink, Sparkles, Users, Instagram, Zap, Briefcase, FileCode2, Target } from "lucide-react";
+import { Linkedin, Twitter, ExternalLink, Sparkles, Users, Instagram, Zap, Target } from "lucide-react";
 import Image from "next/image";
-
-const team = [
-    {
-        name: "Abhay Sehdev",
-        role: "Co-Founder · Tech",
-        image: "/teams/abhay tellora.png",
-        color: "#A855F7", /* Purple */
-        rotate: "-2deg",
-        linkedin: "https://www.linkedin.com/in/abhaysehdev",
-        instagram: "https://www.instagram.com/abhays3hdev/",
-        bio: "Mastermind behind Tellora's technical architecture. Specializes in building high-performance, scalable web systems and AI-driven growth engines that outperform competitors globally.",
-        skills: ["System Architecture", "Next.js & React", "AI Automation"],
-        stats: [
-            { label: "Focus", value: "Scale" },
-            { label: "Execution", value: "Fast" }
-        ]
-    },
-    {
-        name: "Prakhar Saxena",
-        role: "Co-Founder · Content",
-        image: "/teams/prakhar tellora.png",
-        color: "#22C55E", /* Green */
-        rotate: "1.5deg",
-        linkedin: "https://www.linkedin.com/in/prakhar-saxena-a13876274?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
-        instagram: "https://www.instagram.com/_prakkhar_?igsh=MTEyYTRmZ3dyd3VnMg%3D%3D&utm_source=qr",
-        bio: "Strategic visionary for brand narratives. Directs high-converting, viral content that scales engagement exponentially and deeply connects with target consumer psychology.",
-        skills: ["Content Strategy", "Viral Media", "Brand Identity"],
-        stats: [
-            { label: "Impact", value: "Viral" },
-            { label: "Creative", value: "High" }
-        ]
-    },
-    {
-        name: "Vansh Sharma",
-        role: "Co-Founder · Sales",
-        image: "/teams/vansh tellora.png",
-        color: "#F3E84A", /* Yellow */
-        rotate: "-1.2deg",
-        linkedin: "https://www.linkedin.com/in/vansh-sharma-3b6b0a3b5?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
-        instagram: "https://www.instagram.com/vanssh._.sharma?igsh=cXFpOTZnbnc2eDNw&utm_source=qr",
-        bio: "Drives strategic global partnerships and enterprise scaling. Relentless focus on client ROI, maximizing acquisition pipelines natively through structured, aggressive B2B architecture.",
-        skills: ["Enterprise Sales", "Client Strategy", "B2B Growth"],
-        stats: [
-            { label: "Growth", value: "B2B" },
-            { label: "Strategy", value: "Macro" }
-        ]
-    },
-    {
-        name: "Nandini",
-        role: "Design Lead",
-        image: "/teams/nandini tellora.png",
-        color: "#FFFFFF", /* White */
-        rotate: "2.5deg",
-        linkedin: "#",
-        instagram: "#",
-        bio: "Transforms digital interfaces into unforgettable brand experiences. Blends unapologetic brutalist aesthetics with meticulously engineered user-conversion layout methodologies.",
-        skills: ["UI/UX Design", "Motion Graphics", "Visual Identity"],
-        stats: [
-            { label: "Design", value: "Pure" },
-            { label: "Aesthetic", value: "UX" }
-        ]
-    }
-];
+import { getTeam } from "@/lib/store";
+import { DbTeamMember } from "@/lib/supabase";
 
 export default function Team() {
+    const [team, setTeam] = useState<DbTeamMember[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getTeam().then(data => {
+            setTeam(data || []);
+            setLoading(false);
+        });
+    }, []);
+
+    if (loading || team.length === 0) return null;
+
     return (
         <section id="team" className="py-32 relative z-10 bg-background overflow-hidden border-t-[4px] border-black">
             {/* Background Marquee */}
@@ -98,7 +49,6 @@ export default function Team() {
                     </div>
                 </div>
 
-                {/* Grid Layout spacing adjusted to account for taller interactive cards */}
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 pt-8 md:pt-12">
                     {team.map((member, idx) => (
                         <TeamCard key={idx} member={member} idx={idx} />
@@ -109,7 +59,7 @@ export default function Team() {
     );
 }
 
-function TeamCard({ member, idx }: { member: any; idx: number }) {
+function TeamCard({ member, idx }: { member: DbTeamMember; idx: number }) {
     const [isFlipped, setIsFlipped] = useState(false);
 
     return (
@@ -143,7 +93,7 @@ function TeamCard({ member, idx }: { member: any; idx: number }) {
                             transition={{ type: "spring", stiffness: 300 }}
                         >
                             <Image
-                                src={member.image}
+                                src={member.image_url}
                                 alt={member.name}
                                 width={500}
                                 height={500}
@@ -199,7 +149,7 @@ function TeamCard({ member, idx }: { member: any; idx: number }) {
                         <div className="mt-auto">
                             <p className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-3 border-b border-white/20 pb-2">Core Competencies</p>
                             <div className="flex flex-wrap gap-2">
-                                {member.skills.map((skill: string, idx: number) => (
+                                {member.skills?.map((skill: string, idx: number) => (
                                     <span key={idx} className="px-3 py-1.5 bg-white/10 text-white text-[9px] font-black uppercase tracking-widest brutalist-border">
                                         {skill}
                                     </span>
@@ -211,7 +161,7 @@ function TeamCard({ member, idx }: { member: any; idx: number }) {
                     {/* Stats & Socials Footer */}
                     <div className="p-6 h-[30%] bg-[#111] flex flex-col justify-between">
                         <div className="flex justify-between divide-x-2 divide-white/10">
-                            {member.stats.map((stat: any, idx: number) => (
+                            {member.stats?.map((stat: any, idx: number) => (
                                 <div key={idx} className="flex-1 text-center">
                                     <p className="text-xl md:text-2xl font-heading font-black text-white">{stat.value}</p>
                                     <p className="text-[7px] font-black uppercase tracking-widest text-white/50">{stat.label}</p>
@@ -220,10 +170,10 @@ function TeamCard({ member, idx }: { member: any; idx: number }) {
                         </div>
 
                         <div className="flex justify-center gap-4 mt-4 relative z-50">
-                            <a href={member.linkedin} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="w-10 h-10 rounded-full bg-white text-black brutalist-border flex items-center justify-center hover:bg-primary hover:text-white transition-all hover:scale-110 active:scale-95 shadow-[2px_2px_0px_#A855F7]">
+                            <a href={member.linkedin_url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="w-10 h-10 rounded-full bg-white text-black brutalist-border flex items-center justify-center hover:bg-primary hover:text-white transition-all hover:scale-110 active:scale-95 shadow-[2px_2px_0px_#A855F7]">
                                 <Linkedin size={16} />
                             </a>
-                            <a href={member.instagram} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="w-10 h-10 rounded-full bg-white text-black brutalist-border flex items-center justify-center hover:bg-primary hover:text-white transition-all hover:scale-110 active:scale-95 shadow-[2px_2px_0px_#22C55E]">
+                            <a href={member.instagram_url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="w-10 h-10 rounded-full bg-white text-black brutalist-border flex items-center justify-center hover:bg-primary hover:text-white transition-all hover:scale-110 active:scale-95 shadow-[2px_2px_0px_#22C55E]">
                                 <Instagram size={16} />
                             </a>
                             <a href="#" onClick={e => e.stopPropagation()} className="w-10 h-10 rounded-full bg-white text-black brutalist-border flex items-center justify-center hover:bg-primary hover:text-white transition-all hover:scale-110 active:scale-95 shadow-[2px_2px_0px_#F3E84A]">

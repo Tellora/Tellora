@@ -7,17 +7,15 @@ import Link from "next/link";
 import Magnetic from "@/components/animations/Magnetic";
 import { DecodeText } from "@/components/animations/ScrollChoreography";
 import { TiltCard } from "@/components/animations/TiltCard";
-
-const stats = [
-    { value: "5+", label: "Core Partners", color: "#A855F7" },
-    { value: "Data", label: "Driven Growth", color: "#22C55E" },
-    { value: "100%", label: "Performance", color: "#F3E84A" },
-];
+import { getSettings, getCompanyStats, SiteSettings, CompanyStat } from "@/lib/store";
 
 export default function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const [isMounted, setIsMounted] = useState(false);
+    const [settings, setSettings] = useState<SiteSettings | null>(null);
+    const [stats, setStats] = useState<CompanyStat[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -30,8 +28,20 @@ export default function Hero() {
 
     useEffect(() => {
         setIsMounted(true);
+
+        const fetchData = async () => {
+            const [sData, stData] = await Promise.all([
+                getSettings(),
+                getCompanyStats()
+            ]);
+            setSettings(sData);
+            setStats(stData || []);
+            setLoading(false);
+        };
+
+        fetchData();
+
         const handleMouseMove = (e: MouseEvent) => {
-            // Throttled mouse move for performance
             requestAnimationFrame(() => {
                 setMousePos({ x: e.clientX, y: e.clientY });
             });
@@ -40,10 +50,15 @@ export default function Hero() {
         return () => window.removeEventListener("mousemove", handleMouseMove);
     }, []);
 
-    // Optimized interactive mouse parallax with dampened springs
     const springConfig = { stiffness: 50, damping: 20, mass: 0.5 };
     const interactiveX = useSpring((mousePos.x - (isMounted ? window.innerWidth / 2 : 0)) * 0.015, springConfig);
     const interactiveY = useSpring((mousePos.y - (isMounted ? window.innerHeight / 2 : 0)) * 0.015, springConfig);
+
+    if (loading) return null;
+
+    const heroTitle = settings?.hero_title || settings?.site_title || "TELLORA MEDIA";
+    const heroSubtitle = settings?.hero_subtitle || "Engineering DOPAMINE-DRIVEN growth with absolute intent.";
+    const ctaText = settings?.cta_text || "DEPLOY CORE";
 
     return (
         <section
@@ -54,7 +69,7 @@ export default function Hero() {
             {/* Optimized Brand Halftone (Left) */}
             <div className="absolute top-0 left-0 w-[300px] h-full bg-transparent halftone-overlay -translate-x-1/2 opacity-5 pointer-events-none" />
 
-            {/* Interactive Advanced Glare / Spotlight Orchestrated by Mouse */}
+            {/* Interactive Advanced Glare / Spotlight */}
             <motion.div
                 className="pointer-events-none absolute inset-0 mix-blend-screen transition-opacity duration-300 z-0"
                 style={{
@@ -62,7 +77,7 @@ export default function Hero() {
                 }}
             />
 
-            {/* Optimized Top Kinetic Marquee */}
+            {/* Top Kinetic Marquee */}
             <div className="absolute top-24 md:top-32 left-0 w-full overflow-hidden border-y-[4px] border-black bg-white py-3 md:py-6 -rotate-1 z-30 shadow-[0px_6px_0px_rgba(0,0,0,1)] gpu-accelerated">
                 <div className="flex animate-marquee gap-12 md:gap-24 whitespace-nowrap">
                     {[...Array(4)].map((_, i) => (
@@ -81,7 +96,6 @@ export default function Hero() {
             <div className="container mx-auto px-6 relative z-10">
                 <div className="flex flex-col items-center text-center">
 
-                    {/* Decorative Background Ornaments - GPU Accelerated */}
                     <motion.div style={{ x: interactiveX, y: interactiveY }} className="absolute -z-10 w-full h-[150%] pointer-events-none translate-z-0 overflow-visible hidden md:block">
                         <div className="absolute top-[5%] left-[10%] bg-primary p-12 brutalist-border shadow-[12px_12px_0px_#000] rotate-12 opacity-40 animate-float translate-z-0">
                             <Globe size={120} className="text-black" />
@@ -90,7 +104,6 @@ export default function Hero() {
                             <Focus size={60} className="text-black" />
                         </div>
 
-                        {/* More Floating Shapes Requested */}
                         <div className="absolute top-[30%] left-[20%] w-16 h-16 bg-secondary brutalist-border shadow-[4px_4px_0px_#000] -rotate-45 opacity-50 animate-float-delayed" />
                         <div className="absolute top-[45%] right-[25%] w-20 h-20 bg-white border-[6px] border-primary rounded-full opacity-60 animate-bounce flex items-center justify-center">
                             <Sparkles size={30} className="text-primary" />
@@ -118,11 +131,12 @@ export default function Hero() {
                         className="relative mb-12 md:mb-20 translate-z-0 mt-16 md:mt-0"
                     >
                         <div className="relative group mt-8 md:mt-0">
-                            <h1 className="text-[15vw] md:text-[20rem] font-heading font-black tracking-tighter leading-[0.85] md:leading-none text-black selection:bg-accent select-none uppercase relative z-20">
-                                TELLORA <br />
-                                <span className="animate-red-gradient drop-shadow-[4px_4px_0px_#000] md:drop-shadow-[10px_10px_0px_#000] inline-block -translate-y-2 md:-translate-y-8 gpu-accelerated">
-                                    MEDIA
-                                </span>
+                            <h1 className="text-[12vw] md:text-[15rem] font-heading font-black tracking-tighter leading-[0.85] md:leading-none text-black selection:bg-accent select-none uppercase relative z-20">
+                                {heroTitle.split(' ').map((word, i) => (
+                                    <span key={i} className={i === 1 ? "animate-red-gradient drop-shadow-[4px_4px_0px_#000] md:drop-shadow-[10px_10px_0px_#000] inline-block -translate-y-2 md:-translate-y-8 gpu-accelerated" : ""}>
+                                        {word} {i === 0 && <br />}
+                                    </span>
+                                ))}
                             </h1>
                             <span className="sr-only">Tellora Media - Premier Digital Growth Agency and SEO Experts</span>
                             <div className="absolute -top-10 md:-top-12 left-1/2 -translate-x-1/2 px-4 md:px-6 py-2 bg-black text-white text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] rough-border shadow-[4px_4px_0px_#F3E84A] md:shadow-[8px_8px_0px_#F3E84A] rotate-2 animate-bounce flex items-center whitespace-nowrap">
@@ -138,7 +152,7 @@ export default function Hero() {
                         className="max-w-5xl mb-16 md:mb-24"
                     >
                         <p className="text-xl sm:text-2xl md:text-5xl font-black uppercase tracking-tighter leading-[1.2] md:leading-[0.9] text-black">
-                            <DecodeText text="Engineering" /> <span className="bg-primary text-black rough-border px-2 py-1 md:px-6 md:py-3 rotate-[-1.5deg] inline-block mx-1 md:mx-4 shadow-[4px_4px_0px_#F3E84A] md:shadow-[10px_10px_0px_#F3E84A]"><DecodeText text="DOPAMINE-DRIVEN" /></span> growth with <span className="text-black underline decoration-secondary decoration-[4px] md:decoration-[10px] underline-offset-[4px] md:underline-offset-[8px] italic"><DecodeText text="absolute intent." /></span>
+                            {heroSubtitle}
                         </p>
                     </motion.div>
 
@@ -150,7 +164,7 @@ export default function Hero() {
                     >
                         <Magnetic>
                             <Link href="/contact" className="w-full sm:w-auto px-10 md:px-16 py-6 md:py-8 bg-black text-white font-black uppercase tracking-widest text-lg md:text-xl brutalist-border shadow-[8px_8px_0px_#A855F7] md:shadow-[12px_12px_0px_#A855F7] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_#A855F7] md:hover:shadow-[16px_16px_0px_#A855F7] active:translate-y-1 transition-all flex items-center justify-center gap-4 md:gap-6 group">
-                                DEPLOY CORE <ArrowRight className="w-6 h-6 md:w-7 md:h-7 group-hover:translate-x-4 transition-transform text-accent" />
+                                {ctaText} <ArrowRight className="w-6 h-6 md:w-7 md:h-7 group-hover:translate-x-4 transition-transform text-accent" />
                             </Link>
                         </Magnetic>
 
@@ -162,7 +176,6 @@ export default function Hero() {
                         </Magnetic>
                     </motion.div>
 
-                    {/* Stats Grid - Performance Optimized Bento with 3D Tilt */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 w-full max-w-6xl relative z-20">
                         {stats.map((stat, i) => (
                             <TiltCard key={i} className="h-full">
@@ -191,7 +204,6 @@ export default function Hero() {
                 </div>
             </div>
 
-            {/* Background Marquee Text - Optimized Scale & Calculation */}
             <motion.div
                 style={{ rotateX, x: xOffset }}
                 className="absolute -bottom-40 left-0 w-[200%] pointer-events-none opacity-[0.02] mix-blend-overlay select-none z-0 gpu-accelerated translate-z-0"

@@ -36,24 +36,10 @@ export default function RecruitmentAdmin() {
     // Load data
     const loadData = async () => {
         const storedJobs = await getAdminData("recruitment_jobs", []);
-        if (storedJobs.length > 0) setJobs(storedJobs);
-        else {
-            const initialJobs = [
-                { id: 1, title: "Creative Director", department: "Design", location: "Remote", type: "Full-time", status: "Published", description: "Lead our creative vision...", requirements: "8+ years experience...", benefits: "Health, Equity, Remote-first" },
-                { id: 2, title: "Senior Performance Engineer", department: "Engineering", location: "Global (Remote)", type: "Contract", status: "Published", description: "Optimize web performance...", requirements: "Deep knowledge of Next.js...", benefits: "Competitive pay, flexible hours" }
-            ];
-            setJobs(initialJobs);
-        }
+        setJobs(storedJobs);
 
         const storedApps = await getAdminData("recruitment_apps", []);
-        if (storedApps.length > 0) setApplications(storedApps);
-        else {
-            const initialApps = [
-                { id: 1, jobId: 1, jobTitle: "Creative Director", candidateName: "Alex Rivera", candidateEmail: "alex@example.com", resumeUrl: "/demo-resume.pdf", coverLetter: "I've been following Tellora for years...", status: "In Review", date: "2026-03-05" },
-                { id: 2, jobId: 1, jobTitle: "Creative Director", candidateName: "Sarah Chen", candidateEmail: "sarah@design.io", resumeUrl: "/resume-sarah.pdf", coverLetter: "My portfolio speaks for itself...", status: "Interviewed", date: "2026-03-07" }
-            ];
-            setApplications(initialApps);
-        }
+        setApplications(storedApps);
     };
 
     useEffect(() => {

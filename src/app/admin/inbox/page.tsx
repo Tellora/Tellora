@@ -76,8 +76,7 @@ export default function AdminInbox() {
             await addActivityLog({
                 type: "reply",
                 item: `Replied to: ${selectedMsg.sender}`,
-                user: "Admin",
-                time: "Just Now",
+                user_name: "Admin",
                 status: "Sent",
             });
             setReplyText("");
@@ -199,7 +198,7 @@ export default function AdminInbox() {
                                     <div className="flex items-center gap-4 md:gap-8 w-full">
                                         {/* Avatar */}
                                         <div className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-[2rem] flex items-center justify-center font-black text-base md:text-lg italic shadow-inner shrink-0 ${msg.status === "Unread" ? "bg-primary text-white" : "bg-white/5 text-white/30 border border-white/5"}`}>
-                                            {msg.avatar}
+                                            {msg.sender?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || '?'}
                                         </div>
 
                                         <div className="flex-1 min-w-0">
@@ -209,7 +208,7 @@ export default function AdminInbox() {
                                                     {msg.status === "Unread" && <span className="w-2 md:w-2.5 h-2 md:h-2.5 bg-primary rounded-full shadow-[0_0_10px_#4ac0e4]" />}
                                                     {msg.status === "Replied" && <span className="text-[8px] md:text-[9px] px-2 md:px-3 py-0.5 md:py-1 bg-green-500/20 text-green-400 rounded-full font-black uppercase tracking-wider">Replied</span>}
                                                 </h4>
-                                                <span className="text-[9px] md:text-[11px] font-black text-white/20 uppercase tracking-widest md:tracking-[0.3em] font-mono shrink-0 ml-2">{msg.time}</span>
+                                                <span className="text-[9px] md:text-[11px] font-black text-white/20 uppercase tracking-widest md:tracking-[0.3em] font-mono shrink-0 ml-2">{msg.created_at ? new Date(msg.created_at).toLocaleDateString() : ''}</span>
                                             </div>
                                             <h5 className="text-xs md:text-sm font-black text-primary/80 mb-1 md:mb-1.5 truncate italic">{msg.subject}</h5>
                                             <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-0">
@@ -257,7 +256,7 @@ export default function AdminInbox() {
                             <div className="flex flex-col md:flex-row justify-between items-start mb-8 md:mb-12 gap-6">
                                 <div className="flex items-center gap-4 md:gap-8">
                                     <div className="w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-[3rem] bg-primary flex items-center justify-center text-white text-xl md:text-2xl font-black italic shadow-2xl md:shadow-4xl shadow-primary/30 shrink-0">
-                                        {selectedMsg.avatar}
+                                        {selectedMsg.sender?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || '?'}
                                     </div>
                                     <div>
                                         <h2 className="text-3xl font-black text-white italic tracking-tighter">{selectedMsg.sender}</h2>
@@ -268,7 +267,7 @@ export default function AdminInbox() {
                                             {selectedMsg.email} <ExternalLink size={12} />
                                         </a>
                                         <div className="flex items-center gap-4 mt-2 flex-wrap">
-                                            <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] italic font-mono">{selectedMsg.time}</span>
+                                            <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] italic font-mono">{selectedMsg.created_at ? new Date(selectedMsg.created_at).toLocaleString() : ''}</span>
                                             <span className="text-[9px] px-3 py-1 bg-white/5 text-white/30 rounded-full font-black uppercase tracking-wide border border-white/5">{selectedMsg.service}</span>
                                             {selectedMsg.company && selectedMsg.company !== "N/A" && (
                                                 <span className="text-[9px] px-3 py-1 bg-primary/10 text-primary/60 rounded-full font-black uppercase tracking-wide border border-primary/20">{selectedMsg.company}</span>
@@ -311,10 +310,10 @@ export default function AdminInbox() {
                                 </div>
 
                                 {/* Reply History */}
-                                {selectedMsg.replyHistory && selectedMsg.replyHistory.length > 0 && (
+                                {selectedMsg.reply_history && selectedMsg.reply_history.length > 0 && (
                                     <div className="space-y-4">
                                         <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 ml-4">Reply History</p>
-                                        {selectedMsg.replyHistory.map((reply, i) => (
+                                        {selectedMsg.reply_history.map((reply, i) => (
                                             <div key={i} className="ml-8 p-8 bg-primary/10 border border-primary/20 rounded-[2.5rem] relative">
                                                 <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-[2px] bg-primary/30" />
                                                 <p className="text-white/70 text-sm leading-relaxed italic font-medium">{reply.text}</p>

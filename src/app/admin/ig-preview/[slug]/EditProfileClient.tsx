@@ -34,25 +34,26 @@ export default function EditProfileClient({ slug }: { slug: string }) {
 
     useEffect(() => {
         if (!slug) return;
-        fetch(`/api/ig/profiles/${slug}`)
-            .then((r) => r.json())
-            .then((data) => {
+        const load = async () => {
+            const storage = await import("@/lib/igStorage");
+            const data = await storage.getProfile(slug);
+            if (data) {
                 setProfile(data);
                 setName(data.name);
                 setBio(data.bio || "");
                 setProfilePic(data.profilePic || undefined);
-            });
+            }
+        };
+        load();
     }, [slug]);
 
     const handleSaveProfile = async (e: React.FormEvent) => {
         e.preventDefault();
+        const storage = await import("@/lib/igStorage");
         const body: any = { name, bio };
         if (profilePic) body.profilePic = profilePic;
-        await fetch(`/api/ig/profiles/${slug}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-        });
+        
+        await storage.updateProfile(slug, body);
         router.refresh();
     };
 
@@ -67,17 +68,16 @@ export default function EditProfileClient({ slug }: { slug: string }) {
 
     const addPost = async () => {
         if (!newFile) return;
+        const storage = await import("@/lib/igStorage");
         const reader = new FileReader();
         reader.onload = async () => {
             const src = reader.result as string;
             const type = newFile.type.startsWith("video") ? "video" : "image";
-            const res = await fetch(`/api/ig/profiles/${slug}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ type, src, caption: newCaption }),
-            });
-            const added = await res.json();
-            setProfile((p) => p ? { ...p, posts: [...p.posts, added] } : p);
+            
+            const added = await storage.addPost(slug, { type, src, caption: newCaption });
+            if (added) {
+                setProfile((p) => p ? { ...p, posts: [...p.posts, added] } : p);
+            }
             setIsPostModal(false);
             setNewCaption("");
             setNewFile(null);
@@ -87,12 +87,9 @@ export default function EditProfileClient({ slug }: { slug: string }) {
 
     const deletePost = async (id: string) => {
         if (!confirm("Delete post?")) return;
-        await fetch(`/api/ig/profiles/${slug}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ postId: id }),
-        });
-        setProfile((p) => { if (!p) return p; return { ...p, posts: p.posts.filter((x) => x.id !== id) }; });
+        const storage = await import("@/lib/igStorage");
+        await storage.removePost(slug, id);
+        setProfile((p) => { if (!p) return p; return { ...p, posts: p.posts.filter((x: any) => x.id !== id) }; });
     };
 
     if (!profile) return <p className="text-white">Loading…</p>;

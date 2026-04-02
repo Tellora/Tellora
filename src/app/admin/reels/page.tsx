@@ -30,9 +30,9 @@ function getThumbnail(url: string): string | null {
     return null;
 }
 
-const emptyReel = (): Omit<Reel, "id" | "createdAt"> => ({
+const emptyReel = (): Omit<Reel, "id" | "created_at"> => ({
     title: "",
-    embedUrl: "",
+    embed_url: "",
     tag: "BTS",
     likes: "0",
     views: "0",
@@ -58,7 +58,7 @@ export default function AdminReels() {
 
     const openEdit = (r: Reel) => {
         setEditingReel(r);
-        setForm({ title: r.title, embedUrl: r.embedUrl, tag: r.tag, likes: r.likes, views: r.views, status: r.status });
+        setForm({ title: r.title, embed_url: r.embed_url, tag: r.tag, likes: r.likes, views: r.views, status: r.status });
         setIsModalOpen(true);
     };
 
@@ -67,12 +67,11 @@ export default function AdminReels() {
         const reel: Reel = {
             id: editingReel ? editingReel.id : `reel-${Date.now()}`,
             title: form.title,
-            embedUrl: form.embedUrl,
+            embed_url: form.embed_url,
             tag: form.tag,
             likes: form.likes || "0",
             views: form.views || "0",
             status: form.status,
-            createdAt: editingReel ? editingReel.createdAt : Date.now(),
         };
         await upsertReel(reel);
         await reload();
@@ -155,8 +154,8 @@ export default function AdminReels() {
             {/* Reel Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {filtered.map((reel, i) => {
-                    const thumb = getThumbnail(reel.embedUrl);
-                    const embed = getEmbedUrl(reel.embedUrl);
+                    const thumb = getThumbnail(reel.embed_url);
+                    const embed = getEmbedUrl(reel.embed_url);
                     return (
                         <motion.div
                             key={reel.id}
@@ -176,7 +175,7 @@ export default function AdminReels() {
                                 ) : (
                                     <div className="flex flex-col items-center justify-center gap-3 text-white/10 p-8">
                                         <Video size={48} />
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-center">{reel.embedUrl ? "Custom Embed" : "No Video URL"}</span>
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-center">{reel.embed_url ? "Custom Embed" : "No Video URL"}</span>
                                     </div>
                                 )}
                                 {embed && (
@@ -203,9 +202,9 @@ export default function AdminReels() {
                                     </div>
                                 </div>
 
-                                {reel.embedUrl && (
+                                {reel.embed_url && (
                                     <a
-                                        href={reel.embedUrl}
+                                        href={reel.embed_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-white/20 hover:text-primary transition-colors mb-4"
@@ -260,7 +259,7 @@ export default function AdminReels() {
                             <button onClick={() => setPreviewReel(null)} className="absolute -top-12 right-0 p-3 text-white/50 hover:text-white"><X size={28} /></button>
                             <div className="w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-black" style={{ aspectRatio: "9/16", maxHeight: "80vh" }}>
                                 <iframe
-                                    src={getEmbedUrl(previewReel.embedUrl) || ""}
+                                    src={getEmbedUrl(previewReel.embed_url) || ""}
                                     className="w-full h-full"
                                     allow="autoplay; fullscreen; picture-in-picture"
                                     allowFullScreen
@@ -301,13 +300,13 @@ export default function AdminReels() {
 
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">YouTube / Vimeo URL</label>
-                                    <input value={form.embedUrl} onChange={(e) => setForm({ ...form, embedUrl: e.target.value })}
+                                    <input value={form.embed_url} onChange={(e) => setForm({ ...form, embed_url: e.target.value })}
                                         className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white outline-none focus:border-primary transition-all font-medium text-sm"
                                         placeholder="https://www.youtube.com/watch?v=..." />
-                                    {form.embedUrl && getEmbedUrl(form.embedUrl) && (
+                                    {form.embed_url && getEmbedUrl(form.embed_url) && (
                                         <p className="text-[10px] text-green-400 font-black uppercase tracking-widest">✓ Valid video URL detected</p>
                                     )}
-                                    {form.embedUrl && !getEmbedUrl(form.embedUrl) && (
+                                    {form.embed_url && !getEmbedUrl(form.embed_url) && (
                                         <p className="text-[10px] text-orange-400 font-black uppercase tracking-widest">⚠ URL format not recognized. Use YouTube or Vimeo links.</p>
                                     )}
                                 </div>

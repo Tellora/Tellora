@@ -45,7 +45,7 @@ export default function AdminSettings() {
     const handlePasswordChange = () => {
         setPwError("");
         setPwSuccess("");
-        if (currentPassword !== settings.adminPassword) {
+        if (currentPassword !== settings.admin_password) {
             setPwError("Current password is incorrect.");
             return;
         }
@@ -57,8 +57,8 @@ export default function AdminSettings() {
             setPwError("Passwords do not match.");
             return;
         }
-        update({ adminPassword: newPassword });
-        saveSettings({ ...settings, adminPassword: newPassword });
+        update({ admin_password: newPassword });
+        saveSettings({ ...settings, admin_password: newPassword });
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
@@ -83,6 +83,7 @@ export default function AdminSettings() {
     const tabs = [
         { name: "Brand Identity", icon: Palette },
         { name: "Global SEO", icon: Globe },
+        { name: "Infrastructure", icon: Network },
         { name: "System Access", icon: Shield },
         { name: "Data Matrix", icon: Database },
         { name: "Core Engine", icon: Cpu },
@@ -201,8 +202,8 @@ export default function AdminSettings() {
                                         <div className="space-y-3 md:space-y-4">
                                             <label className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-primary italic">Site Display Name</label>
                                             <input
-                                                value={settings.siteTitle}
-                                                onChange={(e) => update({ siteTitle: e.target.value })}
+                                                value={settings.site_title}
+                                                onChange={(e) => update({ site_title: e.target.value })}
                                                 className="w-full bg-white/5 border border-white/10 rounded-2xl md:rounded-[2rem] p-4 md:p-6 text-white font-black italic text-lg md:text-2xl outline-none focus:border-primary transition-all"
                                             />
                                         </div>
@@ -211,14 +212,14 @@ export default function AdminSettings() {
                                             <div className="flex items-center gap-4 md:gap-6 p-2 md:p-3 bg-white/5 rounded-2xl md:rounded-[2.5rem] border border-white/10 group/color hover:border-primary/40 transition-all">
                                                 <input
                                                     type="color"
-                                                    value={settings.brandAccent}
-                                                    onChange={(e) => update({ brandAccent: e.target.value })}
+                                                    value={settings.brand_accent || '#4ac0e4'}
+                                                    onChange={(e) => update({ brand_accent: e.target.value })}
                                                     className="w-14 h-14 md:w-20 md:h-20 rounded-xl md:rounded-[2rem] border-none cursor-pointer bg-transparent shrink-0"
                                                 />
                                                 <input
                                                     type="text"
-                                                    value={settings.brandAccent}
-                                                    onChange={(e) => update({ brandAccent: e.target.value })}
+                                                    value={settings.brand_accent || '#4ac0e4'}
+                                                    onChange={(e) => update({ brand_accent: e.target.value })}
                                                     className="flex-1 bg-transparent border-none text-white font-mono text-base md:text-xl uppercase outline-none px-4 md:px-6 italic font-black"
                                                 />
                                             </div>
@@ -227,14 +228,14 @@ export default function AdminSettings() {
                                             </p>
                                         </div>
                                         <div className="p-6 md:p-12 bg-primary/5 border border-primary/10 rounded-3xl md:rounded-[4rem] flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10 text-center md:text-left mt-8">
-                                            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl md:rounded-[2.5rem] flex items-center justify-center shadow-3xl shrink-0" style={{ background: settings.brandAccent }}>
+                                            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl md:rounded-[2.5rem] flex items-center justify-center shadow-3xl shrink-0" style={{ background: settings.brand_accent || '#4ac0e4' }}>
                                                 <Sparkles size={32} className="text-white md:w-10 md:h-10 w-8 h-8" />
                                             </div>
                                             <div className="flex-1 w-full max-w-[200px] md:max-w-none">
                                                 <h4 className="text-xl md:text-2xl font-black text-white mb-1 md:mb-2 italic">Brand Preview</h4>
-                                                <p className="text-white/50 text-xs md:text-sm italic truncate block w-full">{settings.siteTitle}</p>
-                                                <p className="text-[9px] md:text-[10px] font-black uppercase tracking-widest mt-2 md:mt-3 italic" style={{ color: settings.brandAccent }}>
-                                                    Accent: {settings.brandAccent}
+                                                <p className="text-white/50 text-xs md:text-sm italic truncate block w-full">{settings.site_title}</p>
+                                                <p className="text-[9px] md:text-[10px] font-black uppercase tracking-widest mt-2 md:mt-3 italic" style={{ color: settings.brand_accent || '#4ac0e4' }}>
+                                                    Accent: {settings.brand_accent || '#4ac0e4'}
                                                 </p>
                                             </div>
                                         </div>
@@ -247,24 +248,24 @@ export default function AdminSettings() {
                                         <div className="space-y-3 md:space-y-4">
                                             <label className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-primary italic">Page Title (browser tab)</label>
                                             <input
-                                                value={settings.siteTitle}
-                                                onChange={(e) => update({ siteTitle: e.target.value })}
+                                                value={settings.site_title}
+                                                onChange={(e) => update({ site_title: e.target.value })}
                                                 className="w-full bg-white/5 border border-white/10 rounded-2xl md:rounded-[2.5rem] p-5 md:p-8 text-white font-black italic text-lg md:text-2xl outline-none focus:border-primary transition-all"
                                             />
                                             <p className="text-[9px] md:text-[10px] text-white/20 font-black uppercase tracking-widest md:ml-2 italic">
-                                                Character count: {settings.siteTitle.length}/70
+                                                Character count: {settings.site_title?.length || 0}/70
                                             </p>
                                         </div>
                                         <div className="space-y-3 md:space-y-4">
                                             <label className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-primary italic">Meta Description</label>
                                             <textarea
                                                 rows={4}
-                                                value={settings.metaDescription}
-                                                onChange={(e) => update({ metaDescription: e.target.value })}
+                                                value={settings.meta_description}
+                                                onChange={(e) => update({ meta_description: e.target.value })}
                                                 className="w-full bg-white/5 border border-white/10 rounded-2xl md:rounded-[3rem] p-6 md:p-10 text-white font-medium outline-none resize-none focus:border-primary transition-all italic text-base md:text-lg"
                                             />
                                             <p className="text-[9px] md:text-[10px] text-white/20 font-black uppercase tracking-widest md:ml-2 italic">
-                                                Character count: {settings.metaDescription.length}/160
+                                                Character count: {settings.meta_description?.length || 0}/160
                                             </p>
                                         </div>
                                         <div className="space-y-3 md:space-y-4">
@@ -301,15 +302,15 @@ export default function AdminSettings() {
                                         {/* Stealth Mode */}
                                         <div className="grid md:grid-cols-2 gap-6 md:gap-10">
                                             <div
-                                                className={`p-6 md:p-10 rounded-3xl md:rounded-[4rem] border transition-all cursor-pointer ${settings.stealthMode ? "bg-red-500/10 border-red-500/20" : "bg-white/5 border-white/10 hover:border-primary/30"}`}
-                                                onClick={() => update({ stealthMode: !settings.stealthMode })}
+                                                className={`p-6 md:p-10 rounded-3xl md:rounded-[4rem] border transition-all cursor-pointer ${settings.stealth_mode ? "bg-red-500/10 border-red-500/20" : "bg-white/5 border-white/10 hover:border-primary/30"}`}
+                                                onClick={() => update({ stealth_mode: !settings.stealth_mode })}
                                             >
                                                 <div className="flex items-center justify-between mb-6 md:mb-8">
-                                                    <div className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-[1.5rem] flex items-center justify-center ${settings.stealthMode ? "bg-red-500 text-white" : "bg-white/10 text-white/40"}`}>
+                                                    <div className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-[1.5rem] flex items-center justify-center ${settings.stealth_mode ? "bg-red-500 text-white" : "bg-white/10 text-white/40"}`}>
                                                         <ShieldCheck size={24} className="md:w-8 md:h-8" />
                                                     </div>
-                                                    <div className={`w-12 md:w-14 h-6 md:h-7 rounded-full relative transition-all p-1 ${settings.stealthMode ? "bg-red-500" : "bg-white/10"}`}>
-                                                        <motion.div animate={{ x: settings.stealthMode ? (window.innerWidth < 768 ? 24 : 28) : 0 }} className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-white shadow-xl" />
+                                                    <div className={`w-12 md:w-14 h-6 md:h-7 rounded-full relative transition-all p-1 ${settings.stealth_mode ? "bg-red-500" : "bg-white/10"}`}>
+                                                        <motion.div animate={{ x: settings.stealth_mode ? 28 : 0 }} className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-white shadow-xl" />
                                                     </div>
                                                 </div>
                                                 <h4 className="text-lg md:text-xl font-black text-white italic">Maintenance Mode</h4>
@@ -364,6 +365,82 @@ export default function AdminSettings() {
                                     </div>
                                 )}
 
+                                {/* Infrastructure */}
+                                {activeTab === "Infrastructure" && (
+                                    <div className="space-y-10 md:space-y-12">
+                                        <div className="space-y-6">
+                                            <h4 className="text-[10px] font-black uppercase tracking-[0.5em] text-primary/60 ml-2 italic">Supabase Connectivity</h4>
+                                            <div className="grid gap-6">
+                                                <div className="space-y-3 md:space-y-4">
+                                                    <label className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-primary italic">Supabase Project URL</label>
+                                                    <input
+                                                        value={settings.supabase_url || ''}
+                                                        onChange={(e) => update({ supabase_url: e.target.value })}
+                                                        placeholder="https://your-project.supabase.co"
+                                                        className="w-full bg-white/5 border border-white/10 rounded-2xl md:rounded-[2.5rem] p-4 md:p-6 text-white font-mono text-sm md:text-base outline-none focus:border-primary transition-all"
+                                                    />
+                                                </div>
+                                                <div className="space-y-3 md:space-y-4">
+                                                    <label className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-primary italic">Supabase Anon Key</label>
+                                                    <div className="relative">
+                                                        <input
+                                                            type={showPw ? "text" : "password"}
+                                                            value={settings.supabase_anon_key || ''}
+                                                            onChange={(e) => update({ supabase_anon_key: e.target.value })}
+                                                            className="w-full bg-white/5 border border-white/10 rounded-2xl md:rounded-[2.5rem] p-4 md:p-6 text-white font-mono text-sm md:text-base outline-none focus:border-primary transition-all pr-16"
+                                                        />
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={() => setShowPw(!showPw)} 
+                                                            className="absolute right-6 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors"
+                                                        >
+                                                            {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-6">
+                                            <h4 className="text-[10px] font-black uppercase tracking-[0.5em] text-primary/60 ml-2 italic">Storage Protocol</h4>
+                                            <div className="grid md:grid-cols-2 gap-6">
+                                                {[
+                                                    { id: "Local", label: "Local Memory", desc: "Data is stored in browser localStorage. Fast, but resets on clear.", icon: HardDrive },
+                                                    { id: "Cloud", label: "Supabase Cloud", desc: "Globally persistent storage. Syncs across all devices and browsers.", icon: Globe },
+                                                ].map((mode) => (
+                                                    <div
+                                                        key={mode.id}
+                                                        onClick={() => update({ storage_mode: mode.id as "Local" | "Cloud" })}
+                                                        className={`p-6 md:p-8 rounded-3xl border transition-all cursor-pointer relative overflow-hidden group ${settings.storage_mode === mode.id ? "bg-primary/10 border-primary/40 ring-1 ring-primary/20" : "bg-white/5 border-white/10 hover:border-white/20 opacity-60"}`}
+                                                    >
+                                                        <div className="flex items-center gap-4 mb-4">
+                                                            <div className={`p-3 rounded-xl ${settings.storage_mode === mode.id ? "bg-primary text-white shadow-[0_0_15px_rgba(74,192,228,0.4)]" : "bg-white/10 text-white/40"}`}>
+                                                                <mode.icon size={20} />
+                                                            </div>
+                                                            <h5 className="font-black text-white italic">{mode.label}</h5>
+                                                        </div>
+                                                        <p className="text-[10px] text-white/40 uppercase tracking-widest leading-relaxed italic">{mode.desc}</p>
+                                                        {settings.storage_mode === mode.id && (
+                                                            <motion.div layoutId="mode-check" className="absolute top-4 right-4">
+                                                                <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white scale-75 md:scale-100">
+                                                                    <Check size={14} />
+                                                                </div>
+                                                            </motion.div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {settings.storage_mode === "Cloud" && !settings.supabase_url && (
+                                            <div className="p-6 bg-amber-500/10 border border-amber-500/20 rounded-3xl flex items-center gap-4">
+                                                <AlertTriangle size={20} className="text-amber-400 shrink-0" />
+                                                <p className="text-amber-400 font-black uppercase tracking-widest text-[10px] italic">Warning: Supabase credentials missing. Cloud storage will fail until configured.</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
                                 {/* Data Matrix */}
                                 {activeTab === "Data Matrix" && (
                                     <div className="space-y-8 md:space-y-12">
@@ -375,7 +452,7 @@ export default function AdminSettings() {
                                             ].map((sensor, i) => (
                                                 <div
                                                     key={i}
-                                                    onClick={() => update({ [sensor.key]: !settings[sensor.key] })}
+                                                    onClick={() => update({ [sensor.key]: !settings[sensor.key as keyof SiteSettings] })}
                                                     className={`p-6 md:p-10 rounded-3xl md:rounded-[3.5rem] border transition-all cursor-pointer flex flex-row md:flex-col items-center md:items-start text-left gap-4 md:gap-0 ${settings[sensor.key] ? "bg-primary/10 border-primary/40" : "bg-white/5 border-white/10 opacity-50"}`}
                                                 >
                                                     <div className="flex justify-between items-center md:items-start mb-0 md:mb-8 w-auto md:w-full shrink-0">
@@ -393,7 +470,7 @@ export default function AdminSettings() {
                                                                 <Check size={12} />
                                                             </div>
                                                         </div>
-                                                        <p className="text-[9px] font-black uppercase tracking-widest text-white/20 mt-1 md:mt-3 italic">{settings[sensor.key] ? "ACTIVE" : "INACTIVE"}</p>
+                                                        <p className="text-[9px] font-black uppercase tracking-widest text-white/20 mt-1 md:mt-3 italic">{settings[sensor.key as keyof SiteSettings] ? "ACTIVE" : "INACTIVE"}</p>
                                                     </div>
                                                 </div>
                                             ))}
@@ -455,9 +532,9 @@ export default function AdminSettings() {
                                             <div className="space-y-3 md:space-y-4 text-[10px] md:text-[12px] font-bold leading-relaxed overflow-hidden">
                                                 <p className="text-primary italic truncate">{`>`} INITIALIZING_CORE_DIAGNOSTICS...</p>
                                                 <p className="text-white/40 italic truncate"> [SYSTEM] Reading site settings from LocalStorage... {settings ? "OK" : "FAIL"}</p>
-                                                <p className="text-white/40 italic truncate"> [SYSTEM] Admin password: {settings.adminPassword ? "SET" : "DEFAULT"}</p>
-                                                <p className="text-white/40 italic truncate"> [SYSTEM] Neural cache: {settings.neuralCache ? "ENABLED" : "DISABLED"}</p>
-                                                <p className="text-white/40 italic truncate"> [SYSTEM] Auto-optimization: {settings.autoOptimization ? "ENABLED" : "DISABLED"}</p>
+                                                <p className="text-white/40 italic truncate"> [SYSTEM] Admin password: {settings.admin_password ? "SET" : "DEFAULT"}</p>
+                                                <p className="text-white/40 italic truncate"> [SYSTEM] Neural cache: {settings.neural_cache ? "ENABLED" : "DISABLED"}</p>
+                                                <p className="text-white/40 italic truncate"> [SYSTEM] Auto-optimization: {settings.auto_optimization ? "ENABLED" : "DISABLED"}</p>
                                                 <p className="text-green-400 italic truncate">{`>`} KERNEL_STABLE: All systems nominal.</p>
                                                 <p className="text-primary animate-pulse italic truncate">{`>`} Awaiting command_</p>
                                             </div>

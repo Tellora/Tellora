@@ -1,30 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus, HelpCircle, Sparkles } from "lucide-react";
+import { getFAQs } from "@/lib/store";
+import { DbFAQ } from "@/lib/supabase";
 
 export default function FAQ() {
-    const faqs = [
-        {
-            question: "How is Tellora different from other agencies?",
-            answer: "We don't just run campaigns; we build growth engines. We blend high-end creative design with advanced data science and custom ROI tracking, ensuring every dollar spent is measurable."
-        },
-        {
-            question: "What is your typical onboarding process?",
-            answer: "Our onboarding takes 1-2 weeks. We start with a deep-dive strategy session, followed by a comprehensive audit of your current assets, pixel implementations, and competitor analysis before launching phase one."
-        },
-        {
-            question: "Do you guarantee results?",
-            answer: "While no ethical agency can guarantee specific financial outcomes due to market variables, we guarantee our output, our strategy execution, and a transparent data pipeline. If a strategy isn't scaling, you will know exactly why and how we are pivoting."
-        },
-        {
-            question: "What industries do you specialize in?",
-            answer: "We have deep expertise in SaaS, B2B Tech, High-Ticket E-commerce, and specialized Local Services (e.g., Medical, Real Estate). Our frameworks adapt well to any data-driven sector."
-        }
-    ];
-
+    const [faqs, setFaqs] = useState<DbFAQ[]>([]);
+    const [loading, setLoading] = useState(true);
     const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+    useEffect(() => {
+        getFAQs().then(data => {
+            setFaqs(data || []);
+            setLoading(false);
+        });
+    }, []);
+
+    if (loading || faqs.length === 0) return null;
 
     return (
         <section className="py-32 relative z-10 bg-background border-t-[4px] border-black overflow-hidden">
