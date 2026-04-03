@@ -33,19 +33,21 @@ function getThumbnail(url?: string): string | null {
     return null; // Fallback to a placeholder design if Vimeo
 }
 
+const STORAGE_BASE = "https://pteassendcvgngkkybjf.supabase.co/storage/v1/object/public/reels/";
+
 const staticReels = [
-    { id: "1", src: "/reels/1.mp4", title: "Creative Shoot #01", author: "@tellora", tag: "BTS", likes: "18.2k", comments: "124", color: "#F3E84A" },
-    { id: "2", src: "/reels/2.mp4", title: "Studio Magic", author: "@tellora", tag: "Studio", likes: "12.5k", comments: "89", color: "#A855F7" },
-    { id: "3", src: "/reels/10.mp4", title: "Strategy Session", author: "@tellora", tag: "Strategy", likes: "9.1k", comments: "45", color: "#22C55E" },
-    { id: "4", src: "/reels/14.mp4", title: "Win Highlight", author: "@tellora", tag: "Case Study", likes: "21.4k", comments: "312", color: "#FFFFFF" },
-    { id: "5", src: "/reels/15.mp4", title: "Brand Identity", author: "@tellora", tag: "Production", likes: "11.2k", comments: "105", color: "#F97316" },
-    { id: "6", src: "/reels/16.mp4", title: "Viral Execution", author: "@tellora", tag: "Scale", likes: "33.7k", comments: "482", color: "#3B82F6" },
-    { id: "7", src: "/reels/8.mp4", title: "High-End Optic", author: "@tellora", tag: "Production", likes: "14.7k", comments: "156", color: "#FF4D6D" },
-    { id: "8", src: "/reels/bts1.mp4", title: "Behind The Scenes 1", author: "@tellora", tag: "BTS", likes: "8.4k", comments: "56", color: "#EAB308" },
-    { id: "9", src: "/reels/bts2.mp4", title: "Behind The Scenes 2", author: "@tellora", tag: "BTS", likes: "9.2k", comments: "67", color: "#EC4899" },
-    { id: "10", src: "/reels/bts3.mp4", title: "Behind The Scenes 3", author: "@tellora", tag: "BTS", likes: "10.1k", comments: "88", color: "#8B5CF6" },
-    { id: "11", src: "/reels/cicilreel.mp4", title: "Client Delivery", author: "@tellora", tag: "Case Study", likes: "15.3k", comments: "145", color: "#14B8A6" },
-    { id: "12", src: "/reels/officeshoot.mp4", title: "Office Culture", author: "@tellora", tag: "Studio", likes: "19.8k", comments: "210", color: "#6366F1" },
+    { id: "1", src: `${STORAGE_BASE}1.mp4`, title: "Creative Shoot #01", author: "@tellora", tag: "BTS", likes: "18.2k", comments: "124", color: "#F3E84A" },
+    { id: "2", src: `${STORAGE_BASE}2.mp4`, title: "Studio Magic", author: "@tellora", tag: "Studio", likes: "12.5k", comments: "89", color: "#A855F7" },
+    { id: "3", src: `${STORAGE_BASE}10.mp4`, title: "Strategy Session", author: "@tellora", tag: "Strategy", likes: "9.1k", comments: "45", color: "#22C55E" },
+    { id: "4", src: `${STORAGE_BASE}14.mp4`, title: "Win Highlight", author: "@tellora", tag: "Case Study", likes: "21.4k", comments: "312", color: "#FFFFFF" },
+    { id: "5", src: `${STORAGE_BASE}15.mp4`, title: "Brand Identity", author: "@tellora", tag: "Production", likes: "11.2k", comments: "105", color: "#F97316" },
+    { id: "6", src: `${STORAGE_BASE}16.mp4`, title: "Viral Execution", author: "@tellora", tag: "Scale", likes: "33.7k", comments: "482", color: "#3B82F6" },
+    { id: "7", src: `${STORAGE_BASE}8.mp4`, title: "High-End Optic", author: "@tellora", tag: "Production", likes: "14.7k", comments: "156", color: "#FF4D6D" },
+    { id: "8", src: `${STORAGE_BASE}bts1.mp4`, title: "Behind The Scenes 1", author: "@tellora", tag: "BTS", likes: "8.4k", comments: "56", color: "#EAB308" },
+    { id: "9", src: `${STORAGE_BASE}bts2.mp4`, title: "Behind The Scenes 2", author: "@tellora", tag: "BTS", likes: "9.2k", comments: "67", color: "#EC4899" },
+    { id: "10", src: `${STORAGE_BASE}bts3.mp4`, title: "Behind The Scenes 3", author: "@tellora", tag: "BTS", likes: "10.1k", comments: "88", color: "#8B5CF6" },
+    { id: "11", src: `${STORAGE_BASE}cicilreel.mp4`, title: "Client Delivery", author: "@tellora", tag: "Case Study", likes: "15.3k", comments: "145", color: "#14B8A6" },
+    { id: "12", src: `${STORAGE_BASE}officeshoot.mp4`, title: "Office Culture", author: "@tellora", tag: "Studio", likes: "19.8k", comments: "210", color: "#6366F1" },
 ];
 
 const TAGS = ["All", "BTS", "Studio", "Growth", "Case Study", "Production"];
@@ -69,7 +71,7 @@ export default function ReelsSection() {
                         const isMp4 = r.embed_url!.toLowerCase().endsWith('.mp4');
                         return {
                             id: r.id,
-                            src: isMp4 ? (r.embed_url!.startsWith('/') ? r.embed_url : `/reels/${r.embed_url}`) : undefined,
+                            src: isMp4 ? (r.embed_url!.startsWith('http') ? r.embed_url : `${STORAGE_BASE}${r.embed_url}`) : undefined,
                             embedUrl: isMp4 ? undefined : r.embed_url,
                             title: r.title,
                             author: "@tellora",
