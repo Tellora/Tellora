@@ -15,7 +15,7 @@ import {
     Eye,
     Clock
 } from "lucide-react";
-import { getAdminData } from "@/lib/serverDb";
+// Import from lib/store if needed in future, but serverDb is deprecated.
 
 export default function AdminAnalytics() {
     const [stats, setStats] = useState<any[]>([]);
