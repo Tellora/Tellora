@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Outfit } from "next/font/google";
 import "@/styles/globals.css";
 
@@ -20,12 +20,12 @@ export const metadata: Metadata = {
     },
     description: "Tellora Media is an elite digital growth agency specialized in high-frequency SEO, performance marketing, and architecture-driven brand scaling. Turn your vision into market dominance.",
     keywords: [
-        "Digital Growth Agency", 
-        "High-Frequency SEO", 
-        "Elite Performance Marketing", 
-        "Growth Architecture", 
-        "Revenue Scaling Systems", 
-        "Next.js Web Design", 
+        "Digital Growth Agency",
+        "High-Frequency SEO",
+        "Elite Performance Marketing",
+        "Growth Architecture",
+        "Revenue Scaling Systems",
+        "Next.js Web Design",
         "Tellora Media Dominance",
         "Technical SEO Experts",
         "Conversion Rate Optimization Agency"
@@ -61,7 +61,6 @@ export const metadata: Metadata = {
         images: ["/tellora-logo.png"],
         creator: "@telloramedia",
     },
-    viewport: "width=device-width, initial-scale=1, maximum-scale=5",
     robots: {
         index: true,
         follow: true,
@@ -91,6 +90,13 @@ export const metadata: Metadata = {
         ],
     },
     manifest: "/site.webmanifest",
+};
+
+// Separate viewport export — required by Next.js 14+
+export const viewport: Viewport = {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
 };
 
 const jsonLd = {
@@ -132,10 +138,10 @@ export default function RootLayout({
             >
                 {/* Google Tag Manager (noscript) */}
                 <noscript>
-                    <iframe 
+                    <iframe
                         src="https://www.googletagmanager.com/ns.html?id=GTM-MSRGVJ8L"
-                        height="0" 
-                        width="0" 
+                        height="0"
+                        width="0"
                         style={{ display: "none", visibility: "hidden" }}
                     />
                 </noscript>
@@ -152,16 +158,15 @@ export default function RootLayout({
                     `}
                 </Script>
                 {/* Google tag (gtag.js) */}
-                <Script 
-                    strategy="afterInteractive" 
-                    src="https://www.googletagmanager.com/gtag/js?id=G-BVWRJPJRZ1" 
+                <Script
+                    strategy="afterInteractive"
+                    src="https://www.googletagmanager.com/gtag/js?id=G-BVWRJPJRZ1"
                 />
                 <Script id="google-analytics" strategy="afterInteractive">
                     {`
                     window.dataLayer = window.dataLayer || [];
                     function gtag(){dataLayer.push(arguments);}
                     gtag('js', new Date());
-
                     gtag('config', 'G-BVWRJPJRZ1');
                     `}
                 </Script>

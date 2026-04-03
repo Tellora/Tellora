@@ -1,0 +1,721 @@
+﻿
+> tellora-media@0.1.0 build
+> next build
+
+  Γû▓ Next.js 14.2.35
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Linting and checking validity of types ...
+node.exe :  Γ¿» 
+ESLint: Converting 
+circular structure to 
+JSON     --> starting 
+at object with 
+constructor 'Object'   
+  |     property 
+'configs' -> object 
+with constructor 
+'Object'     |     
+property 'flat' -> 
+object with 
+constructor 'Object'   
+  |     ...     |     
+property 'plugins' -> 
+object with 
+constructor 'Object'   
+  --- property 'react' 
+closes the circle 
+Referenced from: C:\Use
+rs\pc\Documents\GitHub\
+Tellora\.eslintrc.json
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : 
+NotSpecified: ( Γ¿    
+» ESLint: Co...\.eslin 
+   trc.json:String) 
+[], R    emoteException
+    + 
+FullyQualifiedErrorI   
+ d : NativeCommandError
+ 
+   Collecting page data ...
+   Generating static pages (0/30) ...
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/inbox/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/inbox/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/_not-found/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/_not-found/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/case-studies/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/case-studies/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/settings/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/settings/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/reels/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/reels/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/dashboard/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/dashboard/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/services/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/services/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/team/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/team/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/preview/instagram/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/preview/instagram/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+   Generating static pages (7/30) 
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/analytics/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/analytics/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/login/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/login/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/ig-preview/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/ig-preview/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/instagram/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/instagram/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/instagram-preview/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/instagram-preview/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /blog/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /blog/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/seo-checker/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/seo-checker/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/case-studies/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /contact/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /contact/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /careers/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /careers/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+   Generating static pages (14/30) 
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /admin/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /admin/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/recruitment/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/recruitment/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /services/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /services/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /about/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /about/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/admin/case-studies/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /instagram-pr
+eview/no-profiles/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /instagram-pr
+eview/no-profiles/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /admin/ig-pre
+view/no-profiles/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in /admin/ig-pre
+view/no-profiles/. 
+Please move it to 
+viewport export 
+instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+   Generating static pages (22/30) 
+ Γ£ô Generating static pages (30/30)
+   Finalizing page optimization ...
+   Collecting build traces ...
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/_not-found/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+ ΓÜá Unsupported 
+metadata viewport is 
+configured in metadata 
+export in 
+/_not-found/. Please 
+move it to viewport 
+export instead.
+Read more: https://next
+js.org/docs/app/api-ref
+erence/functions/genera
+te-viewport
+
+Route (app)                              Size     First Load JS
+Γöî Γùï /                                    24 kB           238 kB
+Γö£ Γùï /_not-found                          152 B          87.9 kB
+Γö£ Γùï /about                               6.26 kB         216 kB
+Γö£ Γùï /admin                               517 B          88.3 kB
+Γö£ Γùï /admin/analytics                     3.27 kB         129 kB
+Γö£ Γùï /admin/case-studies                  7.08 kB         191 kB
+Γö£ Γùï /admin/dashboard                     5.88 kB         190 kB
+Γö£ Γùï /admin/ig-preview                    3.24 kB        99.7 kB
+Γö£ ΓùÅ /admin/ig-preview/[slug]             2.65 kB        90.4 kB
+Γö£   Γöö /admin/ig-preview/no-profiles
+Γö£ Γùï /admin/inbox                         8.26 kB         192 kB
+Γö£ Γùï /admin/instagram                     8.67 kB         198 kB
+Γö£ Γùï /admin/login                         3.51 kB         188 kB
+Γö£ Γùï /admin/recruitment                   8 kB            192 kB
+Γö£ Γùï /admin/reels                         7.92 kB         192 kB
+Γö£ Γùï /admin/services                      7.39 kB         192 kB
+Γö£ Γùï /admin/settings                      11.4 kB         196 kB
+Γö£ Γùï /admin/team                          6.71 kB         191 kB
+Γö£ Γùï /blog                                3.88 kB         151 kB
+Γö£ Γùï /careers                             10.9 kB         220 kB
+Γö£ Γùï /case-studies                        5.79 kB         157 kB
+Γö£ Γùï /contact                             7.99 kB         214 kB
+Γö£ Γùï /instagram-preview                   152 B          87.9 kB
+Γö£ ΓùÅ /instagram-preview/[slug]            152 B          87.9 kB
+Γö£   Γöö /instagram-preview/no-profiles
+Γö£ Γùï /preview/instagram                   5.38 kB         137 kB
+Γö£ Γùï /robots.txt                          0 B                0 B
+Γö£ Γùï /seo-checker                         8.39 kB         156 kB
+Γö£ Γùï /services                            9.52 kB         219 kB
+Γöö Γùï /sitemap.xml                         0 B                0 B
++ First Load JS shared by all            87.7 kB
+  Γö£ chunks/2117-93d439e0898ab8a1.js      32 kB
+  Γö£ chunks/fd9d1056-f9e4acf04409849f.js  53.6 kB
+  Γöö other shared chunks (total)          2.07 kB
+
+
+Γùï  (Static)  prerendered as static content
+ΓùÅ  (SSG)     prerendered as static HTML (uses getStaticProps)
+
+
+> tellora-media@0.1.0 postbuild
+> node -e "if (require('fs').existsSync('out')) require('fs').writeFileSync('out/.nojekyll', '')"
+
