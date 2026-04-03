@@ -8,7 +8,7 @@ interface Profile {
     slug: string;
     name: string;
     bio?: string;
-    profilePic?: string;
+    profile_pic?: string;
     posts: any[];
 }
 
@@ -32,7 +32,7 @@ export default function AdminInstagramPreview() {
     const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
         const body: any = { name: newName, bio: newBio };
-        if (newPic) body.profilePic = newPic;
+        if (newPic) body.profile_pic = newPic;
         const res = await fetch("/api/ig/profiles", {
             method: "POST",
             headers: { "Content-Type": "application/json" },

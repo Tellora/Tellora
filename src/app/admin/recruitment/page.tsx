@@ -178,7 +178,7 @@ export default function RecruitmentAdmin() {
                                         <div className="flex justify-between items-center pt-4 md:pt-6 border-t border-white/5">
                                             <div className="flex items-center gap-2 text-primary font-black text-[9px] md:text-[10px] uppercase tracking-widest">
                                                 <Users size={14} />
-                                                {applications.filter(a => a.jobId === job.id).length} Applicants
+                                                {applications.filter(a => a.job_id === job.id).length} Applicants
                                             </div>
                                             <div className="flex gap-2 md:gap-3">
                                                 <button onClick={() => { setEditingJob(job); setIsJobModalOpen(true); }} className="p-2 md:p-3 bg-white/5 rounded-lg md:rounded-xl text-white/40 hover:text-white transition-all"><Edit2 size={16} className="w-4 h-4" /></button>
@@ -221,17 +221,17 @@ export default function RecruitmentAdmin() {
                                             <td className="p-4 md:p-8">
                                                 <div className="flex items-center gap-3 md:gap-4">
                                                     <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center text-primary font-black italic shrink-0">
-                                                        {app.candidateName.charAt(0)}
+                                                        {app.candidate_name.charAt(0)}
                                                     </div>
                                                     <div>
-                                                        <h4 className="font-black text-white italic text-sm md:text-base">{app.candidateName}</h4>
-                                                        <p className="text-[9px] md:text-[10px] text-white/30 truncate max-w-[150px] md:max-w-none">{app.candidateEmail}</p>
-                                                        <p className="sm:hidden text-[9px] font-black text-primary/60 uppercase tracking-widest mt-1 truncate max-w-[150px]">{app.jobTitle}</p>
+                                                        <h4 className="font-black text-white italic text-sm md:text-base">{app.candidate_name}</h4>
+                                                        <p className="text-[9px] md:text-[10px] text-white/30 truncate max-w-[150px] md:max-w-none">{app.candidate_email}</p>
+                                                        <p className="sm:hidden text-[9px] font-black text-primary/60 uppercase tracking-widest mt-1 truncate max-w-[150px]">{app.job_title}</p>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td className="p-4 md:p-8 hidden sm:table-cell">
-                                                <span className="text-[9px] md:text-[11px] font-black text-primary/60 uppercase tracking-widest">{app.jobTitle}</span>
+                                                <span className="text-[9px] md:text-[11px] font-black text-primary/60 uppercase tracking-widest">{app.job_title}</span>
                                             </td>
                                             <td className="p-4 md:p-8">
                                                 <select
@@ -248,7 +248,7 @@ export default function RecruitmentAdmin() {
                                             </td>
                                             <td className="p-4 md:p-8 hidden md:table-cell">
                                                 <div className="flex items-center gap-2 text-white/20 text-[10px] font-bold">
-                                                    <Calendar size={12} /> {app.date}
+                                                    <Calendar size={12} /> {app.created_at ? new Date(app.created_at).toLocaleDateString() : 'N/A'}
                                                 </div>
                                             </td>
                                             <td className="p-4 md:p-8 text-right">
@@ -361,18 +361,18 @@ export default function RecruitmentAdmin() {
                             className="w-full max-w-4xl bg-[#0D121F] border border-white/10 rounded-3xl md:rounded-[3rem] p-6 sm:p-10 md:p-16 relative overflow-hidden my-auto"
                         >
                             <div className="flex justify-between items-start mb-8 md:mb-12 gap-4">
-                                <div className="flex flex-col sm:flex-row sm:items-center gap-4 md:gap-8">
-                                    <div className="w-16 h-16 md:w-24 md:h-24 bg-primary/20 rounded-2xl md:rounded-[2rem] flex flex-shrink-0 items-center justify-center text-primary text-3xl md:text-4xl font-black italic">
-                                        {viewingApp.candidateName.charAt(0)}
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-4 md:gap-8">                                     <div className="w-16 h-16 md:w-24 md:h-24 bg-primary/20 rounded-2xl md:rounded-[2rem] flex flex-shrink-0 items-center justify-center text-primary text-3xl md:text-4xl font-black italic">
+                                        {viewingApp.candidate_name.charAt(0)}
                                     </div>
                                     <div>
-                                        <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter italic">{viewingApp.candidateName}</h2>
+                                        <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter italic">{viewingApp.candidate_name}</h2>
                                         <div className="flex items-center gap-3 md:gap-4 mt-2">
-                                            <span className="text-primary font-black text-[9px] md:text-[11px] uppercase tracking-widest truncate">{viewingApp.jobTitle}</span>
+                                            <span className="text-primary font-black text-[9px] md:text-[11px] uppercase tracking-widest truncate">{viewingApp.job_title}</span>
                                             <div className="w-1 h-1 bg-white/20 rounded-full shrink-0" />
                                             <span className="text-white/40 text-[9px] md:text-[11px] font-bold uppercase tracking-widest shrink-0">{viewingApp.status}</span>
                                         </div>
                                     </div>
+
                                 </div>
                                 <button onClick={() => setViewingApp(null)} className="p-3 md:p-4 shrink-0 bg-white/5 rounded-xl md:rounded-2xl text-white/40 hover:text-white transition-all"><X size={20} className="md:w-6 md:h-6" /></button>
                             </div>
@@ -385,19 +385,19 @@ export default function RecruitmentAdmin() {
                                         </h3>
                                         <div className="bg-white/5 p-6 md:p-8 rounded-2xl md:rounded-3xl border border-white/5">
                                             <p className="text-white/70 leading-relaxed font-medium text-sm md:text-base">
-                                                {viewingApp.coverLetter}
+                                                {viewingApp.cover_letter}
                                             </p>
                                         </div>
                                     </section>
-
-                                    <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
-                                        <a href={viewingApp.resumeUrl} download className="flex-1 flex items-center justify-center gap-3 md:gap-4 bg-white text-black py-4 md:py-6 rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-widest hover:scale-[1.02] transition-all">
+                                     <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
+                                        <a href={viewingApp.resume_url} download className="flex-1 flex items-center justify-center gap-3 md:gap-4 bg-white text-black py-4 md:py-6 rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-widest hover:scale-[1.02] transition-all">
                                             <Download size={18} className="md:w-5 md:h-5" /> Download Resume
                                         </a>
-                                        <a href={`mailto:${viewingApp.candidateEmail}`} className="flex items-center justify-center gap-3 md:gap-4 bg-white/5 border border-white/10 text-white px-6 md:px-10 py-4 md:py-6 rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-widest hover:bg-white/10 transition-all">
+                                        <a href={`mailto:${viewingApp.candidate_email}`} className="flex items-center justify-center gap-3 md:gap-4 bg-white/5 border border-white/10 text-white px-6 md:px-10 py-4 md:py-6 rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-widest hover:bg-white/10 transition-all">
                                             <Mail size={18} className="md:w-5 md:h-5" /> Contact
                                         </a>
                                     </div>
+
                                 </div>
 
                                 <aside className="space-y-8 md:space-y-10">
@@ -422,7 +422,7 @@ export default function RecruitmentAdmin() {
                                         <div className="space-y-4">
                                             <div className="flex justify-between text-[10px] font-bold">
                                                 <span className="text-white/40">Timestamp</span>
-                                                <span className="text-white">{viewingApp.date}</span>
+                                                <span className="text-white">{viewingApp.created_at ? new Date(viewingApp.created_at).toLocaleDateString() : 'N/A'}</span>
                                             </div>
                                             <div className="flex justify-between text-[10px] font-bold">
                                                 <span className="text-white/40">ID Reference</span>
