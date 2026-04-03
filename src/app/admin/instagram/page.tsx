@@ -9,27 +9,12 @@ import {
     Save, Sparkles, Smartphone, Settings, ShieldCheck,
     RefreshCw, Zap, ArrowUpRight
 } from "lucide-react";
-import { getAdminData, saveAdminData } from "@/lib/serverDb";
+import { 
+    getIGProfiles, upsertIGProfile, deleteIGProfile, 
+    upsertIGPost, deleteIGPost, IGProfile, DbIGPost 
+} from "@/lib/store";
 
-interface IgPost {
-    id: string;
-    type: 'image' | 'video';
-    url: string;
-    caption: string;
-    likes: number;
-    timestamp: string;
-}
-
-interface IgProfile {
-    id: string;
-    handle: string;
-    name: string;
-    bio: string;
-    profilePic: string;
-    posts: IgPost[];
-    website?: string;
-    isVerified?: boolean;
-}
+// Types are now imported from store.ts (DbIGProfile, DbIGPost)
 
 // Utility for image compression
 const compressImage = (base64Str: string, maxWidth = 800, maxHeight = 800): Promise<string> => {
@@ -62,7 +47,7 @@ const compressImage = (base64Str: string, maxWidth = 800, maxHeight = 800): Prom
 };
 
 export default function InstagramAdmin() {
-    const [profiles, setProfiles] = useState<IgProfile[]>([]);
+    const [profiles, setProfiles] = useState<IGProfile[]>([]);
     const [activeId, setActiveId] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -72,7 +57,7 @@ export default function InstagramAdmin() {
 
     // Load and Sync
     const loadProfiles = async () => {
-        const saved = await getAdminData('tellora_ig_profiles_v2', []);
+        const saved = await getIGProfiles();
         setProfiles(saved);
     };
 
@@ -82,65 +67,70 @@ export default function InstagramAdmin() {
         return () => clearInterval(interval);
     }, []);
 
-    const triggerSave = async (updated: IgProfile[]) => {
-        setProfiles(updated);
-        await saveAdminData('tellora_ig_profiles_v2', updated);
-    };
-
-    const updateProfile = useCallback(async (updates: Partial<IgProfile>) => {
-        if (!activeId) return;
-        const updated = profiles.map(p => p.id === activeId ? { ...p, ...updates } : p);
-        await triggerSave(updated);
-    }, [activeId, profiles]);
+    const updateProfile = useCallback(async (updates: Partial<IGProfile>) => {
+        if (!activeId || !activeProfile) return;
+        const updatedProfile = { ...activeProfile, ...updates };
+        setProfiles(prev => prev.map(p => p.id === activeId ? updatedProfile : p));
+        await upsertIGProfile(updatedProfile);
+    }, [activeId, activeProfile]);
 
     const handleCreateProfile = async () => {
-        const newProfile: IgProfile = {
-            id: Date.now().toString(),
-            handle: "new_client",
+        const newProfile: IGProfile = {
+            id: crypto.randomUUID(),
+            slug: "new_client",
             name: "Client Name",
             bio: "Innovative brand strategy and content creation.",
-            profilePic: "",
+            profile_pic: "",
             posts: [],
-            isVerified: false
+            is_verified: false
         };
-        const updated = [...profiles, newProfile];
-        await triggerSave(updated);
+        setProfiles(prev => [...prev, newProfile]);
+        await upsertIGProfile(newProfile);
         setActiveId(newProfile.id);
         setIsEditing(true);
     };
 
     const handleDeleteProfile = async (id: string) => {
         if (confirm("Delete this profile and all its resonance nodes?")) {
-            const updated = profiles.filter(p => p.id !== id);
-            await triggerSave(updated);
+            setProfiles(prev => prev.filter(p => p.id !== id));
+            await deleteIGProfile(id);
             if (activeId === id) setActiveId(null);
         }
     };
 
     const handleAddPost = async () => {
-        if (!activeProfile) return;
-        const newPost: IgPost = {
-            id: Date.now().toString(),
+        if (!activeProfile || !activeId) return;
+        const newPost: DbIGPost = {
+            id: crypto.randomUUID(),
+            profile_id: activeId,
             type: 'image',
-            url: '',
+            src: '',
             caption: '',
             likes: Math.floor(Math.random() * 500) + 100,
-            timestamp: new Date().toISOString()
+            created_at: new Date().toISOString()
         };
-        const updatedPosts = [newPost, ...activeProfile.posts];
-        await updateProfile({ posts: updatedPosts });
+        const updatedPosts = [newPost, ...(activeProfile.posts || [])];
+        setProfiles(prev => prev.map(p => p.id === activeId ? { ...p, posts: updatedPosts } : p));
+        await upsertIGPost(newPost);
     };
 
-    const handlePostUpdate = async (postId: string, updates: Partial<IgPost>) => {
-        if (!activeProfile) return;
-        const updatedPosts = activeProfile.posts.map(p => p.id === postId ? { ...p, ...updates } : p);
-        await updateProfile({ posts: updatedPosts });
+    const handlePostUpdate = async (postId: string, updates: Partial<DbIGPost>) => {
+        if (!activeProfile || !activeId) return;
+        const post = activeProfile.posts?.find(p => p.id === postId);
+        if (!post) return;
+        
+        const updatedPost = { ...post, ...updates };
+        const updatedPosts = activeProfile.posts?.map(p => p.id === postId ? updatedPost : p);
+        
+        setProfiles(prev => prev.map(p => p.id === activeId ? { ...p, posts: updatedPosts } : p));
+        await upsertIGPost(updatedPost);
     };
 
     const handlePostDelete = async (postId: string) => {
-        if (!activeProfile) return;
-        const updatedPosts = activeProfile.posts.filter(p => p.id !== postId);
-        await updateProfile({ posts: updatedPosts });
+        if (!activeProfile || !activeId) return;
+        const updatedPosts = activeProfile.posts?.filter(p => p.id !== postId);
+        setProfiles(prev => prev.map(p => p.id === activeId ? { ...p, posts: updatedPosts } : p));
+        await deleteIGPost(postId);
     };
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, id: string, target: 'profile' | 'post') => {
@@ -153,18 +143,19 @@ export default function InstagramAdmin() {
             const compressed = await compressImage(rawBase64);
 
             if (target === 'profile') {
-                updateProfile({ profilePic: compressed });
+                updateProfile({ profile_pic: compressed });
             } else {
-                handlePostUpdate(id, { url: compressed });
+                handlePostUpdate(id, { src: compressed });
             }
         };
         reader.readAsDataURL(file);
     };
 
-    const generateShareableLink = (profile: IgProfile) => {
+    const generateShareableLink = (profile: IGProfile) => {
         try {
+            // Include posts in the shareable format (remapping snake_case back to camelCase for the preview page if needed, 
+            // but for now we'll just send the DB format)
             const data = JSON.stringify(profile);
-            // Use a slightly more robust encoding for large strings
             const encoded = btoa(encodeURIComponent(data).replace(/%([0-9A-F]{2})/g, (match, p1) =>
                 String.fromCharCode(parseInt(p1, 16))
             ));
@@ -254,21 +245,21 @@ export default function InstagramAdmin() {
                                 >
                                     <div className="flex items-center gap-3 md:gap-5">
                                         <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-white/5 flex items-center justify-center overflow-hidden border border-white/10 shadow-inner shrink-0">
-                                            {p.profilePic ? (
-                                                <img src={p.profilePic} className="w-full h-full object-cover" />
+                                            {p.profile_pic ? (
+                                                <img src={p.profile_pic} className="w-full h-full object-cover" />
                                             ) : (
                                                 <User size={20} className="text-white/20 md:w-6 md:h-6" />
                                             )}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-1.5 md:gap-2">
                                                 <h4 className={`font-black text-base md:text-lg tracking-tighter truncate italic ${activeId === p.id ? 'text-white' : 'text-white/80'}`}>
-                                                    @{p.handle}
+                                                    @{p.slug}
                                                 </h4>
-                                                {p.isVerified && <ShieldCheck size={14} className={`md:w-4 md:h-4 ${activeId === p.id ? 'text-white' : 'text-primary'}`} />}
+                                                {p.is_verified && <ShieldCheck size={14} className={`md:w-4 md:h-4 ${activeId === p.id ? 'text-white' : 'text-primary'}`} />}
                                             </div>
                                             <p className={`text-[8px] md:text-[9px] font-bold uppercase tracking-widest truncate ${activeId === p.id ? 'text-white/60' : 'text-white/20'}`}>
-                                                {p.posts.length} Fragments Detected
+                                                {p.posts?.length || 0} Fragments Detected
                                             </p>
                                         </div>
                                     </div>
@@ -307,7 +298,7 @@ export default function InstagramAdmin() {
                                                 <h2 className="text-2xl md:text-4xl font-black text-white italic tracking-tighter uppercase">Terminal</h2>
                                                 <div className="px-2 md:px-3 py-0.5 md:py-1 bg-primary text-[8px] md:text-[9px] font-black rounded-lg text-white animate-pulse">LIVE_SYNC</div>
                                             </div>
-                                            <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-white/30 italic truncate max-w-[150px] sm:max-w-none">Target: [ {activeProfile.handle.toUpperCase()} ]</p>
+                                            <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-white/30 italic truncate max-w-[150px] sm:max-w-none">Target: [ {activeProfile.slug.toUpperCase()} ]</p>
                                         </div>
                                     </div>
 
@@ -339,8 +330,8 @@ export default function InstagramAdmin() {
                                                     <label className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-primary italic px-2">Visual Identity Ingest</label>
                                                     <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 md:gap-8 bg-white/5 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border border-white/5">
                                                         <div className="w-28 h-28 md:w-32 md:h-32 shrink-0 rounded-[2rem] md:rounded-[2.5rem] bg-black border-2 border-dashed border-white/20 flex items-center justify-center relative overflow-hidden group hover:border-primary/50 transition-all">
-                                                            {activeProfile.profilePic ? (
-                                                                <img src={activeProfile.profilePic} className="w-full h-full object-cover transition-transform duration-500 xl:group-hover:scale-110" />
+                                                            {activeProfile.profile_pic ? (
+                                                                <img src={activeProfile.profile_pic} className="w-full h-full object-cover transition-transform duration-500 xl:group-hover:scale-110" />
                                                             ) : (
                                                                 <Camera className="text-white/10 w-8 h-8 md:w-10 md:h-10" />
                                                             )}
@@ -359,16 +350,14 @@ export default function InstagramAdmin() {
                                                 </div>
 
                                                 <div className="space-y-6 md:space-y-8">
-                                                    <div className="space-y-2">
-                                                        <label className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-primary italic px-2">Entity Handle</label>
-                                                        <div className="relative">
-                                                            <span className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 text-white/20 font-black italic">@</span>
-                                                            <input
-                                                                className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl p-4 md:p-6 pl-8 md:pl-10 text-xs md:text-sm text-white outline-none focus:border-primary transition-all font-black italic uppercase tracking-tighter"
-                                                                value={activeProfile.handle}
-                                                                onChange={e => updateProfile({ handle: e.target.value.toLowerCase().replace(/\s/g, '_') })}
-                                                            />
-                                                        </div>
+                                                    <div className="flex-1 space-y-2">
+                                                        <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">Handle (@)</label>
+                                                        <input
+                                                            value={activeProfile.slug}
+                                                            onChange={(e) => updateProfile({ slug: e.target.value })}
+                                                            className="w-full bg-black/40 border border-white/10 rounded-2xl p-4 md:p-5 text-white outline-none focus:border-primary transition-all font-black italic tracking-tighter"
+                                                            placeholder="handle"
+                                                        />
                                                     </div>
                                                     <div className="space-y-2">
                                                         <label className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-primary italic px-2">Official Designation</label>
@@ -380,14 +369,14 @@ export default function InstagramAdmin() {
                                                     </div>
                                                     <div className="flex items-center justify-between bg-white/5 p-4 md:p-6 rounded-xl md:rounded-2xl border border-white/5">
                                                         <div className="flex items-center gap-3 md:gap-4">
-                                                            <ShieldCheck className={`${activeProfile.isVerified ? 'text-primary' : 'text-white/20'} md:w-6 md:h-6`} size={20} />
+                                                            <ShieldCheck className={`${activeProfile.is_verified ? 'text-primary' : 'text-white/20'} md:w-6 md:h-6`} size={20} />
                                                             <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest italic text-white/50">Verification Status</span>
                                                         </div>
                                                         <button
-                                                            onClick={() => updateProfile({ isVerified: !activeProfile.isVerified })}
-                                                            className={`w-12 md:w-14 h-6 md:h-8 rounded-full transition-all relative p-1 ${activeProfile.isVerified ? 'bg-primary' : 'bg-white/10'}`}
+                                                            onClick={() => updateProfile({ is_verified: !activeProfile.is_verified })}
+                                                            className={`w-12 md:w-14 h-6 md:h-8 rounded-full transition-all relative p-1 ${activeProfile.is_verified ? 'bg-primary' : 'bg-white/10'}`}
                                                         >
-                                                            <div className={`w-4 h-4 md:w-6 md:h-6 rounded-full bg-white shadow-lg transition-all ${activeProfile.isVerified ? 'translate-x-6' : 'translate-x-0'}`} />
+                                                            <div className={`w-4 h-4 md:w-6 md:h-6 rounded-full bg-white shadow-lg transition-all ${activeProfile.is_verified ? 'translate-x-6' : 'translate-x-0'}`} />
                                                         </button>
                                                     </div>
                                                 </div>
@@ -424,8 +413,8 @@ export default function InstagramAdmin() {
                                                 <div className="w-32 h-32 md:w-44 md:h-44 rounded-full p-1.5 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 relative shrink-0 shadow-2xl">
                                                     <div className="w-full h-full rounded-full bg-[#0D121F] p-1.5">
                                                         <div className="w-full h-full rounded-full bg-white/5 overflow-hidden border border-white/10 flex items-center justify-center shadow-inner">
-                                                            {activeProfile.profilePic ? (
-                                                                <img src={activeProfile.profilePic} className="w-full h-full object-cover" />
+                                                            {activeProfile.profile_pic ? (
+                                                                <img src={activeProfile.profile_pic} className="w-full h-full object-cover" />
                                                             ) : (
                                                                 <User size={40} className="text-white/5 md:w-[60px] md:h-[60px]" />
                                                             )}
@@ -436,8 +425,8 @@ export default function InstagramAdmin() {
                                                 <div className="flex-1 space-y-6 md:space-y-8 w-full">
                                                     <div className="flex flex-col sm:flex-row items-center justify-center xl:justify-start gap-4 md:gap-8">
                                                         <div className="flex items-center gap-2 md:gap-3">
-                                                            <h3 className="text-2xl md:text-3xl font-black text-white tracking-widest italic">{activeProfile.handle}</h3>
-                                                            {activeProfile.isVerified && <div className="p-1 bg-primary rounded-full text-white shadow-lg"><Check size={10} className="md:w-[12px] md:h-[12px]" strokeWidth={4} /></div>}
+                                                            <h3 className="text-2xl md:text-3xl font-black text-white tracking-widest italic">{activeProfile.slug}</h3>
+                                                            {activeProfile.is_verified && <div className="p-1 bg-primary rounded-full text-white shadow-lg"><Check size={10} className="md:w-[12px] md:h-[12px]" strokeWidth={4} /></div>}
                                                         </div>
                                                         <div className="flex gap-3 md:gap-4">
                                                             <div className="px-6 md:px-8 py-2 md:py-3 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-white/60 italic hover:text-primary hover:border-primary/30 transition-all cursor-default shadow-sm tracking-widest">Simulation_Edit</div>
@@ -446,7 +435,7 @@ export default function InstagramAdmin() {
                                                     </div>
 
                                                     <div className="flex justify-between sm:justify-center xl:justify-start gap-4 sm:gap-8 md:gap-12 border-y border-white/5 py-4 md:py-6">
-                                                        <div className="flex flex-col items-center xl:items-start"><span className="text-xl md:text-2xl font-black text-white italic tracking-tighter leading-tight">{activeProfile.posts.length}</span><span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white/20 italic">Fragments</span></div>
+                                                        <div className="flex flex-col items-center xl:items-start"><span className="text-xl md:text-2xl font-black text-white italic tracking-tighter leading-tight">{activeProfile.posts?.length || 0}</span><span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white/20 italic">Fragments</span></div>
                                                         <div className="flex flex-col items-center xl:items-start"><span className="text-xl md:text-2xl font-black text-white italic tracking-tighter leading-tight">1.2M</span><span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white/20 italic">Synchronized</span></div>
                                                         <div className="flex flex-col items-center xl:items-start"><span className="text-xl md:text-2xl font-black text-white italic tracking-tighter leading-tight">854</span><span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white/20 italic">Following</span></div>
                                                     </div>
@@ -474,13 +463,13 @@ export default function InstagramAdmin() {
                                                 </div>
 
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-                                                    {activeProfile.posts.map(post => (
+                                                    {activeProfile.posts?.map(post => (
                                                         <div
                                                             key={post.id}
                                                             className="aspect-square bg-white/[0.03] rounded-3xl md:rounded-[2.5rem] border border-white/5 overflow-hidden relative group hover:border-primary/50 transition-all cursor-pointer shadow-lg"
                                                         >
-                                                            {post.url ? (
-                                                                <img src={post.url} className="w-full h-full object-cover xl:group-hover:scale-110 transition-transform duration-1000" />
+                                                            {post.src ? (
+                                                                <img src={post.src} className="w-full h-full object-cover xl:group-hover:scale-110 transition-transform duration-1000" />
                                                             ) : (
                                                                 <div className="w-full h-full flex flex-col items-center justify-center gap-3 md:gap-4">
                                                                     <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/5 flex items-center justify-center">
@@ -533,7 +522,7 @@ export default function InstagramAdmin() {
                                                                 </div>
 
                                                                 <div className="mt-auto pt-3 md:pt-4 border-t border-white/10 flex justify-between items-center text-[7px] md:text-[9px] font-black text-white/20 uppercase tracking-widest italic">
-                                                                    <span>TS_{new Date(post.timestamp).getTime().toString().slice(-4)}</span>
+                                                                    <span>TS_{new Date(post.created_at || "").getTime().toString().slice(-4)}</span>
                                                                     <span className="text-primary/40">Fragment_Locked</span>
                                                                 </div>
                                                             </div>

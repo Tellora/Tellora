@@ -14,7 +14,7 @@ export default function ContactForm() {
         setStatus("loading");
         const formData = new FormData(e.currentTarget);
 
-        // Save to localStorage store so it appears in admin inbox
+        // Save to Supabase Cloud store so it appears in admin inbox
         await submitContactForm({
             name: formData.get("name") as string,
             email: formData.get("email") as string,

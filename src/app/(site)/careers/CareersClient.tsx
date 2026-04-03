@@ -23,7 +23,7 @@ import {
     RotateCw,
     Plus
 } from "lucide-react";
-import { getAdminData, saveAdminData } from "@/lib/serverDb";
+import { getJobs, upsertJobApplication, Job } from "@/lib/store";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Magnetic from "@/components/animations/Magnetic";
@@ -66,15 +66,16 @@ export default function CareersClient() {
 
     useEffect(() => {
         const fetchJobs = async () => {
-            const savedJobs = await getAdminData("recruitment_jobs", []);
+            const savedJobs = await getJobs();
             if (savedJobs.length > 0) {
-                setJobs(savedJobs.filter((j: any) => j.status === "Published"));
+                setJobs(savedJobs.filter((j: Job) => j.status === "Published"));
             } else {
+                // Fallback for initial view if DB is empty
                 const initialJobs = [
-                    { id: 1, title: "Creative Director", department: "Design", location: "Remote", type: "Full-time", status: "Published", description: "Lead our creative vision. You'll be responsible for oversight of all visual assets and brand resonance strategies.", requirements: "8+ years experience in digital design, mastery of Figma/Adobe CC.", benefits: "Health, Equity, Remote-first" },
-                    { id: 2, title: "Senior Performance Engineer", department: "Engineering", location: "Global (Remote)", type: "Contract", status: "Published", description: "Optimize web performance and lead our technical architecture transitions.", requirements: "Deep knowledge of Next.js, Three.js, and browser rendering engines.", benefits: "Competitive pay, flexible hours" }
+                    { id: "1", title: "Creative Director", department: "Design", location: "Remote", type: "Full-time", status: "Published", description: "Lead our creative vision. You'll be responsible for oversight of all visual assets and brand resonance strategies.", requirements: "8+ years experience in digital design, mastery of Figma/Adobe CC.", benefits: "Health, Equity, Remote-first" },
+                    { id: "2", title: "Senior Performance Engineer", department: "Engineering", location: "Global (Remote)", type: "Contract", status: "Published", description: "Optimize web performance and lead our technical architecture transitions.", requirements: "Deep knowledge of Next.js, Three.js, and browser rendering engines.", benefits: "Competitive pay, flexible hours" }
                 ];
-                setJobs(initialJobs);
+                setJobs(initialJobs as any);
             }
         };
         fetchJobs();
@@ -90,20 +91,18 @@ export default function CareersClient() {
             return;
         }
 
-        const application = {
-            id: Date.now(),
-            jobId: selectedJob.id,
-            jobTitle: selectedJob.title,
-            candidateName: formData.get('name'),
-            candidateEmail: formData.get('email'),
-            resumeUrl: "#",
-            coverLetter: formData.get('experience'),
+        const application: any = {
+            id: crypto.randomUUID(),
+            job_id: selectedJob.id,
+            job_title: selectedJob.title,
+            candidate_name: formData.get('name'),
+            candidate_email: formData.get('email'),
+            resume_url: "#",
+            cover_letter: formData.get('experience'),
             status: "New",
-            date: new Date().toISOString().split('T')[0]
         };
 
-        const savedApps = await getAdminData("recruitment_apps", []);
-        await saveAdminData("recruitment_apps", [application, ...savedApps]);
+        await upsertJobApplication(application);
 
         setTimeout(() => {
             setIsLoading(false);
@@ -299,7 +298,7 @@ export default function CareersClient() {
                             <div className="space-y-12">
                                 <h2 className="text-6xl md:text-9xl font-black tracking-tighter text-white uppercase leading-[0.8] italic">
                                     Send us <br />
-                                    <span className="text-primary outline-text">The Vector.</span>
+                                    <span className="text-primary outline-text !text-white">The Vector.</span>
                                 </h2>
                                 <p className="text-xl text-white/60 font-medium leading-relaxed max-w-md">
                                     Elite talent doesn't always wait for an invite. If you operate at a higher frequency, transmit your dossier now.
@@ -341,7 +340,7 @@ export default function CareersClient() {
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: "100%", opacity: 0 }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="w-full max-w-6xl bg-[#080B12] md:brutalist-border border-white/10 md:rounded-[4rem] p-8 md:p-24 relative min-h-screen md:min-h-0 md:max-h-[90vh] overflow-y-auto"
+                            className="w-full max-w-6xl bg-[#080B12] md:brutalist-border border-white/10 md:rounded-[4rem] p-8 md:p-24 relative min-h-screen md:min-h-0 md:max-h-[90vh] overflow-y-auto overscroll-contain"
                         >
                             <button
                                 onClick={() => { setSelectedJob(null); setIsApplying(false); }}
@@ -359,7 +358,7 @@ export default function CareersClient() {
                                                     <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary italic">Initialization Node_TM: {selectedJob.id}</span>
                                                     <div className="h-[1px] flex-1 bg-white/10" />
                                                 </div>
-                                                <h2 className="text-6xl md:text-8xl font-black tracking-tighter uppercase italic leading-[0.8] mb-12">
+                                                <h2 className="text-6xl md:text-8xl font-black tracking-tighter uppercase italic leading-[0.8] mb-12 text-white">
                                                     {selectedJob.title}
                                                 </h2>
                                                 <div className="flex flex-wrap gap-6 md:gap-12">

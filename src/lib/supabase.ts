@@ -100,6 +100,51 @@ export interface DbFAQ {
     sort_order: number;
 }
 
+export interface DbJob {
+    id: string;
+    title: string;
+    department: string;
+    location: string;
+    type: string;
+    status: "Published" | "Closed" | "Draft";
+    description: string;
+    requirements: string;
+    benefits: string;
+    created_at?: string;
+}
+
+export interface DbJobApplication {
+    id: string;
+    job_id: string;
+    job_title?: string;
+    candidate_name: string;
+    candidate_email: string;
+    resume_url: string;
+    cover_letter: string;
+    status: "New" | "In Review" | "Interviewed" | "Offered" | "Rejected";
+    created_at?: string;
+}
+
+export interface DbIGProfile {
+    id: string;
+    slug: string;
+    name: string;
+    bio?: string;
+    profile_pic?: string;
+    is_verified?: boolean;
+    created_at?: string;
+}
+
+export interface DbIGPost {
+    id: string;
+    profile_id: string;
+    type: "image" | "video";
+    src: string;
+    caption?: string;
+    likes?: number;
+    created_at?: string;
+}
+
 // ── Generic Data Access ──────────────────────────────────────────────────────
 
 export async function fetchTableData<T>(table: string, defaultValue: T): Promise<T> {

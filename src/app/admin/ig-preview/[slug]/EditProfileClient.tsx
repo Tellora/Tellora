@@ -3,30 +3,21 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2, Plus } from "lucide-react";
+import { 
+    getIGProfileBySlug, upsertIGProfile, 
+    upsertIGPost, deleteIGPost, 
+    IGProfile, DbIGPost 
+} from "@/lib/store";
 
-interface Profile {
-    slug: string;
-    name: string;
-    bio?: string;
-    profilePic?: string;
-    posts: Post[];
-}
-
-interface Post {
-    id: string;
-    type: "image" | "video";
-    src: string;
-    caption: string;
-    createdAt: string;
-}
+// Types are now imported from store.ts (IGProfile, DbIGPost)
 
 export default function EditProfileClient({ slug }: { slug: string }) {
     const router = useRouter();
 
-    const [profile, setProfile] = useState<Profile | null>(null);
+    const [profile, setProfile] = useState<IGProfile | null>(null);
     const [name, setName] = useState("");
     const [bio, setBio] = useState("");
-    const [profilePic, setProfilePic] = useState<string | undefined>(undefined);
+    const [profile_pic, setProfilePic] = useState<string | undefined>(undefined);
 
     const [isPostModal, setIsPostModal] = useState(false);
     const [newCaption, setNewCaption] = useState("");
@@ -35,13 +26,12 @@ export default function EditProfileClient({ slug }: { slug: string }) {
     useEffect(() => {
         if (!slug) return;
         const load = async () => {
-            const storage = await import("@/lib/igStorage");
-            const data = await storage.getProfile(slug);
+            const data = await getIGProfileBySlug(slug);
             if (data) {
                 setProfile(data);
                 setName(data.name);
                 setBio(data.bio || "");
-                setProfilePic(data.profilePic || undefined);
+                setProfilePic(data.profile_pic || undefined);
             }
         };
         load();
@@ -49,11 +39,15 @@ export default function EditProfileClient({ slug }: { slug: string }) {
 
     const handleSaveProfile = async (e: React.FormEvent) => {
         e.preventDefault();
-        const storage = await import("@/lib/igStorage");
-        const body: any = { name, bio };
-        if (profilePic) body.profilePic = profilePic;
+        if (!profile) return;
+        const updated: IGProfile = { 
+            ...profile, 
+            name, 
+            bio,
+            profile_pic 
+        };
         
-        await storage.updateProfile(slug, body);
+        await upsertIGProfile(updated);
         router.refresh();
     };
 
@@ -67,17 +61,24 @@ export default function EditProfileClient({ slug }: { slug: string }) {
     };
 
     const addPost = async () => {
-        if (!newFile) return;
-        const storage = await import("@/lib/igStorage");
+        if (!newFile || !profile) return;
         const reader = new FileReader();
         reader.onload = async () => {
             const src = reader.result as string;
             const type = newFile.type.startsWith("video") ? "video" : "image";
             
-            const added = await storage.addPost(slug, { type, src, caption: newCaption });
-            if (added) {
-                setProfile((p) => p ? { ...p, posts: [...p.posts, added] } : p);
-            }
+            const newPost: DbIGPost = {
+                id: crypto.randomUUID(),
+                profile_id: profile.id,
+                type,
+                src,
+                caption: newCaption,
+                created_at: new Date().toISOString()
+            };
+            
+            await upsertIGPost(newPost);
+            setProfile((p) => p ? { ...p, posts: [...(p.posts || []), newPost] } : p);
+            
             setIsPostModal(false);
             setNewCaption("");
             setNewFile(null);
@@ -87,9 +88,11 @@ export default function EditProfileClient({ slug }: { slug: string }) {
 
     const deletePost = async (id: string) => {
         if (!confirm("Delete post?")) return;
-        const storage = await import("@/lib/igStorage");
-        await storage.removePost(slug, id);
-        setProfile((p) => { if (!p) return p; return { ...p, posts: p.posts.filter((x: any) => x.id !== id) }; });
+        await deleteIGPost(id);
+        setProfile((p) => { 
+            if (!p) return p; 
+            return { ...p, posts: (p.posts || []).filter((x) => x.id !== id) }; 
+        });
     };
 
     if (!profile) return <p className="text-white">Loading…</p>;
@@ -157,7 +160,7 @@ export default function EditProfileClient({ slug }: { slug: string }) {
                     </button>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    {profile.posts.map((post) => (
+                    {profile.posts?.map((post) => (
                         <div key={post.id} className="relative group">
                             {post.type === "image" ? (
                                 <img src={post.src} alt="" className="w-full h-auto object-cover rounded-2xl" />

@@ -11,8 +11,14 @@ import {
     DbCaseStudy,
     DbReel,
     DbTestimonial,
-    DbFAQ
+    DbFAQ,
+    DbJob,
+    DbJobApplication,
+    DbIGProfile,
+    DbIGPost
 } from "./supabase";
+
+export type { DbIGProfile, DbIGPost };
 
 export interface ContactMessage {
     id: string;
@@ -30,6 +36,12 @@ export interface ContactMessage {
 export interface Service extends DbService {}
 export interface CaseStudy extends DbCaseStudy {}
 export interface Reel extends DbReel {}
+
+export interface Job extends DbJob {}
+export interface JobApplication extends DbJobApplication {}
+export interface IGProfile extends DbIGProfile {
+    posts?: DbIGPost[];
+}
 
 export interface ActivityLog {
     id: string;
@@ -229,5 +241,64 @@ export async function getCompanyStats(): Promise<CompanyStat[]> {
 
 export async function upsertCompanyStat(stat: CompanyStat): Promise<void> {
     await upsertTableData("company_stats", stat);
+}
+
+// ── Recruitment ───────────────────────────────────────────────────────────────
+export async function getJobs(): Promise<Job[]> {
+    return fetchTableData("jobs", []);
+}
+
+export async function upsertJob(job: Job): Promise<void> {
+    await upsertTableData("jobs", job);
+}
+
+export async function deleteJob(id: string): Promise<void> {
+    await deleteTableData("jobs", { id });
+}
+
+export async function getJobApplications(): Promise<JobApplication[]> {
+    return fetchTableData("job_applications", []);
+}
+
+export async function upsertJobApplication(app: JobApplication): Promise<void> {
+    await upsertTableData("job_applications", app);
+}
+
+export async function deleteJobApplication(id: string): Promise<void> {
+    await deleteTableData("job_applications", { id });
+}
+
+// ── Instagram Preview ─────────────────────────────────────────────────────────
+export async function getIGProfiles(): Promise<IGProfile[]> {
+    const profiles = await fetchTableData<DbIGProfile[]>("ig_profiles", []);
+    // Fetch posts for each profile
+    const profilesWithPosts = await Promise.all(profiles.map(async (p) => {
+        const { data: posts } = await supabase.from("ig_posts").select("*").eq("profile_id", p.id);
+        return { ...p, posts: posts || [] };
+    }));
+    return profilesWithPosts;
+}
+
+export async function getIGProfileBySlug(slug: string): Promise<IGProfile | null> {
+    const { data: profile, error } = await supabase.from("ig_profiles").select("*").eq("slug", slug).single();
+    if (error || !profile) return null;
+    const { data: posts } = await supabase.from("ig_posts").select("*").eq("profile_id", profile.id);
+    return { ...profile, posts: posts || [] };
+}
+
+export async function upsertIGProfile(profile: DbIGProfile): Promise<void> {
+    await upsertTableData("ig_profiles", profile);
+}
+
+export async function deleteIGProfile(id: string): Promise<void> {
+    await deleteTableData("ig_profiles", { id });
+}
+
+export async function upsertIGPost(post: DbIGPost): Promise<void> {
+    await upsertTableData("ig_posts", post);
+}
+
+export async function deleteIGPost(id: string): Promise<void> {
+    await deleteTableData("ig_posts", { id });
 }
 

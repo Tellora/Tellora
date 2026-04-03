@@ -1,12 +1,12 @@
 import React from "react";
-import { getProfile, listProfiles } from "@/lib/igStorage";
+import { getIGProfileBySlug, getIGProfiles } from "@/lib/store";
 
 interface PageProps {
     params: { slug: string };
 }
 
 export async function generateStaticParams() {
-    const profiles = await listProfiles();
+    const profiles = await getIGProfiles();
     if (!profiles || profiles.length === 0) {
         return [{ slug: "no-profiles" }];
     }
@@ -23,10 +23,10 @@ export const metadata = {
 };
 
 export default async function PreviewPage({ params }: PageProps) {
-    const profile = await getProfile(params.slug);
+    const profile = await getIGProfileBySlug(params.slug);
 
     if (!profile) {
-        return <p className="p-8 text-center text-white">Profile not found</p>;
+        return <p className="p-8 text-center text-white font-black uppercase italic tracking-widest bg-black min-h-screen flex items-center justify-center">Fragment Not Found</p>;
     }
 
     return (
@@ -37,8 +37,8 @@ export default async function PreviewPage({ params }: PageProps) {
             `}</style>
             <header className="p-4 border-b">
                 <div className="flex items-center gap-4">
-                    {profile.profilePic && (
-                        <img src={profile.profilePic} className="w-12 h-12 rounded-full object-cover" alt="" />
+                    {profile.profile_pic && (
+                        <img src={profile.profile_pic} className="w-12 h-12 rounded-full object-cover" alt="" />
                     )}
                     <div>
                         <h1 className="text-lg font-semibold">{profile.name}</h1>

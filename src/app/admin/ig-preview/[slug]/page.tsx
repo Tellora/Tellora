@@ -1,12 +1,11 @@
 import React from "react";
-import { listProfiles } from "@/lib/igStorage";
+import { getIGProfiles } from "@/lib/store";
 import EditProfileClient from "./EditProfileClient";
 
 export async function generateStaticParams() {
     try {
-        const profiles = await listProfiles();
+        const profiles = await getIGProfiles();
         if (!profiles || profiles.length === 0) {
-            // Return at least one dummy path to satisfy "output: export" requirement for dynamic routes
             return [{ slug: "no-profiles" }];
         }
         return profiles.map((p) => ({

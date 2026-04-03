@@ -150,9 +150,9 @@ export default function ServicesPage() {
                                 { step: "03", title: "Hard Execution", desc: "Our team builds the Next.js landing pages, creates the brutalist motion art, and launches the live ad campaigns." },
                                 { step: "04", title: "Infinite Scale", desc: "Daily multivariate testing. We cut losing variants aggressively and pour budget directly into winning formulas." }
                             ].map((phase, i) => (
-                                <div key={i} className="p-8 brutalist-card bg-[#111] hover:bg-primary transition-colors group shadow-[8px_8px_0px_#A855F7] md:hover:-translate-y-4 duration-300">
+                                <div key={i} className="p-8 brutalist-card !bg-[#111] hover:bg-primary transition-colors group shadow-[8px_8px_0px_#A855F7] md:hover:-translate-y-4 duration-300">
                                     <div className="text-4xl font-heading font-black text-white/20 mb-6 group-hover:text-black/50 transition-colors">{phase.step}</div>
-                                    <h3 className="text-2xl font-black uppercase tracking-tight mb-4 group-hover:text-black mt-auto">{phase.title}</h3>
+                                    <h3 className="text-2xl font-black uppercase tracking-tight mb-4 text-white group-hover:text-black mt-auto">{phase.title}</h3>
                                     <p className="text-xs font-medium text-white/60 group-hover:text-black uppercase tracking-widest leading-relaxed">
                                         {phase.desc}
                                     </p>
