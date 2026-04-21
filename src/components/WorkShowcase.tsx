@@ -1,77 +1,35 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Trophy, Target } from "lucide-react";
+import { ArrowRight, Trophy, Target, ExternalLink } from "lucide-react";
 import { DecodeText, ParallaxImage } from "@/components/animations/ScrollChoreography";
-
-const projects = [
-    {
-        id: 1,
-        title: "JS Wedding",
-        category: "web",
-        color: "#F3E84A",
-        label: "Web & SEO",
-        image: "https://images.unsplash.com/photo-1562577309-4932fdd64cd1?auto=format&fit=crop&w=800&q=80",
-        badge: "CONV. SCALE",
-        rotate: "-2deg"
-    },
-    {
-        id: 2,
-        title: "Astrology Light",
-        category: "social",
-        color: "#A855F7",
-        label: "Social Scale",
-        image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=800&q=80",
-        badge: "VIRAL IMPACT",
-        rotate: "3deg"
-    },
-    {
-        id: 3,
-        title: "Smile Center",
-        category: "web",
-        color: "#22C55E",
-        label: "UI/UX Design",
-        image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=800&q=80",
-        badge: "HIGH ROAS",
-        rotate: "-1deg"
-    },
-    {
-        id: 4,
-        title: "Safe Eats",
-        category: "web",
-        color: "#FFFFFF",
-        label: "Product Strategy",
-        image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
-        badge: "BRAND SCALE",
-        rotate: "2deg"
-    },
-    {
-        id: 5,
-        title: "Tech Sol",
-        category: "seo",
-        color: "#FF4D6D",
-        label: "Performance",
-        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-        badge: "SEO DOMINANCE",
-        rotate: "-3deg"
-    },
-    {
-        id: 6,
-        title: "Glow Beauty",
-        category: "social",
-        color: "#4AC0E4",
-        label: "Branding",
-        image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=800&q=80",
-        badge: "MARKET LEAD",
-        rotate: "1.5deg"
-    }
-];
+import { caseStudies } from "@/data/case-studies";
 
 export default function WorkShowcase() {
     const [filter, setFilter] = useState("all");
-    const filteredProjects = projects.filter(p => filter === "all" || p.category.includes(filter));
+    
+    // Mapping our case studies to the showcase format
+    const projects = useMemo(() => {
+        return caseStudies.map((study, index) => ({
+            id: study.id,
+            title: study.title,
+            category: study.industry.toLowerCase(),
+            displayCategory: study.industry,
+            color: study.color,
+            label: study.services[0], // Show the primary service
+            image: study.image,
+            badge: study.impact.toUpperCase(),
+            rotate: index % 2 === 0 ? "-2deg" : "2deg"
+        }));
+    }, []);
+
+    const categories = useMemo(() => {
+        return ["all", ...Array.from(new Set(projects.map(p => p.category)))];
+    }, [projects]);
+
+    const filteredProjects = projects.filter(p => filter === "all" || p.category === filter).slice(0, 6);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
@@ -92,16 +50,16 @@ export default function WorkShowcase() {
                     <motion.div style={{ y: yTitle }} className="relative">
                         <div className="inline-flex items-center gap-4 px-6 py-2 bg-black text-white brutalist-border rounded-full rotate-[-1deg] mb-8 shadow-[6px_6px_0px_#A855F7]">
                             <Trophy size={14} className="text-primary" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em]">Personalised Choice</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em]">Client Wins</span>
                         </div>
                         <h2 className="text-[5rem] md:text-[10rem] font-heading font-black leading-[0.8] tracking-tighter uppercase relative z-10">
-                            <DecodeText text="OUR" /> <br /> <span className="text-secondary italic"><DecodeText text="WINS" /></span>
+                            <DecodeText text="THE" /> <br /> <span className="text-secondary italic"><DecodeText text="RESULTS" /></span>
                         </h2>
                     </motion.div>
 
                     {/* Optimized Filter Navigation */}
                     <div className="flex flex-wrap gap-4">
-                        {["all", "web", "seo", "social"].map((f) => (
+                        {categories.map((f) => (
                             <button
                                 key={f}
                                 onClick={() => setFilter(f)}
@@ -148,7 +106,7 @@ export default function WorkShowcase() {
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-[1.5px] bg-primary" />
                                                 <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">
-                                                    {project.label}
+                                                    {project.displayCategory} • {project.label}
                                                 </span>
                                             </div>
                                             <h3 className="text-4xl md:text-5xl font-heading font-black text-white uppercase leading-[0.9] tracking-tighter">
@@ -156,7 +114,7 @@ export default function WorkShowcase() {
                                             </h3>
                                             <div className="flex items-center gap-4 text-white pt-4">
                                                 <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                                                    <Target size={14} /> OPEN INTEL
+                                                    <Target size={14} /> VIEW INTEL
                                                 </span>
                                                 <ArrowRight size={20} className="opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-2" />
                                             </div>
@@ -167,6 +125,15 @@ export default function WorkShowcase() {
                         ))}
                     </AnimatePresence>
                 </div>
+
+                <div className="mt-24 flex justify-center">
+                    <Link href="/case-studies">
+                        <button className="group flex items-center gap-8 bg-black text-white brutalist-border px-16 py-8 shadow-[10px_10px_0px_#4AC0E4] hover:shadow-[15px_15px_0px_#4AC0E4] hover:-translate-y-2 transition-all">
+                            <span className="text-sm font-black uppercase tracking-widest">Explore Full Portfolio</span>
+                            <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
+                        </button>
+                    </Link>
+                </div>
             </div>
 
             {/* Optimized Background Marquee */}
@@ -175,7 +142,7 @@ export default function WorkShowcase() {
                 className="absolute bottom-6 left-0 w-full opacity-[0.02] mix-blend-overlay pointer-events-none select-none z-0 gpu-accelerated"
             >
                 <span className="text-[20vw] font-heading font-black uppercase tracking-tighter leading-none whitespace-nowrap block translate-y-1/2">
-                    PROOF OF CONCEPT • PROOF OF CONCEPT •
+                    REVENUE GROWTH • MARKET DOMINATION •
                 </span>
             </motion.div>
         </section>

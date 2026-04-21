@@ -1,61 +1,60 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { motion } from "framer-motion";
-import { ArrowUpRight, TrendingUp, Sparkles, Zap, Star, Globe, Rocket } from "lucide-react";
-import { ScrollLine, HorizontalReveal, FloatingElement, MagneticElement, ParallaxText, ScrollConnector } from "@/components/animations/ScrollChoreography";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+    ArrowUpRight, 
+    TrendingUp, 
+    Sparkles, 
+    Zap, 
+    Globe, 
+    Instagram, 
+    Facebook, 
+    MapPin, 
+    Shield,
+    Activity,
+    Cpu,
+    Target,
+    Briefcase,
+    Settings,
+    ChevronDown,
+    ChevronUp,
+    Terminal,
+    Layers
+} from "lucide-react";
+import { 
+    ScrollLine, 
+    FloatingElement, 
+    MagneticElement, 
+    ParallaxText 
+} from "@/components/animations/ScrollChoreography";
+import { caseStudies, CaseStudy } from "@/data/case-studies";
 
-const caseStudies = [
-    {
-        title: "JS Wedding Services",
-        impact: "Organic Dominance",
-        description: "How we transformed a regional wedding boutique into a national digital authority using semantic SEO and high-performance WebGL design.",
-        challenge: "Stuck in local search algorithms with poor visibility and low-quality lead capture.",
-        execution: "Completely rebuilt the frontend architecture using Next.js and deployed a semantic content cluster targeting high-intent keywords.",
-        tags: ["SEO", "Web Development", "UI/UX"],
-        stats: [
-            { label: "Search Vis.", value: "Tier 1" },
-            { label: "CPA Reduction", value: "Massive" }
-        ],
-        image: "https://images.unsplash.com/photo-1562577309-4932fdd64cd1?auto=format&fit=crop&w=1200&q=80",
-        color: "#A855F7" // Primary
-    },
-    {
-        title: "Astrology Light",
-        impact: "Viral Expansion",
-        description: "Architecting a viral social growth engine that fueled a subscription-based platform's expansion into new continental markets.",
-        challenge: "Saturating existing audiences with fatigue leading to rapidly increasing Customer Acquisition Costs.",
-        execution: "Deployed an aggressive TikTok structural testing framework, cutting losing creatives in 24 hours and scaling winning hooks exponentially.",
-        tags: ["Social Media", "Paid Performance", "Scaling"],
-        stats: [
-            { label: "Scale", value: "Global" },
-            { label: "Viral Impact", value: "High" }
-        ],
-        image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1200&q=80",
-        color: "#F3E84A" // Accent
-    },
-    {
-        title: "FinTech Pro",
-        impact: "Frictionless Funnel",
-        description: "Redesigning a high-intent financial services funnel using Next.js and complex state management for instantaneous decision results.",
-        challenge: "60%+ drop-off rate at the final step of their multi-page application process due to slow load times.",
-        execution: "Engineered a single-page localized application with brutalist UI patterns to establish extreme trust and zero wait times.",
-        tags: ["Product Design", "Next.js", "Analytics"],
-        stats: [
-            { label: "Conv Rate", value: "Peak" },
-            { label: "Load Time", value: "Instant" }
-        ],
-        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
-        color: "#22C55E" // Success
-    }
-];
+type BrowseMode = "industry" | "service";
 
 export default function CaseStudiesPage() {
+    const [mode, setMode] = useState<BrowseMode>("industry");
+    const [activeFilter, setActiveFilter] = useState<string>("All");
+
+    const industries = useMemo(() => ["All", ...Array.from(new Set(caseStudies.map(s => s.industry)))], []);
+    const services = useMemo(() => ["All", ...Array.from(new Set(caseStudies.flatMap(s => s.services)))], []);
+
+    const filters = mode === "industry" ? industries : services;
+
+    const filteredStudies = useMemo(() => {
+        if (activeFilter === "All") return caseStudies;
+        if (mode === "industry") {
+            return caseStudies.filter(s => s.industry === activeFilter);
+        } else {
+            return caseStudies.filter(s => s.services.includes(activeFilter));
+        }
+    }, [mode, activeFilter]);
+
     return (
         <div className="bg-background text-foreground min-h-screen relative overflow-x-hidden">
-            {/* Background Marquee Text */}
             <div className="fixed top-1/2 left-0 w-full opacity-5 pointer-events-none -translate-y-1/2 rotate-12 z-0">
                 <span className="text-[35rem] font-heading font-black uppercase whitespace-nowrap">
                     WINS • WINS • WINS •
@@ -68,137 +67,250 @@ export default function CaseStudiesPage() {
                 <PageHeader
                     breadcrumb="Proven Reliability"
                     title="SUCCESS BLUEPRINTS"
-                    subtitle="We don't just deliver work; we deliver outcomes. Explore how our strategic interventions drive measurable market dominance."
+                    subtitle="We don't just deliver work; we deliver outcomes. Explore our technical dossiers and strategic roadmaps."
                 />
 
-                <section className="py-40 relative z-10">
+                {/* Filter Section */}
+                <section className="py-12 bg-white border-y-[4px] border-black sticky top-[80px] z-[40]">
                     <div className="container mx-auto px-6">
-                        <div className="space-y-[30rem]">
-                            {caseStudies.map((study, idx) => (
-                                <motion.div
-                                    key={idx}
-                                    initial={{ opacity: 0, y: 80 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 1, ease: "circOut" }}
-                                    viewport={{ once: true, margin: "-100px" }}
-                                    className={`group grid lg:grid-cols-12 gap-16 md:gap-32 items-center ${idx % 2 !== 0 ? "lg:flex-row-reverse" : ""}`}
+                        <div className="flex flex-col lg:flex-row gap-12 items-start lg:items-center justify-between">
+                            <div className="flex bg-slate-100 p-2 brutalist-border shadow-[4px_4px_0px_#000]">
+                                <button
+                                    onClick={() => { setMode("industry"); setActiveFilter("All"); }}
+                                    className={`px-8 py-3 flex items-center gap-3 text-xs font-black uppercase tracking-widest transition-all ${mode === "industry" ? "bg-black text-white shadow-[4px_4px_0px_#4AC0E4]" : "text-black/40 hover:text-black"}`}
                                 >
-                                    {/* Image with Advanced Container */}
-                                    <div className={`lg:col-span-7 relative ${idx % 2 !== 0 ? "lg:order-2" : ""}`}>
-                                        <div className="relative brutalist-card h-[600px] overflow-hidden group-hover:shadow-[20px_20px_0px_#000] transition-all duration-700">
-                                            <img
-                                                src={study.image}
-                                                alt={study.title}
-                                                className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:scale-105 group-hover:grayscale-0"
-                                            />
-                                            <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-1000" />
+                                    <Briefcase size={14} /> Browse by Industry
+                                </button>
+                                <button
+                                    onClick={() => { setMode("service"); setActiveFilter("All"); }}
+                                    className={`px-8 py-3 flex items-center gap-3 text-xs font-black uppercase tracking-widest transition-all ${mode === "service" ? "bg-black text-white shadow-[4px_4px_0px_#4AC0E4]" : "text-black/40 hover:text-black"}`}
+                                >
+                                    <Settings size={14} /> Browse by Service
+                                </button>
+                            </div>
 
-                                            <div className="absolute top-8 left-8 bg-black text-white brutalist-border px-6 py-2 rotate-2 shadow-[4px_4px_0px_#FFF]">
-                                                <span className="text-xs font-black uppercase tracking-widest">{study.impact}</span>
-                                            </div>
+                            <div className="flex flex-wrap gap-3">
+                                {filters.map((filter) => (
+                                    <button
+                                        key={filter}
+                                        onClick={() => setActiveFilter(filter)}
+                                        className={`px-6 py-2 brutalist-border text-[10px] font-black uppercase tracking-widest transition-all ${activeFilter === filter ? "bg-primary text-white shadow-[4px_4px_0px_#000] -translate-y-1" : "bg-white text-black shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] hover:-translate-y-1 active:translate-y-0"}`}
+                                    >
+                                        {filter}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-                                            <motion.div
-                                                className="absolute bottom-10 right-10 flex gap-4 rotate-[-3deg]"
-                                                animate={{ rotate: [-3, 3, -3] }}
-                                                transition={{ duration: 4, repeat: Infinity }}
-                                            >
-                                                <div className="bg-primary p-6 brutalist-border shadow-[6px_6px_0px_#000]">
-                                                    <TrendingUp className="text-white" size={32} />
-                                                </div>
-                                            </motion.div>
-                                        </div>
-
-                                        {/* Background Ornaments */}
-                                        <FloatingElement speed={-0.1} top="0" left="0">
-                                            <div className="w-64 h-64 bg-accent/20 brutalist-border rotate-45 -z-10 blur-xl" />
-                                        </FloatingElement>
-                                    </div>
-
-                                    {/* Content */}
-                                    <div className={`lg:col-span-5 flex flex-col justify-center ${idx % 2 !== 0 ? "xl:order-1" : ""}`}>
-                                        <div className="flex flex-wrap gap-4 mb-12">
-                                            {study.tags.map((tag) => (
-                                                <span key={tag} className="px-6 py-2 bg-black text-white brutalist-border text-[9px] font-black uppercase tracking-widest rotate-2 group-hover:rotate-0 transition-transform shadow-[4px_4px_0px_#4AC0E4]">
-                                                    {tag}
-                                                </span>
-                                            ))}
-                                        </div>
-
-                                        <h2 className="text-6xl md:text-[8rem] font-heading font-black text-black mb-10 leading-none tracking-tighter uppercase group-hover:text-primary transition-all duration-500 drop-shadow-[5px_5px_0px_rgba(0,0,0,0.1)]">
-                                            {study.title}
-                                        </h2>
-
-                                        <p className="text-black font-black uppercase leading-tight opacity-60 mb-8 max-w-lg text-lg">
-                                            {study.description}
-                                        </p>
-
-                                        <div className="bg-slate-50 p-6 brutalist-border mb-12 shadow-[4px_4px_0px_#000]">
-                                            <div className="mb-6">
-                                                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-2 flex items-center gap-2"><Zap size={10} /> The Challenge</h4>
-                                                <p className="text-sm font-medium text-black/80">{study.challenge}</p>
-                                            </div>
-                                            <div>
-                                                <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-success mb-2 flex items-center gap-2"><Sparkles size={10} /> The Execution</h4>
-                                                <p className="text-sm font-medium text-black/80">{study.execution}</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-2 gap-12 mb-16 py-12 border-y-[4px] border-black relative overflow-hidden">
-                                            {study.stats.map((stat, sIdx) => (
-                                                <div key={sIdx} className="flex flex-col z-10">
-                                                    <p className="text-4xl lg:text-5xl font-heading font-black text-black mb-3 leading-none group-hover:text-primary transition-colors italic shadow-white text-shadow-sm">{stat.value}</p>
-                                                    <p className="text-[10px] font-black text-black/40 uppercase tracking-[0.4em]">{stat.label}</p>
-                                                </div>
-                                            ))}
-
-                                        </div>
-
-                                        <MagneticElement>
-                                            <a href="/contact" className="inline-flex items-center gap-8 bg-black text-white brutalist-border px-12 py-8 shadow-[10px_10px_0px_#4AC0E4] hover:shadow-[15px_15px_0px_#4AC0E4] hover:-translate-y-2 transition-all">
-                                                <span className="text-sm font-black uppercase tracking-widest">View Intel</span>
-                                                <ArrowUpRight size={28} />
-                                            </a>
-                                        </MagneticElement>
-                                    </div>
-                                </motion.div>
-                            ))}
+                <section className="py-32 relative z-10">
+                    <div className="container mx-auto px-6">
+                        <div className="space-y-40 md:space-y-64">
+                            <AnimatePresence mode="wait">
+                                {filteredStudies.map((study, idx) => (
+                                    <CaseStudyDossier key={study.id} study={study} idx={idx} />
+                                ))}
+                            </AnimatePresence>
                         </div>
                     </div>
                 </section>
 
                 <ScrollLine />
-
                 <div className="py-32 relative overflow-hidden bg-white">
                     <ParallaxText text="PROVEN RELIABILITY • MEASURABLE ROI • SCALABLE SOLUTIONS •" baseVelocity={-20} />
                 </div>
 
-                <section className="py-64 relative overflow-hidden bg-black text-white">
+                <section className="py-64 relative overflow-hidden bg-black text-white text-center">
                     <div className="absolute inset-0 noise-overlay opacity-10 pointer-events-none" />
-                    <FloatingElement speed={-0.2} top="20%" left="80%">
-                        <div className="bg-primary p-12 brutalist-border rotate-12 shadow-[15px_15px_0px_#FFF] opacity-20">
-                            <Rocket size={120} />
-                        </div>
-                    </FloatingElement>
-
-                    <div className="container mx-auto px-6 text-center relative z-10">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            className="bg-accent brutalist-border w-40 h-40 flex items-center justify-center mx-auto mb-16 rotate-[-15deg] shadow-[10px_10px_0px_#FFF] group hover:rotate-0 transition-transform"
-                        >
-                            <Globe size={64} className="text-black group-hover:scale-110 transition-transform animate-pulse" />
-                        </motion.div>
-                        <h2 className="text-6xl md:text-[12rem] font-heading font-black text-white mb-16 leading-none tracking-tighter uppercase drop-shadow-[8px_8px_0px_#A855F7]">SCALE YOUR <br /><span className="text-primary italic underline decoration-accent decoration-[12px] underline-offset-12">GLOBAL REACH.</span></h2>
-                        <MagneticElement>
-                            <a href="/contact" className="px-20 py-10 bg-white text-black font-black brutalist-border shadow-[12px_12px_0px_#A855F7] hover:shadow-[20px_20px_0px_#A855F7] hover:-translate-y-2 inline-block uppercase tracking-widest text-sm transition-all">
-                                INITIATE GROWTH
-                            </a>
-                        </MagneticElement>
-                    </div>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        className="bg-accent brutalist-border w-32 h-32 flex items-center justify-center mx-auto mb-16 -rotate-12 shadow-[8px_8px_0px_#FFF]"
+                    >
+                        <Shield size={48} className="text-black animate-pulse" />
+                    </motion.div>
+                    <h2 className="text-6xl md:text-[8rem] font-heading font-black text-white mb-12 leading-none uppercase tracking-tighter">
+                        Deploy your <br />
+                        <span className="text-primary italic underline decoration-accent decoration-[8px] underline-offset-8">Growth Architecture.</span>
+                    </h2>
+                    <MagneticElement>
+                        <a href="/contact" className="px-20 py-10 bg-white text-black font-black brutalist-border shadow-[12px_12px_0px_#4AC0E4] hover:shadow-[20px_20px_0px_#4AC0E4] hover:-translate-y-2 inline-block uppercase tracking-widest text-sm transition-all">
+                            INITIALIZE PROTOCOL
+                        </a>
+                    </MagneticElement>
                 </section>
             </main>
-
             <Footer />
         </div>
+    );
+}
+
+function CaseStudyDossier({ study, idx }: { study: CaseStudy; idx: number }) {
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    return (
+        <motion.div
+            layout
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.6, ease: "circOut" }}
+            className={`group grid lg:grid-cols-12 gap-12 md:gap-24 items-start ${idx % 2 !== 0 ? "lg:flex-row-reverse" : ""}`}
+        >
+            {/* Visual Column */}
+            <div className={`lg:col-span-6 relative ${idx % 2 !== 0 ? "lg:order-2" : ""}`}>
+                <div className="relative brutalist-card h-[400px] md:h-[700px] overflow-hidden group-hover:shadow-[20px_20px_0px_#000] transition-all duration-700">
+                    <img
+                        src={study.image}
+                        alt={study.title}
+                        className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:scale-105 group-hover:grayscale-0"
+                    />
+                    <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-1000" />
+                    
+                    <div className="absolute top-8 left-8 bg-black text-white brutalist-border px-6 py-2 rotate-2 shadow-[4px_4px_0px_#FFF]">
+                        <span className="text-xs font-black uppercase tracking-widest">{study.impact}</span>
+                    </div>
+
+                    <div className="absolute bottom-8 left-8 flex flex-col gap-2">
+                        <div className="bg-white brutalist-border px-4 py-2 shadow-[4px_4px_0px_#000] -rotate-2">
+                            <span className="text-[10px] font-black uppercase text-black">{study.industry}</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Technical Stats Overlay */}
+                <div className="grid grid-cols-2 gap-6 mt-8">
+                    {study.stats.map((stat, sIdx) => (
+                        <div key={sIdx} className="bg-white p-6 brutalist-border shadow-[6px_6px_0px_#000] group-hover:bg-primary group-hover:text-white transition-colors">
+                            <p className="text-3xl md:text-5xl font-heading font-black leading-none mb-1 italic">{stat.value}</p>
+                            <p className="text-[9px] font-black uppercase tracking-widest opacity-60">{stat.label}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Intel Column */}
+            <div className={`lg:col-span-6 flex flex-col ${idx % 2 !== 0 ? "xl:order-1" : ""}`}>
+                <div className="flex flex-wrap gap-4 mb-8">
+                    {study.services.map((service) => (
+                        <span key={service} className="px-4 py-1 bg-black text-white brutalist-border text-[9px] font-black uppercase tracking-widest shadow-[3px_3px_0px_#4AC0E4]">
+                            {service}
+                        </span>
+                    ))}
+                </div>
+
+                <h2 className="text-5xl md:text-8xl font-heading font-black text-black mb-8 leading-[0.9] tracking-tighter uppercase group-hover:text-primary transition-all duration-500">
+                    {study.title}
+                </h2>
+
+                <p className="text-xl md:text-2xl font-black uppercase leading-tight text-black/60 mb-12 max-w-xl">
+                    {study.description}
+                </p>
+
+                {/* Primary Content Card */}
+                <div className="bg-slate-50 p-8 brutalist-border mb-8 shadow-[8px_8px_0px_#000]">
+                    <div className="mb-8 p-6 bg-white brutalist-border shadow-[4px_4px_0px_#000] rotate-1">
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-3 flex items-center gap-2"><Target size={14} /> The Brief</h4>
+                        <p className="text-sm font-medium text-black/80">{study.clientSummary}</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-3 flex items-center gap-2"><Activity size={14} /> The Friction</h4>
+                            <p className="text-xs font-medium text-black/70 italic">"{study.challenge}"</p>
+                        </div>
+                        <div>
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-success mb-3 flex items-center gap-2"><Zap size={14} /> The Intervention</h4>
+                            <p className="text-xs font-medium text-black/70 italic">"{study.execution}"</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Expandable Dossier Region */}
+                <button 
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="flex items-center justify-between w-full px-8 py-6 bg-black text-white brutalist-border shadow-[6px_6px_0px_#4AC0E4] hover:shadow-[10px_10px_0px_#4AC0E4] transition-all group/btn mb-12"
+                >
+                    <span className="text-xs font-black uppercase tracking-[0.4em] flex items-center gap-4">
+                        <Terminal size={16} className="text-primary" /> 
+                        {isExpanded ? "Close Technical Dossier" : "Open Technical Dossier"}
+                    </span>
+                    {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </button>
+
+                <AnimatePresence>
+                    {isExpanded && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                        >
+                            <div className="space-y-12 pb-12">
+                                {/* Strategic Insight */}
+                                <div className="p-8 border-l-[4px] border-primary bg-primary/5">
+                                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-4 flex items-center gap-2"><Sparkles size={14} /> Strategic Insight</h4>
+                                    <p className="text-lg font-black uppercase leading-[1.3] text-black">
+                                        {study.strategicInsight}
+                                    </p>
+                                </div>
+
+                                {/* Roadmap */}
+                                <div>
+                                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-8 flex items-center gap-2"><Layers size={14} /> Project Roadmap</h4>
+                                    <div className="space-y-4">
+                                        {study.roadmap.map((step, sIdx) => (
+                                            <div key={sIdx} className="grid grid-cols-12 gap-6 bg-white p-6 brutalist-border shadow-[4px_4px_0px_#000]">
+                                                <div className="col-span-1 text-2xl font-heading font-black text-primary/40 italic">0{sIdx + 1}</div>
+                                                <div className="col-span-11">
+                                                    <p className="text-xs font-black uppercase tracking-widest text-black mb-1">{step.phase}</p>
+                                                    <p className="text-[11px] font-medium text-black/60">{step.details}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Tech Stack */}
+                                <div>
+                                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-6 flex items-center gap-2"><Cpu size={14} /> The Arsenal</h4>
+                                    <div className="flex flex-wrap gap-3">
+                                        {study.techStack.map(tech => (
+                                            <span key={tech} className="px-4 py-2 bg-slate-100 brutalist-border text-[8px] font-black uppercase tracking-widest shadow-[2px_2px_0px_#000]">
+                                                {tech}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Actions */}
+                <div className="flex flex-wrap gap-6 items-center">
+                    <MagneticElement>
+                        <a href="/contact" className="inline-flex items-center gap-8 bg-black text-white brutalist-border px-12 py-8 shadow-[10px_10px_0px_#4AC0E4] hover:shadow-[15px_15px_0px_#4AC0E4] transition-all group/btn">
+                            <span className="text-sm font-black uppercase tracking-widest">Scale Similar Outcome</span>
+                            <ArrowUpRight size={28} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                        </a>
+                    </MagneticElement>
+
+                    <div className="flex gap-4">
+                        {study.links.website && (
+                            <a href={study.links.website} target="_blank" rel="noopener noreferrer" className="w-16 h-16 bg-white brutalist-border flex items-center justify-center shadow-[4px_4px_0px_#000] hover:bg-black hover:text-white transition-all">
+                                <Globe size={24} />
+                            </a>
+                        )}
+                        {study.links.instagram && (
+                            <a href={study.links.instagram} target="_blank" rel="noopener noreferrer" className="w-16 h-16 bg-white brutalist-border flex items-center justify-center shadow-[4px_4px_0px_#000] hover:bg-black hover:text-white transition-all">
+                                <Instagram size={24} />
+                            </a>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </motion.div>
     );
 }

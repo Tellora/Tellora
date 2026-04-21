@@ -62,10 +62,10 @@ export function ParallaxText({ text, baseVelocity = 100 }: { text: string, baseV
     const xSmooth = useSpring(x, { stiffness: 50, damping: 20 });
 
     return (
-        <div className="overflow-hidden whitespace-nowrap flex py-20 pointer-events-none select-none border-y-[4px] border-black bg-white/50 backdrop-blur-sm">
+        <div className="overflow-hidden whitespace-nowrap flex py-10 md:py-20 pointer-events-none select-none border-y-[4px] border-black bg-white/50 backdrop-blur-sm">
             <motion.div style={{ x: xSmooth }} className="flex gap-40 will-change-transform">
                 {[...Array(6)].map((_, i) => (
-                    <span key={i} className="text-[12rem] md:text-[20rem] font-heading font-black uppercase text-black tracking-tighter leading-none opacity-10">
+                    <span key={i} className="text-[8rem] md:text-[12rem] lg:text-[15rem] font-heading font-black uppercase text-black tracking-tighter leading-none opacity-5">
                         {text}
                     </span>
                 ))}

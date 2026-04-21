@@ -47,6 +47,7 @@ export interface DbTeamMember {
     id: string;
     name: string;
     role: string;
+    category?: string;
     image_url?: string;
     color?: string;
     rotate?: string;

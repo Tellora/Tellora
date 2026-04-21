@@ -4,7 +4,6 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
-import Pricing from "@/components/Pricing";
 import WorkShowcase from "@/components/WorkShowcase";
 import Testimonials from "@/components/Testimonials";
 import ROICalculator from "@/components/ROICalculator";
@@ -95,7 +94,7 @@ export default function Home() {
 
                 <ScrollConnector />
 
-                <Team />
+                <Team onlyCore={true} />
 
                 <ParallaxText text="DATA DRIVEN • RESULTS • SCALE •" baseVelocity={30} />
 
@@ -110,8 +109,6 @@ export default function Home() {
                 <Testimonials />
 
                 <ScrollConnector />
-
-                <Pricing />
 
                 <ROICalculator />
 

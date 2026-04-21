@@ -143,8 +143,8 @@ export default function Footer() {
                     </div>
 
                     <div className="flex flex-wrap justify-center gap-12">
-                        {["Security_Protocol", "Core_Terms", "Ethical_Data"].map(l => (
-                            <Link key={l} href="#" className="text-[10px] font-black uppercase tracking-[0.6em] hover:text-primary transition-all group relative">
+                        {["Growth_Strategy", "Market_Mastery", "Performance_Hub"].map(l => (
+                            <Link key={l} href="/services" className="text-[10px] font-black uppercase tracking-[0.6em] hover:text-primary transition-all group relative">
                                 {l}
                                 <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-primary group-hover:w-full transition-all duration-500" />
                             </Link>

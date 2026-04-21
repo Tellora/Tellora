@@ -6,11 +6,11 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     return (
         // Optimized Lenis settings for snappier, lag-free performance
         <ReactLenis root options={{
-            lerp: 0.12,
+            lerp: 0.08,
             syncTouch: true,
             smoothWheel: true,
-            wheelMultiplier: 1.1,
-            touchMultiplier: 1.5,
+            wheelMultiplier: 0.9,
+            touchMultiplier: 1.2,
         }}>
             {children}
         </ReactLenis>

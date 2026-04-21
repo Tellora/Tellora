@@ -30,7 +30,7 @@ export default function LogoCloud() {
                     <Award className="text-primary w-4 h-4 md:w-4 md:h-4" />
                     <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Industry Disruptors</span>
                 </div>
-                <h2 className="heading-massive !text-4xl sm:!text-6xl md:!text-8xl tracking-tight">
+                <h2 className="heading-massive !text-4xl sm:!text-6xl md:!text-7xl lg:!text-8xl tracking-tight">
                     TRUSTED BY THE <br className="hidden md:block" /> <span className="text-accent italic">VALIANT</span>
                 </h2>
             </div>
@@ -45,7 +45,7 @@ export default function LogoCloud() {
                                 {clients.map((client, idx) => (
                                     <div
                                         key={`marquee-${idx}`}
-                                        className="px-12 py-8 brutalist-border bg-white hover:bg-gray-50 hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_#A855F7] transition-all group flex items-center justify-center min-w-[280px]"
+                                        className="px-8 md:px-12 py-6 md:py-8 brutalist-border bg-white hover:bg-gray-50 hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_#A855F7] transition-all group flex items-center justify-center min-w-[200px] md:min-w-[280px]"
                                     >
                                         <img
                                             src={client.logo_url}

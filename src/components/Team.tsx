@@ -7,13 +7,124 @@ import Image from "next/image";
 import { getTeam } from "@/lib/store";
 import { DbTeamMember } from "@/lib/supabase";
 
-export default function Team() {
+export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
     const [team, setTeam] = useState<DbTeamMember[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const categories = [
+        { id: "core", name: "Core Team" },
+        { id: "designing", name: "Designing Team" },
+        { id: "security", name: "Security Experts" }
+    ];
+
     useEffect(() => {
         getTeam().then(data => {
-            setTeam(data || []);
+            // Manual additions as requested by the user
+            const manualMembers: DbTeamMember[] = [
+                {
+                    id: "abhay",
+                    name: "Abhay Sahdev",
+                    role: "Core Team",
+                    category: "core",
+                    image_url: "/teams/abhay tellora.png",
+                    color: "#A855F7",
+                    bio: "Architecting high-frequency growth ecosystems with precision.",
+                    skills: ["Growth Strategy", "Architecture", "Scale"],
+                    stats: [{ label: "ROI", value: "10X" }, { label: "Scale", value: "Global" }]
+                },
+                {
+                    id: "prakhar",
+                    name: "Prakhar Saxena",
+                    role: "Core Team",
+                    category: "core",
+                    image_url: "/teams/prakhar tellora.png",
+                    color: "#22C55E",
+                    bio: "Performance marketing specialist focused on ROAS and data-driven results.",
+                    skills: ["PPC", "Marketing", "Data"],
+                    stats: [{ label: "ROAS", value: "12X" }, { label: "Growth", value: "800%" }]
+                },
+                {
+                    id: "vansh",
+                    name: "Vansh Sharma",
+                    role: "Core Team",
+                    category: "core",
+                    image_url: "/teams/vansh tellora.png",
+                    color: "#F3E84A",
+                    bio: "Strategic growth specialist leading technical integrations and ops.",
+                    skills: ["Operations", "Strategy", "Tech"],
+                    stats: [{ label: "Efficiency", value: "98%" }, { label: "Nodes", value: "120+" }]
+                },
+                {
+                    id: "nandini",
+                    name: "Nandini",
+                    role: "Graphic Designer",
+                    category: "designing",
+                    image_url: "/teams/nandini tellora.png",
+                    color: "#EC4899",
+                    skills: ["Branding", "Visuals", "Motion"],
+                    bio: "Crafting brutalist aesthetic and high-converting visual narratives."
+                },
+                {
+                    id: "saksham",
+                    name: "Saksham",
+                    role: "Graphic Designer",
+                    category: "designing",
+                    image_url: "/teams/saksham tellora.png",
+                    color: "#3B82F6",
+                    skills: ["Graphics", "Creative", "Assets"],
+                    bio: "Engineering pixel-perfect assets for market domination."
+                },
+                {
+                    id: "ananya",
+                    name: "Ananya",
+                    role: "UI/UX Designer",
+                    category: "designing",
+                    image_url: "/teams/ananya tellora.png",
+                    color: "#F59E0B",
+                    skills: ["Interface", "Experience", "Systems"],
+                    bio: "Designing friction-less user journeys that maximize conversion."
+                },
+                {
+                    id: "daksh",
+                    name: "Daksh",
+                    role: "Security Specialist",
+                    category: "security",
+                    image_url: "/teams/daksh tellora.png",
+                    color: "#EF4444",
+                    skills: ["Pentesting", "Hardening", "Audit"],
+                    bio: "Securing high-value digital assets against sophisticated threats."
+                },
+                {
+                    id: "abhijit",
+                    name: "Abhijit",
+                    role: "Website Security Specialist",
+                    category: "security",
+                    image_url: "/teams/abhijeet tellora.png",
+                    color: "#6366F1",
+                    skills: ["Web Security", "SSL/TLS", "Firewalls"],
+                    bio: "Fortifying web infrastructures for zero-compromise performance."
+                },
+                {
+                    id: "raminder",
+                    name: "Raminder",
+                    role: "Website Diagnostics & Specialization",
+                    category: "security",
+                    image_url: "/teams/raminder tellora.png",
+                    color: "#10B981",
+                    skills: ["Diagnostics", "Optimization", "Speed"],
+                    bio: "Diagnosing and optimizing complex technical performance bottlenecks."
+                }
+            ];
+
+            // Merge and de-dupe (prefer manual for requested names)
+            const finalTeam = [...manualMembers];
+            (data || []).forEach(m => {
+                if (!finalTeam.find(fm => fm.name.toLowerCase() === m.name.toLowerCase())) {
+                    finalTeam.push(m);
+                }
+            });
+
+            setTeam(finalTeam);
             setLoading(false);
         });
     }, []);
@@ -21,26 +132,25 @@ export default function Team() {
     if (loading || team.length === 0) return null;
 
     return (
-        <section id="team" className="py-32 relative z-10 bg-background overflow-hidden border-t-[4px] border-black">
+        <section id="team" className="py-20 md:py-32 relative z-10 bg-background overflow-hidden border-t-[4px] border-black">
             {/* Background Marquee */}
             <div className="absolute top-20 left-0 w-full opacity-5 pointer-events-none">
-                <span className="text-[20rem] font-heading font-black uppercase whitespace-nowrap">
+                <span className="text-[12rem] md:text-[20rem] font-heading font-black uppercase whitespace-nowrap">
                     THE VISIONARIES • THE VISIONARIES •
                 </span>
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-24 gap-10">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 md:mb-24 gap-10">
                     <div>
                         <div className="inline-flex items-center gap-3 px-6 py-2 bg-black text-white brutalist-border rounded-full rotate-1 mb-6 md:mb-8 shadow-[4px_4px_0px_#A855F7]">
                             <Users size={16} className="text-primary fill-current" />
-                            <span className="text-[10px] font-black uppercase tracking-widest">Global Talent</span>
+                            <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest">Global Talent</span>
                         </div>
-                        <h2 className="heading-massive !text-5xl md:!text-7xl lg:!text-9xl tracking-tight">
+                        <h2 className="heading-massive !text-4xl sm:!text-6xl md:!text-8xl tracking-tight leading-none">
                             MEET THE <br /> <span className="text-primary italic">SQUAD</span>
                         </h2>
                     </div>
-
                     <div className="max-w-xs text-left lg:text-right">
                         <p className="text-xs md:text-sm font-black uppercase leading-tight bg-white p-4 md:p-6 brutalist-border shadow-[4px_4px_0px_#000] lg:-rotate-2">
                             Combining deep technical expertise with relentless creative innovation to architect the future.
@@ -49,11 +159,28 @@ export default function Team() {
                     </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 pt-8 md:pt-12">
-                    {team.map((member, idx) => (
-                        <TeamCard key={idx} member={member} idx={idx} />
-                    ))}
-                </div>
+                {categories.map((cat) => {
+                    if (onlyCore && cat.id !== "core") return null;
+                    
+                    const members = team.filter(m => (m.category === cat.id) || (cat.id === "core" && !m.category && ["abhay sahdev", "prakhar saxena", "vansh sharma"].includes(m.name.toLowerCase())));
+                    if (members.length === 0) return null;
+                    
+                    return (
+                        <div key={cat.id} className="mb-24 last:mb-0">
+                            <div className="flex items-center gap-6 mb-12">
+                                <h3 className="text-2xl md:text-4xl font-heading font-black uppercase tracking-tighter bg-black text-white px-8 py-3 brutalist-border shadow-[6px_6px_0px_#A855F7] -rotate-1">
+                                    {cat.name}
+                                </h3>
+                                <div className="h-[2px] flex-1 bg-black/10" />
+                            </div>
+                            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-12">
+                                {members.map((member, idx) => (
+                                    <TeamCard key={member.id || idx} member={member} idx={idx} />
+                                ))}
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
         </section>
     );
@@ -93,11 +220,14 @@ function TeamCard({ member, idx }: { member: DbTeamMember; idx: number }) {
                             transition={{ type: "spring", stiffness: 300 }}
                         >
                             <Image
-                                src={member.image_url}
+                                src={encodeURI(member.image_url || "/teams/fallback.png")}
                                 alt={member.name}
                                 width={500}
                                 height={500}
                                 className="w-auto h-full object-contain group-hover:drop-shadow-[15px_15px_0px_rgba(0,0,0,0.5)] transition-all duration-300 pointer-events-none"
+                                onError={(e) => {
+                                    (e.target as HTMLImageElement).src = "/tellora-logo.png";
+                                }}
                             />
                         </motion.div>
 

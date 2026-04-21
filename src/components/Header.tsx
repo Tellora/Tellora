@@ -47,7 +47,7 @@ export default function Header() {
         { name: "Services", href: "/services" },
         { name: "Cases", href: "/case-studies" },
         { name: "SEO Audit", href: "/seo-checker" },
-        { name: "Team", href: "/about" },
+        { name: "Team", href: "/teams" },
         { name: "Careers", href: "/careers" },
         { name: "Blog", href: "/blog" },
     ];
@@ -63,7 +63,7 @@ export default function Header() {
                     onClick={handleLogoTap}
                 >
                     <Link href="/" onClick={(e) => { /* allow tap tracking but let link work on desktop */ }}>
-                        <div className="bg-white text-black px-3 md:px-5 py-2 brutalist-border shadow-[4px_4px_0px_#A855F7] md:shadow-[8px_8px_0px_#A855F7] -rotate-3 hover:rotate-0 transition-all duration-500 flex items-center h-[60px] md:h-[70px] relative overflow-hidden">
+                        <div className="bg-white text-black px-3 md:px-5 py-2 brutalist-border shadow-[4px_4px_0px_#A855F7] md:shadow-[8px_8px_0px_#A855F7] -rotate-3 hover:rotate-0 transition-all duration-500 flex items-center justify-center h-[55px] md:h-[70px] relative overflow-hidden">
                             <Image src="/tellora-logo.png" alt="Tellora Logo" width={160} height={70} className="object-contain w-auto h-full" priority />
                             {/* Subtle tap ripple indicators (mobile only) */}
                             {tapCount > 0 && tapCount < 4 && (

@@ -54,7 +54,7 @@ export default function Process() {
         <section
             ref={containerRef}
             id="process"
-            className="py-32 relative z-10 bg-background border-y-[4px] border-black overflow-hidden"
+            className="py-20 md:py-32 relative z-10 bg-background border-y-[4px] border-black overflow-hidden"
         >
             {/* Background Marquee */}
             <div className="absolute top-1/2 left-0 w-full opacity-5 pointer-events-none -translate-y-1/2 -rotate-3">
@@ -80,7 +80,7 @@ export default function Process() {
                     </motion.div>
                 </div>
 
-                <div className="relative grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12">
                     {/* Visual Connector - Decorative Dash updated to animated line */}
                     <ScrollLine className="hidden lg:block absolute top-[45%] left-0 w-full z-0 pointer-events-none" />
 
@@ -95,7 +95,7 @@ export default function Process() {
                             className="group relative flex flex-col items-center"
                         >
                             <div
-                                className="w-full p-10 brutalist-card h-full flex flex-col items-center text-center group-hover:shadow-[12px_12px_0px_#000] transition-all"
+                                className="w-full p-6 md:p-10 brutalist-card h-full flex flex-col items-center text-center group-hover:shadow-[12px_12px_0px_#000] transition-all"
                                 style={{ background: step.color }}
                             >
                                 {/* Step Badge */}
@@ -103,7 +103,7 @@ export default function Process() {
                                     <span className="text-xl font-black font-heading italic">{step.num}</span>
                                 </div>
 
-                                <div className="w-24 h-24 rounded-full bg-white brutalist-border flex items-center justify-center mb-10 mt-4 group-hover:bg-black group-hover:text-white transition-all transform group-hover:scale-110">
+                                <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-white brutalist-border flex items-center justify-center mb-6 md:mb-10 mt-4 group-hover:bg-black group-hover:text-white transition-all transform group-hover:scale-110">
                                     {step.icon}
                                 </div>
 

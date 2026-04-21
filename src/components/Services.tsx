@@ -106,7 +106,7 @@ export default function Services() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                     {services.map((service, idx) => (
                         <Link
                             key={idx}
@@ -135,7 +135,10 @@ export default function Services() {
 
                                 <div
                                     className="w-12 h-12 md:w-16 md:h-16 brutalist-border flex items-center justify-center mb-6 md:mb-8 transition-all group-hover:scale-110"
-                                    style={{ background: service.accent, color: service.color === "#000000" ? "#000" : "#FFF" }}
+                                    style={{ 
+                                        background: service.accent, 
+                                        color: (service.accent === "#FFFFFF" || service.accent === "#F3E84A") ? "#000" : "#FFF" 
+                                    }}
                                 >
                                     {service.icon}
                                 </div>
