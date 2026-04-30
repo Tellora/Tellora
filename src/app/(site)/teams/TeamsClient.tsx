@@ -16,7 +16,7 @@ export default function TeamsClient() {
                 <PageHeader
                     breadcrumb="Our Squad"
                     title="THE ARCHITECTS"
-                    subtitle="Meet the elite collective of designers, developers, and security specialists engineering the future of digital growth."
+                    subtitle="Meet the elite collective of designers, developers, and growth architects engineering the future of digital growth."
                 />
 
                 {/* Squad Intro Stats */}
@@ -35,9 +35,9 @@ export default function TeamsClient() {
                                 <p className="text-[10px] font-black uppercase tracking-widest opacity-60 group-hover:text-black/80">Execution Speed</p>
                             </div>
                             <div className="p-10 brutalist-border border-white/20 bg-white/5 flex flex-col items-center text-center group hover:bg-primary transition-all duration-500">
-                                <Shield size={40} className="text-accent group-hover:text-black mb-6" />
-                                <h3 className="text-4xl font-heading font-black mb-2">VETTED</h3>
-                                <p className="text-[10px] font-black uppercase tracking-widest opacity-60 group-hover:text-black/80">Security Protocol</p>
+                                <Target size={40} className="text-accent group-hover:text-black mb-6" />
+                                <h3 className="text-4xl font-heading font-black mb-2">PRECISION</h3>
+                                <p className="text-[10px] font-black uppercase tracking-widest opacity-60 group-hover:text-black/80">UX Strategy</p>
                             </div>
                         </div>
                     </div>

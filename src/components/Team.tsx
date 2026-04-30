@@ -13,8 +13,8 @@ export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
 
     const categories = [
         { id: "core", name: "Core Team" },
-        { id: "designing", name: "Designing Team" },
-        { id: "security", name: "Security Experts" }
+        { id: "development", name: "Development Team" },
+        { id: "designing", name: "Designing Team" }
     ];
 
     useEffect(() => {
@@ -23,7 +23,7 @@ export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
             const manualMembers: DbTeamMember[] = [
                 {
                     id: "abhay",
-                    name: "Abhay Sahdev",
+                    name: "Abhay Sehdev",
                     role: "Core Team",
                     category: "core",
                     image_url: "/teams/abhay tellora.png",
@@ -67,8 +67,8 @@ export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
                 {
                     id: "saksham",
                     name: "Saksham",
-                    role: "Graphic Designer",
-                    category: "designing",
+                    role: "Development Expert",
+                    category: "development",
                     image_url: "/teams/saksham tellora.png",
                     color: "#3B82F6",
                     skills: ["Graphics", "Creative", "Assets"],
@@ -78,42 +78,32 @@ export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
                     id: "ananya",
                     name: "Ananya",
                     role: "UI/UX Designer",
-                    category: "designing",
+                    category: "development",
                     image_url: "/teams/ananya tellora.png",
                     color: "#F59E0B",
                     skills: ["Interface", "Experience", "Systems"],
                     bio: "Designing friction-less user journeys that maximize conversion."
                 },
                 {
-                    id: "daksh",
-                    name: "Daksh",
-                    role: "Security Specialist",
-                    category: "security",
-                    image_url: "/teams/daksh tellora.png",
-                    color: "#EF4444",
-                    skills: ["Pentesting", "Hardening", "Audit"],
-                    bio: "Securing high-value digital assets against sophisticated threats."
+                    id: "tanisha",
+                    name: "Tanisha",
+                    role: "Graphic Designer Intern",
+                    category: "designing",
+                    image_url: "/teams/tanisha tellora.png",
+                    color: "#EC4899",
+                    skills: ["Design", "Visuals", "Creativity"],
+                    bio: "Bringing fresh and creative perspectives to graphic design."
                 },
                 {
-                    id: "abhijit",
-                    name: "Abhijit",
-                    role: "Website Security Specialist",
-                    category: "security",
-                    image_url: "/teams/abhijeet tellora.png",
-                    color: "#6366F1",
-                    skills: ["Web Security", "SSL/TLS", "Firewalls"],
-                    bio: "Fortifying web infrastructures for zero-compromise performance."
+                    id: "aryan",
+                    name: "Aryan",
+                    role: "Business Development Intern",
+                    category: "development",
+                    image_url: "/teams/aryan tellora.png",
+                    color: "#3B82F6",
+                    skills: ["Strategy", "Growth", "Relations"],
+                    bio: "Identifying and expanding new business opportunities."
                 },
-                {
-                    id: "raminder",
-                    name: "Raminder",
-                    role: "Website Diagnostics & Specialization",
-                    category: "security",
-                    image_url: "/teams/raminder tellora.png",
-                    color: "#10B981",
-                    skills: ["Diagnostics", "Optimization", "Speed"],
-                    bio: "Diagnosing and optimizing complex technical performance bottlenecks."
-                }
             ];
 
             // Merge and de-dupe (prefer manual for requested names)
@@ -162,7 +152,7 @@ export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
                 {categories.map((cat) => {
                     if (onlyCore && cat.id !== "core") return null;
                     
-                    const members = team.filter(m => (m.category === cat.id) || (cat.id === "core" && !m.category && ["abhay sahdev", "prakhar saxena", "vansh sharma"].includes(m.name.toLowerCase())));
+                    const members = team.filter(m => (m.category === cat.id) || (cat.id === "core" && !m.category && ["abhay sehdev", "prakhar saxena", "vansh sharma"].includes(m.name.toLowerCase())));
                     if (members.length === 0) return null;
                     
                     return (
