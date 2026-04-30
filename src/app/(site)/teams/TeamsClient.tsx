@@ -15,7 +15,7 @@ export default function TeamsClient() {
             <main>
                 <PageHeader
                     breadcrumb="Our Squad"
-                    title="THE ARCHITECTS"
+                    title="THE CORE"
                     subtitle="Meet the elite collective of designers, developers, and growth architects engineering the future of digital growth."
                 />
 

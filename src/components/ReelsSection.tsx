@@ -52,7 +52,12 @@ export default function ReelsSection() {
                         color: "#" + Math.floor(Math.random()*16777215).toString(16),
                         isEmbed: !r.embed_url!.endsWith('.mp4')
                     }));
-                setAllReels([...staticReels, ...liveAdminReels]);
+                
+                if (liveAdminReels.length > 0) {
+                    setAllReels(liveAdminReels);
+                } else {
+                    setAllReels([...staticReels]);
+                }
             } catch (err) {
                 console.error("Failed fetching admin reels", err);
             }

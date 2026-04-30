@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Trash2, Plus, Search, Heart, Eye, Video, Clapperboard, Zap, ArrowRight, X, Edit2, ExternalLink } from "lucide-react";
+import { Play, Trash2, Plus, Search, Heart, Eye, Video, Clapperboard, Zap, ArrowRight, X, Edit2, ExternalLink, Upload } from "lucide-react";
 import { Reel, getReels, upsertReel, deleteReel } from "@/lib/store";
+import { uploadFile } from "@/lib/supabase";
 
 const TAGS = ["BTS", "Studio", "Case Study", "Production", "Client Testimonial", "Brand Film", "Tutorial"];
 
@@ -46,6 +47,8 @@ export default function AdminReels() {
     const [editingReel, setEditingReel] = useState<Reel | null>(null);
     const [form, setForm] = useState(emptyReel());
     const [previewReel, setPreviewReel] = useState<Reel | null>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [isUploading, setIsUploading] = useState(false);
 
     const reload = async () => setReels(await getReels());
     useEffect(() => { reload(); }, []);
@@ -53,21 +56,39 @@ export default function AdminReels() {
     const openCreate = () => {
         setEditingReel(null);
         setForm(emptyReel());
+        setSelectedFile(null);
         setIsModalOpen(true);
     };
 
     const openEdit = (r: Reel) => {
         setEditingReel(r);
         setForm({ title: r.title, embed_url: r.embed_url, tag: r.tag, likes: r.likes, views: r.views, status: r.status });
+        setSelectedFile(null);
         setIsModalOpen(true);
     };
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsUploading(true);
+
+        let finalEmbedUrl = form.embed_url;
+
+        if (selectedFile) {
+            const fileName = `reel-${Date.now()}-${selectedFile.name.replace(/[^a-zA-Z0-9.\-]/g, '_')}`;
+            const uploadedUrl = await uploadFile("reels", fileName, selectedFile);
+            if (uploadedUrl) {
+                finalEmbedUrl = uploadedUrl;
+            } else {
+                alert("Failed to upload video to Supabase Storage. Please ensure the 'reels' bucket exists and is public.");
+                setIsUploading(false);
+                return;
+            }
+        }
+
         const reel: Reel = {
             id: editingReel ? editingReel.id : `reel-${Date.now()}`,
             title: form.title,
-            embed_url: form.embed_url,
+            embed_url: finalEmbedUrl,
             tag: form.tag,
             likes: form.likes || "0",
             views: form.views || "0",
@@ -75,6 +96,7 @@ export default function AdminReels() {
         };
         await upsertReel(reel);
         await reload();
+        setIsUploading(false);
         setIsModalOpen(false);
     };
 
@@ -298,16 +320,45 @@ export default function AdminReels() {
                                         placeholder="e.g. Creative Studio BTS" />
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">YouTube / Vimeo URL</label>
-                                    <input value={form.embed_url} onChange={(e) => setForm({ ...form, embed_url: e.target.value })}
-                                        className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white outline-none focus:border-primary transition-all font-medium text-sm"
-                                        placeholder="https://www.youtube.com/watch?v=..." />
-                                    {form.embed_url && getEmbedUrl(form.embed_url) && (
-                                        <p className="text-[10px] text-green-400 font-black uppercase tracking-widest">✓ Valid video URL detected</p>
-                                    )}
-                                    {form.embed_url && !getEmbedUrl(form.embed_url) && (
-                                        <p className="text-[10px] text-orange-400 font-black uppercase tracking-widest">⚠ URL format not recognized. Use YouTube or Vimeo links.</p>
+                                <div className="space-y-4">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-primary italic">Video Source *</label>
+                                    
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <div className="relative group cursor-pointer border-2 border-dashed border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:border-primary/50 transition-all bg-white/5">
+                                            <input 
+                                                type="file" 
+                                                accept="video/mp4,video/quicktime,video/*"
+                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                                onChange={(e) => {
+                                                    if (e.target.files && e.target.files[0]) {
+                                                        setSelectedFile(e.target.files[0]);
+                                                        setForm({ ...form, embed_url: "" }); // clear URL if file selected
+                                                    }
+                                                }}
+                                            />
+                                            <Upload size={24} className="mb-2 text-white/40 group-hover:text-primary transition-colors" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-white/60">Upload Video File</span>
+                                            {selectedFile && <span className="text-[9px] text-primary mt-2 break-all font-bold">{selectedFile.name}</span>}
+                                        </div>
+
+                                        <div className="flex flex-col justify-center gap-2">
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-white/40 text-center">OR</span>
+                                            <input 
+                                                value={form.embed_url} 
+                                                onChange={(e) => {
+                                                    setForm({ ...form, embed_url: e.target.value });
+                                                    if (e.target.value) setSelectedFile(null); // clear file if URL typed
+                                                }}
+                                                className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white outline-none focus:border-primary transition-all font-medium text-sm"
+                                                placeholder="YouTube / Vimeo URL" 
+                                            />
+                                            {form.embed_url && getEmbedUrl(form.embed_url) && (
+                                                <p className="text-[9px] text-green-400 font-black uppercase tracking-widest text-center mt-1">✓ Valid URL format</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                    {(!form.embed_url && !selectedFile) && (
+                                        <p className="text-[10px] text-orange-400 font-black uppercase tracking-widest">⚠ Please upload a video file or provide a valid video URL.</p>
                                     )}
                                 </div>
 
@@ -347,8 +398,16 @@ export default function AdminReels() {
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 pt-4">
                                     <button type="button" onClick={() => setIsModalOpen(false)} className="py-4 md:py-5 rounded-2xl md:rounded-[2rem] border border-white/10 text-white font-black text-[10px] uppercase tracking-widest hover:bg-white/5 transition-all">Cancel</button>
-                                    <button type="submit" className="py-4 md:py-5 rounded-2xl md:rounded-[2rem] bg-primary text-white font-black text-[10px] uppercase tracking-widest hover:shadow-2xl hover:shadow-primary/40 transition-all flex items-center justify-center gap-3">
-                                        {editingReel ? "Save Changes" : "Add Reel"} <ArrowRight size={16} />
+                                    <button 
+                                        type="submit" 
+                                        disabled={isUploading || (!form.embed_url && !selectedFile)}
+                                        className={`py-4 md:py-5 rounded-2xl md:rounded-[2rem] bg-primary text-white font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-3 ${isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-2xl hover:shadow-primary/40'}`}
+                                    >
+                                        {isUploading ? (
+                                            <>Uploading Video... <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /></>
+                                        ) : (
+                                            <>{editingReel ? "Save Changes" : "Add Reel"} <ArrowRight size={16} /></>
+                                        )}
                                     </button>
                                 </div>
                             </form>

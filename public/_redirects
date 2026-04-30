@@ -1,0 +1,6 @@
+# Tellora Media - Static Redirects (Cloudflare/Netlify/Vercel)
+
+# Example: Old blog post to new
+# /blog/old-post /blog/new-post 301
+
+# Force HTTPS and non-www is handled at DNS/Provider level.

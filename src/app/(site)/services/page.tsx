@@ -1,28 +1,52 @@
 import ServicesClient from "./ServicesClient";
 import { Metadata } from "next";
+import { SEO_CONFIG, getCanonicalUrl } from "@/lib/seo";
+import ServicesSchema from "@/components/seo/schema/ServicesSchema";
 
 export const metadata: Metadata = {
-    title: "Digital Growth Services | SEO, PPC & Next.js Performance Web Design | Tellora Media",
-    description: "Explore Tellora Media's core growth ecosystems. We specialize in semantic high-frequency SEO, Technical Core Web Vitals, ML-optimized PPC management, and conversion-forced branding.",
-    keywords: ["Semantic SEO Strategy", "Data-Driven PPC Management", "Performance Web Design", "Conversion Rate Optimization CRO", "Brand Identity Systems", "High-Authority Link Building"],
+    title: "Digital Marketing Services | SEO, Performance Marketing & More | Tellora Media",
+    description: "Tellora Media offers end-to-end digital growth services: SEO, Meta & Google Ads, social media management, content creation, video post-production, and web development. Built for brands that mean business.",
+    keywords: [
+        "SEO services India",
+        "performance marketing services",
+        "social media management agency",
+        "Meta Ads agency Delhi",
+        "Google Ads management India",
+        "content marketing agency",
+        "web design agency Delhi"
+    ],
     alternates: {
-        canonical: "https://tellora.media/services",
+        canonical: getCanonicalUrl("/services/"),
     },
     openGraph: {
-        title: "Digital Growth Services | SEO, PPC & Design | Tellora Media",
-        description: "Explore our end-to-end growth ecosystems for market dominance.",
-        url: "https://tellora.media/services",
-        siteName: "Tellora Media",
-        locale: "en_US",
+        title: "Digital Marketing Services | SEO, Performance Marketing & More | Tellora Media",
+        description: "Tellora Media offers end-to-end digital growth services: SEO, Meta & Google Ads, social media management, content creation, video post-production, and web development. Built for brands that mean business.",
+        url: getCanonicalUrl("/services/"),
+        siteName: SEO_CONFIG.siteName,
+        locale: SEO_CONFIG.locale,
         type: "website",
+        images: [
+            {
+                url: "/og-services.png",
+                width: 1200,
+                height: 630,
+                alt: "Tellora Media Services",
+            },
+        ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Services | Tellora Media",
-        description: "Explore Tellora Media's core SEO, PPC, and Performance Design services.",
+        title: "Digital Marketing Services | SEO, Performance Marketing & More | Tellora Media",
+        description: "Tellora Media offers end-to-end digital growth services: SEO, Meta & Google Ads, social media management, content creation, video post-production, and web development. Built for brands that mean business.",
+        images: ["/og-services.png"],
     }
 };
 
 export default function ServicesPage() {
-    return <ServicesClient />;
+    return (
+        <>
+            <ServicesSchema />
+            <ServicesClient />
+        </>
+    );
 }

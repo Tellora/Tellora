@@ -63,7 +63,7 @@ export default function SiteLayout({
             <CustomCursor />
             <SmoothScroll>
                 <ScrollProgress />
-                <main className="relative min-h-screen">
+                <main id="main-content" className="relative min-h-screen">
                     {children}
                 </main>
 

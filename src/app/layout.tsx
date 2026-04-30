@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Outfit } from "next/font/google";
 import "@/styles/globals.css";
-
+import { SEO_CONFIG } from "@/lib/seo";
 const plusJakartaSans = Plus_Jakarta_Sans({
     subsets: ["latin"],
     variable: "--font-sans",
@@ -13,12 +13,12 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-    metadataBase: new URL("https://tellora.media"),
+    metadataBase: new URL(SEO_CONFIG.siteUrl),
     title: {
-        default: "Tellora Media | Digital Growth Agency & SEO Experts",
-        template: "%s | Tellora Media"
+        default: SEO_CONFIG.defaultTitle,
+        template: SEO_CONFIG.titleTemplate
     },
-    description: "Tellora Media is an elite digital growth agency specialized in high-frequency SEO, performance marketing, and architecture-driven brand scaling. Turn your vision into market dominance.",
+    description: SEO_CONFIG.defaultDescription,
     keywords: [
         "Digital Growth Agency",
         "High-Frequency SEO",
@@ -40,26 +40,35 @@ export const metadata: Metadata = {
     },
     openGraph: {
         type: "website",
-        locale: "en_US",
-        url: "https://tellora.media",
-        siteName: "Tellora Media",
-        title: "Tellora Media | Architecting Digital Domination",
-        description: "Scale your revenue with elite level SEO, performance marketing, and creative growth architecture. Turn your brand into a high-frequency growth engine.",
+        locale: SEO_CONFIG.locale,
+        alternateLocale: SEO_CONFIG.alternateLocales,
+        url: SEO_CONFIG.siteUrl,
+        siteName: SEO_CONFIG.siteName,
+        title: SEO_CONFIG.defaultTitle,
+        description: SEO_CONFIG.defaultDescription,
         images: [
             {
-                url: "/tellora-logo.png",
+                url: SEO_CONFIG.defaultOGImage,
                 width: 1200,
                 height: 630,
-                alt: "Tellora Media - Digital Growth Architects",
+                alt: `${SEO_CONFIG.siteName} - Digital Growth Architects`,
             },
         ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Tellora Media | Digital Growth Agency",
-        description: "Elite digital growth agency specialized in high-frequency SEO and performance marketing systems.",
-        images: ["/tellora-logo.png"],
-        creator: "@telloramedia",
+        title: SEO_CONFIG.defaultTitle,
+        description: SEO_CONFIG.defaultDescription,
+        images: [SEO_CONFIG.defaultOGImage],
+        creator: SEO_CONFIG.twitterHandle,
+        site: SEO_CONFIG.twitterHandle,
+    },
+    alternates: {
+        canonical: SEO_CONFIG.siteUrl,
+        languages: {
+            "en": SEO_CONFIG.siteUrl,
+            "x-default": SEO_CONFIG.siteUrl,
+        },
     },
     robots: {
         index: true,
@@ -113,18 +122,23 @@ const jsonLd = {
     "priceRange": "$$$",
     "address": {
         "@type": "PostalAddress",
-        "addressCountry": "Remote / Worldwide"
+        "streetAddress": "Tellora Hub, South Extension II",
+        "addressLocality": "New Delhi",
+        "addressRegion": "Delhi",
+        "postalCode": "110049",
+        "addressCountry": "IN"
     },
     "contactPoint": {
         "@type": "ContactPoint",
-        "telephone": "+91-98115-39510",
-        "contactType": "Strategy Consult",
+        "telephone": "+91-76784-93113",
+        "contactType": "customer service",
         "areaServed": "Worldwide",
         "availableLanguage": "English"
     }
 };
 
-import Script from "next/script";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+import SocialPixels from "@/components/analytics/SocialPixels";
 
 export default function RootLayout({
     children,
@@ -133,43 +147,17 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <head>
+                <link rel="preconnect" href="https://www.googletagmanager.com" />
+                <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+                {/* Add preconnect for any external APIs if needed */}
+            </head>
             <body
                 className={`${plusJakartaSans.variable} ${outfit.variable} antialiased selection:bg-primary/20 overflow-x-hidden`}
             >
-                {/* Google Tag Manager (noscript) */}
-                <noscript>
-                    <iframe
-                        src="https://www.googletagmanager.com/ns.html?id=GTM-MSRGVJ8L"
-                        height="0"
-                        width="0"
-                        style={{ display: "none", visibility: "hidden" }}
-                    />
-                </noscript>
-                {/* End Google Tag Manager (noscript) */}
-
-                {/* Google Tag Manager */}
-                <Script id="google-tag-manager" strategy="afterInteractive">
-                    {`
-                    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                    })(window,document,'script','dataLayer','GTM-MSRGVJ8L');
-                    `}
-                </Script>
-                {/* Google tag (gtag.js) */}
-                <Script
-                    strategy="afterInteractive"
-                    src="https://www.googletagmanager.com/gtag/js?id=G-BVWRJPJRZ1"
-                />
-                <Script id="google-analytics" strategy="afterInteractive">
-                    {`
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-                    gtag('config', 'G-BVWRJPJRZ1');
-                    `}
-                </Script>
+                <a href="#main-content" className="sr-only focus:not-sr-only">Skip to content</a>
+                <GoogleAnalytics />
+                <SocialPixels />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

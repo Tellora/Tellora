@@ -31,9 +31,9 @@ export default function SEOCheckerPage() {
                             <span className="font-black uppercase tracking-widest text-[12px]">Advanced Performance Intelligence</span>
                         </motion.div>
 
-                        <h1 className="text-[12vw] md:text-[8rem] lg:text-[12rem] font-heading font-black tracking-tighter leading-[0.8] mb-12 uppercase">
-                            SEO <span className="text-secondary italic">AUDIT</span> <br /> 
-                            CORE <span className="underline decoration-primary decoration-[15px] underline-offset-[10px]">ANALYSIS</span>
+                        <h1 className="text-[12vw] md:text-[8rem] lg:text-[10rem] font-heading font-black tracking-tighter leading-[0.85] mb-12 uppercase">
+                            TECHNICAL <span className="text-secondary italic">SEO</span> <br /> 
+                            <span className="underline decoration-primary decoration-[15px] underline-offset-[10px]">AUDIT</span>
                         </h1>
 
                         <p className="max-w-4xl mx-auto text-xl md:text-3xl font-black uppercase tracking-tight leading-none opacity-60 mb-20 text-center">

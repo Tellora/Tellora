@@ -1,25 +1,41 @@
 import BlogClient from "./BlogClient";
 import { Metadata } from "next";
+import { SEO_CONFIG, getCanonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-    title: "Growth Engine Blog | Marketing Intelligence & SEO Strategy | Tellora Media",
-    description: "Deep dive into tactical digital strategies driving modern B2B brand dominance. Read proprietary agency research on SEO architectures, Paid advertising, and high-frequency growth hacking.",
-    keywords: ["Digital Marketing Blog", "Strategic SEO Insights", "Growth Hacking Case Studies", "Performance Advertising Research", "Tellora Media Marketing Insights", "CRO Strategies"],
+    title: "Tellora Media Blog | Growth Marketing & SEO Insights",
+    description: "Deep-dive technical articles, SEO strategies, and performance marketing insights from the Tellora Media team. Learn how to engineer your own digital growth.",
+    keywords: [
+        "digital marketing blog",
+        "SEO insights",
+        "performance marketing strategies",
+        "growth hacking tips",
+        "Tellora Media blog"
+    ],
     alternates: {
-        canonical: "https://tellora.media/blog",
+        canonical: getCanonicalUrl("/blog/"),
     },
     openGraph: {
-        title: "Growth Engine Blog | Marketing Intelligence | Tellora Media",
-        description: "Tactical digital strategies and growth framework insights from Tellora Media experts.",
-        url: "https://tellora.media/blog",
-        siteName: "Tellora Media",
-        locale: "en_US",
+        title: "Tellora Media Blog | Growth Marketing & SEO Insights",
+        description: "Deep-dive technical articles, SEO strategies, and performance marketing insights from the Tellora Media team. Learn how to engineer your own digital growth.",
+        url: getCanonicalUrl("/blog/"),
+        siteName: SEO_CONFIG.siteName,
+        locale: SEO_CONFIG.locale,
         type: "website",
+        images: [
+            {
+                url: "/og-blog.png",
+                width: 1200,
+                height: 630,
+                alt: "Tellora Media Blog",
+            },
+        ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Growth Engine Blog | Tellora Media",
-        description: "Read proprietary digital marketing and SEO research from the experts.",
+        title: "Tellora Media Blog | Growth Marketing & SEO Insights",
+        description: "Deep-dive technical articles, SEO strategies, and performance marketing insights from the Tellora Media team. Learn how to engineer your own digital growth.",
+        images: ["/og-blog.png"],
     }
 };
 

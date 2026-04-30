@@ -10,13 +10,13 @@ import ROICalculator from "@/components/ROICalculator";
 import FAQ from "@/components/FAQ";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
-import AnimatedFeatures from "@/components/AnimatedFeatures";
 import ReelsSection from "@/components/ReelsSection";
 import { ParallaxText, FloatingElement, ScrollLine, ScrollConnector } from "@/components/animations/ScrollChoreography";
 import { ScrollWordReveal } from "@/components/animations/ScrollWordReveal";
 import Team from "@/components/Team";
 import LogoCloud from "@/components/LogoCloud";
 import { Zap, Sparkles, Star, Rocket } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
     return (
@@ -34,7 +34,6 @@ export default function Home() {
                     <ScrollLine className="bottom-0" />
                 </section>
 
-                <AnimatedFeatures />
 
                 {/* Massive Statement with Dynamic Text - Optimized Decor */}
                 <section className="py-24 md:py-64 bg-black text-white relative flex items-center justify-center overflow-hidden">
@@ -77,9 +76,9 @@ export default function Home() {
                         />
 
                         <div className="flex justify-center mt-16 md:mt-32">
-                            <div className="bg-white brutalist-border px-8 py-4 rotate-2 shadow-[4px_4px_0px_#000] hover:rotate-0 transition-transform cursor-pointer group">
+                            <Link href="/about" className="bg-white brutalist-border px-8 py-4 rotate-2 shadow-[4px_4px_0px_#000] hover:rotate-0 transition-transform cursor-pointer group">
                                 <span className="text-xs font-black uppercase tracking-widest group-hover:text-primary transition-colors text-black">Learn Our Secret Sauce</span>
-                            </div>
+                            </Link>
                         </div>
                     </div>
                 </section>

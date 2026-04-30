@@ -71,7 +71,7 @@ export default function BlogPage() {
             <main>
                 <PageHeader
                     breadcrumb="Growth Insights"
-                    title="The Growth Lab"
+                    title="THE VAULT"
                     subtitle="Deep dives into the strategies, technologies, and data-points driving the world's fastest growing digital brands."
                 />
 

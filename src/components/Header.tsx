@@ -96,7 +96,7 @@ export default function Header() {
                 </AnimatePresence>
 
                 {/* Desktop Dock - Centered Floating Navigation */}
-                <nav className="hidden md:flex items-center bg-white/90 backdrop-blur-xl brutalist-border rounded-full px-12 py-4 shadow-[10px_10px_0px_rgba(0,0,0,1)] gap-10">
+                <nav aria-label="Main navigation" className="hidden md:flex items-center bg-white/90 backdrop-blur-xl brutalist-border rounded-full px-12 py-4 shadow-[10px_10px_0px_rgba(0,0,0,1)] gap-10">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
@@ -135,6 +135,7 @@ export default function Header() {
                     {/* Mobile Toggle - Brutalist Block */}
                     <button
                         onClick={() => setMobileOpen(!mobileOpen)}
+                        aria-label={mobileOpen ? "Close menu" : "Open menu"}
                         className="p-5 bg-primary text-white brutalist-border shadow-[6px_6px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all active:scale-95"
                     >
                         {mobileOpen ? <X size={24} /> : <Menu size={24} />}

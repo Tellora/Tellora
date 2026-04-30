@@ -13,23 +13,23 @@ const contactInfo = [
     {
         icon: <Mail className="w-6 h-6 text-primary" />,
         label: "Direct Email",
-        value: "contact@tellora.media",
+        value: "contact@telloramedia.online",
         subtitle: "Architecture & Strategy",
-        link: "mailto:contact@tellora.media"
+        link: "mailto:contact@telloramedia.online"
     },
     {
         icon: <MessageSquare className="w-6 h-6 text-primary" />,
         label: "WhatsApp Support",
-        value: "+91 98115 39510",
+        value: "+91 76784 93113",
         subtitle: "Instant Consulting",
-        link: "https://wa.me/919811539510"
+        link: "https://wa.me/917678493113"
     },
     {
-        icon: <Globe className="w-6 h-6 text-primary" />,
+        icon: <MapPin className="w-6 h-6 text-primary" />,
         label: "Global HQ",
-        value: "Remote Worldwide",
-        subtitle: "New York • London • Dubai",
-        link: "#"
+        value: "South Extension II, New Delhi",
+        subtitle: "India Node | Global Strategy",
+        link: "https://goo.gl/maps/placeholder"
     }
 ];
 
@@ -248,7 +248,7 @@ export default function ContactPage() {
                         </div>
                         <h2 className="text-5xl md:text-[8rem] font-heading font-black text-white mb-16 leading-[0.9] tracking-tighter">Ready to <br /><span className="text-primary italic">Ignite?</span></h2>
                         <div className="flex flex-wrap justify-center gap-8">
-                            <a href="https://wa.me/919811539510" target="_blank" className="group px-12 py-8 bg-white rounded-[2rem] hover:bg-primary transition-all duration-500 shadow-2xl shadow-primary/20 flex items-center gap-6 hover:-translate-y-4">
+                            <a href="https://wa.me/917678493113" target="_blank" className="group px-12 py-8 bg-white rounded-[2rem] hover:bg-primary transition-all duration-500 shadow-2xl shadow-primary/20 flex items-center gap-6 hover:-translate-y-4">
                                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-white group-hover:text-primary transition-all duration-500 shadow-sm">
                                     <MessageSquare size={24} />
                                 </div>
@@ -258,7 +258,7 @@ export default function ContactPage() {
                                 </div>
                             </a>
 
-                            <a href="mailto:contact@tellora.media" className="group px-12 py-8 bg-white/5 border border-white/10 rounded-[2rem] hover:border-primary/50 transition-all duration-500 backdrop-blur-xl flex items-center gap-6 hover:-translate-y-4">
+                            <a href="mailto:contact@telloramedia.online" className="group px-12 py-8 bg-white/5 border border-white/10 rounded-[2rem] hover:border-primary/50 transition-all duration-500 backdrop-blur-xl flex items-center gap-6 hover:-translate-y-4">
                                 <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-white group-hover:bg-primary transition-all duration-500">
                                     <Mail size={24} />
                                 </div>

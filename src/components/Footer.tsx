@@ -90,7 +90,7 @@ export default function Footer() {
                                 <ul className="space-y-6">
                                     {["The Genesis", "Success Map", "Join Core", "Intel Blog"].map((s, idx) => (
                                         <li key={s}>
-                                            <Link href={idx === 0 ? "/about" : idx === 2 ? "/careers" : idx === 3 ? "/blog" : "/#"} className="text-[12px] font-black uppercase tracking-[0.4em] hover:text-accent transition-colors flex items-center gap-4 group">
+                                            <Link href={idx === 0 ? "/about" : idx === 1 ? "/case-studies" : idx === 2 ? "/careers" : idx === 3 ? "/blog" : "/#"} className="text-[12px] font-black uppercase tracking-[0.4em] hover:text-accent transition-colors flex items-center gap-4 group">
                                                 <div className="w-2 h-2 bg-black rounded-full group-hover:scale-200 transition-all group-hover:bg-accent" /> {s}
                                             </Link>
                                         </li>
@@ -143,8 +143,8 @@ export default function Footer() {
                     </div>
 
                     <div className="flex flex-wrap justify-center gap-12">
-                        {["Growth_Strategy", "Market_Mastery", "Performance_Hub"].map(l => (
-                            <Link key={l} href="/services" className="text-[10px] font-black uppercase tracking-[0.6em] hover:text-primary transition-all group relative">
+                        {["Growth_Strategy", "Market_Mastery", "Performance_Hub"].map((l, idx) => (
+                            <Link key={l} href={idx === 0 ? "/services" : idx === 1 ? "/case-studies" : "/seo-checker"} className="text-[10px] font-black uppercase tracking-[0.6em] hover:text-primary transition-all group relative">
                                 {l}
                                 <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-primary group-hover:w-full transition-all duration-500" />
                             </Link>

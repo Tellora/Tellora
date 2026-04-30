@@ -137,13 +137,13 @@ export default function Hero() {
                         className="relative mb-12 md:mb-20 translate-z-0 mt-8 md:mt-0"
                     >
                         <div className="relative group mt-4 md:mt-0">
-                            <h1 className="text-[12vw] xl:text-[15rem] font-heading font-black tracking-tighter leading-[0.85] md:leading-none text-black selection:bg-accent select-none uppercase relative z-20">
+                            <h2 className="text-[12vw] xl:text-[15rem] font-heading font-black tracking-tighter leading-[0.85] md:leading-none text-black selection:bg-accent select-none uppercase relative z-20">
                                 {heroTitle.split(' ').map((word, i) => (
                                     <span key={i} className={i === 1 ? "animate-red-gradient drop-shadow-[4px_4px_0px_#000] md:drop-shadow-[10px_10px_0px_#000] inline-block -translate-y-2 md:-translate-y-8 gpu-accelerated" : ""}>
                                         {word} {i === 0 && <br />}
                                     </span>
                                 ))}
-                            </h1>
+                            </h2>
                             <span className="sr-only">{rawTitle}</span>
                         </div>
                     </motion.div>
@@ -154,9 +154,9 @@ export default function Hero() {
                         transition={{ delay: 0.2 }}
                         className="max-w-5xl mb-16 md:mb-24"
                     >
-                        <p className="text-xl sm:text-2xl md:text-5xl font-black uppercase tracking-tighter leading-[1.2] md:leading-[0.9] text-black">
+                        <h1 className="text-xl sm:text-2xl md:text-5xl font-black uppercase tracking-tighter leading-[1.2] md:leading-[0.9] text-black">
                             {heroSubtitle}
-                        </p>
+                        </h1>
                     </motion.div>
 
                     <motion.div
@@ -172,10 +172,10 @@ export default function Hero() {
                         </Magnetic>
 
                         <Magnetic>
-                            <button className="w-full sm:w-auto px-10 md:px-12 py-6 md:py-8 bg-white text-black font-black uppercase tracking-widest text-lg md:text-xl brutalist-border shadow-[8px_8px_0px_#F3E84A] md:shadow-[12px_12px_0px_#F3E84A] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_#F3E84A] md:hover:shadow-[16px_16px_0px_#F3E84A] active:translate-y-1 transition-all flex items-center justify-center gap-4 md:gap-6 group">
+                            <Link href="/blog" className="w-full sm:w-auto px-10 md:px-12 py-6 md:py-8 bg-white text-black font-black uppercase tracking-widest text-lg md:text-xl brutalist-border shadow-[8px_8px_0px_#F3E84A] md:shadow-[12px_12px_0px_#F3E84A] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_#F3E84A] md:hover:shadow-[16px_16px_0px_#F3E84A] active:translate-y-1 transition-all flex items-center justify-center gap-4 md:gap-6 group">
                                 <Terminal className="w-6 h-6 md:w-6 md:h-6 text-primary" />
                                 INTEL LAB
-                            </button>
+                            </Link>
                         </Magnetic>
                     </motion.div>
 

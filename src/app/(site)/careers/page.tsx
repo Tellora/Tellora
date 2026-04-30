@@ -1,25 +1,40 @@
 import CareersClient from "./CareersClient";
 import { Metadata } from "next";
+import { SEO_CONFIG, getCanonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-    title: "Careers | Join the Digital Growth Architects | Tellora Media",
-    description: "Join Tellora Media's elite collective of Next.js engineers, growth strategists, and performance designers. We operate globally to build the future of digital marketing.",
-    keywords: ["Tellora Media Careers", "Digital Marketing Jobs", "Next.js Engineering Roles", "SEO Specialist Jobs", "Growth Marketing Hiring", "Advertising Agency Careers"],
+    title: "Careers | Join the Tellora Media Growth Team",
+    description: "Ready to engineer dopamine-driven growth? Explore open roles at Tellora Media. We hire outlier talent in design, development, SEO, and performance marketing.",
+    keywords: [
+        "digital marketing jobs Delhi",
+        "SEO careers",
+        "growth marketing jobs",
+        "Tellora Media careers"
+    ],
     alternates: {
-        canonical: "https://tellora.media/careers",
+        canonical: getCanonicalUrl("/careers/"),
     },
     openGraph: {
-        title: "Careers | Join the Digital Growth Architects | Tellora Media",
-        description: "Join Tellora Media's elite collective of engineers and growth strategists.",
-        url: "https://tellora.media/careers",
-        siteName: "Tellora Media",
-        locale: "en_US",
+        title: "Careers | Join the Tellora Media Growth Team",
+        description: "Ready to engineer dopamine-driven growth? Explore open roles at Tellora Media. We hire outlier talent in design, development, SEO, and performance marketing.",
+        url: getCanonicalUrl("/careers/"),
+        siteName: SEO_CONFIG.siteName,
+        locale: SEO_CONFIG.locale,
         type: "website",
+        images: [
+            {
+                url: "/og-default.png",
+                width: 1200,
+                height: 630,
+                alt: "Tellora Media Careers",
+            },
+        ],
     },
     twitter: {
         card: "summary_large_image",
-        title: "Careers | Tellora Media",
-        description: "Join our elite global hub of digital architects.",
+        title: "Careers | Join the Tellora Media Growth Team",
+        description: "Ready to engineer dopamine-driven growth? Explore open roles at Tellora Media. We hire outlier talent in design, development, SEO, and performance marketing.",
+        images: ["/og-default.png"],
     }
 };
 

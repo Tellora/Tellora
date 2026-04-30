@@ -24,6 +24,7 @@ import {
     Plus
 } from "lucide-react";
 import { getJobs, upsertJobApplication, Job } from "@/lib/store";
+import { uploadFile } from "@/lib/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Magnetic from "@/components/animations/Magnetic";
@@ -85,10 +86,37 @@ export default function CareersClient() {
         e.preventDefault();
         setIsLoading(true);
 
-        const formData = new FormData(e.target as HTMLFormElement);
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
         if (formData.get('website')) {
             setIsLoading(false);
             return;
+        }
+
+        let resumeUrl = "#";
+        const file = formData.get('resume') as File;
+        if (file && file.size > 0) {
+            try {
+                const fileName = `resume-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-]/g, '_')}`;
+                const uploaded = await uploadFile("resumes", fileName, file);
+                if (uploaded) {
+                    resumeUrl = uploaded;
+                } else {
+                    // Fallback to base64 if bucket doesn't exist
+                    resumeUrl = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = (ev) => resolve(ev.target?.result as string);
+                        reader.readAsDataURL(file);
+                    }) as string;
+                }
+            } catch (e) {
+                // Fallback to base64
+                resumeUrl = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => resolve(ev.target?.result as string);
+                    reader.readAsDataURL(file);
+                }) as string;
+            }
         }
 
         const application: any = {
@@ -97,7 +125,7 @@ export default function CareersClient() {
             job_title: selectedJob.title,
             candidate_name: formData.get('name'),
             candidate_email: formData.get('email'),
-            resume_url: "#",
+            resume_url: resumeUrl,
             cover_letter: formData.get('experience'),
             status: "New",
         };
@@ -142,12 +170,12 @@ export default function CareersClient() {
                         </motion.div>
 
                         <h1 className="text-[10vw] md:text-[8rem] xl:text-[9rem] font-black tracking-tighter uppercase leading-[0.9] mb-16 relative">
-                            <span className="block opacity-40 outline-text mb-4">Architect</span>
+                            <span className="block opacity-40 outline-text mb-4">JOIN</span>
                             <span className="block italic group mb-4">
-                                <ScrambleText text="THE FUTURE" className="group-hover:text-primary transition-all inline-block" />
+                                <ScrambleText text="THE" className="group-hover:text-primary transition-all inline-block" />
                             </span>
                             <span className="block flex items-center gap-8 flex-wrap">
-                                <span className="text-primary italic">OF FORCE</span>
+                                <span className="text-primary italic">RESISTANCE</span>
                                 <div className="hidden md:block h-[4px] flex-1 min-w-[200px] bg-white/5 relative overflow-hidden">
                                     <motion.div
                                         initial={{ width: 0 }}
@@ -334,19 +362,20 @@ export default function CareersClient() {
             {/* Modal */}
             <AnimatePresence>
                 {selectedJob && (
-                    <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center p-0 md:p-6 bg-black/98 backdrop-blur-[40px] overflow-y-auto selection:bg-primary">
+                    <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center p-0 md:p-6 bg-black/98 backdrop-blur-[40px] selection:bg-primary">
                         <motion.div
                             initial={{ y: "100%", opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: "100%", opacity: 0 }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="w-full max-w-6xl bg-[#080B12] md:brutalist-border border-white/10 md:rounded-[4rem] p-8 md:p-24 relative min-h-screen md:min-h-0 md:max-h-[90vh] overflow-y-auto overscroll-contain"
+                            className="w-full max-w-6xl bg-[#080B12] text-white md:brutalist-border border-white/10 md:rounded-[4rem] p-6 md:p-24 relative min-h-[100dvh] md:min-h-0 md:max-h-[90vh] overflow-y-auto overscroll-contain"
+                            data-lenis-prevent="true"
                         >
                             <button
                                 onClick={() => { setSelectedJob(null); setIsApplying(false); }}
-                                className="absolute top-12 right-12 p-6 bg-white text-black rounded-full shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:scale-110 active:scale-95 transition-all z-[210] group"
+                                className="sticky top-0 float-right p-4 md:p-6 bg-white text-black rounded-full shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:scale-110 active:scale-95 transition-all z-[210] group"
                             >
-                                <X size={32} className="group-hover:rotate-90 transition-transform" />
+                                <X size={24} className="group-hover:rotate-90 transition-transform" />
                             </button>
 
                             {!isApplying ? (
@@ -358,10 +387,10 @@ export default function CareersClient() {
                                                     <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary italic">Initialization Node_TM: {selectedJob.id}</span>
                                                     <div className="h-[1px] flex-1 bg-white/10" />
                                                 </div>
-                                                <h2 className="text-6xl md:text-8xl font-black tracking-tighter uppercase italic leading-[0.8] mb-12 text-white">
+                                                <h2 className="text-4xl md:text-8xl font-black tracking-tighter uppercase italic leading-[0.9] mb-8 text-white break-words">
                                                     {selectedJob.title}
                                                 </h2>
-                                                <div className="flex flex-wrap gap-6 md:gap-12">
+                                                <div className="flex flex-wrap gap-4 md:gap-12">
                                                     <div className="flex items-center gap-4 bg-white/5 px-8 py-4 rounded-full border border-white/5 text-[11px] font-black uppercase tracking-widest text-white/60">
                                                         <MapPin size={18} className="text-primary" /> {selectedJob.location}
                                                     </div>
@@ -458,9 +487,9 @@ export default function CareersClient() {
                                                     ABORT PROTOCOL / RETURN TO MISSION
                                                 </button>
                                             </div>
-                                            <div className="space-y-4 mb-20">
-                                                <h2 className="text-8xl md:text-9xl font-black uppercase tracking-tighter italic leading-none">Initialization <span className="text-primary">Phase.</span></h2>
-                                                <p className="text-xl text-white/30 font-medium italic">Establishing secure uplink. Please provide your cognitive identifier.</p>
+                                            <div className="space-y-4 mb-12">
+                                                <h2 className="text-5xl md:text-9xl font-black uppercase tracking-tighter italic leading-none">Initialization <span className="text-primary">Phase.</span></h2>
+                                                <p className="text-lg md:text-xl text-white/50 font-medium italic">Establishing secure uplink. Please provide your cognitive identifier.</p>
                                             </div>
 
                                             <form onSubmit={handleApply} className="space-y-12">
@@ -485,7 +514,7 @@ export default function CareersClient() {
                                                 <div className="space-y-4">
                                                     <label className="text-[11px] font-black uppercase tracking-[0.5em] text-primary italic">Dossier_Asset (PDF)</label>
                                                     <div className="relative group">
-                                                        <input type="file" accept=".pdf" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                                                        <input required type="file" name="resume" accept=".pdf" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
                                                         <div className="w-full bg-white/5 brutalist-border p-16 border-dashed border-white/10 flex flex-col items-center justify-center gap-6 group-hover:bg-white/10 group-hover:border-primary/50 transition-all border-white/10">
                                                             <div className="w-20 h-20 bg-black rounded-3xl flex items-center justify-center text-white/20 group-hover:text-primary transition-colors border border-white/5 shadow-2xl">
                                                                 <Upload size={40} className="group-hover:translate-y-[-4px] transition-transform" />

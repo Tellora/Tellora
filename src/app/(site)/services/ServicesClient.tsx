@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { 
     Search, Share2, Monitor, PenTool, ArrowRight, BarChart3, 
     Lightbulb, Zap, Sparkles, Star, Database, Cpu, Target, 
-    CheckCircle2, Globe, Shield, Rocket, Layout, Code, Play
+    CheckCircle2, Globe, Shield, Rocket, Layout, Code, Play, Users, Speaker
 } from "lucide-react";
 import { GrowthDashboard } from "@/components/GrowthDashboard";
 import { ScrollLine, HorizontalReveal, FloatingElement, MagneticElement, ScrollConnector } from "@/components/animations/ScrollChoreography";
@@ -30,8 +30,73 @@ const IconMap: Record<string, React.ReactNode> = {
     Rocket: <Rocket size={24} />,
     Layout: <Layout size={24} />,
     Code: <Code size={24} />,
-    Play: <Play size={24} />
+    Play: <Play size={24} />,
+    Users: <Users size={24} />,
+    Speaker: <Speaker size={24} />
 };
+
+const defaultServices: Service[] = [
+    {
+        id: "1",
+        title: "SEO Optimization",
+        description: "Dominate search engine rankings with semantic high-frequency SEO, programmatic content strategies, and aggressive technical architecture audits that force algorithms to reward your brand.",
+        category: "Organic Growth",
+        icon: "Search",
+        color: "#F3E84A",
+        status: "Published",
+        features: ["Semantic Architecture Audits", "Programmatic Keyword Matrix", "High-Authority Link Velocity", "Core Web Vitals Optimization"]
+    },
+    {
+        id: "2",
+        title: "Social Media",
+        description: "Build an impenetrable brand cult. We deploy high-velocity content frameworks that turn passive scrollers into aggressive brand advocates and loyal customers.",
+        category: "Organic Growth",
+        icon: "Share2",
+        color: "#FF3366",
+        status: "Published",
+        features: ["Viral Content Mechanics", "Community Sentiment Cultivation", "Algorithmic Trend Hacking", "Brand Persona Engineering"]
+    },
+    {
+        id: "3",
+        title: "Web Design",
+        description: "We don't build websites; we engineer conversion-forced digital ecosystems using Next.js and brutalist motion design to instantly capture and convert elite traffic.",
+        category: "Digital Experience",
+        icon: "Monitor",
+        color: "#4AC0E4",
+        status: "Published",
+        features: ["Next.js Performance Architecture", "Conversion Rate Optimization (CRO)", "WebGL & Motion Physics", "Headless Commerce Solutions"]
+    },
+    {
+        id: "4",
+        title: "Performance Ads",
+        description: "Deploy machine-learning optimized PPC campaigns across Meta, Google, and TikTok. We aggressively test variants to scale winning formulas and eliminate wasted ad spend.",
+        category: "Paid Acquisition",
+        icon: "Speaker",
+        color: "#A855F7",
+        status: "Published",
+        features: ["Predictive Bidding Models", "Omnichannel Ad Sync", "Multivariate Creative Testing", "Advanced Pixel Tracking"]
+    },
+    {
+        id: "5",
+        title: "Content Production",
+        description: "Command attention with hyper-visual narratives, copy that reads like a weapon, and cinematic micro-content designed for infinite scroll retention.",
+        category: "Digital Experience",
+        icon: "PenTool",
+        color: "#22C55E",
+        status: "Published",
+        features: ["Cinematic Short-Form Video", "Direct-Response Copywriting", "3D Motion Graphics", "SEO-Driven Editorial"]
+    },
+    {
+        id: "6",
+        title: "Influencer Scaling",
+        description: "Leverage our private network of macro and micro-creators. We broker algorithmic resonance through authentic human synergy to scale your trust instantly.",
+        category: "Paid Acquisition",
+        icon: "Users",
+        color: "#FF9900",
+        status: "Published",
+        features: ["Creator Network Arbitration", "Performance-Based Payouts", "UGC Asset Generation", "Niche Community Penetration"]
+    }
+];
 
 export default function ServicesPage() {
     const [services, setServices] = useState<Service[]>([]);
@@ -39,7 +104,11 @@ export default function ServicesPage() {
 
     useEffect(() => {
         getServices().then((data) => {
-            setServices(data || []);
+            if (data && data.length > 0) {
+                setServices(data);
+            } else {
+                setServices(defaultServices);
+            }
             setLoading(false);
         });
     }, []);
@@ -71,7 +140,6 @@ export default function ServicesPage() {
             <Header />
 
             <main className="relative z-10">
-                <h1 className="sr-only">Our Digital Growth Services | SEO, PPC, and High-End Web Design by Tellora Media</h1>
                 <PageHeader
                     breadcrumb="Our Expertise"
                     title="GROWTH SYSTEMS"
@@ -151,9 +219,9 @@ export default function ServicesPage() {
                                 { step: "04", title: "Infinite Scale", desc: "Daily multivariate testing. We cut losing variants aggressively and pour budget directly into winning formulas." }
                             ].map((phase, i) => (
                                 <div key={i} className="p-8 brutalist-card !bg-[#111] hover:bg-primary transition-colors group shadow-[8px_8px_0px_#A855F7] md:hover:-translate-y-4 duration-300">
-                                    <div className="text-4xl font-heading font-black text-white/20 mb-6 group-hover:text-black/50 transition-colors">{phase.step}</div>
-                                    <h3 className="text-2xl font-black uppercase tracking-tight mb-4 text-white group-hover:text-black mt-auto">{phase.title}</h3>
-                                    <p className="text-xs font-medium text-white/60 group-hover:text-black uppercase tracking-widest leading-relaxed">
+                                    <div className="text-4xl font-heading font-black text-white/20 mb-6 group-hover:text-white transition-colors">{phase.step}</div>
+                                    <h3 className="text-2xl font-black uppercase tracking-tight mb-4 text-white">{phase.title}</h3>
+                                    <p className="text-xs font-medium text-white/60 group-hover:text-white uppercase tracking-widest leading-relaxed">
                                         {phase.desc}
                                     </p>
                                 </div>
