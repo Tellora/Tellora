@@ -108,10 +108,6 @@ export default async function JobPage({ params }: { params: { id: string } }) {
                             <h2 className="text-sm font-black uppercase tracking-[0.6em] text-primary mb-4">Required Skillset Node</h2>
                             <p className="text-xl text-white/70 leading-relaxed font-medium tracking-tight italic">{job.requirements}</p>
                         </div>
-                        <div>
-                            <h2 className="text-sm font-black uppercase tracking-[0.6em] text-primary mb-4">Global Resonance Perk Matrix</h2>
-                            <p className="text-xl text-white/70 leading-relaxed font-medium tracking-tight italic">{job.benefits}</p>
-                        </div>
                     </div>
                     <div className="pt-12">
                         <a href="/careers" className="w-full inline-block text-center py-8 bg-primary text-white brutalist-border shadow-[10px_10px_0px_#000] text-xs font-black uppercase tracking-[0.5em] hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all">

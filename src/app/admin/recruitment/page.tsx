@@ -23,7 +23,7 @@ import {
     ChevronRight,
     Archive
 } from "lucide-react";
-import { Job, JobApplication, getJobs, upsertJob, deleteJob, getJobApplications, deleteJobApplication, addActivityLog } from "@/lib/store";
+import { Job, JobApplication, getJobs, upsertJob, deleteJob, getJobApplications, deleteJobApplication, upsertJobApplication, addActivityLog } from "@/lib/store";
 
 export default function RecruitmentAdmin() {
     const [activeTab, setActiveTab] = useState<"jobs" | "applications">("jobs");
@@ -85,17 +85,27 @@ export default function RecruitmentAdmin() {
     };
 
     const handleUpdateAppStatus = async (appId: string, status: any) => {
-        // Find application to get its details
         const app = applications.find(a => a.id === appId);
         if (!app) return;
+        await upsertJobApplication({ ...app, status } as any);
+        await loadData();
+    };
 
-        // In a real app, we'd have an upsertJobApplication too. 
-        // For now, update the local state and sync properly.
-        // Wait, I should add upsertJobApplication to store.ts if I haven't.
-        // I added saveJobApplication. Let's use that.
-        
-        await upsertJob({ ...app, status } as any); // Wait, I need an upsert for Apps.
-        // Let's use saveJobApplication if it handles updates.
+    const handleViewResume = (url: string) => {
+        if (!url || url === "#" || url.length < 5) {
+            alert("Error: Resume file not found or corrupted.");
+            return;
+        }
+        // Use window.open to avoid triggering AdminLayout loader
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+        if (!newWindow) {
+            // If popup blocked, fallback to direct link but with target _blank
+            const link = document.createElement('a');
+            link.href = url;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.click();
+        }
     };
 
     return (
@@ -390,9 +400,12 @@ export default function RecruitmentAdmin() {
                                         </div>
                                     </section>
                                      <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
-                                        <a href={viewingApp.resume_url} download className="flex-1 flex items-center justify-center gap-3 md:gap-4 bg-white text-black py-4 md:py-6 rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-widest hover:scale-[1.02] transition-all">
-                                            <Download size={18} className="md:w-5 md:h-5" /> Download Resume
-                                        </a>
+                                        <button 
+                                            onClick={() => handleViewResume(viewingApp.resume_url)}
+                                            className="flex-1 flex items-center justify-center gap-3 md:gap-4 bg-white text-black py-4 md:py-6 rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-widest hover:scale-[1.02] transition-all"
+                                        >
+                                            <Download size={18} className="md:w-5 md:h-5" /> View / Download Resume
+                                        </button>
                                         <a href={`mailto:${viewingApp.candidate_email}`} className="flex items-center justify-center gap-3 md:gap-4 bg-white/5 border border-white/10 text-white px-6 md:px-10 py-4 md:py-6 rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-widest hover:bg-white/10 transition-all">
                                             <Mail size={18} className="md:w-5 md:h-5" /> Contact
                                         </a>

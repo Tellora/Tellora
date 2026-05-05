@@ -27,7 +27,7 @@ export default function Footer() {
                             <span className="text-[12px] font-black uppercase tracking-[0.5em]">Open Protocol 2026</span>
                         </div>
 
-                        <h2 className="text-[10vw] lg:text-[9rem] font-heading font-black uppercase mb-12 md:mb-16 leading-[0.85] md:leading-[0.8] tracking-tighter">
+                        <h2 className="text-5xl sm:text-7xl lg:text-[9rem] font-heading font-black uppercase mb-12 md:mb-16 leading-[0.85] md:leading-[0.8] tracking-tighter">
                             READY TO <br /> <span className="text-secondary italic">DISRUPT?</span>
                         </h2>
 

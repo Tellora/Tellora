@@ -72,7 +72,7 @@ export default function WorkShowcase() {
                     </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-12">
                     <AnimatePresence mode="popLayout">
                         {filteredProjects.map((project) => (
                             <Link
@@ -101,7 +101,7 @@ export default function WorkShowcase() {
                                         </div>
                                     </div>
 
-                                    <div className="absolute inset-0 p-8 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10">
+                                    <div className="absolute inset-0 p-4 md:p-8 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10">
                                         <div className="flex flex-col gap-2">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-[1.5px] bg-primary" />
@@ -109,7 +109,7 @@ export default function WorkShowcase() {
                                                     {project.displayCategory} • {project.label}
                                                 </span>
                                             </div>
-                                            <h3 className="text-4xl md:text-5xl font-heading font-black text-white uppercase leading-[0.9] tracking-tighter">
+                                            <h3 className="text-xl md:text-5xl font-heading font-black text-white uppercase leading-[0.9] tracking-tighter">
                                                 {project.title}
                                             </h3>
                                             <div className="flex items-center gap-4 text-white pt-4">
@@ -128,9 +128,9 @@ export default function WorkShowcase() {
 
                 <div className="mt-24 flex justify-center">
                     <Link href="/case-studies">
-                        <button className="group flex items-center gap-8 bg-black text-white brutalist-border px-16 py-8 shadow-[10px_10px_0px_#4AC0E4] hover:shadow-[15px_15px_0px_#4AC0E4] hover:-translate-y-2 transition-all">
-                            <span className="text-sm font-black uppercase tracking-widest">Explore Full Portfolio</span>
-                            <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
+                        <button className="group flex items-center gap-4 md:gap-8 bg-black text-white brutalist-border px-8 md:px-16 py-4 md:py-8 shadow-[6px_6px_0px_#4AC0E4] md:shadow-[10px_10px_0px_#4AC0E4] hover:shadow-[15px_15px_0px_#4AC0E4] hover:-translate-y-2 transition-all">
+                            <span className="text-[10px] md:text-sm font-black uppercase tracking-widest">Explore Portfolio</span>
+                            <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
                         </button>
                     </Link>
                 </div>

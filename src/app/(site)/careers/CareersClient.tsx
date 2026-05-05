@@ -223,42 +223,31 @@ export default function CareersClient() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-8 relative z-10 max-w-7xl mx-auto">
+                    <div className="grid grid-cols-2 lg:grid-cols-1 gap-4 md:gap-8 relative z-10 max-w-7xl mx-auto">
                         {jobs.map((job) => (
                             <AdvancedCard key={job.id} className="w-full">
                                 <div
-                                    className="bg-white/5 brutalist-border p-6 sm:p-10 md:p-16 hover:bg-white/[0.08] transition-all cursor-pointer flex flex-col md:flex-row gap-8 md:gap-12 items-start md:items-center justify-between group/card border-white/5"
+                                    className="bg-white/5 brutalist-border p-4 md:p-16 hover:bg-white/[0.08] transition-all cursor-pointer flex flex-col gap-4 md:gap-12 items-start md:items-center justify-between group/card border-white/5 h-full"
                                     onClick={() => setSelectedJob(job)}
                                 >
-                                    <div className="flex-1 space-y-8">
-                                        <div className="flex flex-wrap items-center gap-6">
-                                            <div className="px-6 py-2 bg-primary/10 border border-primary/20 rounded-full flex items-center gap-3">
-                                                <div className="w-1.5 h-1.5 bg-primary rounded-full animate-ping" />
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-primary">{job.department}</span>
+                                    <div className="flex-1 space-y-4 md:space-y-8">
+                                        <div className="flex flex-wrap items-center gap-2 md:gap-6">
+                                            <div className="px-3 md:px-6 py-1 md:py-2 bg-primary/10 border border-primary/20 rounded-full flex items-center gap-2">
+                                                <div className="w-1 h-1 bg-primary rounded-full animate-ping" />
+                                                <span className="text-[7px] md:text-[10px] font-black uppercase tracking-widest text-primary">{job.department}</span>
                                             </div>
-                                            <span className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-white/30 bg-white/5 px-6 py-2 rounded-full border border-white/5 italic">
-                                                <MapPin size={12} className="text-primary" /> {job.location}
-                                            </span>
-                                            <span className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-white/30 bg-white/5 px-6 py-2 rounded-full border border-white/5 italic">
-                                                <Clock size={12} className="text-primary" /> {job.type}
-                                            </span>
                                         </div>
-                                        <h3 className="text-3xl sm:text-5xl md:text-7xl font-black tracking-tighter group-hover/card:text-primary transition-colors italic uppercase leading-none">
+                                        <h3 className="text-xl md:text-7xl font-black tracking-tighter group-hover/card:text-primary transition-colors italic uppercase leading-none">
                                             {job.title}
                                         </h3>
-                                        <div className="flex items-center gap-4 text-[9px] font-black uppercase tracking-[0.5em] text-white/20 italic">
-                                            <span className="w-12 h-[1px] bg-white/10" /> ID Reference_TM-00{job.id}
+                                        <div className="flex flex-wrap gap-2 text-[7px] md:text-[10px] font-black uppercase text-white/30 italic">
+                                            <span className="flex items-center gap-1"><MapPin size={10} /> {job.location}</span>
+                                            <span className="flex items-center gap-1"><Clock size={10} /> {job.type}</span>
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-8">
-                                        <div className="hidden xl:flex flex-col items-end gap-2 text-right">
-                                            <span className="text-[10px] font-black uppercase text-white/40 tracking-widest">Mission Status</span>
-                                            <span className="text-xs font-black uppercase italic text-primary">Live Connection 🛰️</span>
-                                        </div>
-                                        <div className="w-16 h-16 md:w-20 md:h-20 bg-white brutalist-border shadow-[6px_6px_0px_#A855F7] md:shadow-[8px_8px_0px_#A855F7] group-hover/card:shadow-none group-hover/card:translate-x-2 group-hover/card:translate-y-2 transition-all flex items-center justify-center text-black flex-shrink-0">
-                                            <ArrowUpRight size={32} className="md:w-10 md:h-10 group-hover/card:rotate-45 transition-transform duration-500" />
-                                        </div>
+                                    <div className="w-10 h-10 md:w-20 md:h-20 bg-white brutalist-border shadow-[4px_4px_0px_#A855F7] md:shadow-[8px_8px_0px_#A855F7] flex items-center justify-center text-black flex-shrink-0">
+                                        <ArrowUpRight size={16} className="md:w-10 md:h-10 group-hover/card:rotate-45 transition-transform duration-500" />
                                     </div>
                                 </div>
                             </AdvancedCard>
@@ -319,7 +308,7 @@ export default function CareersClient() {
             {/* Modal */}
             <AnimatePresence>
                 {selectedJob && (
-                    <div className="fixed inset-0 z-[200] bg-black/98 backdrop-blur-[40px] selection:bg-primary overflow-y-auto">
+                    <div className="fixed inset-0 z-[200] bg-black/98 backdrop-blur-[40px] selection:bg-primary overflow-y-auto overscroll-contain">
                         <div className="flex min-h-full items-end md:items-center justify-center p-0 md:p-6">
                             <motion.div
                                 initial={{ y: "100%", opacity: 0 }}
@@ -373,12 +362,6 @@ export default function CareersClient() {
                                                         <Cpu size={18} /> Required Skillset Node
                                                     </h3>
                                                     <p className="text-lg sm:text-xl md:text-2xl text-white/70 leading-relaxed font-medium tracking-tight italic">{selectedJob.requirements}</p>
-                                                </section>
-                                                <section className="space-y-6 md:space-y-8 font-black">
-                                                    <h3 className="text-[10px] sm:text-sm font-black uppercase tracking-[0.4em] md:tracking-[0.6em] text-primary flex items-center gap-4">
-                                                        <Zap size={18} /> Global Resonance Perk Matrix
-                                                    </h3>
-                                                    <p className="text-lg sm:text-xl md:text-2xl text-white/70 leading-relaxed font-medium tracking-tight italic">{selectedJob.benefits}</p>
                                                 </section>
                                             </div>
                                         </div>

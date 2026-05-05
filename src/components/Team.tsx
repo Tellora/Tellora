@@ -163,7 +163,7 @@ export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
                                 </h3>
                                 <div className="h-[2px] flex-1 bg-black/10" />
                             </div>
-                            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-12">
+                            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-12">
                                 {members.map((member, idx) => (
                                     <TeamCard key={member.id || idx} member={member} idx={idx} />
                                 ))}
@@ -186,7 +186,7 @@ function TeamCard({ member, idx }: { member: DbTeamMember; idx: number }) {
             viewport={{ once: true }}
             transition={{ delay: idx * 0.1, duration: 0.6 }}
             whileHover={{ y: -10, rotate: "0deg", zIndex: 30 }}
-            className="group relative flex flex-col items-center cursor-pointer h-[550px] md:h-[500px]"
+            className="group relative flex flex-col items-center cursor-pointer h-[350px] md:h-[500px]"
             onClick={() => setIsFlipped(!isFlipped)}
             style={{ perspective: "1500px" }}
         >
@@ -229,12 +229,12 @@ function TeamCard({ member, idx }: { member: DbTeamMember; idx: number }) {
                     </div>
 
                     <div className="p-6 md:p-8 flex flex-col justify-center flex-1 bg-white border-t-[3px] border-black">
-                        <h3 className="text-2xl lg:text-3xl font-heading font-black uppercase tracking-tighter leading-none mb-2">
+                        <h3 className="text-lg lg:text-3xl font-heading font-black uppercase tracking-tighter leading-none mb-1">
                             {member.name}
                         </h3>
                         <div className="flex items-center gap-2">
                             <div className="h-[2px] w-6 bg-black" />
-                            <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest opacity-60">
+                            <span className="text-[8px] md:text-[11px] font-black uppercase tracking-widest opacity-60">
                                 {member.role}
                             </span>
                         </div>

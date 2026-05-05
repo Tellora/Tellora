@@ -91,93 +91,88 @@ export default function ROICalculator() {
                         <Cpu size={14} className="text-primary animate-pulse" />
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">System Analysis v5.0</span>
                     </div>
-                    <h2 className="text-[4.5rem] md:text-[10rem] font-heading font-black uppercase leading-[0.85] tracking-tighter">
+                    <h2 className="text-4xl sm:text-7xl md:text-[10rem] font-heading font-black uppercase leading-[0.85] tracking-tighter">
                         CALCULATE <br /> <span className="text-primary italic">POTENTIAL</span>
                     </h2>
                 </div>
-
                 <div className="grid lg:grid-cols-12 gap-12 md:gap-16 items-start">
                     {/* Input Module */}
-                    <div className="lg:col-span-7 space-y-10">
-                        <div className="grid md:grid-cols-2 gap-8">
-                            <div className="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] hover:border-primary/50 transition-colors group">
-                                <div className="flex items-center gap-3 mb-6 opacity-40 group-hover:opacity-100 transition-opacity">
-                                    <MousePointer2 size={16} className="text-primary" />
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-white">Monthly Traffic</label>
+                    <div className="lg:col-span-7 space-y-6 md:space-y-10">
+                        <div className="grid grid-cols-2 gap-4 md:gap-8">
+                            <div className="p-4 md:p-8 bg-white/5 border border-white/10 rounded-[1.5rem] md:rounded-[2.5rem] hover:border-primary/50 transition-colors group">
+                                <div className="flex items-center gap-2 mb-3 md:mb-6 opacity-40 group-hover:opacity-100 transition-opacity">
+                                    <MousePointer2 size={12} className="text-primary" />
+                                    <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white">Traffic</label>
                                 </div>
                                 <input 
                                     type="number" 
                                     value={traffic}
                                     onChange={(e) => { setTraffic(Number(e.target.value)); triggerScan(); }}
-                                    className="w-full bg-transparent text-4xl font-heading font-black outline-none border-b border-white/10 focus:border-primary transition-all pb-2 selection:bg-primary"
+                                    className="w-full bg-transparent text-xl md:text-4xl font-heading font-black outline-none border-b border-white/10 focus:border-primary transition-all pb-1 md:pb-2 selection:bg-primary"
                                 />
-                                <p className="text-[9px] uppercase font-black tracking-widest opacity-20 mt-4 italic">Baseline sessions/mo</p>
                             </div>
 
-                            <div className="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] hover:border-primary/50 transition-colors group">
-                                <div className="flex items-center gap-3 mb-6 opacity-40 group-hover:opacity-100 transition-opacity">
-                                    <Target size={16} className="text-primary" />
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-white">Conv. Rate (%)</label>
+                            <div className="p-4 md:p-8 bg-white/5 border border-white/10 rounded-[1.5rem] md:rounded-[2.5rem] hover:border-primary/50 transition-colors group">
+                                <div className="flex items-center gap-2 mb-3 md:mb-6 opacity-40 group-hover:opacity-100 transition-opacity">
+                                    <Target size={12} className="text-primary" />
+                                    <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white">Conv. %</label>
                                 </div>
                                 <input 
                                     type="number" 
                                     step="0.1"
                                     value={conversion}
                                     onChange={(e) => { setConversion(Number(e.target.value)); triggerScan(); }}
-                                    className="w-full bg-transparent text-4xl font-heading font-black outline-none border-b border-white/10 focus:border-primary transition-all pb-2 selection:bg-primary"
+                                    className="w-full bg-transparent text-xl md:text-4xl font-heading font-black outline-none border-b border-white/10 focus:border-primary transition-all pb-1 md:pb-2 selection:bg-primary"
                                 />
-                                <p className="text-[9px] uppercase font-black tracking-widest opacity-20 mt-4 italic">Current checkout efficiency</p>
                             </div>
 
-                            <div className="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] hover:border-primary/50 transition-colors group">
-                                <div className="flex items-center gap-3 mb-6 opacity-40 group-hover:opacity-100 transition-opacity">
-                                    <DollarSign size={16} className="text-primary" />
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-white">Avg. Order Value ($)</label>
+                            <div className="p-4 md:p-8 bg-white/5 border border-white/10 rounded-[1.5rem] md:rounded-[2.5rem] hover:border-primary/50 transition-colors group">
+                                <div className="flex items-center gap-2 mb-3 md:mb-6 opacity-40 group-hover:opacity-100 transition-opacity">
+                                    <DollarSign size={12} className="text-primary" />
+                                    <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white">Avg. $</label>
                                 </div>
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-2xl font-black opacity-20">$</span>
+                                <div className="flex items-baseline gap-1 md:gap-2">
+                                    <span className="text-lg md:text-2xl font-black opacity-20">$</span>
                                     <input 
                                         type="number" 
                                         value={aov}
                                         onChange={(e) => { setAov(Number(e.target.value)); triggerScan(); }}
-                                        className="w-full bg-transparent text-4xl font-heading font-black outline-none border-b border-white/10 focus:border-primary transition-all pb-2 selection:bg-primary"
+                                        className="w-full bg-transparent text-xl md:text-4xl font-heading font-black outline-none border-b border-white/10 focus:border-primary transition-all pb-1 md:pb-2 selection:bg-primary"
                                     />
                                 </div>
-                                <p className="text-[9px] uppercase font-black tracking-widest opacity-20 mt-4 italic">Gross revenue per sale</p>
                             </div>
 
-                            <div className="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] hover:border-primary/50 transition-colors group">
-                                <div className="flex items-center gap-3 mb-6 opacity-40 group-hover:opacity-100 transition-opacity">
-                                    <Activity size={16} className="text-primary" />
-                                    <label className="text-[10px] font-black uppercase tracking-widest text-white">Lifetime Value ($)</label>
+                            <div className="p-4 md:p-8 bg-white/5 border border-white/10 rounded-[1.5rem] md:rounded-[2.5rem] hover:border-primary/50 transition-colors group">
+                                <div className="flex items-center gap-2 mb-3 md:mb-6 opacity-40 group-hover:opacity-100 transition-opacity">
+                                    <Activity size={12} className="text-primary" />
+                                    <label className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white">LTV $</label>
                                 </div>
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-2xl font-black opacity-20">$</span>
+                                <div className="flex items-baseline gap-1 md:gap-2">
+                                    <span className="text-lg md:text-2xl font-black opacity-20">$</span>
                                     <input 
                                         type="number" 
                                         value={ltv}
                                         onChange={(e) => { setLtv(Number(e.target.value)); triggerScan(); }}
-                                        className="w-full bg-transparent text-4xl font-heading font-black outline-none border-b border-white/10 focus:border-primary transition-all pb-2 selection:bg-primary"
+                                        className="w-full bg-transparent text-xl md:text-4xl font-heading font-black outline-none border-b border-white/10 focus:border-primary transition-all pb-1 md:pb-2 selection:bg-primary"
                                     />
                                 </div>
-                                <p className="text-[9px] uppercase font-black tracking-widest opacity-20 mt-4 italic">Projected 12-month value</p>
                             </div>
                         </div>
 
-                        <div className="p-8 bg-primary/5 border border-primary/20 rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-6">
-                            <div className="flex items-center gap-6">
-                                <Shield className="text-primary w-8 h-8" />
+                        <div className="p-4 md:p-8 bg-primary/5 border border-primary/20 rounded-[2rem] md:rounded-[3rem] flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+                            <div className="flex items-center gap-3 md:gap-6">
+                                <Shield className="text-primary w-6 h-6 md:w-8 md:h-8" />
                                 <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-primary">Industry Focus</p>
-                                    <p className="text-xl font-heading font-black uppercase tracking-tight">{industry.label}</p>
+                                    <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary">Industry Focus</p>
+                                    <p className="text-sm md:text-xl font-heading font-black uppercase tracking-tight">{industry.label}</p>
                                 </div>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex flex-wrap gap-2 justify-center">
                                 {industries.map((ind, i) => (
                                     <button 
                                         key={i}
                                         onClick={() => { setIndustryIdx(i); triggerScan(); }}
-                                        className={`px-6 py-3 rounded-2xl font-black uppercase text-[9px] tracking-widest transition-all ${industryIdx === i ? 'bg-primary text-white' : 'bg-white/5 text-white/40 hover:bg-white/10'}`}
+                                        className={`px-3 md:px-6 py-2 md:py-3 rounded-xl md:rounded-2xl font-black uppercase text-[7px] md:text-[9px] tracking-widest transition-all ${industryIdx === i ? 'bg-primary text-white' : 'bg-white/5 text-white/40 hover:bg-white/10'}`}
                                     >
                                         {ind.label.split(' ')[0]}
                                     </button>
@@ -187,8 +182,8 @@ export default function ROICalculator() {
                     </div>
 
                     {/* Result Module */}
-                    <div className="lg:col-span-5 h-full">
-                        <div className="sticky top-12 p-10 md:p-16 bg-white text-black rounded-[3.5rem] md:rounded-[5rem] brutalist-border shadow-[16px_16px_0px_#A855F7] h-full flex flex-col relative overflow-hidden">
+                    <div className="lg:col-span-5">
+                        <div className="md:sticky md:top-12 p-6 md:p-16 bg-white text-black rounded-[2.5rem] md:rounded-[5rem] brutalist-border shadow-[10px_10px_0px_#A855F7] md:shadow-[16px_16px_0px_#A855F7] flex flex-col relative overflow-hidden">
                             {/* Scan Line Animation */}
                             <AnimatePresence>
                                 {isCalculating && (
@@ -215,7 +210,7 @@ export default function ROICalculator() {
 
                                 <div className="mb-auto">
                                     <p className="text-[10px] font-black uppercase tracking-[0.4em] mb-4 text-black/30">Net Annual Revenue Lift</p>
-                                    <h3 className="text-5xl md:text-8xl font-heading font-black italic tracking-tighter mb-8 leading-none">
+                                    <h3 className="text-4xl sm:text-5xl md:text-8xl font-heading font-black italic tracking-tighter mb-8 leading-none">
                                         +${(revenueLift * 12).toLocaleString()}
                                     </h3>
                                     <div className="flex items-center gap-4">
@@ -224,24 +219,24 @@ export default function ROICalculator() {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16 mb-16">
-                                    <div className="p-8 bg-black/5 rounded-[2.5rem] border border-black/5 group hover:bg-black/10 transition-all">
-                                        <p className="text-[9px] font-black uppercase text-black/40 tracking-widest mb-3 flex items-center gap-2">
-                                            <Zap size={10} className="text-primary" /> Monthly ROAS
+                                <div className="grid grid-cols-2 gap-4 md:gap-6 mt-8 md:mt-16 mb-8 md:mb-16">
+                                    <div className="p-4 md:p-8 bg-black/5 rounded-[1.5rem] md:rounded-[2.5rem] border border-black/5 group hover:bg-black/10 transition-all">
+                                        <p className="text-[7px] md:text-[9px] font-black uppercase text-black/40 tracking-widest mb-1 md:mb-3 flex items-center gap-2">
+                                            <Zap size={10} className="text-primary" /> ROAS
                                         </p>
-                                        <p className="text-3xl font-black italic">{(finalMonthlyRevenue / (currentMonthlyRevenue || 1) * industry.multiplier).toFixed(1)}x</p>
+                                        <p className="text-xl md:text-3xl font-black italic">{(finalMonthlyRevenue / (currentMonthlyRevenue || 1) * industry.multiplier).toFixed(1)}x</p>
                                     </div>
-                                    <div className="p-8 bg-black/5 rounded-[2.5rem] border border-black/5 group hover:bg-black/10 transition-all">
-                                        <p className="text-[9px] font-black uppercase text-black/40 tracking-widest mb-3 flex items-center gap-2">
-                                            <Sparkles size={10} className="text-primary" /> Scale Potential
+                                    <div className="p-4 md:p-8 bg-black/5 rounded-[1.5rem] md:rounded-[2.5rem] border border-black/5 group hover:bg-black/10 transition-all">
+                                        <p className="text-[7px] md:text-[9px] font-black uppercase text-black/40 tracking-widest mb-1 md:mb-3 flex items-center gap-2">
+                                            <Sparkles size={10} className="text-primary" /> Potential
                                         </p>
-                                        <p className="text-3xl font-black italic">High Energy</p>
+                                        <p className="text-xl md:text-3xl font-black italic">High</p>
                                     </div>
                                 </div>
 
                                 <Magnetic>
-                                    <a href="/contact" className="w-full py-8 bg-black text-white rounded-[2.5rem] text-center font-black uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-4 hover:gap-8 transition-all shadow-[12px_12px_0px_#A855F7] group">
-                                        DEPLOY ARCHITECTURE <ArrowRight size={20} className="text-primary group-hover:translate-x-4 transition-transform" />
+                                    <a href="/contact" className="w-full py-5 md:py-8 bg-black text-white rounded-[1.5rem] md:rounded-[2.5rem] text-center font-black uppercase tracking-[0.1em] md:tracking-[0.2em] text-[10px] md:text-sm flex items-center justify-center gap-2 md:gap-4 hover:gap-8 transition-all shadow-[8px_8px_0px_#A855F7] md:shadow-[12px_12px_0px_#A855F7] group">
+                                        DEPLOY <ArrowRight size={16} className="text-primary group-hover:translate-x-4 transition-transform" />
                                     </a>
                                 </Magnetic>
 

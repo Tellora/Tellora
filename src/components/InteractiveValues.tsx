@@ -47,7 +47,7 @@ export default function InteractiveValues() {
                     </h2>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 relative z-10">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-12 relative z-10">
                     {values.map((v, i) => (
                         <motion.div
                             key={i}
@@ -57,13 +57,13 @@ export default function InteractiveValues() {
                             transition={{ delay: i * 0.15, type: "spring", stiffness: 100, damping: 20 }}
                         >
                             <Magnetic>
-                                <div className="brutalist-card bg-white p-8 md:p-12 h-full flex flex-col relative overflow-hidden transition-all duration-500 hover:shadow-[16px_16px_0px_#000] hover:-translate-y-4 hover:bg-black hover:text-white cursor-crosshair group/card">
+                                <div className="brutalist-card bg-white p-4 md:p-12 h-full flex flex-col relative overflow-hidden transition-all duration-500 hover:shadow-[16px_16px_0px_#000] hover:-translate-y-4 hover:bg-black hover:text-white cursor-crosshair group/card">
                                     {/* Animated Grid Background */}
                                     <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03] group-hover/card:opacity-10 bg-[radial-gradient(#000_2px,transparent_2px)] group-hover/card:bg-[radial-gradient(#fff_2px,transparent_2px)] [background-size:20px_20px] transition-colors duration-500" />
 
                                     <div className="relative z-10 flex justify-between items-start mb-16">
                                         <div
-                                            className="w-16 h-16 md:w-20 md:h-20 brutalist-border flex items-center justify-center rotate-3 group-hover/card:-rotate-6 transition-transform duration-500"
+                                            className="w-10 h-10 md:w-20 md:h-20 brutalist-border flex items-center justify-center rotate-3 group-hover/card:-rotate-6 transition-transform duration-500"
                                             style={{ backgroundColor: v.color }}
                                         >
                                             <v.icon size={32} className="text-black" />
@@ -76,7 +76,7 @@ export default function InteractiveValues() {
 
                                     <div className="relative z-10 mt-auto">
                                         <Layers className="mb-6 opacity-0 group-hover/card:opacity-100 -translate-x-4 group-hover/card:translate-x-0 transition-all duration-500 text-accent" size={24} />
-                                        <h3 className="text-3xl md:text-4xl font-heading font-black uppercase mb-4 tracking-tighter leading-none group-hover/card:text-primary transition-colors">
+                                        <h3 className="text-lg md:text-4xl font-heading font-black uppercase mb-2 md:mb-4 tracking-tighter leading-none group-hover/card:text-primary transition-colors">
                                             {v.title}
                                         </h3>
                                         <p className="font-black text-xs md:text-sm uppercase tracking-widest leading-relaxed opacity-60 group-hover/card:opacity-90">

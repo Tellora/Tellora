@@ -106,7 +106,7 @@ export default function Services() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8 items-stretch">
                     {services.map((service, idx) => (
                         <Link
                             key={idx}
@@ -123,37 +123,39 @@ export default function Services() {
                                     rotate: "0deg",
                                     zIndex: 20
                                 }}
-                                className="p-8 md:p-10 brutalist-card h-full flex flex-col group relative cursor-pointer"
+                                className="p-4 md:p-10 brutalist-card h-full flex flex-col group relative cursor-pointer"
                                 style={{
                                     background: service.color,
                                     color: service.color === "#000000" ? "#FFF" : "#000"
                                 }}
                             >
-                                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <Sparkles size={24} style={{ color: service.accent }} />
+                                <div className="absolute top-3 md:top-4 right-3 md:right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Sparkles className="w-4 h-4 md:w-6 md:h-6" style={{ color: service.accent }} />
                                 </div>
 
                                 <div
-                                    className="w-12 h-12 md:w-16 md:h-16 brutalist-border flex items-center justify-center mb-6 md:mb-8 transition-all group-hover:scale-110"
+                                    className="w-10 h-10 md:w-16 md:h-16 brutalist-border flex items-center justify-center mb-4 md:mb-8 transition-all group-hover:scale-110"
                                     style={{ 
                                         background: service.accent, 
                                         color: (service.accent === "#FFFFFF" || service.accent === "#F3E84A") ? "#000" : "#FFF" 
                                     }}
                                 >
-                                    {service.icon}
+                                    <div className="scale-75 md:scale-100">
+                                        {service.icon}
+                                    </div>
                                 </div>
 
-                                <h3 className="text-2xl md:text-3xl font-heading font-black uppercase mb-4 tracking-tighter">
+                                <h3 className="text-sm md:text-3xl font-heading font-black uppercase mb-1 md:mb-4 tracking-tighter leading-tight">
                                     {service.title}
                                 </h3>
-                                <p className="font-black text-xs md:text-sm uppercase leading-relaxed mb-auto opacity-80">
+                                <p className="font-black text-[9px] md:text-sm uppercase leading-tight md:leading-relaxed mb-4 md:mb-auto opacity-80 line-clamp-2 md:line-clamp-none">
                                     {service.description}
                                 </p>
 
-                                <div className="mt-8 md:mt-10 pt-6 md:pt-8 border-t-[2px] border-current flex items-center justify-between">
-                                    <span className="text-[10px] font-black uppercase tracking-widest group-hover:text-primary transition-colors">Launch Project</span>
-                                    <div className="w-8 h-8 rounded-full brutalist-border flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
-                                        <ArrowRight size={14} />
+                                <div className="mt-auto pt-3 md:pt-8 border-t-[2px] border-current flex items-center justify-between">
+                                    <span className="text-[7px] md:text-[8px] font-black uppercase tracking-widest group-hover:text-primary transition-colors">Launch</span>
+                                    <div className="w-5 h-5 md:w-8 md:h-8 rounded-full brutalist-border flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+                                        <ArrowRight className="w-2.5 h-2.5 md:w-3 md:h-3" />
                                     </div>
                                 </div>
                             </motion.div>

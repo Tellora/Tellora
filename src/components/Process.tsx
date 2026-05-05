@@ -80,7 +80,7 @@ export default function Process() {
                     </motion.div>
                 </div>
 
-                <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12">
+                <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-12 items-stretch">
                     {/* Visual Connector - Decorative Dash updated to animated line */}
                     <ScrollLine className="hidden lg:block absolute top-[45%] left-0 w-full z-0 pointer-events-none" />
 
@@ -92,35 +92,37 @@ export default function Process() {
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.1 }}
                             whileHover={{ y: -10, rotate: "0deg", zIndex: 20 }}
-                            className="group relative flex flex-col items-center"
+                            className="group relative flex flex-col h-full"
                         >
                             <div
-                                className="w-full p-6 md:p-10 brutalist-card h-full flex flex-col items-center text-center group-hover:shadow-[12px_12px_0px_#000] transition-all"
+                                className="w-full p-4 md:p-10 brutalist-card h-full flex flex-col items-center text-center group-hover:shadow-[12px_12px_0px_#000] transition-all relative"
                                 style={{ background: step.color }}
                             >
                                 {/* Step Badge */}
-                                <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white brutalist-border px-5 py-2 rotate-6 z-20 shadow-[4px_4px_0px_#FFF]">
-                                    <span className="text-xl font-black font-heading italic">{step.num}</span>
+                                <div className="absolute -top-3 md:-top-4 left-1/2 -translate-x-1/2 bg-black text-white brutalist-border px-2 md:px-3 py-0.5 md:py-1 rotate-6 z-20 shadow-[2px_2px_0px_#FFF]">
+                                    <span className="text-[10px] md:text-sm font-black font-heading italic">{step.num}</span>
                                 </div>
 
-                                <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-white brutalist-border flex items-center justify-center mb-6 md:mb-10 mt-4 group-hover:bg-black group-hover:text-white transition-all transform group-hover:scale-110">
-                                    {step.icon}
+                                <div className="w-12 h-12 md:w-24 md:h-24 rounded-full bg-white brutalist-border flex items-center justify-center mb-4 md:mb-10 mt-2 md:mt-4 group-hover:bg-black group-hover:text-white transition-all transform group-hover:scale-110">
+                                    <div className="scale-75 md:scale-100">
+                                        {step.icon}
+                                    </div>
                                 </div>
 
-                                <h3 className="text-3xl font-heading font-black uppercase mb-4 tracking-tighter">
+                                <h3 className="text-sm md:text-3xl font-heading font-black uppercase mb-1 md:mb-4 tracking-tighter leading-tight">
                                     <DecodeText text={step.title} />
                                 </h3>
-                                <p className="font-black text-xs uppercase leading-relaxed mb-8 opacity-80">
+                                <p className="font-black text-[9px] md:text-xs uppercase leading-tight md:leading-relaxed mb-4 md:mb-8 opacity-80 line-clamp-3 md:line-clamp-none">
                                     {step.description}
                                 </p>
 
                                 <div className="mt-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <Sparkles className="text-white fill-current" />
+                                    <Sparkles size={16} className="text-white fill-current" />
                                 </div>
                             </div>
 
                             {/* Offset Shadow */}
-                            <div className="absolute -bottom-3 -right-3 w-full h-full bg-black -z-10 rounded-2xl group-hover:translate-x-2 group-hover:translate-y-2 transition-transform opacity-30 group-hover:opacity-100" />
+                            <div className="absolute -bottom-2 -right-2 md:-bottom-3 md:-right-3 w-full h-full bg-black -z-10 rounded-2xl group-hover:translate-x-2 group-hover:translate-y-2 transition-transform opacity-30 group-hover:opacity-100" />
                         </motion.div>
                     ))}
                 </div>

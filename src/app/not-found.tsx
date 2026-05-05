@@ -22,7 +22,7 @@ export default function NotFound() {
                 {/* 404 Glitch Text */}
                 <div className="relative mb-8 group">
                     <motion.h1
-                        className="text-[12rem] md:text-[20rem] font-heading font-black tracking-tighter leading-none text-black select-none brutalist-text-shadow origin-center"
+                        className="text-8xl sm:text-[12rem] md:text-[20rem] font-heading font-black tracking-tighter leading-none text-black select-none brutalist-text-shadow origin-center"
                         animate={{ x: [-2, 2, -2, 2, 0], y: [1, -1, 1, -1, 0] }}
                         transition={{ duration: 0.5, repeat: Infinity, repeatType: "mirror", repeatDelay: 3 }}
                     >

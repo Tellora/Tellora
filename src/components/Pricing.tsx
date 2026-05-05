@@ -87,7 +87,7 @@ export default function Pricing() {
                     </motion.div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 md:gap-16 items-start">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-16 items-stretch">
                     {plans.map((plan, idx) => (
                         <motion.div
                             key={idx}
@@ -96,65 +96,65 @@ export default function Pricing() {
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.15, type: "spring" }}
                             whileHover={{ y: -20, rotate: 0, zIndex: 100, scale: 1.02 }}
-                            className={`group relative flex flex-col ${plan.featured ? "z-10" : "z-0"}`}
+                            className={`group relative flex flex-col h-full ${plan.featured ? "z-10" : "z-0"} ${idx === 2 ? 'col-span-2 lg:col-span-1' : ''}`}
                         >
                             <div
-                                className={`w-full p-8 md:p-16 brutalist-card h-full flex flex-col md:group-hover:shadow-[20px_20px_0px_#000] transition-all relative overflow-hidden ${plan.featured ? 'scale-105 border-[4px] md:border-[6px]' : ''}`}
+                                className={`w-full p-4 md:p-16 brutalist-card h-full flex flex-col md:group-hover:shadow-[20px_20px_0px_#000] transition-all relative overflow-hidden ${plan.featured ? 'scale-105 border-[4px] md:border-[6px]' : ''}`}
                                 style={{ background: plan.color }}
                             >
                                 {/* Personalised 'System Log' Badge */}
-                                <div className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center gap-2 opacity-30 group-hover:opacity-100 transition-opacity">
-                                    <div className="w-2 h-2 bg-black rounded-full animate-pulse" />
+                                <div className="absolute top-4 left-4 md:top-8 md:left-8 flex items-center gap-2 opacity-30 group-hover:opacity-100 transition-opacity">
+                                    <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
                                     <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.5em]">{plan.log}</span>
                                 </div>
 
                                 {plan.featured && (
-                                    <div className="absolute top-4 md:-top-10 -right-4 md:-right-6 bg-accent text-black px-4 md:px-8 py-3 md:py-5 text-[14px] md:text-[18px] font-black uppercase tracking-tighter rotate-12 shadow-[8px_8px_0px_#000] md:shadow-[12px_12px_0px_#000] border-[3px] md:border-4 border-black sticker-pulse z-50 selection:bg-black selection:text-white">
+                                    <div className="absolute top-3 md:-top-10 -right-3 md:-right-6 bg-accent text-black px-3 md:px-8 py-2 md:py-5 text-[10px] md:text-[18px] font-black uppercase tracking-tighter rotate-12 shadow-[4px_4px_0px_#000] md:shadow-[12px_12px_0px_#000] border-[2px] md:border-4 border-black sticker-pulse z-50 selection:bg-black selection:text-white">
                                         DOMINANT 🔥
                                     </div>
                                 )}
 
-                                <div className="mt-12 md:mt-12">
-                                    <h3 className="text-4xl md:text-5xl font-heading font-black uppercase mb-4 md:mb-6 tracking-tighter">
+                                <div className="mt-8 md:mt-12">
+                                    <h3 className="text-xl md:text-5xl font-heading font-black uppercase mb-2 md:mb-6 tracking-tighter">
                                         <DecodeText text={plan.name} />
                                     </h3>
 
-                                    <div className="flex items-baseline gap-2 md:gap-4 mb-8 md:mb-10 bg-black/5 p-6 md:p-8 brutalist-border rounded-2xl relative">
+                                    <div className="flex items-baseline gap-2 md:gap-4 mb-6 md:mb-10 bg-black/5 p-4 md:p-8 brutalist-border rounded-2xl relative">
                                         <div className="absolute inset-0 bg-black/5 halftone-overlay opacity-0 group-hover:opacity-100 transition-opacity z-0" />
-                                        <span className="text-6xl md:text-8xl font-heading font-black tracking-tighter italic z-10 relative">
+                                        <span className="text-3xl md:text-8xl font-heading font-black tracking-tighter italic z-10 relative">
                                             {plan.price}
                                         </span>
                                         {plan.price !== "Scale" && (
-                                            <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest opacity-40 z-10 relative">/mo_intel</span>
+                                            <span className="text-[8px] md:text-[12px] font-black uppercase tracking-widest opacity-40 z-10 relative">/mo_intel</span>
                                         )}
                                     </div>
                                 </div>
 
-                                <p className="font-black text-xs md:text-sm uppercase leading-relaxed mb-8 md:mb-12 opacity-80 min-h-[4rem]">
+                                <p className="font-black text-[10px] md:text-sm uppercase leading-tight md:leading-relaxed mb-6 md:mb-12 opacity-80 min-h-[3rem] md:min-h-[4rem]">
                                     {plan.description}
                                 </p>
 
-                                <ul className="space-y-4 md:space-y-6 mb-12 md:mb-16">
+                                <ul className="space-y-3 md:space-y-6 mb-8 md:mb-16">
                                     {plan.features.map((f, i) => (
-                                        <li key={i} className="flex items-center gap-4 md:gap-6 text-[11px] md:text-[13px] font-black uppercase tracking-widest group-hover:translate-x-2 md:group-hover:translate-x-4 transition-transform">
-                                            <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-black text-white flex items-center justify-center brutalist-border scale-75 shrink-0">
-                                                <ShieldCheck className="w-3 h-3 md:w-4 md:h-4" />
+                                        <li key={i} className="flex items-center gap-3 md:gap-6 text-[9px] md:text-[13px] font-black uppercase tracking-widest group-hover:translate-x-2 md:group-hover:translate-x-4 transition-transform">
+                                            <div className="w-5 h-5 md:w-8 md:h-8 rounded-full bg-black text-white flex items-center justify-center brutalist-border scale-75 shrink-0">
+                                                <ShieldCheck className="w-2.5 h-2.5 md:w-4 md:h-4" />
                                             </div>
-                                            {f}
+                                            <span className="line-clamp-1">{f}</span>
                                         </li>
                                     ))}
                                 </ul>
 
                                 <a
                                     href="/contact"
-                                    className={`mt-auto w-full py-6 md:py-8 brutalist-border text-center font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-xs md:text-sm transition-all hover:translate-y-[-4px] md:hover:translate-y-[-8px] hover:shadow-[6px_6px_0px_#000] md:hover:shadow-[10px_10px_0px_#000] active:translate-y-1 active:shadow-none ${plan.featured ? 'bg-black text-white' : 'bg-white text-black'
+                                    className={`mt-auto w-full py-3 md:py-8 brutalist-border text-center font-black uppercase tracking-[0.1em] md:tracking-[0.4em] text-[8px] md:text-sm transition-all hover:translate-y-[-4px] md:hover:translate-y-[-8px] hover:shadow-[6px_6px_0px_#000] md:hover:shadow-[10px_10px_0px_#000] active:translate-y-1 active:shadow-none ${plan.featured ? 'bg-black text-white' : 'bg-white text-black'
                                         }`}
                                 >
                                     DEPLOY LOGIC
                                 </a>
 
                                 <div className="absolute -bottom-10 -right-10 opacity-[0.05] pointer-events-none group-hover:opacity-20 transition-opacity rotate-12 group-hover:scale-150 duration-700 hidden md:block">
-                                    <Sparkles size={180} />
+                                    <Sparkles className="w-32 h-32 md:w-[180px] md:h-[180px]" />
                                 </div>
                             </div>
 

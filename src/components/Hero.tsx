@@ -180,22 +180,22 @@ export default function Hero() {
                     </motion.div>
 
                     {/* Stats Grid - Restored with Tighter Layout */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 w-full max-w-6xl relative z-20">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-12 w-full max-w-6xl relative z-20 items-stretch">
                         {stats.slice(0, 3).map((stat, i) => (
-                            <TiltCard key={i} className="h-full">
+                            <TiltCard key={i} className={`h-full ${i === 2 ? 'col-span-2 md:col-span-1' : ''}`}>
                                 <motion.div
                                     initial={{ opacity: 0, y: 40 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: 0.4 + i * 0.1, duration: 0.6 }}
-                                    className="p-8 md:p-12 bg-white brutalist-border shadow-[8px_8px_0px_#000] md:shadow-[12px_12px_0px_#000] relative overflow-hidden group/stat cursor-pointer h-full"
+                                    className="p-4 md:p-12 bg-white brutalist-border shadow-[4px_4px_0px_#000] md:shadow-[12px_12px_0px_#000] relative overflow-hidden group/stat cursor-pointer h-full"
                                 >
                                     <div className="absolute inset-0 bg-transparent halftone-overlay opacity-0 group-hover/stat:opacity-5 transition-opacity" />
-                                    <div className="relative z-10 flex flex-col items-center">
-                                        <h3 className="text-[4rem] font-heading font-black mb-2 transition-transform duration-500 text-center" style={{ color: stat.color }}>
+                                    <div className="relative z-10 flex flex-col items-center justify-center">
+                                        <h3 className="text-3xl md:text-[4rem] font-heading font-black mb-1 md:mb-2 transition-transform duration-500 text-center" style={{ color: stat.color }}>
                                             {stat.value}
                                         </h3>
-                                        <p className="font-black text-[10px] md:text-xs uppercase tracking-[0.3em] md:tracking-[0.5em] opacity-40 group-hover/stat:opacity-80 transition-all text-center">{stat.label}</p>
+                                        <p className="font-black text-[7px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.5em] opacity-40 group-hover/stat:opacity-80 transition-all text-center leading-tight">{stat.label}</p>
                                     </div>
                                 </motion.div>
                             </TiltCard>

@@ -34,7 +34,7 @@ export function PageHeader({ title, subtitle, breadcrumb }: { title: string, sub
                         <motion.h1
                             initial={{ opacity: 0, y: 40 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-6xl md:text-[10rem] font-heading font-black text-black leading-none tracking-tighter uppercase text-center"
+                            className="text-5xl sm:text-7xl md:text-[10rem] font-heading font-black text-black leading-none tracking-tighter uppercase text-center"
                         >
                             {title}
                         </motion.h1>
