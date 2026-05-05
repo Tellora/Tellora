@@ -41,9 +41,8 @@ export default function Footer() {
 
                             <div className="flex gap-6">
                                 {[
-                                    { icon: Instagram, href: "https://www.instagram.com/tellora.media/" },
-                                    { icon: Linkedin, href: "https://www.linkedin.com/company/telloramedia" },
-                                    { icon: Twitter, href: "https://twitter.com/telloramedia" }
+                                    { icon: Instagram, href: "https://www.instagram.com/telloramedia/" },
+                                    { icon: Linkedin, href: "https://www.linkedin.com/company/tellora-media" },
                                 ].map((social, i) => (
                                     <a
                                         key={i}

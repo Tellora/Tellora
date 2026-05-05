@@ -34,29 +34,7 @@ import { AdvancedCard } from "@/components/animations/AdvancedCard";
 import { FloatingElement } from "@/components/animations/ScrollChoreography";
 import { ParallaxLine } from "@/components/animations/ParallaxLine";
 
-const Pillars = [
-    {
-        title: "Radical Innovation",
-        desc: "We don't follow trends; we engineer the futures that others only dream of. Our lab is where physics meets fantasy.",
-        color: "#4ac0e4",
-        icon: Rocket,
-        stat: "100+ PROJECTS"
-    },
-    {
-        title: "Human Synergy",
-        desc: "A collective of global elite talent working in perfect, flat-hierarchy resonance. No ego, just execution.",
-        color: "#A855F7",
-        icon: Users,
-        stat: "GLOBAL HUB"
-    },
-    {
-        title: "Data Supremacy",
-        desc: "Every creative decision is back-tested against hyper-accurate market datasets. Reality is calculated.",
-        color: "#2e7dbf",
-        icon: Zap,
-        stat: "99.9% ACCURACY"
-    }
-];
+
 
 export default function CareersClient() {
     const [jobs, setJobs] = useState<any[]>([]);
@@ -81,6 +59,17 @@ export default function CareersClient() {
         };
         fetchJobs();
     }, []);
+
+    useEffect(() => {
+        if (selectedJob) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [selectedJob]);
 
     const handleApply = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -155,9 +144,9 @@ export default function CareersClient() {
                 <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-accent/20 rounded-full blur-[120px] animate-pulse delay-700" />
             </div>
 
-            <div className="relative z-10 pt-64 pb-32 text-white">
+            <div className="relative z-10 pt-32 md:pt-64 pb-20 md:pb-32 text-white">
                 {/* Hero section */}
-                <section className="container mx-auto px-6 mb-48">
+                <section className="container mx-auto px-6 mb-24 md:mb-48">
                     <div className="max-w-7xl mx-auto">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, x: -20 }}
@@ -169,14 +158,14 @@ export default function CareersClient() {
                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                         </motion.div>
 
-                        <h1 className="text-[10vw] md:text-[8rem] xl:text-[9rem] font-black tracking-tighter uppercase leading-[0.9] mb-16 relative">
-                            <span className="block opacity-40 outline-text mb-4">JOIN</span>
+                        <h1 className="text-[12vw] sm:text-[10vw] md:text-[8rem] xl:text-[9rem] font-black tracking-tighter uppercase leading-[0.9] mb-12 md:mb-16 relative">
+                            <span className="block text-white/40 mb-4">JOIN</span>
                             <span className="block italic group mb-4">
                                 <ScrambleText text="THE" className="group-hover:text-primary transition-all inline-block" />
                             </span>
                             <span className="block flex items-center gap-8 flex-wrap">
                                 <span className="text-primary italic">RESISTANCE</span>
-                                <div className="hidden md:block h-[4px] flex-1 min-w-[200px] bg-white/5 relative overflow-hidden">
+                                <div className="hidden md:block h-[4px] max-w-[400px] flex-1 bg-white/5 relative overflow-hidden">
                                     <motion.div
                                         initial={{ width: 0 }}
                                         whileInView={{ width: "100%" }}
@@ -193,7 +182,7 @@ export default function CareersClient() {
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.4 }}
-                                className="text-2xl md:text-3xl text-white font-medium leading-[1.1] tracking-tight max-w-xl italic"
+                                className="text-xl sm:text-2xl md:text-3xl text-white font-medium leading-[1.2] md:leading-[1.1] tracking-tight max-w-xl italic"
                             >
                                 Tellora Media is an elite deployment layer for high-impact brands. We're looking for architects of influence to join our global resonance hive.
                             </motion.p>
@@ -208,69 +197,37 @@ export default function CareersClient() {
                     </div>
                 </section>
 
-                {/* Culture Section */}
-                <section className="container mx-auto px-6 mb-60">
-                    <div className="flex items-center gap-4 mb-20 overflow-hidden">
-                        <h2 className="text-sm font-black uppercase tracking-[0.5em] text-primary whitespace-nowrap italic">Core Resonance Pillars</h2>
-                        <div className="h-[1px] w-full bg-white/10" />
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                        {Pillars.map((pillar, i) => (
-                            <TiltCard key={pillar.title} className="h-full">
-                                <div className="bg-white/5 brutalist-border p-12 h-full relative group overflow-hidden hover:bg-white/[0.08] transition-colors border-white/5">
-                                    <div className="absolute top-0 right-0 w-48 h-48 bg-primary/20 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2 group-hover:bg-primary/40 transition-all opacity-0 group-hover:opacity-100" />
-
-                                    <div className="w-20 h-20 bg-black rounded-3xl flex items-center justify-center text-white mb-10 group-hover:scale-110 group-hover:rotate-12 transition-transform shadow-[6px_6px_0px_#A855F7] border border-white/10">
-                                        <pillar.icon size={36} className="text-primary" />
-                                    </div>
-
-                                    <div className="space-y-6 relative z-10">
-                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">{pillar.stat}</span>
-                                        <h3 className="text-4xl font-black uppercase tracking-tighter italic leading-none">{pillar.title}</h3>
-                                        <p className="text-white/50 font-medium leading-relaxed md:text-lg">
-                                            {pillar.desc}
-                                        </p>
-                                    </div>
-
-                                    <div className="mt-12 flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em] text-primary group-hover:translate-x-4 transition-transform">
-                                        Core Strategy <ArrowRight size={14} />
-                                    </div>
-                                </div>
-                            </TiltCard>
-                        ))}
-                    </div>
-                </section>
 
                 {/* Job Board */}
-                <section className="container mx-auto px-6 mb-60 relative">
+                <section className="container mx-auto px-6 mb-32 md:mb-60 relative">
                     <div className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/2 pointer-events-none opacity-5">
                         <span className="text-[30vw] font-black uppercase vertical-text">DEPLOYS</span>
                     </div>
 
-                    <div className="flex flex-col md:flex-row justify-between items-end gap-12 mb-24 relative z-10">
+                    <div className="flex flex-col md:flex-row justify-between items-end gap-12 mb-24 relative z-10 max-w-7xl mx-auto">
                         <div className="max-w-2xl">
                             <motion.div
                                 initial={{ width: 0 }}
                                 whileInView={{ width: "100%" }}
                                 className="h-[2px] bg-primary mb-12 origin-left"
                             />
-                            <h2 className="text-7xl md:text-9xl font-black tracking-tighter uppercase mb-6 italic">Active <span className="text-primary">Missions</span></h2>
-                            <p className="text-xl text-white/40 font-medium max-w-lg leading-relaxed">Our grid is expanding. Join the elite operation and scale your potential at 10x velocity.</p>
+                            <h2 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter uppercase mb-6 italic">Active <span className="text-primary">Missions</span></h2>
+                            <p className="text-lg md:text-xl text-white/40 font-medium max-w-lg leading-relaxed">Our grid is expanding. Join the elite operation and scale your potential at 10x velocity.</p>
                         </div>
                         <div className="flex flex-col items-end gap-4">
-                            <div className="flex items-center gap-4 bg-primary text-white px-8 py-5 brutalist-border shadow-[8px_8px_0px_#000] rotate-2 hover:rotate-0 transition-all cursor-crosshair">
+                            <div className="flex items-center gap-4 bg-primary text-black px-8 py-5 brutalist-border shadow-[8px_8px_0px_#000] rotate-2 hover:rotate-0 transition-all cursor-crosshair">
                                 <Activity size={20} className="animate-pulse" />
                                 <span className="text-xs font-black uppercase tracking-widest">Global Status: Optimal</span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-8 relative z-10">
+                    <div className="grid grid-cols-1 gap-8 relative z-10 max-w-7xl mx-auto">
                         {jobs.map((job) => (
                             <AdvancedCard key={job.id} className="w-full">
                                 <div
-                                    className="bg-white/5 brutalist-border p-10 md:p-16 hover:bg-white/[0.08] transition-all cursor-pointer flex flex-col md:flex-row gap-12 items-start md:items-center justify-between group/card border-white/5"
+                                    className="bg-white/5 brutalist-border p-6 sm:p-10 md:p-16 hover:bg-white/[0.08] transition-all cursor-pointer flex flex-col md:flex-row gap-8 md:gap-12 items-start md:items-center justify-between group/card border-white/5"
                                     onClick={() => setSelectedJob(job)}
                                 >
                                     <div className="flex-1 space-y-8">
@@ -286,7 +243,7 @@ export default function CareersClient() {
                                                 <Clock size={12} className="text-primary" /> {job.type}
                                             </span>
                                         </div>
-                                        <h3 className="text-5xl md:text-7xl font-black tracking-tighter group-hover/card:text-primary transition-colors italic uppercase leading-none">
+                                        <h3 className="text-3xl sm:text-5xl md:text-7xl font-black tracking-tighter group-hover/card:text-primary transition-colors italic uppercase leading-none">
                                             {job.title}
                                         </h3>
                                         <div className="flex items-center gap-4 text-[9px] font-black uppercase tracking-[0.5em] text-white/20 italic">
@@ -299,8 +256,8 @@ export default function CareersClient() {
                                             <span className="text-[10px] font-black uppercase text-white/40 tracking-widest">Mission Status</span>
                                             <span className="text-xs font-black uppercase italic text-primary">Live Connection 🛰️</span>
                                         </div>
-                                        <div className="w-20 h-20 bg-white brutalist-border shadow-[8px_8px_0px_#A855F7] group-hover/card:shadow-none group-hover/card:translate-x-2 group-hover/card:translate-y-2 transition-all flex items-center justify-center text-black">
-                                            <ArrowUpRight size={40} className="group-hover/card:rotate-45 transition-transform duration-500" />
+                                        <div className="w-16 h-16 md:w-20 md:h-20 bg-white brutalist-border shadow-[6px_6px_0px_#A855F7] md:shadow-[8px_8px_0px_#A855F7] group-hover/card:shadow-none group-hover/card:translate-x-2 group-hover/card:translate-y-2 transition-all flex items-center justify-center text-black flex-shrink-0">
+                                            <ArrowUpRight size={32} className="md:w-10 md:h-10 group-hover/card:rotate-45 transition-transform duration-500" />
                                         </div>
                                     </div>
                                 </div>
@@ -310,8 +267,8 @@ export default function CareersClient() {
                 </section>
 
                 {/* Culture Footer */}
-                <section className="container mx-auto px-6 overflow-hidden">
-                    <div className="relative p-12 md:p-32 brutalist-border bg-black group overflow-hidden border-white/10">
+                <section className="container mx-auto px-6 overflow-hidden mb-20 md:mb-40 max-w-7xl">
+                    <div className="relative p-8 sm:p-16 md:p-32 brutalist-border bg-black group overflow-hidden border-white/10">
                         {/* Dynamic background kinetic layer */}
                         <div className="absolute inset-0 opacity-10 pointer-events-none">
                             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
@@ -322,31 +279,31 @@ export default function CareersClient() {
                             />
                         </div>
 
-                        <div className="relative z-10 grid md:grid-cols-2 gap-20 items-center">
-                            <div className="space-y-12">
-                                <h2 className="text-6xl md:text-9xl font-black tracking-tighter text-white uppercase leading-[0.8] italic">
+                        <div className="relative z-10 grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+                            <div className="space-y-8 md:space-y-12">
+                                <h2 className="text-4xl sm:text-6xl md:text-9xl font-black tracking-tighter text-white uppercase leading-[0.8] italic">
                                     Send us <br />
                                     <span className="text-primary outline-text !text-white">The Vector.</span>
                                 </h2>
-                                <p className="text-xl text-white/60 font-medium leading-relaxed max-w-md">
+                                <p className="text-lg md:text-xl text-white/60 font-medium leading-relaxed max-w-md">
                                     Elite talent doesn't always wait for an invite. If you operate at a higher frequency, transmit your dossier now.
                                 </p>
-                                <div className="flex flex-wrap gap-8 pt-8">
+                                <div className="flex flex-wrap gap-6 pt-4">
                                     <Magnetic>
-                                        <button className="px-12 py-8 bg-primary text-white brutalist-border shadow-[10px_10px_0px_#fff] text-[11px] font-black uppercase tracking-[0.4em] hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all flex items-center gap-4 group">
+                                        <button className="px-8 md:px-12 py-6 md:py-8 bg-primary text-white brutalist-border shadow-[6px_6px_0px_#fff] md:shadow-[10px_10px_0px_#fff] text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all flex items-center gap-4 group">
                                             Open Application Node <RotateCw size={18} className="group-hover:rotate-180 transition-transform duration-700" />
                                         </button>
                                     </Magnetic>
                                 </div>
                             </div>
-                            <div className="flex justify-center md:justify-end relative">
+                            <div className="flex justify-center md:justify-end relative mt-12 md:mt-0">
                                 <FloatingElement speed={0.08} top="0" left="0">
-                                    <div className="w-64 h-64 md:w-96 md:h-96 border-[4px] border-primary/20 rounded-full flex items-center justify-center relative backdrop-blur-3xl group-hover:border-primary transition-colors">
+                                    <div className="w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96 border-[4px] border-primary/20 rounded-full flex items-center justify-center relative backdrop-blur-3xl group-hover:border-primary transition-colors">
                                         <div className="w-full h-full absolute inset-0 rounded-full animate-spin-slow border-t-2 border-primary" style={{ animationDuration: '10s' }} />
-                                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center animate-bounce shadow-[0_0_40px_rgba(255,255,255,0.5)]">
-                                            <Star size={24} className="text-black fill-current" />
+                                        <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center animate-bounce shadow-[0_0_40px_rgba(255,255,255,0.5)]">
+                                            <Star size={20} className="md:w-6 md:h-6 text-black fill-current" />
                                         </div>
-                                        <div className="absolute -bottom-6 bg-white text-black px-8 py-3 brutalist-border text-[10px] font-black uppercase tracking-[0.3em] -rotate-3">
+                                        <div className="absolute -bottom-4 md:-bottom-6 bg-white text-black px-6 md:px-8 py-2 md:py-3 brutalist-border text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] -rotate-3">
                                             Deploy Intel
                                         </div>
                                     </div>
@@ -362,18 +319,19 @@ export default function CareersClient() {
             {/* Modal */}
             <AnimatePresence>
                 {selectedJob && (
-                    <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center p-0 md:p-6 bg-black/98 backdrop-blur-[40px] selection:bg-primary">
-                        <motion.div
-                            initial={{ y: "100%", opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: "100%", opacity: 0 }}
-                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="w-full max-w-6xl bg-[#080B12] text-white md:brutalist-border border-white/10 md:rounded-[4rem] p-6 md:p-24 relative min-h-[100dvh] md:min-h-0 md:max-h-[90vh] overflow-y-auto overscroll-contain"
-                            data-lenis-prevent="true"
-                        >
+                    <div className="fixed inset-0 z-[200] bg-black/98 backdrop-blur-[40px] selection:bg-primary overflow-y-auto">
+                        <div className="flex min-h-full items-end md:items-center justify-center p-0 md:p-6">
+                            <motion.div
+                                initial={{ y: "100%", opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: "100%", opacity: 0 }}
+                                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                                className="w-full max-w-6xl bg-[#080B12] text-white md:brutalist-border border-white/10 md:rounded-[4rem] p-8 md:p-24 relative min-h-screen md:min-h-0 md:max-h-[95vh] overflow-y-auto"
+                                data-lenis-prevent="true"
+                            >
                             <button
                                 onClick={() => { setSelectedJob(null); setIsApplying(false); }}
-                                className="sticky top-0 float-right p-4 md:p-6 bg-white text-black rounded-full shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:scale-110 active:scale-95 transition-all z-[210] group"
+                                className="sticky top-0 float-right p-4 md:p-6 bg-white text-black rounded-full shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:scale-110 active:scale-95 transition-all z-[210] group -mt-4 -mr-4 md:-mt-12 md:-mr-12"
                             >
                                 <X size={24} className="group-hover:rotate-90 transition-transform" />
                             </button>
@@ -387,63 +345,63 @@ export default function CareersClient() {
                                                     <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary italic">Initialization Node_TM: {selectedJob.id}</span>
                                                     <div className="h-[1px] flex-1 bg-white/10" />
                                                 </div>
-                                                <h2 className="text-4xl md:text-8xl font-black tracking-tighter uppercase italic leading-[0.9] mb-8 text-white break-words">
+                                                <h2 className="text-3xl sm:text-5xl md:text-7xl xl:text-8xl font-black tracking-tighter uppercase italic leading-[0.9] mb-8 text-white break-words">
                                                     {selectedJob.title}
                                                 </h2>
-                                                <div className="flex flex-wrap gap-4 md:gap-12">
-                                                    <div className="flex items-center gap-4 bg-white/5 px-8 py-4 rounded-full border border-white/5 text-[11px] font-black uppercase tracking-widest text-white/60">
-                                                        <MapPin size={18} className="text-primary" /> {selectedJob.location}
+                                                <div className="flex flex-wrap gap-3 sm:gap-6 md:gap-12">
+                                                    <div className="flex items-center gap-2 sm:gap-4 bg-white/5 px-4 sm:px-8 py-3 sm:py-4 rounded-full border border-white/5 text-[9px] sm:text-[11px] font-black uppercase tracking-widest text-white/60">
+                                                        <MapPin size={14} className="text-primary" /> {selectedJob.location}
                                                     </div>
-                                                    <div className="flex items-center gap-4 bg-white/5 px-8 py-4 rounded-full border border-white/5 text-[11px] font-black uppercase tracking-widest text-white/60">
-                                                        <Clock size={18} className="text-primary" /> {selectedJob.type}
+                                                    <div className="flex items-center gap-2 sm:gap-4 bg-white/5 px-4 sm:px-8 py-3 sm:py-4 rounded-full border border-white/5 text-[9px] sm:text-[11px] font-black uppercase tracking-widest text-white/60">
+                                                        <Clock size={14} className="text-primary" /> {selectedJob.type}
                                                     </div>
-                                                    <div className="flex items-center gap-4 bg-white/5 px-8 py-4 rounded-full border border-white/5 text-[11px] font-black uppercase tracking-widest text-white/60">
-                                                        <Briefcase size={18} className="text-primary" /> {selectedJob.department}
+                                                    <div className="flex items-center gap-2 sm:gap-4 bg-white/5 px-4 sm:px-8 py-3 sm:py-4 rounded-full border border-white/5 text-[9px] sm:text-[11px] font-black uppercase tracking-widest text-white/60">
+                                                        <Briefcase size={14} className="text-primary" /> {selectedJob.department}
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div className="space-y-20 pt-12 border-t border-white/10">
-                                                <section className="space-y-8">
-                                                    <h3 className="text-sm font-black uppercase tracking-[0.6em] text-primary flex items-center gap-4">
-                                                        <Terminal size={20} /> The Mission Context
+                                            <div className="space-y-12 md:space-y-20 pt-12 border-t border-white/10">
+                                                <section className="space-y-6 md:space-y-8">
+                                                    <h3 className="text-[10px] sm:text-sm font-black uppercase tracking-[0.4em] md:tracking-[0.6em] text-primary flex items-center gap-4">
+                                                        <Terminal size={18} /> The Mission Context
                                                     </h3>
-                                                    <p className="text-2xl text-white/70 leading-relaxed font-medium tracking-tight italic">{selectedJob.description}</p>
+                                                    <p className="text-lg sm:text-xl md:text-2xl text-white/70 leading-relaxed font-medium tracking-tight italic">{selectedJob.description}</p>
                                                 </section>
-                                                <section className="space-y-8">
-                                                    <h3 className="text-sm font-black uppercase tracking-[0.6em] text-primary flex items-center gap-4">
-                                                        <Cpu size={20} /> Required Skillset Node
+                                                <section className="space-y-6 md:space-y-8">
+                                                    <h3 className="text-[10px] sm:text-sm font-black uppercase tracking-[0.4em] md:tracking-[0.6em] text-primary flex items-center gap-4">
+                                                        <Cpu size={18} /> Required Skillset Node
                                                     </h3>
-                                                    <p className="text-2xl text-white/70 leading-relaxed font-medium tracking-tight italic">{selectedJob.requirements}</p>
+                                                    <p className="text-lg sm:text-xl md:text-2xl text-white/70 leading-relaxed font-medium tracking-tight italic">{selectedJob.requirements}</p>
                                                 </section>
-                                                <section className="space-y-8 font-black">
-                                                    <h3 className="text-sm font-black uppercase tracking-[0.6em] text-primary flex items-center gap-4">
-                                                        <Zap size={20} /> Global Resonance Perk Matrix
+                                                <section className="space-y-6 md:space-y-8 font-black">
+                                                    <h3 className="text-[10px] sm:text-sm font-black uppercase tracking-[0.4em] md:tracking-[0.6em] text-primary flex items-center gap-4">
+                                                        <Zap size={18} /> Global Resonance Perk Matrix
                                                     </h3>
-                                                    <p className="text-2xl text-white/70 leading-relaxed font-medium tracking-tight italic">{selectedJob.benefits}</p>
+                                                    <p className="text-lg sm:text-xl md:text-2xl text-white/70 leading-relaxed font-medium tracking-tight italic">{selectedJob.benefits}</p>
                                                 </section>
                                             </div>
                                         </div>
 
                                         <div className="sticky top-0 space-y-12">
-                                            <div className="bg-white/5 p-12 brutalist-border border-white/10 relative overflow-hidden group">
+                                            <div className="bg-white/5 p-8 md:p-12 brutalist-border border-white/10 relative overflow-hidden group">
                                                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
-                                                <h4 className="text-[11px] font-black uppercase tracking-[0.4em] mb-6 text-primary italic">Transmission Integrity</h4>
-                                                <p className="text-sm text-white/40 leading-relaxed italic mb-10">
+                                                <h4 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] mb-4 md:mb-6 text-primary italic">Transmission Integrity</h4>
+                                                <p className="text-xs md:text-sm text-white/40 leading-relaxed italic mb-8 md:mb-10">
                                                     Tellora Media operates under a global meritocracy protocol. We prioritize raw cognitive power and execution over traditional credentials.
                                                 </p>
-                                                <div className="flex items-center gap-4 text-[9px] font-black uppercase tracking-[0.3em] text-white/20">
+                                                <div className="flex items-center gap-4 text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] text-white/20">
                                                     <Shield size={14} /> Encrypted Transmission Node
                                                 </div>
                                             </div>
                                             <Magnetic>
                                                 <button
                                                     onClick={() => setIsApplying(true)}
-                                                    className="w-full py-10 bg-primary text-white brutalist-border shadow-[15px_15px_0px_#000] text-xs font-black uppercase tracking-[0.5em] hover:shadow-none hover:translate-x-3 hover:translate-y-3 transition-all group relative overflow-hidden"
+                                                    className="w-full py-8 md:py-10 bg-primary text-black brutalist-border shadow-[10px_10px_0px_#000] md:shadow-[15px_15px_0px_#000] text-[10px] md:text-xs font-black uppercase tracking-[0.4em] md:tracking-[0.5em] hover:shadow-none hover:translate-x-3 hover:translate-y-3 transition-all group relative overflow-hidden"
                                                 >
                                                     <div className="absolute inset-0 bg-white/10 translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500" />
                                                     <span className="relative z-10 flex items-center justify-center gap-4">
-                                                        INITIALIZE DEPLOY <ArrowRight size={20} className="group-hover:translate-x-4 transition-transform duration-500" />
+                                                        INITIALIZE DEPLOY <ArrowRight size={18} className="group-hover:translate-x-4 transition-transform duration-500" />
                                                     </span>
                                                 </button>
                                             </Magnetic>
@@ -466,8 +424,8 @@ export default function CareersClient() {
                                                 <div className="absolute inset-0 bg-green-500 rounded-full animate-ping opacity-20" />
                                                 <CheckCircle2 size={64} className="text-green-500" />
                                             </div>
-                                            <h2 className="text-7xl font-black uppercase tracking-tighter italic mb-8">Dossier <span className="text-primary italic">Uploaded.</span></h2>
-                                            <p className="text-2xl text-white/40 font-medium tracking-tight max-w-xl mx-auto italic">
+                                            <h2 className="text-4xl sm:text-7xl font-black uppercase tracking-tighter italic mb-8">Dossier <span className="text-primary italic">Uploaded.</span></h2>
+                                            <p className="text-lg sm:text-2xl text-white/40 font-medium tracking-tight max-w-xl mx-auto italic">
                                                 Your cognitive profile has been successfully ingested by our talent matrix. Our Ops team will resonate soon if a sync is detected.
                                             </p>
                                             <button
@@ -487,62 +445,62 @@ export default function CareersClient() {
                                                     ABORT PROTOCOL / RETURN TO MISSION
                                                 </button>
                                             </div>
-                                            <div className="space-y-4 mb-12">
-                                                <h2 className="text-5xl md:text-9xl font-black uppercase tracking-tighter italic leading-none">Initialization <span className="text-primary">Phase.</span></h2>
-                                                <p className="text-lg md:text-xl text-white/50 font-medium italic">Establishing secure uplink. Please provide your cognitive identifier.</p>
+                                            <div className="space-y-4 mb-8 md:mb-12">
+                                                <h2 className="text-4xl sm:text-6xl md:text-9xl font-black uppercase tracking-tighter italic leading-none">Initialization <span className="text-primary">Phase.</span></h2>
+                                                <p className="text-base md:text-xl text-white/50 font-medium italic">Establishing secure uplink. Please provide your cognitive identifier.</p>
                                             </div>
 
                                             <form onSubmit={handleApply} className="space-y-12">
                                                 <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
 
-                                                <div className="grid md:grid-cols-2 gap-12">
+                                                <div className="grid md:grid-cols-2 gap-8 md:gap-12">
                                                     <div className="space-y-4">
-                                                        <label className="text-[11px] font-black uppercase tracking-[0.5em] text-primary italic">Candidate_Identity</label>
-                                                        <input required name="name" className="w-full bg-white/5 brutalist-border p-8 text-white outline-none focus:border-primary transition-all font-medium italic text-xl border-white/5" placeholder="FULL_NAME" />
+                                                        <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary italic">Candidate_Identity</label>
+                                                        <input required name="name" className="w-full bg-white/5 brutalist-border p-6 md:p-8 text-white outline-none focus:border-primary transition-all font-medium italic text-lg md:text-xl border-white/5" placeholder="FULL_NAME" />
                                                     </div>
                                                     <div className="space-y-4">
-                                                        <label className="text-[11px] font-black uppercase tracking-[0.5em] text-primary italic">Secure_Uplink_Node</label>
-                                                        <input required type="email" name="email" className="w-full bg-white/5 brutalist-border p-8 text-white outline-none focus:border-primary transition-all font-medium italic text-xl border-white/5" placeholder="EMAIL_PROTOCOL" />
+                                                        <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary italic">Secure_Uplink_Node</label>
+                                                        <input required type="email" name="email" className="w-full bg-white/5 brutalist-border p-6 md:p-8 text-white outline-none focus:border-primary transition-all font-medium italic text-lg md:text-xl border-white/5" placeholder="EMAIL_PROTOCOL" />
                                                     </div>
                                                 </div>
 
                                                 <div className="space-y-4">
-                                                    <label className="text-[11px] font-black uppercase tracking-[0.5em] text-primary italic">Cognitive_Summary</label>
-                                                    <textarea required name="experience" rows={4} className="w-full bg-white/5 brutalist-border p-8 text-white outline-none focus:border-primary transition-all font-medium italic text-xl resize-none border-white/5" placeholder="Tell us how you break systems and build futures."></textarea>
+                                                    <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary italic">Cognitive_Summary</label>
+                                                    <textarea required name="experience" rows={4} className="w-full bg-white/5 brutalist-border p-6 md:p-8 text-white outline-none focus:border-primary transition-all font-medium italic text-lg md:text-xl resize-none border-white/5" placeholder="Tell us how you break systems and build futures."></textarea>
                                                 </div>
 
                                                 <div className="space-y-4">
-                                                    <label className="text-[11px] font-black uppercase tracking-[0.5em] text-primary italic">Dossier_Asset (PDF)</label>
+                                                    <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary italic">Dossier_Asset (PDF)</label>
                                                     <div className="relative group">
                                                         <input required type="file" name="resume" accept=".pdf" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                                                        <div className="w-full bg-white/5 brutalist-border p-16 border-dashed border-white/10 flex flex-col items-center justify-center gap-6 group-hover:bg-white/10 group-hover:border-primary/50 transition-all border-white/10">
-                                                            <div className="w-20 h-20 bg-black rounded-3xl flex items-center justify-center text-white/20 group-hover:text-primary transition-colors border border-white/5 shadow-2xl">
-                                                                <Upload size={40} className="group-hover:translate-y-[-4px] transition-transform" />
+                                                        <div className="w-full bg-white/5 brutalist-border p-8 sm:p-16 border-dashed border-white/10 flex flex-col items-center justify-center gap-4 sm:gap-6 group-hover:bg-white/10 group-hover:border-primary/50 transition-all border-white/10">
+                                                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-black rounded-2xl sm:rounded-3xl flex items-center justify-center text-white/20 group-hover:text-primary transition-colors border border-white/5 shadow-2xl">
+                                                                <Upload size={32} className="sm:w-10 sm:h-10 group-hover:translate-y-[-4px] transition-transform" />
                                                             </div>
                                                             <div className="text-center space-y-2">
-                                                                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white/40 block">Connect Secure Dossier</span>
-                                                                <span className="text-[8px] font-bold text-white/20 uppercase tracking-[0.3em]">MAX_FILE_SIZE: 12MB / FORMAT: .PDF</span>
+                                                                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-white/40 block">Connect Secure Dossier</span>
+                                                                <span className="text-[7px] md:text-[8px] font-bold text-white/20 uppercase tracking-[0.3em]">MAX_FILE_SIZE: 12MB / FORMAT: .PDF</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div className="grid md:grid-cols-2 gap-12 pt-8">
-                                                    <div className="flex items-center gap-6 p-8 bg-white/5 brutalist-border border-white/5 max-w-md">
-                                                        <Shield size={32} className="text-primary flex-shrink-0" />
-                                                        <p className="text-[9px] font-bold text-white/30 uppercase tracking-widest leading-relaxed italic">
+                                                <div className="grid md:grid-cols-2 gap-8 md:gap-12 pt-4 md:pt-8">
+                                                    <div className="flex items-center gap-6 p-6 md:p-8 bg-white/5 brutalist-border border-white/5 max-w-md">
+                                                        <Shield size={24} className="md:w-8 md:h-8 text-primary flex-shrink-0" />
+                                                        <p className="text-[8px] md:text-[9px] font-bold text-white/30 uppercase tracking-widest leading-relaxed italic">
                                                             SECURITY PROTOCOL: Your transmission is encrypted via AES-256 standards. Our data handling is strictly limited to Talent Ops nodes.
                                                         </p>
                                                     </div>
                                                     <button
                                                         disabled={isLoading}
                                                         type="submit"
-                                                        className={`w-full py-10 bg-primary text-white brutalist-border shadow-[12px_12px_0px_#000] text-xs font-black uppercase tracking-[0.6em] hover:shadow-none hover:translate-x-3 hover:translate-y-3 transition-all flex items-center justify-center gap-6 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                        className={`w-full py-8 md:py-10 bg-primary text-black brutalist-border shadow-[10px_10px_0px_#000] md:shadow-[12px_12px_0px_#000] text-[10px] md:text-xs font-black uppercase tracking-[0.4em] md:tracking-[0.6em] hover:shadow-none hover:translate-x-3 hover:translate-y-3 transition-all flex items-center justify-center gap-4 md:gap-6 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                                     >
                                                         {isLoading ? (
-                                                            <>INGESTING_DATA... <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /></>
+                                                            <>INGESTING_DATA... <div className="w-4 h-4 md:w-5 md:h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" /></>
                                                         ) : (
-                                                            <>FINALIZE TRANSMISSION <ArrowRight size={24} /></>
+                                                            <>FINALIZE TRANSMISSION <ArrowRight size={20} className="md:w-6 md:h-6" /></>
                                                         )}
                                                     </button>
                                                 </div>
@@ -553,7 +511,8 @@ export default function CareersClient() {
                             )}
                         </motion.div>
                     </div>
-                )}
+                </div>
+            )}
             </AnimatePresence>
         </div>
     );
