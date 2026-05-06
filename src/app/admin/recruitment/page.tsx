@@ -96,16 +96,51 @@ export default function RecruitmentAdmin() {
             alert("Error: Resume file not found or corrupted.");
             return;
         }
-        // Use window.open to avoid triggering AdminLayout loader
-        const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
-        if (!newWindow) {
-            // If popup blocked, fallback to direct link but with target _blank
-            const link = document.createElement('a');
-            link.href = url;
-            link.target = '_blank';
-            link.rel = 'noopener noreferrer';
-            link.click();
+
+        // Handle Base64 strings (Fallback when Supabase upload fails)
+        if (url.startsWith('data:')) {
+            try {
+                // Extract mime type and b64 data
+                const parts = url.split(';base64,');
+                const contentType = parts[0].split(':')[1];
+                const raw = window.atob(parts[1]);
+                const rawLength = raw.length;
+                const uInt8Array = new Uint8Array(rawLength);
+
+                for (let i = 0; i < rawLength; ++i) {
+                    uInt8Array[i] = raw.charCodeAt(i);
+                }
+
+                const blob = new Blob([uInt8Array], { type: contentType });
+                const blobUrl = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = `resume-${Date.now()}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Cleanup
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+                return;
+            } catch (e) {
+                console.error("Base64 Download Error:", e);
+                alert("Failed to process embedded resume. The file might be too large or corrupted.");
+                return;
+            }
         }
+
+        // Handle Standard URLs (Supabase Storage)
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        // Note: 'download' attribute only works for same-origin or with specific headers, 
+        // but it doesn't hurt as a hint for the browser.
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     return (
@@ -400,12 +435,20 @@ export default function RecruitmentAdmin() {
                                         </div>
                                     </section>
                                      <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
-                                        <button 
-                                            onClick={() => handleViewResume(viewingApp.resume_url)}
-                                            className="flex-1 flex items-center justify-center gap-3 md:gap-4 bg-white text-black py-4 md:py-6 rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-widest hover:scale-[1.02] transition-all"
-                                        >
-                                            <Download size={18} className="md:w-5 md:h-5" /> View / Download Resume
-                                        </button>
+                                        <div className="flex-1 relative group">
+                                            <button 
+                                                onClick={() => handleViewResume(viewingApp.resume_url)}
+                                                className="w-full flex items-center justify-center gap-3 md:gap-4 bg-white text-black py-4 md:py-6 rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-widest hover:scale-[1.02] transition-all"
+                                            >
+                                                <Download size={18} className="md:w-5 md:h-5" /> 
+                                                {viewingApp.resume_url.startsWith('data:') ? 'Download Embedded Resume' : 'View / Download Resume'}
+                                            </button>
+                                            {viewingApp.resume_url.startsWith('data:') && (
+                                                <div className="absolute -top-3 left-4 bg-accent text-black text-[7px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border border-black shadow-[2px_2px_0px_#000]">
+                                                    Data_Sync: Local_B64
+                                                </div>
+                                            )}
+                                        </div>
                                         <a href={`mailto:${viewingApp.candidate_email}`} className="flex items-center justify-center gap-3 md:gap-4 bg-white/5 border border-white/10 text-white px-6 md:px-10 py-4 md:py-6 rounded-xl md:rounded-2xl font-black text-[10px] md:text-[11px] uppercase tracking-widest hover:bg-white/10 transition-all">
                                             <Mail size={18} className="md:w-5 md:h-5" /> Contact
                                         </a>
