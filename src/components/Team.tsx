@@ -46,8 +46,8 @@ export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
                 {
                     id: "vansh",
                     name: "Vansh Sharma",
-                    role: "Core Team",
-                    category: "core",
+                    role: "Lead Developer",
+                    category: "development",
                     image_url: "/teams/vansh tellora.png",
                     color: "#F3E84A",
                     bio: "Strategic growth specialist leading technical integrations and ops.",
@@ -152,7 +152,7 @@ export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
                 {categories.map((cat) => {
                     if (onlyCore && cat.id !== "core") return null;
                     
-                    const members = team.filter(m => (m.category === cat.id) || (cat.id === "core" && !m.category && ["abhay sehdev", "prakhar saxena", "vansh sharma"].includes(m.name.toLowerCase())));
+                    const members = team.filter(m => (m.category === cat.id) || (cat.id === "core" && !m.category && ["abhay sehdev", "prakhar saxena"].includes(m.name.toLowerCase())));
                     if (members.length === 0) return null;
                     
                     return (

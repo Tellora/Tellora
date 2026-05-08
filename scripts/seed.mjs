@@ -131,7 +131,7 @@ const team = [
     },
     {
         name: "Vansh Sharma",
-        role: "Co-Founder · Sales",
+        role: "Lead Developer",
         image_url: "/teams/vansh tellora.png",
         color: "#F3E84A",
         rotate: "-1.2deg",
