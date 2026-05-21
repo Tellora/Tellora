@@ -17,6 +17,7 @@ import {
     DbIGProfile,
     DbIGPost
 } from "./supabase";
+import { manualMembers } from "@/data/team";
 
 export type { DbIGProfile, DbIGPost };
 
@@ -192,15 +193,69 @@ export async function saveSettings(settings: SiteSettings): Promise<void> {
 
 // ── Additional Entities ──────────────────────────────────────────────────────
 export async function getTeam(): Promise<DbTeamMember[]> {
-    return fetchTableData("team_members", []);
+    const data = await fetchTableData<DbTeamMember[]>("team_members", []);
+    const validCategories = ["core", "development", "designing"];
+    return data.map(m => ({
+        ...m,
+        category: validCategories.includes(m.status || "") ? m.status : undefined
+    }));
+}
+
+export async function getAllTeamMembers(): Promise<DbTeamMember[]> {
+    const dbMembers = await getTeam();
+    
+    // Merge database updates onto manual members
+    const merged = manualMembers.map(manual => {
+        const dbOverride = dbMembers.find(db => db.name.toLowerCase() === manual.name.toLowerCase());
+        if (dbOverride) {
+            return {
+                ...manual,
+                ...dbOverride,
+                // Make sure array/object fields are handled safely
+                skills: dbOverride.skills && dbOverride.skills.length > 0 ? dbOverride.skills : manual.skills,
+                stats: dbOverride.stats && dbOverride.stats.length > 0 ? dbOverride.stats : manual.stats,
+            };
+        }
+        return manual;
+    });
+
+    // Filter out inactive members (e.g. deleted manual members)
+    const activeMerged = merged.filter(m => m.status !== "Inactive");
+
+    // Add any database-only members that don't match manual members by name
+    dbMembers.forEach(db => {
+        const matchesManual = manualMembers.some(manual => manual.name.toLowerCase() === db.name.toLowerCase());
+        if (!matchesManual && db.status !== "Inactive") {
+            activeMerged.push(db);
+        }
+    });
+
+    return activeMerged;
 }
 
 export async function upsertTeamMember(member: DbTeamMember): Promise<void> {
-    await upsertTableData("team_members", member);
+    const dbMember = {
+        ...member,
+        status: member.category || member.status || "Active"
+    };
+    delete (dbMember as any).category;
+    await upsertTableData("team_members", dbMember);
 }
 
-export async function deleteTeamMember(id: string): Promise<void> {
-    await deleteTableData("team_members", { id });
+export async function deleteTeamMember(id: string, name?: string): Promise<void> {
+    const isManual = name && manualMembers.some(m => m.name.toLowerCase() === name.toLowerCase());
+    if (isManual) {
+        // Find existing override if any
+        const dbMembers = await getTeam();
+        const match = dbMembers.find(m => m.name.toLowerCase() === name!.toLowerCase());
+        await upsertTableData("team_members", {
+            id: match?.id || undefined,
+            name: name!,
+            status: "Inactive"
+        });
+    } else {
+        await deleteTableData("team_members", { id });
+    }
 }
 
 export async function getFAQs(): Promise<DbFAQ[]> {

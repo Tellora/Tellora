@@ -24,6 +24,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase, AdminProfile, getAdminProfile } from "@/lib/supabase";
+import { getActivityLogs, getMessages } from "@/lib/store";
 
 export default function AdminLayoutClient({ children }: { children: React.ReactNode }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -31,10 +32,69 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
     const [isLoading, setIsLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState<AdminProfile | null>(null);
 
+    const [notifications, setNotifications] = useState<any[]>([]);
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+    const [unreadCount, setUnreadCount] = useState(0);
+
     const pathname = usePathname();
     const router = useRouter();
     // Use startsWith to handle both /admin/login and /admin/login/ (trailing slash)
     const isLoginPage = pathname === "/admin/login" || pathname === "/admin/login/" || pathname.startsWith("/admin/login?");
+
+    const loadNotifications = async () => {
+        try {
+            const [logs, messages] = await Promise.all([
+                getActivityLogs(),
+                getMessages()
+            ]);
+
+            const mappedMessages = (messages || [])
+                .filter((m: any) => m.status === "Unread")
+                .map((m: any) => ({
+                    id: m.id,
+                    title: `New Inquiry`,
+                    description: `${m.sender}: "${m.subject}"`,
+                    time: m.created_at,
+                    type: "inquiry",
+                    isUnread: true,
+                    link: "/admin/inbox"
+                }));
+
+            const mappedLogs = (logs || [])
+                .slice(-5)
+                .reverse()
+                .map((l: any) => ({
+                    id: l.id,
+                    title: l.item,
+                    description: `Activity by ${l.user_name} (${l.status})`,
+                    time: l.created_at,
+                    type: "action",
+                    isUnread: false,
+                    link: "/admin/dashboard"
+                }));
+
+            const allNotifications = [...mappedMessages, ...mappedLogs].sort((a, b) => {
+                const timeA = a.time ? new Date(a.time).getTime() : 0;
+                const timeB = b.time ? new Date(b.time).getTime() : 0;
+                const numA = isNaN(timeA) ? 0 : timeA;
+                const numB = isNaN(timeB) ? 0 : timeB;
+                return numB - numA;
+            });
+
+            setNotifications(allNotifications);
+            setUnreadCount(mappedMessages.length);
+        } catch (e) {
+            console.error("Error loading notifications:", e);
+        }
+    };
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            loadNotifications();
+            const interval = setInterval(loadNotifications, 15000);
+            return () => clearInterval(interval);
+        }
+    }, [isAuthenticated, pathname]);
 
     // Open sidebar by default on desktop
     useEffect(() => {
@@ -277,10 +337,85 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
 
                     {/* Right: Personalized user info */}
                     <div className="flex items-center gap-4 md:gap-6">
-                        <button className="relative p-2 rounded-lg bg-white/5 text-white/60 hover:bg-white/10 hover:text-white transition-all hidden sm:block">
-                            <Bell size={20} />
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full ring-4 ring-[#080B12]" />
-                        </button>
+                        {/* Functional Notification Bell */}
+                        <div className="relative">
+                            <button
+                                onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                                className="relative p-2 rounded-lg bg-white/5 text-white/60 hover:bg-white/10 hover:text-white transition-all block"
+                            >
+                                <Bell size={20} />
+                                {unreadCount > 0 && (
+                                    <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-primary rounded-full ring-4 ring-[#080B12] animate-pulse" />
+                                )}
+                            </button>
+
+                            <AnimatePresence>
+                                {isNotificationsOpen && (
+                                    <>
+                                        {/* Backdrop to close click */}
+                                        <div className="fixed inset-0 z-40" onClick={() => setIsNotificationsOpen(false)} />
+                                        
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                                            exit={{ opacity: 0, y: 15, scale: 0.95 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="absolute right-[-60px] sm:right-0 mt-3 w-[calc(100vw-2rem)] sm:w-80 max-w-sm bg-[#0D121F] border border-white/10 rounded-2xl p-4 shadow-2xl z-50 space-y-3"
+                                        >
+                                            <div className="flex justify-between items-center pb-2 border-b border-white/5">
+                                                <span className="text-[10px] font-black uppercase tracking-wider text-white">Alert Logs</span>
+                                                {unreadCount > 0 && (
+                                                    <span className="px-2 py-0.5 bg-primary/20 text-primary text-[8px] font-black rounded-full uppercase tracking-widest">
+                                                        {unreadCount} Unread
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            <div className="max-h-60 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                                                {notifications.length === 0 ? (
+                                                    <p className="text-white/20 text-[10px] font-bold uppercase text-center py-6">No Activity Detected</p>
+                                                ) : (
+                                                    notifications.map((notif) => (
+                                                        <Link
+                                                            key={notif.id}
+                                                            href={notif.link}
+                                                            onClick={() => setIsNotificationsOpen(false)}
+                                                            className={`block p-3 rounded-xl transition-all border ${
+                                                                notif.isUnread
+                                                                    ? "bg-primary/5 border-primary/20 hover:bg-primary/10"
+                                                                    : "bg-white/[0.02] border-transparent hover:bg-white/5"
+                                                            }`}
+                                                        >
+                                                            <div className="flex items-start justify-between gap-2">
+                                                                <h5 className={`text-xs font-black italic ${notif.isUnread ? "text-primary" : "text-white/80"}`}>
+                                                                    {notif.title}
+                                                                </h5>
+                                                                <span className="text-[8px] text-white/20 font-bold shrink-0">
+                                                                    {new Date(notif.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                </span>
+                                                            </div>
+                                                            <p className="text-[10px] text-white/40 mt-1 font-medium leading-normal line-clamp-2">
+                                                                {notif.description}
+                                                            </p>
+                                                        </Link>
+                                                    ))
+                                                )}
+                                            </div>
+
+                                            <div className="pt-2 border-t border-white/5 text-center">
+                                                <Link
+                                                    href="/admin/inbox"
+                                                    onClick={() => setIsNotificationsOpen(false)}
+                                                    className="text-[9px] font-black uppercase tracking-widest text-primary hover:text-white transition-colors"
+                                                >
+                                                    Access Inbox
+                                                </Link>
+                                            </div>
+                                        </motion.div>
+                                    </>
+                                )}
+                            </AnimatePresence>
+                        </div>
                         <div className="h-8 w-px bg-white/5 mx-0 md:mx-2 hidden sm:block" />
 
                         {/* Personalized user block */}

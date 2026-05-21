@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Linkedin, Twitter, ExternalLink, Sparkles, Users, Instagram, Zap, Target } from "lucide-react";
 import Image from "next/image";
-import { getTeam } from "@/lib/store";
+import { getAllTeamMembers } from "@/lib/store";
 import { DbTeamMember } from "@/lib/supabase";
 
 export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
@@ -18,103 +18,8 @@ export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
     ];
 
     useEffect(() => {
-        getTeam().then(data => {
-            // Manual additions as requested by the user
-            const manualMembers: DbTeamMember[] = [
-                {
-                    id: "abhay",
-                    name: "Abhay Sehdev",
-                    role: "Core Team",
-                    category: "core",
-                    image_url: "/teams/abhay tellora.png",
-                    color: "#A855F7",
-                    bio: "Architecting high-frequency growth ecosystems with precision.",
-                    skills: ["Growth Strategy", "Architecture", "Scale"],
-                    stats: [{ label: "ROI", value: "10X" }, { label: "Scale", value: "Global" }]
-                },
-                {
-                    id: "prakhar",
-                    name: "Prakhar Saxena",
-                    role: "Core Team",
-                    category: "core",
-                    image_url: "/teams/prakhar tellora.png",
-                    color: "#22C55E",
-                    bio: "Performance marketing specialist focused on ROAS and data-driven results.",
-                    skills: ["PPC", "Marketing", "Data"],
-                    stats: [{ label: "ROAS", value: "12X" }, { label: "Growth", value: "800%" }]
-                },
-                {
-                    id: "vansh",
-                    name: "Vansh Sharma",
-                    role: "Lead Developer",
-                    category: "development",
-                    image_url: "/teams/vansh tellora.png",
-                    color: "#F3E84A",
-                    bio: "Strategic growth specialist leading technical integrations and ops.",
-                    skills: ["Operations", "Strategy", "Tech"],
-                    stats: [{ label: "Efficiency", value: "98%" }, { label: "Nodes", value: "120+" }]
-                },
-                {
-                    id: "nandini",
-                    name: "Nandini",
-                    role: "Graphic Designer",
-                    category: "designing",
-                    image_url: "/teams/nandini tellora.png",
-                    color: "#EC4899",
-                    skills: ["Branding", "Visuals", "Motion"],
-                    bio: "Crafting brutalist aesthetic and high-converting visual narratives."
-                },
-                {
-                    id: "saksham",
-                    name: "Saksham",
-                    role: "Development Expert",
-                    category: "development",
-                    image_url: "/teams/saksham tellora.png",
-                    color: "#3B82F6",
-                    skills: ["Graphics", "Creative", "Assets"],
-                    bio: "Engineering pixel-perfect assets for market domination."
-                },
-                {
-                    id: "ananya",
-                    name: "Ananya",
-                    role: "UI/UX Designer",
-                    category: "development",
-                    image_url: "/teams/ananya tellora.png",
-                    color: "#F59E0B",
-                    skills: ["Interface", "Experience", "Systems"],
-                    bio: "Designing friction-less user journeys that maximize conversion."
-                },
-                {
-                    id: "tanisha",
-                    name: "Tanisha",
-                    role: "Graphic Designer Intern",
-                    category: "designing",
-                    image_url: "/teams/tanisha tellora.png",
-                    color: "#EC4899",
-                    skills: ["Design", "Visuals", "Creativity"],
-                    bio: "Bringing fresh and creative perspectives to graphic design."
-                },
-                {
-                    id: "aryan",
-                    name: "Aryan",
-                    role: "Business Development Intern",
-                    category: "development",
-                    image_url: "/teams/aryan tellora.png",
-                    color: "#3B82F6",
-                    skills: ["Strategy", "Growth", "Relations"],
-                    bio: "Identifying and expanding new business opportunities."
-                },
-            ];
-
-            // Merge and de-dupe (prefer manual for requested names)
-            const finalTeam = [...manualMembers];
-            (data || []).forEach(m => {
-                if (!finalTeam.find(fm => fm.name.toLowerCase() === m.name.toLowerCase())) {
-                    finalTeam.push(m);
-                }
-            });
-
-            setTeam(finalTeam);
+        getAllTeamMembers().then(data => {
+            setTeam(data);
             setLoading(false);
         });
     }, []);
