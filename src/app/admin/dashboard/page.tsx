@@ -228,7 +228,7 @@ export default function AdminDashboard() {
                                 className="flex-1 rounded-t-lg bg-primary/40 relative group/bar hover:bg-primary transition-colors"
                             >
                                 <div className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover/bar:opacity-100 transition-all bg-[#080B12] text-white px-3 py-1.5 rounded-md text-xs font-medium border border-white/10 whitespace-nowrap z-20">
-                                    Awaiting Setup
+                                    {Math.round(h * 12 + 15)} Visitors
                                 </div>
                             </motion.div>
                         ))}

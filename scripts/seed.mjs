@@ -100,6 +100,7 @@ const services = [
 
 const team = [
     {
+        id: "a6b62c34-a506-4069-8f21-8872cd98b61c",
         name: "Abhay Sehdev",
         role: "Co-Founder · Tech",
         image_url: "/teams/abhay tellora.png",
@@ -115,6 +116,7 @@ const team = [
         ]
     },
     {
+        id: "eded14f4-798d-4d4e-bc48-bc971da23085",
         name: "Prakhar Saxena",
         role: "Co-Founder · Content",
         image_url: "/teams/prakhar tellora.png",
@@ -130,21 +132,41 @@ const team = [
         ]
     },
     {
-        name: "Vansh Sharma",
-        role: "Lead Developer",
-        image_url: "/teams/vansh tellora.png",
-        color: "#F3E84A",
+        id: "3146598b-e00e-4ed5-b10a-522bd98a84f4",
+        name: "Arhama",
+        role: "Video Editing Intern",
+        image_url: "/teams/arhama tellora.png",
+        color: "#22D3EE",
         rotate: "-1.2deg",
-        linkedin_url: "https://www.linkedin.com/in/vansh-sharma-3b6b0a3b5?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
-        instagram_url: "https://www.instagram.com/vanssh._.sharma?igsh=cXFpOTZnbnc2eDNw&utm_source=qr",
-        bio: "Drives strategic global partnerships and enterprise scaling. Relentless focus on client ROI, maximizing acquisition pipelines natively through structured, aggressive B2B architecture.",
-        skills: ["Enterprise Sales", "Client Strategy", "B2B Growth"],
+        linkedin_url: "#",
+        instagram_url: "#",
+        bio: "Bringing fresh, creative energy to visual storytelling and high-retention video edits.",
+        skills: ["Video Editing", "Premiere Pro", "Short-form Content"],
         stats: [
-            { label: "Growth", value: "B2B" },
-            { label: "Strategy", value: "Macro" }
-        ]
+            { label: "Retention", value: "85%" },
+            { label: "Reels", value: "40+" }
+        ],
+        status: "designing"
     },
     {
+        id: "ed881694-fa11-4acd-b2bd-0c70b33a4f2d",
+        name: "Prateek",
+        role: "Video Editor",
+        image_url: "/teams/prateek tellora.png",
+        color: "#8B5CF6",
+        rotate: "1deg",
+        linkedin_url: "#",
+        instagram_url: "#",
+        bio: "Crafting dynamic, high-impact videos designed to capture attention and scale brand authority.",
+        skills: ["Video Editing", "After Effects", "Sound Design"],
+        stats: [
+            { label: "Engagement", value: "12%" },
+            { label: "Views", value: "1M+" }
+        ],
+        status: "designing"
+    },
+    {
+        id: "9b863ff0-0a2e-41ba-84f5-113b8cf5d0a2",
         name: "Nandini",
         role: "Design Lead",
         image_url: "/teams/nandini tellora.png",
@@ -157,7 +179,8 @@ const team = [
         stats: [
             { label: "Design", value: "Pure" },
             { label: "Aesthetic", value: "UX" }
-        ]
+        ],
+        status: "designing"
     }
 ];
 

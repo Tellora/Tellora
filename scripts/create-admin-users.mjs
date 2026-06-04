@@ -55,11 +55,7 @@ const ADMIN_USERS = [
         password: 'abhaytellora22@',
         profile:  { name: 'Abhay',          role: 'CEO & Founder', department: 'Operations & Oversight', initials: 'AB' }
     },
-    {
-        email:    'vansh@telloramedia.online',
-        password: 'vanshtellora22@',
-        profile:  { name: 'Vansh Sharma',   role: 'Lead Developer',    department: 'Development',   initials: 'VS' }
-    },
+
     {
         email:    'prakhar@telloramedia.online',
         password: 'prakhartellora22@',

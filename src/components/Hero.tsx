@@ -40,9 +40,9 @@ export default function Hero() {
             } else {
                 // High-energy fallbacks for original hero restoration
                 setStats([
-                    { value: "6.4X", label: "AVERAGE ROAS", color: "#A855F7" },
-                    { value: "100%", label: "GROWTH SCALE", color: "#22C55E" },
-                    { value: "GLOBAL", label: "CORE REACH", color: "#F3E84A" }
+                    { value: "6.4X", label: "AVERAGE AD RETURN", color: "#A855F7" },
+                    { value: "100%", label: "REVENUE GROWTH", color: "#22C55E" },
+                    { value: "GLOBAL", label: "CLIENT REACH", color: "#F3E84A" }
                 ]);
             }
             setLoading(false);
@@ -69,8 +69,8 @@ export default function Hero() {
     const rawTitle = settings?.hero_title || settings?.site_title || "TELLORA MEDIA";
     const heroTitle = rawTitle.split('|')[0].trim().toUpperCase();
     
-    const heroSubtitle = settings?.hero_subtitle || "Engineering DOPAMINE-DRIVEN growth with absolute intent.";
-    const ctaText = settings?.cta_text || "DEPLOY CORE";
+    const heroSubtitle = settings?.hero_subtitle || "Engineering results-driven growth for your business.";
+    const ctaText = settings?.cta_text || "GET STARTED";
 
     return (
         <section
@@ -95,7 +95,7 @@ export default function Hero() {
                     {[...Array(4)].map((_, i) => (
                         <div key={i} className="flex items-center gap-6 md:gap-12">
                             <span className="font-black text-xl md:text-4xl uppercase tracking-tighter flex items-center gap-3 md:gap-6">
-                                HIGH FREQUENCY GROWTH <Sparkles className="text-secondary fill-current w-5 h-5 md:w-6 md:h-6" />
+                                HIGH PERFORMANCE GROWTH <Sparkles className="text-secondary fill-current w-5 h-5 md:w-6 md:h-6" />
                             </span>
                             <span className="font-black text-xl md:text-4xl uppercase tracking-tighter flex items-center gap-3 md:gap-6 text-primary">
                                 REVENUE ENGINES <Zap className="fill-current w-5 h-5 md:w-6 md:h-6" />
@@ -121,7 +121,7 @@ export default function Hero() {
                         </div>
                         <div className="absolute bottom-[20%] left-[2%] bg-white p-6 brutalist-border shadow-[6px_6px_0px_#A855F7] -rotate-[15deg]">
                             <span className="text-[12px] font-black uppercase text-black tracking-widest flex items-center gap-2">
-                                <Activity className="text-primary animate-pulse" /> Growth Loop
+                                <Activity className="text-primary animate-pulse" /> Marketing Results
                             </span>
                         </div>
                         <div className="absolute bottom-[25%] right-[5%] w-24 h-24 bg-black border-[4px] border-primary rotate-45 flex items-center justify-center animate-float-delayed">
@@ -172,9 +172,9 @@ export default function Hero() {
                         </Magnetic>
 
                         <Magnetic>
-                            <Link href="/blog" className="w-full sm:w-auto px-10 md:px-12 py-6 md:py-8 bg-white text-black font-black uppercase tracking-widest text-lg md:text-xl brutalist-border shadow-[8px_8px_0px_#F3E84A] md:shadow-[12px_12px_0px_#F3E84A] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_#F3E84A] md:hover:shadow-[16px_16px_0px_#F3E84A] active:translate-y-1 transition-all flex items-center justify-center gap-4 md:gap-6 group">
+                            <Link href="/contact" className="w-full sm:w-auto px-10 md:px-12 py-6 md:py-8 bg-white text-black font-black uppercase tracking-widest text-lg md:text-xl brutalist-border shadow-[8px_8px_0px_#F3E84A] md:shadow-[12px_12px_0px_#F3E84A] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_#F3E84A] md:hover:shadow-[16px_16px_0px_#F3E84A] active:translate-y-1 transition-all flex items-center justify-center gap-4 md:gap-6 group">
                                 <Terminal className="w-6 h-6 md:w-6 md:h-6 text-primary" />
-                                INTEL LAB
+                                CONTACT US
                             </Link>
                         </Magnetic>
                     </motion.div>

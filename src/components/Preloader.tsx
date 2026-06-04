@@ -18,11 +18,11 @@ export function Preloader() {
 
     useEffect(() => {
         const statuses = [
-            "Initializing Core...",
-            "Loading Growth Intel...",
-            "Architecting Revenue...",
-            "Deploying Potential...",
-            "Ready for Disruption",
+            "Setting Up...",
+            "Loading Marketing Data...",
+            "Preparing Strategy...",
+            "Launching...",
+            "Welcome to Tellora",
         ];
 
         let idx = 0;
@@ -92,13 +92,13 @@ export function Preloader() {
                     <div className="absolute top-12 left-12 hidden md:flex flex-col gap-4">
                         <div className="bg-white p-4 brutalist-border shadow-[4px_4px_0px_#000] flex items-center gap-3">
                             <Cpu size={20} className="text-primary animate-pulse" />
-                            <span className="text-[10px] font-black uppercase tracking-widest text-black/40">CPU_CORE_ACTIVE</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-black/40">SYSTEM_ACTIVE</span>
                         </div>
                     </div>
 
                     <div className="absolute bottom-12 right-12 hidden md:flex items-center gap-3 bg-black text-white px-6 py-3 brutalist-border shadow-[6px_6px_0px_#A855F7]">
                         <Activity size={16} className="text-primary animate-bounce" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Flux Encrypted</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Secure Sync</span>
                     </div>
 
                     {/* Main content */}
@@ -120,7 +120,7 @@ export function Preloader() {
                                 />
                             </div>
                             <h1 className="text-[4rem] md:text-[6rem] lg:text-[8rem] font-heading font-black tracking-tighter leading-none text-black drop-shadow-[8px_8px_0px_#A855F7] uppercase mt-4">
-                                INIT<br />CORE
+                                TELLORA<br />MEDIA
                             </h1>
                             {/* Status badge */}
                             <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-white px-4 py-2 brutalist-border shadow-[6px_6px_0px_#000] -rotate-2 flex items-center gap-2 whitespace-nowrap">

@@ -114,7 +114,7 @@ export default function WorkShowcase() {
                                             </h3>
                                             <div className="flex items-center gap-4 text-white pt-4">
                                                 <span className="text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                                                    <Target size={14} /> VIEW INTEL
+                                                    <Target size={14} /> VIEW CASE STUDY
                                                 </span>
                                                 <ArrowRight size={20} className="opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-2" />
                                             </div>

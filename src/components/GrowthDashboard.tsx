@@ -22,7 +22,7 @@ export function GrowthDashboard() {
             </div>
 
             <div className="mb-10">
-                <h3 className="text-2xl font-black text-text-main mb-2 font-heading uppercase tracking-widest">Growth Intelligence</h3>
+                <h3 className="text-2xl font-black text-text-main mb-2 font-heading uppercase tracking-widest">Performance Dashboard</h3>
                 <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.3em]">Real-time Performance Metrics</p>
             </div>
 
@@ -59,7 +59,7 @@ export function GrowthDashboard() {
                     />
                 </div>
                 <div className="flex justify-between mt-5">
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Target ROAS: High</p>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Target Return: High</p>
                     <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] animate-pulse">Current: Scaling</p>
                 </div>
             </div>

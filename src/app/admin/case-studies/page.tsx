@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Search, Edit3, Trash2, Zap, ArrowRight, X, TrendingUp, Star } from "lucide-react";
-import { CaseStudy, getCaseStudies, upsertCaseStudy, deleteCaseStudy } from "@/lib/store";
+import { CaseStudy, getAllCaseStudies, upsertCaseStudy, deleteCaseStudy } from "@/lib/store";
 
 const CATEGORIES = ["Social Growth", "Performance", "Content", "Design", "SEO", "Product"];
 
@@ -27,7 +27,7 @@ export default function AdminCaseStudies() {
     const [form, setForm] = useState(empty());
     const [tagsInput, setTagsInput] = useState("");
 
-    const reload = async () => setCases(await getCaseStudies());
+    const reload = async () => setCases(await getAllCaseStudies());
     useEffect(() => { reload(); }, []);
 
     const openCreate = () => {
@@ -97,12 +97,12 @@ export default function AdminCaseStudies() {
                 <div>
                     <div className="flex items-center gap-2 mb-2">
                         <TrendingUp size={14} className="text-primary" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Work Narratives</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Case Studies</span>
                     </div>
                     <h1 className="text-4xl font-black tracking-tighter text-white">
-                        Case Study <span className="italic text-primary">Archives</span>
+                        Case <span className="italic text-primary">Studies</span>
                     </h1>
-                    <p className="text-white/40 font-medium text-sm mt-1">Showcase transformation impact. Published studies appear on the public Case Studies page.</p>
+                    <p className="text-white/40 font-medium text-sm mt-1">Manage case studies shown on the website.</p>
                 </div>
                 <button
                     onClick={openCreate}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
@@ -31,27 +31,86 @@ import {
     MagneticElement, 
     ParallaxText 
 } from "@/components/animations/ScrollChoreography";
-import { caseStudies, CaseStudy } from "@/data/case-studies";
+import { caseStudies as staticCaseStudies, CaseStudy } from "@/data/case-studies";
+import { getCaseStudies } from "@/lib/store";
 
 type BrowseMode = "industry" | "service";
 
 export default function CaseStudiesPage() {
     const [mode, setMode] = useState<BrowseMode>("industry");
     const [activeFilter, setActiveFilter] = useState<string>("All");
+    const [caseStudiesList, setCaseStudiesList] = useState<CaseStudy[]>([]);
 
-    const industries = useMemo(() => ["All", ...Array.from(new Set(caseStudies.map(s => s.industry)))], []);
-    const services = useMemo(() => ["All", ...Array.from(new Set(caseStudies.flatMap(s => s.services)))], []);
+    useEffect(() => {
+        async function load() {
+            const dbCases = await getCaseStudies();
+            
+            // Merge database updates onto static case studies
+            const merged = staticCaseStudies.map(staticCase => {
+                const dbOverride = dbCases.find(db => db.id === staticCase.id || db.title.toLowerCase() === staticCase.title.toLowerCase());
+                if (dbOverride) {
+                    return {
+                        ...staticCase,
+                        title: dbOverride.title,
+                        description: dbOverride.description,
+                        industry: dbOverride.tag || staticCase.industry,
+                        services: dbOverride.tags && dbOverride.tags.length > 0 ? dbOverride.tags : staticCase.services,
+                        impact: dbOverride.impact,
+                        image: dbOverride.image_url || staticCase.image,
+                        stats: dbOverride.stats && dbOverride.stats.length > 0 ? dbOverride.stats : staticCase.stats,
+                        status: dbOverride.status,
+                    };
+                }
+                return { ...staticCase, status: "Published" }; // Default static to Published
+            });
+
+            // Add any database-only case studies that don't match static ones
+            dbCases.forEach(db => {
+                const matchesStatic = staticCaseStudies.some(s => s.id === db.id || s.title.toLowerCase() === db.title.toLowerCase());
+                if (!matchesStatic && db.status !== "Inactive") {
+                    merged.push({
+                        id: db.id,
+                        title: db.title,
+                        description: db.description,
+                        clientSummary: db.description,
+                        industry: db.tag || db.category || "General",
+                        services: db.tags && db.tags.length > 0 ? db.tags : [db.category || "General"],
+                        impact: db.impact || "High Impact",
+                        challenge: "Enhancing operations and digital presence to achieve scalable market results.",
+                        execution: "Implemented tailored growth architecture and full-funnel digital optimizations.",
+                        strategicInsight: "Focusing on user-centric design and performance marketing unlocks latent customer intent.",
+                        roadmap: [
+                            { phase: "Deployment", details: "Integrating new digital structures." },
+                            { phase: "Optimization", details: "A/B testing and performance tuning." }
+                        ],
+                        techStack: db.tags || [],
+                        image: db.image_url || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+                        color: "#4AC0E4",
+                        links: {},
+                        stats: db.stats || [],
+                        status: db.status,
+                    });
+                }
+            });
+
+            setCaseStudiesList(merged.filter(c => c.status === "Published"));
+        }
+        load();
+    }, []);
+
+    const industries = useMemo(() => ["All", ...Array.from(new Set(caseStudiesList.map(s => s.industry)))], [caseStudiesList]);
+    const services = useMemo(() => ["All", ...Array.from(new Set(caseStudiesList.flatMap(s => s.services)))], [caseStudiesList]);
 
     const filters = mode === "industry" ? industries : services;
 
     const filteredStudies = useMemo(() => {
-        if (activeFilter === "All") return caseStudies;
+        if (activeFilter === "All") return caseStudiesList;
         if (mode === "industry") {
-            return caseStudies.filter(s => s.industry === activeFilter);
+            return caseStudiesList.filter(s => s.industry === activeFilter);
         } else {
-            return caseStudies.filter(s => s.services.includes(activeFilter));
+            return caseStudiesList.filter(s => s.services.includes(activeFilter));
         }
-    }, [mode, activeFilter]);
+    }, [mode, activeFilter, caseStudiesList]);
 
     return (
         <div className="bg-background text-foreground min-h-screen relative overflow-x-hidden">
@@ -131,12 +190,12 @@ export default function CaseStudiesPage() {
                         <Shield size={48} className="text-black animate-pulse" />
                     </motion.div>
                     <h2 className="text-6xl md:text-[8rem] font-heading font-black text-white mb-12 leading-none uppercase tracking-tighter">
-                        Deploy your <br />
-                        <span className="text-primary italic underline decoration-accent decoration-[8px] underline-offset-8">Growth Architecture.</span>
+                        Launch your <br />
+                        <span className="text-primary italic underline decoration-accent decoration-[8px] underline-offset-8">Growth Strategy.</span>
                     </h2>
                     <MagneticElement>
                         <a href="/contact" className="px-20 py-10 bg-white text-black font-black brutalist-border shadow-[12px_12px_0px_#4AC0E4] hover:shadow-[20px_20px_0px_#4AC0E4] hover:-translate-y-2 inline-block uppercase tracking-widest text-sm transition-all">
-                            INITIALIZE PROTOCOL
+                            GET STARTED
                         </a>
                     </MagneticElement>
                 </section>
@@ -171,14 +230,14 @@ function CaseStudyDossier({ study, idx }: { study: CaseStudy; idx: number }) {
                     <div className="absolute top-8 left-8 bg-black text-white brutalist-border px-6 py-2 rotate-2 shadow-[4px_4px_0px_#FFF]">
                         <span className="text-xs font-black uppercase tracking-widest">{study.impact}</span>
                     </div>
-
+ 
                     <div className="absolute bottom-8 left-8 flex flex-col gap-2">
                         <div className="bg-white brutalist-border px-4 py-2 shadow-[4px_4px_0px_#000] -rotate-2">
                             <span className="text-[10px] font-black uppercase text-black">{study.industry}</span>
                         </div>
                     </div>
                 </div>
-
+ 
                 {/* Technical Stats Overlay */}
                 <div className="grid grid-cols-2 gap-6 mt-8">
                     {study.stats.map((stat, sIdx) => (
@@ -189,7 +248,7 @@ function CaseStudyDossier({ study, idx }: { study: CaseStudy; idx: number }) {
                     ))}
                 </div>
             </div>
-
+ 
             {/* Intel Column */}
             <div className={`lg:col-span-6 flex flex-col ${idx % 2 !== 0 ? "xl:order-1" : ""}`}>
                 <div className="flex flex-wrap gap-4 mb-8">
@@ -199,22 +258,22 @@ function CaseStudyDossier({ study, idx }: { study: CaseStudy; idx: number }) {
                         </span>
                     ))}
                 </div>
-
+ 
                 <h2 className="text-5xl md:text-8xl font-heading font-black text-black mb-8 leading-[0.9] tracking-tighter uppercase group-hover:text-primary transition-all duration-500">
                     {study.title}
                 </h2>
-
+ 
                 <p className="text-xl md:text-2xl font-black uppercase leading-tight text-black/60 mb-12 max-w-xl">
                     {study.description}
                 </p>
-
+ 
                 {/* Primary Content Card */}
                 <div className="bg-slate-50 p-8 brutalist-border mb-8 shadow-[8px_8px_0px_#000]">
                     <div className="mb-8 p-6 bg-white brutalist-border shadow-[4px_4px_0px_#000] rotate-1">
                         <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary mb-3 flex items-center gap-2"><Target size={14} /> The Brief</h4>
                         <p className="text-sm font-medium text-black/80">{study.clientSummary}</p>
                     </div>
-
+ 
                     <div className="grid md:grid-cols-2 gap-8">
                         <div>
                             <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-3 flex items-center gap-2"><Activity size={14} /> The Friction</h4>
@@ -226,7 +285,7 @@ function CaseStudyDossier({ study, idx }: { study: CaseStudy; idx: number }) {
                         </div>
                     </div>
                 </div>
-
+ 
                 {/* Expandable Dossier Region */}
                 <button 
                     onClick={() => setIsExpanded(!isExpanded)}
@@ -234,11 +293,11 @@ function CaseStudyDossier({ study, idx }: { study: CaseStudy; idx: number }) {
                 >
                     <span className="text-xs font-black uppercase tracking-[0.4em] flex items-center gap-4">
                         <Terminal size={16} className="text-primary" /> 
-                        {isExpanded ? "Close Technical Dossier" : "Open Technical Dossier"}
+                        {isExpanded ? "Close Case Study Details" : "View Case Study Details"}
                     </span>
                     {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                 </button>
-
+ 
                 <AnimatePresence>
                     {isExpanded && (
                         <motion.div
@@ -255,10 +314,10 @@ function CaseStudyDossier({ study, idx }: { study: CaseStudy; idx: number }) {
                                         {study.strategicInsight}
                                     </p>
                                 </div>
-
+ 
                                 {/* Roadmap */}
                                 <div>
-                                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-8 flex items-center gap-2"><Layers size={14} /> Project Roadmap</h4>
+                                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-8 flex items-center gap-2"><Layers size={14} /> Project Timeline</h4>
                                     <div className="space-y-4">
                                         {study.roadmap.map((step, sIdx) => (
                                             <div key={sIdx} className="grid grid-cols-12 gap-6 bg-white p-6 brutalist-border shadow-[4px_4px_0px_#000]">
@@ -271,10 +330,10 @@ function CaseStudyDossier({ study, idx }: { study: CaseStudy; idx: number }) {
                                         ))}
                                     </div>
                                 </div>
-
+ 
                                 {/* Tech Stack */}
                                 <div>
-                                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-6 flex items-center gap-2"><Cpu size={14} /> The Arsenal</h4>
+                                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-black mb-6 flex items-center gap-2"><Cpu size={14} /> Tools &amp; Services</h4>
                                     <div className="flex flex-wrap gap-3">
                                         {study.techStack.map(tech => (
                                             <span key={tech} className="px-4 py-2 bg-slate-100 brutalist-border text-[8px] font-black uppercase tracking-widest shadow-[2px_2px_0px_#000]">

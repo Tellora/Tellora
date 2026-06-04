@@ -35,11 +35,11 @@ export default function NotFound() {
                     <div className="flex items-center justify-center gap-4 mb-6">
                         <Zap className="w-10 h-10 text-primary animate-pulse" />
                         <h2 className="text-3xl md:text-5xl font-heading font-black uppercase tracking-tighter">
-                            NODE NOT FOUND
+                            PAGE NOT FOUND
                         </h2>
                     </div>
                     <p className="text-xl md:text-2xl font-bold font-sans uppercase tracking-widest text-black/60 mb-8">
-                        The protocol you requested has been redacted or never existed.
+                        The page you requested does not exist or has been moved.
                     </p>
 
                     <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
@@ -48,7 +48,7 @@ export default function NotFound() {
                             className="w-full sm:w-auto px-8 py-5 bg-black text-white font-black text-lg uppercase tracking-widest brutalist-border shadow-[8px_8px_0px_0px_#F3E84A] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_#F3E84A] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-4"
                         >
                             <Home className="w-6 h-6" />
-                            Return to Core
+                            Return Home
                         </Link>
                         <button
                             onClick={() => window.history.back()}
@@ -62,7 +62,7 @@ export default function NotFound() {
 
                 {/* Status Ticket */}
                 <div className="inline-block bg-black text-white px-6 py-2 brutalist-border shadow-[4px_4px_0px_0px_#A855F7] rotate-3 text-sm font-black uppercase tracking-widest">
-                    ERROR_CODE: 404_VOID
+                    ERROR_CODE: 404
                 </div>
             </motion.div>
         </div>

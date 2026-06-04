@@ -114,7 +114,7 @@ export default function AdminInbox() {
                 <div>
                     <div className="flex items-center gap-3 mb-3">
                         <Mail size={14} className="text-primary" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary">Inter-Matrix Dialogue</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary">Inbox Messages</span>
                     </div>
                     <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter text-white italic leading-none">
                         Dialogue <span className="text-primary italic">Vault</span>

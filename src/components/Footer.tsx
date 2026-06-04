@@ -24,11 +24,11 @@ export default function Footer() {
                     <div className="max-w-2xl relative">
                         <div className="inline-flex items-center gap-4 px-10 py-3 bg-black text-white brutalist-border rounded-full rotate-[-3deg] mb-12 shadow-[12px_12px_0px_#A855F7] hover:rotate-0 transition-transform cursor-help group">
                             <Terminal size={20} className="text-primary group-hover:animate-pulse" />
-                            <span className="text-[12px] font-black uppercase tracking-[0.5em]">Open Protocol 2026</span>
+                            <span className="text-[12px] font-black uppercase tracking-[0.5em]">Tellora Media 2026</span>
                         </div>
 
                         <h2 className="text-5xl sm:text-7xl lg:text-[9rem] font-heading font-black uppercase mb-12 md:mb-16 leading-[0.85] md:leading-[0.8] tracking-tighter">
-                            READY TO <br /> <span className="text-secondary italic">DISRUPT?</span>
+                            READY TO <br /> <span className="text-secondary italic">GROW?</span>
                         </h2>
 
                         <div className="flex flex-col sm:flex-row gap-6 md:gap-10">
@@ -36,7 +36,7 @@ export default function Footer() {
                                 href="/contact"
                                 className="px-10 md:px-16 py-6 md:py-8 bg-primary text-black font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-lg md:text-2xl brutalist-border shadow-[8px_8px_0px_#000] md:shadow-[15px_15px_0px_#000] hover:translate-y-[-8px] hover:shadow-[12px_12px_0px_#000] md:hover:shadow-[20px_20px_0px_#000] active:translate-y-2 active:shadow-none transition-all flex items-center justify-center gap-4 md:gap-8 group"
                             >
-                                START INTEL <ArrowRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-6 transition-transform" />
+                                GET STARTED <ArrowRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-6 transition-transform" />
                             </Link>
 
                             <div className="flex gap-6">
@@ -60,7 +60,7 @@ export default function Footer() {
                         {/* Personalised Badge - Bottom Left of CTA */}
                         <div className="absolute -bottom-20 left-0 hidden md:flex items-center gap-4 bg-accent p-6 brutalist-border shadow-[8px_8px_0px_#000] rotate-2 sticker-pulse">
                             <ShieldCheck size={24} className="text-black" />
-                            <span className="text-[12px] font-black uppercase tracking-widest text-black">Encryption: Active</span>
+                            <span className="text-[12px] font-black uppercase tracking-widest text-black">All Rights Reserved</span>
                         </div>
                     </div>
 
@@ -69,10 +69,10 @@ export default function Footer() {
                         <div className="space-y-12">
                             <div>
                                 <h3 className="text-3xl font-heading font-black uppercase mb-10 flex items-center gap-4">
-                                    <Zap size={24} className="text-primary fill-current" /> Core Protocols
+                                    <Zap size={24} className="text-primary fill-current" /> Our Services
                                 </h3>
                                 <ul className="space-y-6">
-                                    {["SEO Expansion", "Viral Flux", "Web Architecture", "Data Intel"].map(s => (
+                                    {["SEO Optimization", "Social Media", "Web Design", "Performance Ads"].map(s => (
                                         <li key={s}>
                                             <Link href="/services" className="text-[12px] font-black uppercase tracking-[0.4em] hover:text-primary transition-colors flex items-center gap-4 group">
                                                 <div className="w-2 h-2 bg-black rounded-full group-hover:scale-200 transition-all group-hover:bg-primary" /> {s}
@@ -84,10 +84,10 @@ export default function Footer() {
 
                             <div>
                                 <h3 className="text-3xl font-heading font-black uppercase mb-10 flex items-center gap-4">
-                                    <Heart size={24} className="text-accent fill-current" /> Tellora DNA
+                                    <Heart size={24} className="text-accent fill-current" /> Company
                                 </h3>
                                 <ul className="space-y-6">
-                                    {["The Genesis", "Success Map", "Join Core", "Intel Blog"].map((s, idx) => (
+                                    {["About Us", "Case Studies", "Careers", "Blog"].map((s, idx) => (
                                         <li key={s}>
                                             <Link href={idx === 0 ? "/about" : idx === 1 ? "/case-studies" : idx === 2 ? "/careers" : idx === 3 ? "/blog" : "/#"} className="text-[12px] font-black uppercase tracking-[0.4em] hover:text-accent transition-colors flex items-center gap-4 group">
                                                 <div className="w-2 h-2 bg-black rounded-full group-hover:scale-200 transition-all group-hover:bg-accent" /> {s}
@@ -102,16 +102,16 @@ export default function Footer() {
                             {/* Personalised Newsletter Module */}
                             <div className="bg-white p-12 brutalist-border shadow-[15px_15px_0px_#000] -rotate-1 relative overflow-hidden group">
                                 <div className="absolute inset-0 bg-primary/5 halftone-overlay opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <h3 className="text-3xl font-heading font-black uppercase mb-6 tracking-tighter">Intel Sync</h3>
-                                <p className="text-[12px] font-black uppercase mb-10 opacity-60 leading-tight">No noise. Absolute growth algorithms delivered weekly.</p>
+                                <h3 className="text-3xl font-heading font-black uppercase mb-6 tracking-tighter">Newsletter</h3>
+                                <p className="text-[12px] font-black uppercase mb-10 opacity-60 leading-tight">No spam. Get digital marketing strategies delivered weekly.</p>
                                 <form className="flex flex-col gap-6 relative z-10">
                                     <input
                                         type="email"
-                                        placeholder="CORE_IDENTITY@EMAIL.COM"
+                                        placeholder="YOUR.EMAIL@DOMAIN.COM"
                                         className="w-full bg-white brutalist-border p-6 text-[12px] font-black focus:outline-none focus:bg-black focus:text-white transition-all placeholder:text-black/30"
                                     />
                                     <button className="w-full bg-black text-white p-6 font-black uppercase tracking-[0.5em] text-[12px] hover:bg-primary transition-all shadow-[6px_6px_0px_#F3E84A] active:translate-y-1 active:shadow-none">
-                                        JOIN SYNC
+                                        SUBSCRIBE
                                     </button>
                                 </form>
                             </div>
@@ -121,8 +121,8 @@ export default function Footer() {
                                 <div className="flex items-center gap-4">
                                     <Globe size={24} className="text-primary animate-pulse" />
                                     <p className="text-[14px] font-black uppercase leading-tight tracking-widest">
-                                        Universal Node <br />
-                                        <span className="text-primary italic">Absolute Execution</span>
+                                        Global Office <br />
+                                        <span className="text-primary italic">Digital Marketing Agency</span>
                                     </p>
                                 </div>
                             </div>
@@ -137,12 +137,12 @@ export default function Footer() {
                             <Image src="/tellora-logo.png" alt="Tellora" width={160} height={50} className="object-contain md:w-[200px]" />
                         </Link>
                         <div className="flex items-center gap-3 px-4 md:px-6 py-2 bg-black text-white text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] mt-4 md:mt-0">
-                            © 2026 Tellora Groups
+                            © 2026 Tellora Media
                         </div>
                     </div>
 
                     <div className="flex flex-wrap justify-center gap-12">
-                        {["Growth_Strategy", "Market_Mastery", "Performance_Hub"].map((l, idx) => (
+                        {["Services", "Case Studies", "SEO Checker"].map((l, idx) => (
                             <Link key={l} href={idx === 0 ? "/services" : idx === 1 ? "/case-studies" : "/seo-checker"} className="text-[10px] font-black uppercase tracking-[0.6em] hover:text-primary transition-all group relative">
                                 {l}
                                 <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-primary group-hover:w-full transition-all duration-500" />

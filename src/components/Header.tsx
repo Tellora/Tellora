@@ -90,7 +90,7 @@ export default function Header() {
                             className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-4 bg-[#080B12] border border-primary/40 text-white px-6 py-4 rounded-[2rem] shadow-[0_0_40px_rgba(74,192,228,0.3)] backdrop-blur-xl"
                         >
                             <ShieldCheck size={20} className="text-primary animate-pulse" />
-                            <p className="text-[11px] font-black uppercase tracking-[0.3em] text-primary italic">Control Hub Access...</p>
+                            <p className="text-[11px] font-black uppercase tracking-[0.3em] text-primary italic">Opening Admin Panel...</p>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -196,12 +196,12 @@ export default function Header() {
                                 onClick={() => setMobileOpen(false)}
                                 className="block w-full text-center py-4 md:py-10 bg-accent brutalist-border shadow-[8px_8px_0px_#000] md:shadow-[12px_12px_0px_#000] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-base md:text-2xl hover:bg-white transition-all sticker-pulse"
                             >
-                                DEPLOY LOGIC! 🔥
+                                GET STARTED! 🔥
                             </Link>
 
                             <div className="hidden md:flex flex-col justify-center">
                                 <p className="text-xs font-black uppercase leading-tight max-w-xs">
-                                    Architecting end-to-end growth ecosystems for the world's most ambitious disruptors.
+                                    {"Creating customized digital marketing solutions for ambitious brands."}
                                 </p>
                             </div>
                         </div>

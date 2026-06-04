@@ -49,7 +49,7 @@ export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
                     <div className="max-w-xs text-left lg:text-right">
                         <p className="text-xs md:text-sm font-black uppercase leading-tight bg-white p-4 md:p-6 brutalist-border shadow-[4px_4px_0px_#000] lg:-rotate-2">
                             Combining deep technical expertise with relentless creative innovation to architect the future.
-                            Click a card for intel.
+                            Click a card to see profile.
                         </p>
                     </div>
                 </div>
@@ -128,7 +128,7 @@ function TeamCard({ member, idx }: { member: DbTeamMember; idx: number }) {
 
                         <div className="absolute top-6 left-6 -rotate-6 hidden group-hover:block transition-all">
                             <div className="px-3 py-1.5 bg-black text-white brutalist-border text-[8px] font-black uppercase tracking-widest flex items-center gap-2 shadow-[2px_2px_0px_#FFF]">
-                                <Target size={10} className="text-primary" /> Click For Intel
+                                <Target size={10} className="text-primary" /> Click to Flip
                             </div>
                         </div>
                     </div>
@@ -167,7 +167,7 @@ function TeamCard({ member, idx }: { member: DbTeamMember; idx: number }) {
 
                         {/* Biography */}
                         <p className="text-white/80 text-xs md:text-sm font-medium leading-relaxed mb-6">
-                            "{member.bio}"
+                            &quot;{member.bio}&quot;
                         </p>
 
                         {/* Skills */}

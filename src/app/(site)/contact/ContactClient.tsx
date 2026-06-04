@@ -14,7 +14,7 @@ const contactInfo = [
         icon: <Mail className="w-6 h-6 text-primary" />,
         label: "Direct Email",
         value: "contact@telloramedia.online",
-        subtitle: "Architecture & Strategy",
+        subtitle: "General Inquiry",
         link: "mailto:contact@telloramedia.online"
     },
     {
@@ -28,7 +28,7 @@ const contactInfo = [
         icon: <MapPin className="w-6 h-6 text-primary" />,
         label: "Global HQ",
         value: "South Extension II, New Delhi",
-        subtitle: "India Node | Global Strategy",
+        subtitle: "India Office | Global Strategy",
         link: "https://goo.gl/maps/placeholder"
     }
 ];
@@ -75,9 +75,9 @@ export default function ContactPage() {
 
             <main>
                 <PageHeader
-                    breadcrumb="Architecture Phase"
+                    breadcrumb="Contact Us"
                     title="Design Your Growth"
-                    subtitle="Ready to scale? We're currently taking on 2 new high-growth partners this month. Connect with our architects below."
+                    subtitle="Ready to scale? We're currently taking on 2 new high-growth partners this month. Connect with our team below."
                 />
 
                 <section className="py-24 relative z-10 bg-white">
@@ -121,7 +121,7 @@ export default function ContactPage() {
                                     </h3>
                                     <div className="space-y-4 relative z-10">
                                         <div className="flex justify-between items-center py-3 border-b border-white/10">
-                                            <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Global Ops</span>
+                                            <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Global Office</span>
                                             <span className="font-bold text-sm tracking-widest">24 / 7 Active</span>
                                         </div>
                                         <div className="flex justify-between items-center py-3 border-b border-white/10">
@@ -135,7 +135,7 @@ export default function ContactPage() {
                                     </div>
                                     <div className="mt-8 pt-6 border-t border-white/10 text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-2">
                                         <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-                                        Systems Online
+                                        Support Online
                                     </div>
                                 </div>
                             </div>
@@ -155,11 +155,11 @@ export default function ContactPage() {
                                     <div className="mb-14 relative z-10">
                                         <div className="flex items-center gap-4 mb-6">
                                             <span className="h-[2px] w-12 bg-primary"></span>
-                                            <span className="text-primary font-black tracking-[0.4em] uppercase text-[10px]">Strategic Intake</span>
+                                            <span className="text-primary font-black tracking-[0.4em] uppercase text-[10px]">Contact Form</span>
                                         </div>
-                                        <h2 className="text-4xl md:text-6xl font-heading font-black text-text-main mb-6 leading-[1.1]">Project Roadmap</h2>
+                                        <h2 className="text-4xl md:text-6xl font-heading font-black text-text-main mb-6 leading-[1.1]">Tell Us About Your Project</h2>
                                         <p className="text-text-muted text-xl font-bold leading-relaxed max-w-2xl opacity-80">
-                                            Submit your project intelligence. Our architects will decrypt your data and return a custom growth blueprint within <span className="text-primary underline decoration-2 underline-offset-4 font-black">24 hours</span>.
+                                            Submit your project details. Our team will analyze your request and return a custom growth plan within <span className="text-primary underline decoration-2 underline-offset-4 font-black">24 hours</span>.
                                         </p>
                                     </div>
 
@@ -177,10 +177,10 @@ export default function ContactPage() {
                     
                     <div className="container mx-auto px-4 relative z-10">
                         <div className="text-center mb-24">
-                            <span className="text-primary font-black tracking-[0.4em] uppercase text-[10px] mb-6 block">The Partnership Flow</span>
-                            <h2 className="text-5xl md:text-7xl font-heading font-black text-text-main mb-8 leading-tight">Growth Architecture</h2>
+                            <span className="text-primary font-black tracking-[0.4em] uppercase text-[10px] mb-6 block">Our Process</span>
+                            <h2 className="text-5xl md:text-7xl font-heading font-black text-text-main mb-8 leading-tight">How We Work</h2>
                             <p className="text-text-muted text-xl font-bold max-w-3xl mx-auto opacity-70 leading-relaxed">
-                                Our battle-tested process for turning vision into market dominance.
+                                Our battle-tested process for turning vision into market growth.
                             </p>
                         </div>
 
@@ -217,7 +217,7 @@ export default function ContactPage() {
                             {[
                                 { q: "How fast will I see results?", a: "Quick wins (UI/UX & technical SEO fixes) are visible in days. Significant organic scale usually takes 3-6 months depending on niche competition." },
                                 { q: "Do you offer custom pricing?", a: "Yes. Every project is unique. We build flexible pricing models based on your specific growth goals and required resources." },
-                                { q: "Will I have a dedicated manager?", a: "Absolutely. You'll be paired with a strategic architect who will be your direct point of contact for all phases." },
+                                { q: "Will I have a dedicated manager?", a: "Absolutely. You'll be paired with a growth manager who will be your direct point of contact for all phases." },
                                 { q: "What industries do you work with?", a: "We specialize in high-growth startups, e-commerce empires, and service leaders looking to dominate their local or global markets." }
                             ].map((item, idx) => (
                                 <details key={idx} className="group p-8 rounded-[2rem] bg-slate-50 border border-slate-100 hover:border-primary/20 transition-all duration-300">
@@ -244,7 +244,7 @@ export default function ContactPage() {
                     <div className="container mx-auto px-4 text-center relative z-10">
                         <div className="inline-flex items-center gap-3 px-8 py-3 rounded-full bg-white/5 border border-white/10 mb-12 backdrop-blur-xl">
                             <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse shadow-[0_0_12px_rgba(var(--primary-rgb),0.5)]"></span>
-                            <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.4em]">Direct Protocol Engaged</span>
+                            <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.4em]">Contact Information</span>
                         </div>
                         <h2 className="text-5xl md:text-[8rem] font-heading font-black text-white mb-16 leading-[0.9] tracking-tighter">Ready to <br /><span className="text-primary italic">Ignite?</span></h2>
                         <div className="flex flex-wrap justify-center gap-8">

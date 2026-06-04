@@ -94,7 +94,7 @@ export default function AdminServices() {
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Service Ecosystem</span>
                     </div>
                     <h1 className="text-4xl font-black tracking-tighter text-white">
-                        Offerings <span className="text-primary text-4xl font-black tracking-tighter italic">Matrix</span>
+                        Service <span className="text-primary text-4xl font-black tracking-tighter italic">List</span>
                     </h1>
                     <p className="text-white/40 font-medium text-sm mt-1">
                         Manage core service deliverables. Changes reflect on the public services page.

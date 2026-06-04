@@ -156,7 +156,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
                     <p className="text-white/20 text-[10px] font-black uppercase tracking-widest">
-                        Verifying Session...
+                        Loading...
                     </p>
                 </div>
             </div>
@@ -177,7 +177,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
 
     // ── Display values ─────────────────────────────────────────────────────────
     const displayName = currentUser?.name || "Administrator";
-    const displayRole = currentUser?.role || "System Root";
+    const displayRole = currentUser?.role || "Administrator";
     const displayDept = currentUser?.department || "";
     const displayInitials = currentUser?.initials || "AD";
 
@@ -189,7 +189,6 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
         { name: "Team Members", icon: Users, path: "/admin/team" },
         { name: "Recruitment", icon: PlusCircle, path: "/admin/recruitment" },
         { name: "Customer Reels", icon: PieChart, path: "/admin/reels" },
-        { name: "IG Preview", icon: ImageIcon, path: "/admin/ig-preview" },
         { name: "Inbox", icon: MessageSquare, path: "/admin/inbox" },
         { name: "Instagram Portal", icon: Instagram, path: "/admin/instagram" },
         { name: "Analytics", icon: BarChart3, path: "/admin/analytics" },
@@ -329,7 +328,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
                             <Search size={16} className="text-white/20" />
                             <input
                                 type="text"
-                                placeholder="Universal Search..."
+                                placeholder="Search..."
                                 className="bg-transparent border-none outline-none text-sm font-medium w-64 text-white placeholder:text-white/20"
                             />
                         </div>
@@ -363,7 +362,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
                                             className="absolute right-[-60px] sm:right-0 mt-3 w-[calc(100vw-2rem)] sm:w-80 max-w-sm bg-[#0D121F] border border-white/10 rounded-2xl p-4 shadow-2xl z-50 space-y-3"
                                         >
                                             <div className="flex justify-between items-center pb-2 border-b border-white/5">
-                                                <span className="text-[10px] font-black uppercase tracking-wider text-white">Alert Logs</span>
+                                                <span className="text-[10px] font-black uppercase tracking-wider text-white">Notifications</span>
                                                 {unreadCount > 0 && (
                                                     <span className="px-2 py-0.5 bg-primary/20 text-primary text-[8px] font-black rounded-full uppercase tracking-widest">
                                                         {unreadCount} Unread
@@ -373,7 +372,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
 
                                             <div className="max-h-60 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                                                 {notifications.length === 0 ? (
-                                                    <p className="text-white/20 text-[10px] font-bold uppercase text-center py-6">No Activity Detected</p>
+                                                    <p className="text-white/20 text-[10px] font-bold uppercase text-center py-6">No notifications</p>
                                                 ) : (
                                                     notifications.map((notif) => (
                                                         <Link
@@ -387,7 +386,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
                                                             }`}
                                                         >
                                                             <div className="flex items-start justify-between gap-2">
-                                                                <h5 className={`text-xs font-black italic ${notif.isUnread ? "text-primary" : "text-white/80"}`}>
+                                                                 <h5 className={`text-xs font-black italic ${notif.isUnread ? "text-primary" : "text-white/80"}`}>
                                                                     {notif.title}
                                                                 </h5>
                                                                 <span className="text-[8px] text-white/20 font-bold shrink-0">
@@ -408,7 +407,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
                                                     onClick={() => setIsNotificationsOpen(false)}
                                                     className="text-[9px] font-black uppercase tracking-widest text-primary hover:text-white transition-colors"
                                                 >
-                                                    Access Inbox
+                                                    View Inbox
                                                 </Link>
                                             </div>
                                         </motion.div>

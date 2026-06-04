@@ -18,6 +18,7 @@ import {
     DbIGPost
 } from "./supabase";
 import { manualMembers } from "@/data/team";
+import { caseStudies as staticCaseStudies } from "@/data/case-studies";
 
 export type { DbIGProfile, DbIGPost };
 
@@ -160,12 +161,96 @@ export async function getCaseStudies(): Promise<CaseStudy[]> {
     return fetchTableData("case_studies", []);
 }
 
+export async function getAllCaseStudies(): Promise<CaseStudy[]> {
+    const dbCases = await getCaseStudies();
+    
+    // Merge database updates onto static case studies
+    const merged = staticCaseStudies.map(staticCase => {
+        const dbOverride = dbCases.find(db => db.id === staticCase.id || db.title.toLowerCase() === staticCase.title.toLowerCase());
+        if (dbOverride) {
+            return {
+                ...staticCase,
+                ...dbOverride,
+                // Make sure array/object fields are handled safely
+                stats: dbOverride.stats && dbOverride.stats.length > 0 ? dbOverride.stats : staticCase.stats,
+                tags: dbOverride.tags && dbOverride.tags.length > 0 ? dbOverride.tags : staticCase.techStack,
+            };
+        }
+        return { ...staticCase, status: "Published" }; // Default static to Published
+    });
+
+    // Add any database-only case studies that don't match static ones
+    dbCases.forEach(db => {
+        const matchesStatic = staticCaseStudies.some(s => s.id === db.id || s.title.toLowerCase() === db.title.toLowerCase());
+        if (!matchesStatic && db.status !== "Inactive") {
+            // Provide defaults for static-only fields
+            merged.push({
+                ...db,
+                clientSummary: db.description,
+                industry: db.tag || db.category || "General",
+                services: db.tags && db.tags.length > 0 ? db.tags : [db.category || "General"],
+                challenge: "Enhancing operations and digital presence to achieve scalable market results.",
+                execution: "Implemented tailored growth architecture and full-funnel digital optimizations.",
+                strategicInsight: "Focusing on user-centric design and performance marketing unlocks latent customer intent.",
+                roadmap: [
+                    { phase: "Deployment", details: "Integrating new digital structures." },
+                    { phase: "Optimization", details: "A/B testing and performance tuning." }
+                ],
+                techStack: db.tags || [],
+                image: db.image_url || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+                color: "#4AC0E4",
+                links: {},
+            } as any);
+        }
+    });
+
+    return merged.filter(c => c.status !== "Inactive") as any[];
+}
+
 export async function upsertCaseStudy(cs: CaseStudy): Promise<void> {
-    await upsertTableData("case_studies", cs);
+    const dbCase: any = {
+        id: cs.id,
+        title: cs.title,
+        description: cs.description,
+        category: cs.category,
+        impact: cs.impact,
+        tag: cs.tag,
+        image_url: cs.image_url,
+        stats: cs.stats,
+        tags: cs.tags,
+        status: cs.status,
+    };
+    
+    // Check if the id is a valid UUID
+    const isUuid = cs.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cs.id);
+    if (!isUuid) {
+        // Find existing override if any by matching title
+        const dbCases = await getCaseStudies();
+        const match = dbCases.find(c => c.title.toLowerCase() === cs.title.toLowerCase() || c.id === cs.id);
+        if (match) {
+            dbCase.id = match.id;
+        } else {
+            // Let the database generate a UUID
+            delete dbCase.id;
+        }
+    }
+    await upsertTableData("case_studies", dbCase);
 }
 
 export async function deleteCaseStudy(id: string): Promise<void> {
-    await deleteTableData("case_studies", { id });
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+    if (!isUuid) {
+        // Mark as Inactive in the database
+        const dbCases = await getCaseStudies();
+        const match = dbCases.find(c => c.id === id);
+        await upsertTableData("case_studies", {
+            id: match?.id || undefined,
+            title: match?.title || id,
+            status: "Inactive"
+        });
+    } else {
+        await deleteTableData("case_studies", { id });
+    }
 }
 
 // ── Reels ─────────────────────────────────────────────────────────────────────
@@ -239,6 +324,19 @@ export async function upsertTeamMember(member: DbTeamMember): Promise<void> {
         status: member.category || member.status || "Active"
     };
     delete (dbMember as any).category;
+    // Check if the id is a valid UUID
+    const isUuid = member.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(member.id);
+    if (!isUuid) {
+        // Find existing override if any by matching name
+        const dbMembers = await getTeam();
+        const match = dbMembers.find(m => m.name.toLowerCase() === member.name.toLowerCase());
+        if (match) {
+            dbMember.id = match.id;
+        } else {
+            // Let the database generate a UUID
+            delete (dbMember as any).id;
+        }
+    }
     await upsertTableData("team_members", dbMember);
 }
 
@@ -342,7 +440,9 @@ export async function getIGProfileBySlug(slug: string): Promise<IGProfile | null
 }
 
 export async function upsertIGProfile(profile: DbIGProfile): Promise<void> {
-    await upsertTableData("ig_profiles", profile);
+    const dbProfile = { ...profile };
+    delete (dbProfile as any).posts;
+    await upsertTableData("ig_profiles", dbProfile);
 }
 
 export async function deleteIGProfile(id: string): Promise<void> {

@@ -24,15 +24,26 @@ export const manualMembers: DbTeamMember[] = [
         stats: [{ label: "ROAS", value: "12X" }, { label: "Growth", value: "800%" }]
     },
     {
-        id: "vansh",
-        name: "Vansh Sharma",
-        role: "Lead Developer",
-        category: "development",
-        image_url: "/teams/vansh tellora.png",
-        color: "#F3E84A",
-        bio: "Strategic growth specialist leading technical integrations and ops.",
-        skills: ["Operations", "Strategy", "Tech"],
-        stats: [{ label: "Efficiency", value: "98%" }, { label: "Nodes", value: "120+" }]
+        id: "arhama",
+        name: "Arhama",
+        role: "Video Editing Intern",
+        category: "designing",
+        image_url: "/teams/arhama tellora.png",
+        color: "#22D3EE",
+        bio: "Bringing fresh, creative energy to visual storytelling and high-retention video edits.",
+        skills: ["Video Editing", "Premiere Pro", "Short-form Content"],
+        stats: [{ label: "Retention", value: "85%" }, { label: "Reels", value: "40+" }]
+    },
+    {
+        id: "prateek",
+        name: "Prateek",
+        role: "Video Editor",
+        category: "designing",
+        image_url: "/teams/prateek tellora.png",
+        color: "#8B5CF6",
+        bio: "Crafting dynamic, high-impact videos designed to capture attention and scale brand authority.",
+        skills: ["Video Editing", "After Effects", "Sound Design"],
+        stats: [{ label: "Engagement", value: "12%" }, { label: "Views", value: "1M+" }]
     },
     {
         id: "nandini",

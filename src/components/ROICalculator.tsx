@@ -80,7 +80,7 @@ export default function ROICalculator() {
             <div className="absolute top-1/2 left-0 w-full opacity-[0.02] pointer-events-none -translate-y-1/2">
                 <motion.div style={{ x: xMarquee }}>
                     <span className="text-[20rem] md:text-[30rem] font-heading font-black uppercase whitespace-nowrap tracking-tighter">
-                        ABSOLUTE ROI • DATA ARCHITECTURE •
+                        ABSOLUTE ROI • MARKETING PERFORMANCE •
                     </span>
                 </motion.div>
             </div>
@@ -222,7 +222,7 @@ export default function ROICalculator() {
                                 <div className="grid grid-cols-2 gap-4 md:gap-6 mt-8 md:mt-16 mb-8 md:mb-16">
                                     <div className="p-4 md:p-8 bg-black/5 rounded-[1.5rem] md:rounded-[2.5rem] border border-black/5 group hover:bg-black/10 transition-all">
                                         <p className="text-[7px] md:text-[9px] font-black uppercase text-black/40 tracking-widest mb-1 md:mb-3 flex items-center gap-2">
-                                            <Zap size={10} className="text-primary" /> ROAS
+                                            <Zap size={10} className="text-primary" /> AD RETURN
                                         </p>
                                         <p className="text-xl md:text-3xl font-black italic">{(finalMonthlyRevenue / (currentMonthlyRevenue || 1) * industry.multiplier).toFixed(1)}x</p>
                                     </div>
@@ -236,12 +236,12 @@ export default function ROICalculator() {
 
                                 <Magnetic>
                                     <a href="/contact" className="w-full py-5 md:py-8 bg-black text-white rounded-[1.5rem] md:rounded-[2.5rem] text-center font-black uppercase tracking-[0.1em] md:tracking-[0.2em] text-[10px] md:text-sm flex items-center justify-center gap-2 md:gap-4 hover:gap-8 transition-all shadow-[8px_8px_0px_#A855F7] md:shadow-[12px_12px_0px_#A855F7] group">
-                                        DEPLOY <ArrowRight size={16} className="text-primary group-hover:translate-x-4 transition-transform" />
+                                        START NOW <ArrowRight size={16} className="text-primary group-hover:translate-x-4 transition-transform" />
                                     </a>
                                 </Magnetic>
 
                                 <p className="mt-8 text-center text-[8px] font-black uppercase tracking-widest opacity-30">
-                                    *Analysis based on high-frequency market growth variables
+                                    *Analysis based on average industry results
                                 </p>
                             </div>
                         </div>

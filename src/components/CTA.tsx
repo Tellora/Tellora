@@ -14,7 +14,7 @@ export default function CTA() {
             {/* Massive Background Text */}
             <div className="absolute top-1/2 left-0 w-full opacity-5 pointer-events-none -translate-y-1/2 -rotate-6">
                 <span className="text-[30rem] font-heading font-black uppercase whitespace-nowrap">
-                    LET'S GO • LET'S GO •
+                    {"LET'S GO • LET'S GO •"}
                 </span>
             </div>
 

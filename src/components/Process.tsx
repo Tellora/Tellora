@@ -26,7 +26,7 @@ const steps = [
         num: "03",
         icon: <Rocket size={32} />,
         title: "Execution",
-        description: "Our expert team deploys high-frequency campaigns, content, and optimizations with creative precision.",
+        description: "Our expert team launches high-impact campaigns, content, and optimizations with creative precision.",
         color: "#22C55E",
         rotate: "-1.5deg"
     },
@@ -72,7 +72,7 @@ export default function Process() {
                     <motion.div style={{ y: yTitle }} className="max-w-2xl">
                         <div className="inline-flex items-center gap-4 mb-6 px-6 py-2 bg-black text-white brutalist-border rounded-full rotate-2 shadow-[4px_4px_0px_#A855F7]">
                             <Zap size={14} className="text-primary fill-current" />
-                            <span className="font-black uppercase tracking-widest text-[10px]">Neural Growth Map</span>
+                            <span className="font-black uppercase tracking-widest text-[10px]">Our Growth Process</span>
                         </div>
                         <h2 className="heading-massive !text-7xl md:!text-9xl tracking-tight">
                             <DecodeText text="FOUR" /> <br /> <span className="text-primary italic"><DecodeText text="PHASES" /></span>

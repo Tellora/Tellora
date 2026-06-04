@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     },
     openGraph: {
         title: "Contact Us | Tellora Media Digital Strategy Lab",
-        description: "Initialize your growth protocol. Connect with our experts for a marketing performance audit.",
+        description: "Get in touch with our team for a marketing performance audit.",
         url: "https://tellora.media/contact",
         siteName: "Tellora Media",
         locale: "en_US",

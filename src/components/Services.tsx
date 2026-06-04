@@ -93,7 +93,7 @@ export default function Services() {
 
                     <div className="flex flex-col items-start md:items-end text-left md:text-right">
                         <p className="max-w-xs font-black uppercase text-xs md:text-sm leading-tight mb-8">
-                            We don't do boring. We do high-impact, Gen-Z operated digital scale.
+                            {"We don't do boring. We do high-impact, Gen-Z operated digital scale."}
                         </p>
                         <div className="flex gap-4">
                             <button className="w-12 h-12 md:w-16 md:h-16 rounded-full brutalist-border flex items-center justify-center hover:bg-black hover:text-white transition-all">

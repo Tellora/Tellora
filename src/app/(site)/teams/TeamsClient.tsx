@@ -15,8 +15,8 @@ export default function TeamsClient() {
             <main>
                 <PageHeader
                     breadcrumb="Our Squad"
-                    title="THE CORE"
-                    subtitle="Meet the elite collective of designers, developers, and growth architects engineering the future of digital growth."
+                    title="OUR TEAM"
+                    subtitle="Meet the team of designers, developers, and digital marketing experts engineering the future of digital growth."
                 />
 
                 {/* Squad Intro Stats */}
@@ -31,8 +31,8 @@ export default function TeamsClient() {
                             </div>
                             <div className="p-10 brutalist-border border-white/20 bg-white/5 flex flex-col items-center text-center group hover:bg-primary transition-all duration-500">
                                 <Zap size={40} className="text-secondary group-hover:text-black mb-6" />
-                                <h3 className="text-4xl font-heading font-black mb-2">ELITE</h3>
-                                <p className="text-[10px] font-black uppercase tracking-widest opacity-60 group-hover:text-black/80">Execution Speed</p>
+                                <h3 className="text-4xl font-heading font-black mb-2">FAST</h3>
+                                <p className="text-[10px] font-black uppercase tracking-widest opacity-60 group-hover:text-black/80">Delivery Speed</p>
                             </div>
                             <div className="p-10 brutalist-border border-white/20 bg-white/5 flex flex-col items-center text-center group hover:bg-primary transition-all duration-500">
                                 <Target size={40} className="text-accent group-hover:text-black mb-6" />
@@ -63,13 +63,13 @@ export default function TeamsClient() {
                                 THINK YOU HAVE <br /> <span className="text-primary italic">WHAT IT TAKES?</span>
                             </h2>
                             <p className="text-lg md:text-xl font-bold mb-16 opacity-70 uppercase tracking-tight">
-                                We are always looking for outlier talent in design, development, and growth architecture.
+                                We are always looking for talented individuals in design, development, and marketing.
                             </p>
                             <a 
                                 href="/careers"
                                 className="inline-flex items-center gap-6 bg-black text-white px-16 py-8 brutalist-border shadow-[12px_12px_0_#4AC0E4] hover:shadow-none hover:translate-x-3 hover:translate-y-3 transition-all text-xl font-black uppercase tracking-widest"
                             >
-                                DEPLOY RESUME <Rocket size={24} className="text-primary" />
+                                JOIN OUR TEAM <Rocket size={24} className="text-primary" />
                             </a>
                         </div>
                     </div>

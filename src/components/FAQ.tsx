@@ -33,7 +33,7 @@ export default function FAQ() {
                 <div className="text-center mb-24">
                     <div className="inline-flex items-center gap-4 mb-8 px-6 py-2 bg-black text-white brutalist-border rounded-full -rotate-1 shadow-[4px_4px_0px_#A855F7]">
                         <HelpCircle size={14} className="text-primary fill-current" />
-                        <span className="font-black uppercase tracking-widest text-[10px]">Your Intel Base</span>
+                        <span className="font-black uppercase tracking-widest text-[10px]">HELP & FAQ</span>
                     </div>
                     <h2 className="heading-massive !text-7xl md:!text-9xl tracking-tighter">
                         BRAIN <br /> <span className="text-accent italic">DUMP</span>

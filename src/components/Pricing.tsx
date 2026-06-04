@@ -73,7 +73,7 @@ export default function Pricing() {
                     <motion.div style={{ y: yTitle }} className="max-w-3xl">
                         <div className="inline-flex items-center gap-4 md:gap-6 mb-8 md:mb-10 px-6 md:px-8 py-2 md:py-3 bg-black text-white brutalist-border rounded-full rotate-[-1deg] shadow-[8px_8px_0px_#A855F7] md:shadow-[12px_12px_0px_#A855F7]">
                             <Target className="text-primary fill-current w-4 h-4 md:w-5 md:h-5" />
-                            <span className="font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-[10px] md:text-[12px]">Dynamic Investment</span>
+                            <span className="font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-[10px] md:text-[12px]">Pricing Plans</span>
                         </div>
                         <h2 className="text-[4.5rem] sm:text-[6rem] md:text-[14rem] font-heading font-black uppercase tracking-tighter leading-[0.8] mb-8">
                             <DecodeText text="SCALE" /> <br className="hidden md:block" /> <span className="text-primary italic"><DecodeText text="PLANS" /></span>
@@ -125,7 +125,7 @@ export default function Pricing() {
                                             {plan.price}
                                         </span>
                                         {plan.price !== "Scale" && (
-                                            <span className="text-[8px] md:text-[12px] font-black uppercase tracking-widest opacity-40 z-10 relative">/mo_intel</span>
+                                            <span className="text-[8px] md:text-[12px] font-black uppercase tracking-widest opacity-40 z-10 relative">/month</span>
                                         )}
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@ export default function Pricing() {
                                     className={`mt-auto w-full py-3 md:py-8 brutalist-border text-center font-black uppercase tracking-[0.1em] md:tracking-[0.4em] text-[8px] md:text-sm transition-all hover:translate-y-[-4px] md:hover:translate-y-[-8px] hover:shadow-[6px_6px_0px_#000] md:hover:shadow-[10px_10px_0px_#000] active:translate-y-1 active:shadow-none ${plan.featured ? 'bg-black text-white' : 'bg-white text-black'
                                         }`}
                                 >
-                                    DEPLOY LOGIC
+                                    GET STARTED
                                 </a>
 
                                 <div className="absolute -bottom-10 -right-10 opacity-[0.05] pointer-events-none group-hover:opacity-20 transition-opacity rotate-12 group-hover:scale-150 duration-700 hidden md:block">

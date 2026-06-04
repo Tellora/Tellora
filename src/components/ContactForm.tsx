@@ -156,7 +156,7 @@ export default function ContactForm() {
                     <div className="w-6 h-6 border-[3px] border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                     <>
-                        <span className="uppercase tracking-[0.3em] text-[10px]">Initialize Strategy Protocol</span>
+                        <span className="uppercase tracking-[0.3em] text-[10px]">Send Message</span>
                         <div className="relative w-4 h-4 overflow-hidden">
                             <Send size={16} className="absolute inset-0 group-hover:translate-x-full group-hover:-translate-y-full transition-transform duration-500" />
                             <Send size={16} className="absolute inset-0 -translate-x-full translate-y-full group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-500" />

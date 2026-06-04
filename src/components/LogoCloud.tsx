@@ -80,7 +80,7 @@ export default function LogoCloud() {
                                 ARCHITECT YOUR <br /> <span className="text-accent underline decoration-white decoration-[4px] md:decoration-8 underline-offset-4 md:underline-offset-8">REVENUE ENGINE</span>
                             </h3>
                             <p className="text-sm md:text-lg font-black uppercase opacity-60 leading-tight">
-                                We don't just execute; we disrupt. Ready to join the high-performance family?
+                                {"We don't just execute; we disrupt. Ready to join the high-performance family?"}
                             </p>
                         </div>
 

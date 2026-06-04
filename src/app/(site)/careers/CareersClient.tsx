@@ -154,7 +154,7 @@ export default function CareersClient() {
                             className="inline-flex items-center gap-4 bg-white/5 border border-white/10 px-6 py-3 rounded-full mb-12 backdrop-blur-xl group cursor-help"
                         >
                             <Terminal size={14} className="text-primary" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60 group-hover:text-primary transition-colors">Career_Initialization_V4.0</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60 group-hover:text-primary transition-colors">Careers Info</span>
                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                         </motion.div>
 
@@ -164,7 +164,7 @@ export default function CareersClient() {
                                 <ScrambleText text="THE" className="group-hover:text-primary transition-all inline-block" />
                             </span>
                             <span className="block flex items-center gap-8 flex-wrap">
-                                <span className="text-primary italic">RESISTANCE</span>
+                                <span className="text-primary italic">TEAM</span>
                                 <div className="hidden md:block h-[4px] max-w-[400px] flex-1 bg-white/5 relative overflow-hidden">
                                     <motion.div
                                         initial={{ width: 0 }}
@@ -184,7 +184,7 @@ export default function CareersClient() {
                                 transition={{ delay: 0.4 }}
                                 className="text-xl sm:text-2xl md:text-3xl text-white font-medium leading-[1.2] md:leading-[1.1] tracking-tight max-w-xl italic"
                             >
-                                Tellora Media is an elite deployment layer for high-impact brands. We're looking for architects of influence to join our global resonance hive.
+                                Tellora Media is a leading digital marketing agency for high-growth brands. We're looking for talented individuals to join our global team.
                             </motion.p>
                             <div className="flex justify-end order-first md:order-last">
                                 <FloatingElement speed={0.05} top="0" left="0">
@@ -202,7 +202,7 @@ export default function CareersClient() {
                 {/* Job Board */}
                 <section className="container mx-auto px-6 mb-32 md:mb-60 relative">
                     <div className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/2 pointer-events-none opacity-5">
-                        <span className="text-[30vw] font-black uppercase vertical-text">DEPLOYS</span>
+                        <span className="text-[30vw] font-black uppercase vertical-text">CAREERS</span>
                     </div>
 
                     <div className="flex flex-col md:flex-row justify-between items-end gap-12 mb-24 relative z-10 max-w-7xl mx-auto">
@@ -212,13 +212,13 @@ export default function CareersClient() {
                                 whileInView={{ width: "100%" }}
                                 className="h-[2px] bg-primary mb-12 origin-left"
                             />
-                            <h2 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter uppercase mb-6 italic">Active <span className="text-primary">Missions</span></h2>
-                            <p className="text-lg md:text-xl text-white/40 font-medium max-w-lg leading-relaxed">Our grid is expanding. Join the elite operation and scale your potential at 10x velocity.</p>
+                            <h2 className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter uppercase mb-6 italic">Active <span className="text-primary">Careers</span></h2>
+                            <p className="text-lg md:text-xl text-white/40 font-medium max-w-lg leading-relaxed">Our team is expanding. Join us and scale your marketing and design career.</p>
                         </div>
                         <div className="flex flex-col items-end gap-4">
                             <div className="flex items-center gap-4 bg-primary text-black px-8 py-5 brutalist-border shadow-[8px_8px_0px_#000] rotate-2 hover:rotate-0 transition-all cursor-crosshair">
                                 <Activity size={20} className="animate-pulse" />
-                                <span className="text-xs font-black uppercase tracking-widest">Global Status: Optimal</span>
+                                <span className="text-xs font-black uppercase tracking-widest">Global Office: Hiring</span>
                             </div>
                         </div>
                     </div>
@@ -271,16 +271,16 @@ export default function CareersClient() {
                         <div className="relative z-10 grid md:grid-cols-2 gap-12 md:gap-20 items-center">
                             <div className="space-y-8 md:space-y-12">
                                 <h2 className="text-4xl sm:text-6xl md:text-9xl font-black tracking-tighter text-white uppercase leading-[0.8] italic">
-                                    Send us <br />
-                                    <span className="text-primary outline-text !text-white">The Vector.</span>
+                                    Send your <br />
+                                    <span className="text-primary outline-text !text-white">Resume.</span>
                                 </h2>
                                 <p className="text-lg md:text-xl text-white/60 font-medium leading-relaxed max-w-md">
-                                    Elite talent doesn't always wait for an invite. If you operate at a higher frequency, transmit your dossier now.
+                                    Great talent doesn't always wait for an invite. If you have what it takes, send your resume today.
                                 </p>
                                 <div className="flex flex-wrap gap-6 pt-4">
                                     <Magnetic>
                                         <button className="px-8 md:px-12 py-6 md:py-8 bg-primary text-white brutalist-border shadow-[6px_6px_0px_#fff] md:shadow-[10px_10px_0px_#fff] text-[10px] md:text-[11px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] hover:shadow-none hover:translate-x-2 hover:translate-y-2 transition-all flex items-center gap-4 group">
-                                            Open Application Node <RotateCw size={18} className="group-hover:rotate-180 transition-transform duration-700" />
+                                            Open Application Form <RotateCw size={18} className="group-hover:rotate-180 transition-transform duration-700" />
                                         </button>
                                     </Magnetic>
                                 </div>
@@ -293,7 +293,7 @@ export default function CareersClient() {
                                             <Star size={20} className="md:w-6 md:h-6 text-black fill-current" />
                                         </div>
                                         <div className="absolute -bottom-4 md:-bottom-6 bg-white text-black px-6 md:px-8 py-2 md:py-3 brutalist-border text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] -rotate-3">
-                                            Deploy Intel
+                                            Apply Now
                                         </div>
                                     </div>
                                 </FloatingElement>
@@ -331,7 +331,7 @@ export default function CareersClient() {
                                         <div className="md:col-span-2 space-y-12">
                                             <div className="space-y-6">
                                                 <div className="flex items-center gap-4">
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary italic">Initialization Node_TM: {selectedJob.id}</span>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary italic">Job ID: {selectedJob.id}</span>
                                                     <div className="h-[1px] flex-1 bg-white/10" />
                                                 </div>
                                                 <h2 className="text-3xl sm:text-5xl md:text-7xl xl:text-8xl font-black tracking-tighter uppercase italic leading-[0.9] mb-8 text-white break-words">
@@ -353,13 +353,13 @@ export default function CareersClient() {
                                             <div className="space-y-12 md:space-y-20 pt-12 border-t border-white/10">
                                                 <section className="space-y-6 md:space-y-8">
                                                     <h3 className="text-[10px] sm:text-sm font-black uppercase tracking-[0.4em] md:tracking-[0.6em] text-primary flex items-center gap-4">
-                                                        <Terminal size={18} /> The Mission Context
+                                                        <Terminal size={18} /> Job Description
                                                     </h3>
                                                     <p className="text-lg sm:text-xl md:text-2xl text-white/70 leading-relaxed font-medium tracking-tight italic">{selectedJob.description}</p>
                                                 </section>
                                                 <section className="space-y-6 md:space-y-8">
                                                     <h3 className="text-[10px] sm:text-sm font-black uppercase tracking-[0.4em] md:tracking-[0.6em] text-primary flex items-center gap-4">
-                                                        <Cpu size={18} /> Required Skillset Node
+                                                        <Cpu size={18} /> Requirements
                                                     </h3>
                                                     <p className="text-lg sm:text-xl md:text-2xl text-white/70 leading-relaxed font-medium tracking-tight italic">{selectedJob.requirements}</p>
                                                 </section>
@@ -369,12 +369,12 @@ export default function CareersClient() {
                                         <div className="sticky top-0 space-y-12">
                                             <div className="bg-white/5 p-8 md:p-12 brutalist-border border-white/10 relative overflow-hidden group">
                                                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
-                                                <h4 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] mb-4 md:mb-6 text-primary italic">Transmission Integrity</h4>
+                                                <h4 className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] mb-4 md:mb-6 text-primary italic">Our Culture</h4>
                                                 <p className="text-xs md:text-sm text-white/40 leading-relaxed italic mb-8 md:mb-10">
-                                                    Tellora Media operates under a global meritocracy protocol. We prioritize raw cognitive power and execution over traditional credentials.
+                                                    Tellora Media operates under a global culture of excellence. We prioritize raw talent and execution over traditional credentials.
                                                 </p>
                                                 <div className="flex items-center gap-4 text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] text-white/20">
-                                                    <Shield size={14} /> Encrypted Transmission Node
+                                                    <Shield size={14} /> Confidential Submission
                                                 </div>
                                             </div>
                                             <Magnetic>
@@ -384,13 +384,13 @@ export default function CareersClient() {
                                                 >
                                                     <div className="absolute inset-0 bg-white/10 translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500" />
                                                     <span className="relative z-10 flex items-center justify-center gap-4">
-                                                        INITIALIZE DEPLOY <ArrowRight size={18} className="group-hover:translate-x-4 transition-transform duration-500" />
+                                                        APPLY NOW <ArrowRight size={18} className="group-hover:translate-x-4 transition-transform duration-500" />
                                                     </span>
                                                 </button>
                                             </Magnetic>
-
+ 
                                             <div className="text-center">
-                                                <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/10">MISSION_CONTROL_TM_2026</span>
+                                                <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/10">TELLORA_MEDIA_2026</span>
                                             </div>
                                         </div>
                                     </div>
@@ -407,15 +407,15 @@ export default function CareersClient() {
                                                 <div className="absolute inset-0 bg-green-500 rounded-full animate-ping opacity-20" />
                                                 <CheckCircle2 size={64} className="text-green-500" />
                                             </div>
-                                            <h2 className="text-4xl sm:text-7xl font-black uppercase tracking-tighter italic mb-8">Dossier <span className="text-primary italic">Uploaded.</span></h2>
+                                            <h2 className="text-4xl sm:text-7xl font-black uppercase tracking-tighter italic mb-8">Application <span className="text-primary italic">Submitted.</span></h2>
                                             <p className="text-lg sm:text-2xl text-white/40 font-medium tracking-tight max-w-xl mx-auto italic">
-                                                Your cognitive profile has been successfully ingested by our talent matrix. Our Ops team will resonate soon if a sync is detected.
+                                                Your application has been successfully submitted to our hiring team. We will review your details and contact you if there is a match.
                                             </p>
                                             <button
                                                 onClick={() => { setSelectedJob(null); setIsApplying(false); }}
                                                 className="mt-16 text-primary font-black uppercase tracking-[0.5em] text-[10px] hover:text-white transition-colors"
                                             >
-                                                ← Terminate Connection
+                                                ← Close Window
                                             </button>
                                         </motion.div>
                                     ) : (
@@ -425,12 +425,12 @@ export default function CareersClient() {
                                                     <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary/20 transition-all">
                                                         <ArrowRight size={18} className="rotate-180 group-hover:-translate-x-2 transition-transform" />
                                                     </div>
-                                                    ABORT PROTOCOL / RETURN TO MISSION
+                                                    CLOSE / GO BACK
                                                 </button>
                                             </div>
                                             <div className="space-y-4 mb-8 md:mb-12">
-                                                <h2 className="text-4xl sm:text-6xl md:text-9xl font-black uppercase tracking-tighter italic leading-none">Initialization <span className="text-primary">Phase.</span></h2>
-                                                <p className="text-base md:text-xl text-white/50 font-medium italic">Establishing secure uplink. Please provide your cognitive identifier.</p>
+                                                <h2 className="text-4xl sm:text-6xl md:text-9xl font-black uppercase tracking-tighter italic leading-none">Application <span className="text-primary">Form.</span></h2>
+                                                <p className="text-base md:text-xl text-white/50 font-medium italic">Please provide your details below to apply.</p>
                                             </div>
 
                                             <form onSubmit={handleApply} className="space-y-12">
@@ -438,22 +438,22 @@ export default function CareersClient() {
 
                                                 <div className="grid md:grid-cols-2 gap-8 md:gap-12">
                                                     <div className="space-y-4">
-                                                        <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary italic">Candidate_Identity</label>
-                                                        <input required name="name" className="w-full bg-white/5 brutalist-border p-6 md:p-8 text-white outline-none focus:border-primary transition-all font-medium italic text-lg md:text-xl border-white/5" placeholder="FULL_NAME" />
+                                                        <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary italic">Your Name</label>
+                                                        <input required name="name" className="w-full bg-white/5 brutalist-border p-6 md:p-8 text-white outline-none focus:border-primary transition-all font-medium italic text-lg md:text-xl border-white/5" placeholder="Full Name" />
                                                     </div>
                                                     <div className="space-y-4">
-                                                        <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary italic">Secure_Uplink_Node</label>
-                                                        <input required type="email" name="email" className="w-full bg-white/5 brutalist-border p-6 md:p-8 text-white outline-none focus:border-primary transition-all font-medium italic text-lg md:text-xl border-white/5" placeholder="EMAIL_PROTOCOL" />
+                                                        <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary italic">Your Email</label>
+                                                        <input required type="email" name="email" className="w-full bg-white/5 brutalist-border p-6 md:p-8 text-white outline-none focus:border-primary transition-all font-medium italic text-lg md:text-xl border-white/5" placeholder="Email Address" />
                                                     </div>
                                                 </div>
 
                                                 <div className="space-y-4">
-                                                    <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary italic">Cognitive_Summary</label>
-                                                    <textarea required name="experience" rows={4} className="w-full bg-white/5 brutalist-border p-6 md:p-8 text-white outline-none focus:border-primary transition-all font-medium italic text-lg md:text-xl resize-none border-white/5" placeholder="Tell us how you break systems and build futures."></textarea>
+                                                    <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary italic">Your Experience</label>
+                                                    <textarea required name="experience" rows={4} className="w-full bg-white/5 brutalist-border p-6 md:p-8 text-white outline-none focus:border-primary transition-all font-medium italic text-lg md:text-xl resize-none border-white/5" placeholder="Tell us about your background and why you want to join."></textarea>
                                                 </div>
 
                                                 <div className="space-y-4">
-                                                    <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary italic">Dossier_Asset (PDF)</label>
+                                                    <label className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-primary italic">Resume File (PDF)</label>
                                                     <div className="relative group">
                                                         <input required type="file" name="resume" accept=".pdf" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
                                                         <div className="w-full bg-white/5 brutalist-border p-8 sm:p-16 border-dashed border-white/10 flex flex-col items-center justify-center gap-4 sm:gap-6 group-hover:bg-white/10 group-hover:border-primary/50 transition-all border-white/10">
@@ -461,8 +461,8 @@ export default function CareersClient() {
                                                                 <Upload size={32} className="sm:w-10 sm:h-10 group-hover:translate-y-[-4px] transition-transform" />
                                                             </div>
                                                             <div className="text-center space-y-2">
-                                                                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-white/40 block">Connect Secure Dossier</span>
-                                                                <span className="text-[7px] md:text-[8px] font-bold text-white/20 uppercase tracking-[0.3em]">MAX_FILE_SIZE: 12MB / FORMAT: .PDF</span>
+                                                                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-white/40 block">Upload Resume</span>
+                                                                <span className="text-[7px] md:text-[8px] font-bold text-white/20 uppercase tracking-[0.3em]">Max file size: 12MB / Format: PDF</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -472,7 +472,7 @@ export default function CareersClient() {
                                                     <div className="flex items-center gap-6 p-6 md:p-8 bg-white/5 brutalist-border border-white/5 max-w-md">
                                                         <Shield size={24} className="md:w-8 md:h-8 text-primary flex-shrink-0" />
                                                         <p className="text-[8px] md:text-[9px] font-bold text-white/30 uppercase tracking-widest leading-relaxed italic">
-                                                            SECURITY PROTOCOL: Your transmission is encrypted via AES-256 standards. Our data handling is strictly limited to Talent Ops nodes.
+                                                            CONFIDENTIALITY: Your application data is kept confidential. Our data handling is strictly limited to our hiring team.
                                                         </p>
                                                     </div>
                                                     <button
@@ -481,9 +481,9 @@ export default function CareersClient() {
                                                         className={`w-full py-8 md:py-10 bg-primary text-black brutalist-border shadow-[10px_10px_0px_#000] md:shadow-[12px_12px_0px_#000] text-[10px] md:text-xs font-black uppercase tracking-[0.4em] md:tracking-[0.6em] hover:shadow-none hover:translate-x-3 hover:translate-y-3 transition-all flex items-center justify-center gap-4 md:gap-6 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                                     >
                                                         {isLoading ? (
-                                                            <>INGESTING_DATA... <div className="w-4 h-4 md:w-5 md:h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" /></>
+                                                            <>SUBMITTING... <div className="w-4 h-4 md:w-5 md:h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" /></>
                                                         ) : (
-                                                            <>FINALIZE TRANSMISSION <ArrowRight size={20} className="md:w-6 md:h-6" /></>
+                                                            <>SUBMIT APPLICATION <ArrowRight size={20} className="md:w-6 md:h-6" /></>
                                                         )}
                                                     </button>
                                                 </div>

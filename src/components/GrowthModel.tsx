@@ -36,7 +36,7 @@ const focusAreas = [
     {
         id: "security",
         title: "Autonomous Resilience",
-        description: "Ensuring your growth is secure. We integrate elite security protocols to protect your brand assets while you scale to the moon.",
+        description: "Ensuring your growth is secure. We integrate security measures to protect your brand assets while you scale.",
         icon: <Shield className="w-10 h-10" />,
         color: "#4AC0E4",
         accent: "#000",
@@ -74,7 +74,7 @@ export default function GrowthModel() {
                         THE STRATEGIC <br /> <span className="text-primary italic">FRAMEWORK</span>
                     </h2>
                     <p className="text-xl md:text-3xl font-bold uppercase tracking-tight text-white/70 max-w-2xl leading-tight">
-                        We don't offer plans. We provide the architecture for absolute market dominance.
+                        {"We don't offer plans. We provide the architecture for absolute market dominance."}
                     </p>
                 </div>
 
@@ -103,7 +103,7 @@ export default function GrowthModel() {
                                 </p>
                                 
                                 <div className="mt-12 pt-8 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-between">
-                                    <span className="text-[10px] font-black uppercase tracking-widest">Learn Intel</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest">Learn More</span>
                                     <ArrowRight className="w-5 h-5 text-primary" />
                                 </div>
                             </div>

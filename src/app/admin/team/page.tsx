@@ -95,7 +95,7 @@ export default function AdminTeam() {
         await upsertTeamMember(memberData as any);
         await addActivityLog({
             type: editingMember ? "update" : "create",
-            item: `Team Node: ${name}`,
+            item: `Team Member: ${name}`,
             user_name: "Admin",
             status: "Live"
         });
@@ -107,7 +107,7 @@ export default function AdminTeam() {
 
     const handleDelete = async (id: string) => {
         const member = members.find(m => m.id === id);
-        if (confirm(`De-authorize ${member?.name}?`)) {
+        if (confirm(`Delete ${member?.name}?`)) {
             await deleteTeamMember(id, member?.name);
             await addActivityLog({
                 type: "delete",
@@ -284,7 +284,7 @@ export default function AdminTeam() {
                                         <Shield size={24} />
                                     </div>
                                     <h2 className="text-xl md:text-2xl font-black text-white tracking-tighter italic">{editingMember ? "Edit Member" : "Add Team Member"}</h2>
-                                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/20 mt-1">Member Configuration Protocol</p>
+                                    <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/20 mt-1">Team Member Details</p>
                                 </div>
 
                                 {/* Scrollable Container */}
@@ -381,13 +381,13 @@ export default function AdminTeam() {
                                         onClick={() => setIsModalOpen(false)}
                                         className="py-3.5 rounded-xl border border-white/10 text-white/40 font-black text-[9px] uppercase tracking-widest hover:bg-white/5 transition-all"
                                     >
-                                        Abort
+                                        Cancel
                                     </button>
                                     <button
                                         type="submit"
                                         className="py-3.5 rounded-xl bg-primary text-white font-black text-[9px] uppercase tracking-widest hover:shadow-2xl hover:shadow-primary/40 transition-all flex items-center justify-center gap-2"
                                     >
-                                        Commit <ArrowRight size={14} />
+                                        Save <ArrowRight size={14} />
                                     </button>
                                 </div>
                             </form>

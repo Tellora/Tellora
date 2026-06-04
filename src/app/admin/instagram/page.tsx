@@ -91,7 +91,7 @@ export default function InstagramAdmin() {
     };
 
     const handleDeleteProfile = async (id: string) => {
-        if (confirm("Delete this profile and all its resonance nodes?")) {
+        if (confirm("Delete this profile and all its posts?")) {
             setProfiles(prev => prev.filter(p => p.id !== id));
             await deleteIGProfile(id);
             if (activeId === id) setActiveId(null);
@@ -185,18 +185,18 @@ export default function InstagramAdmin() {
                     <div className="flex flex-wrap items-center gap-2 md:gap-4">
                         <div className="px-3 md:px-4 py-1.5 md:py-2 bg-primary/10 border border-primary/20 rounded-full flex items-center gap-2 md:gap-3">
                             <Zap size={14} className="text-primary fill-primary w-3 h-3 md:w-3.5 md:h-3.5" />
-                            <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-primary">Ultra-Logic Engine v4.0</span>
+                            <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-primary">Instagram Preview Portal</span>
                         </div>
                         <div className="px-3 md:px-4 py-1.5 md:py-2 bg-green-500/10 border border-green-500/20 rounded-full flex items-center gap-2 md:gap-3">
                             <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                            <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-green-500">Sub-System Staged</span>
+                            <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-green-500">Connected</span>
                         </div>
                     </div>
                     <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white italic leading-[0.8] uppercase mt-2 md:mt-0">
-                        IG Portal <span className="text-primary block not-italic font-sans tracking-[-0.1em]">Architect</span>
+                        Instagram <span className="text-primary block not-italic font-sans tracking-[-0.1em]">Portal</span>
                     </h1>
                     <p className="text-white/40 font-medium text-xs md:text-sm max-w-2xl italic">
-                        Deploying hyper-realistic social simulations. Optimize brand narratives through high-fidelity neural previews.
+                        Manage and preview mock Instagram profiles and feeds.
                     </p>
                 </div>
 
@@ -206,7 +206,7 @@ export default function InstagramAdmin() {
                         className="w-full sm:w-auto group relative overflow-hidden px-8 md:px-12 py-5 md:py-6 bg-white text-black rounded-3xl md:rounded-[2.5rem] font-black text-[10px] md:text-xs uppercase tracking-widest transition-all sm:hover:pr-16 active:scale-95"
                     >
                         <span className="relative z-10 flex items-center justify-center gap-2 md:gap-3">
-                            <Plus size={20} strokeWidth={3} className="w-4 h-4 md:w-5 md:h-5" /> Initialize Neural Node
+                            <Plus size={20} strokeWidth={3} className="w-4 h-4 md:w-5 md:h-5" /> Create Profile
                         </span>
                         <div className="absolute top-0 right-0 h-full w-0 bg-primary group-hover:w-full transition-all duration-500 -z-0 hidden sm:block" />
                     </button>
@@ -221,7 +221,7 @@ export default function InstagramAdmin() {
                 <div className="lg:col-span-1 space-y-6 md:space-y-8">
                     <div className="bg-[#0D121F]/80 backdrop-blur-3xl border border-white/10 rounded-[2rem] md:rounded-[3.5rem] p-6 md:p-10 shadow-2xl">
                         <div className="flex justify-between items-center mb-6 md:mb-10">
-                            <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-white/20 italic">Global Nodes</h3>
+                            <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-white/20 italic">Profiles</h3>
                             <span className="px-3 py-1 bg-white/5 rounded-lg text-[8px] md:text-[9px] font-black text-white/40">{profiles.length}</span>
                         </div>
 
@@ -229,7 +229,7 @@ export default function InstagramAdmin() {
                             {profiles.length === 0 && (
                                 <div className="text-center py-20 border-2 border-dashed border-white/5 rounded-[2.5rem]">
                                     <Sparkles className="mx-auto text-white/5 mb-6" size={48} />
-                                    <p className="text-[11px] font-black uppercase tracking-widest text-white/10">No active portals</p>
+                                    <p className="text-[11px] font-black uppercase tracking-widest text-white/10">No profiles</p>
                                 </div>
                             )}
 
@@ -259,7 +259,7 @@ export default function InstagramAdmin() {
                                                 {p.is_verified && <ShieldCheck size={14} className={`md:w-4 md:h-4 ${activeId === p.id ? 'text-white' : 'text-primary'}`} />}
                                             </div>
                                             <p className={`text-[8px] md:text-[9px] font-bold uppercase tracking-widest truncate ${activeId === p.id ? 'text-white/60' : 'text-white/20'}`}>
-                                                {p.posts?.length || 0} Fragments Detected
+                                                {p.posts?.length || 0} Posts
                                             </p>
                                         </div>
                                     </div>
@@ -295,10 +295,10 @@ export default function InstagramAdmin() {
                                         </div>
                                         <div>
                                             <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-1">
-                                                <h2 className="text-2xl md:text-4xl font-black text-white italic tracking-tighter uppercase">Terminal</h2>
-                                                <div className="px-2 md:px-3 py-0.5 md:py-1 bg-primary text-[8px] md:text-[9px] font-black rounded-lg text-white animate-pulse">LIVE_SYNC</div>
+                                                <h2 className="text-2xl md:text-4xl font-black text-white italic tracking-tighter uppercase">Workspace</h2>
+                                                <div className="px-2 md:px-3 py-0.5 md:py-1 bg-primary text-[8px] md:text-[9px] font-black rounded-lg text-white animate-pulse">Active</div>
                                             </div>
-                                            <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-white/30 italic truncate max-w-[150px] sm:max-w-none">Target: [ {activeProfile.slug.toUpperCase()} ]</p>
+                                            <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-white/30 italic truncate max-w-[150px] sm:max-w-none">Profile: @{activeProfile.slug}</p>
                                         </div>
                                     </div>
 
@@ -308,15 +308,15 @@ export default function InstagramAdmin() {
                                             className={`flex-1 sm:flex-none flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-4 md:py-5 rounded-[1.5rem] md:rounded-[2rem] font-black text-[9px] md:text-[11px] uppercase tracking-widest transition-all ${isEditing ? 'bg-white text-black' : 'bg-white/5 text-white/50 hover:text-white hover:bg-white/10 border border-white/5'
                                                 }`}
                                         >
-                                            <Settings size={16} className="md:w-[18px] md:h-[18px]" /> <span className="hidden xs:inline">{isEditing ? 'Close Interface' : 'Node Config'}</span>
+                                            <Settings size={16} className="md:w-[18px] md:h-[18px]" /> <span className="hidden xs:inline">{isEditing ? 'Close Interface' : 'Profile Settings'}</span>
                                         </button>
                                         <button
                                             onClick={() => copyToClipboard(generateShareableLink(activeProfile), activeProfile.id)}
                                             className="flex-1 sm:flex-none flex items-center justify-center gap-3 md:gap-4 px-6 md:px-10 py-4 md:py-5 bg-primary text-white rounded-[1.5rem] md:rounded-[2rem] font-black text-[9px] md:text-[11px] uppercase tracking-widest hover:shadow-[0_15px_40px_rgba(74,192,228,0.4)] transition-all active:scale-95 group"
                                         >
                                             {copiedId === activeProfile.id ? <Check size={16} className="md:w-[18px] md:h-[18px]" /> : <Share2 size={16} className="md:w-[18px] md:h-[18px]" />}
-                                            <span className="hidden xs:inline">{copiedId === activeProfile.id ? 'Uplink Secured' : 'Generate Uplink'}</span>
-                                            <span className="xs:hidden">Uplink</span>
+                                            <span className="hidden xs:inline">{copiedId === activeProfile.id ? 'Link Copied' : 'Copy Preview Link'}</span>
+                                            <span className="xs:hidden">Link</span>
                                             <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                         </button>
                                     </div>
@@ -327,7 +327,7 @@ export default function InstagramAdmin() {
                                         <div className="space-y-8 md:space-y-12 max-w-3xl mx-auto py-6 md:py-10">
                                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
                                                 <div className="space-y-4 md:space-y-6">
-                                                    <label className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-primary italic px-2">Visual Identity Ingest</label>
+                                                    <label className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-primary italic px-2">Upload Profile Picture</label>
                                                     <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 md:gap-8 bg-white/5 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border border-white/5">
                                                         <div className="w-28 h-28 md:w-32 md:h-32 shrink-0 rounded-[2rem] md:rounded-[2.5rem] bg-black border-2 border-dashed border-white/20 flex items-center justify-center relative overflow-hidden group hover:border-primary/50 transition-all">
                                                             {activeProfile.profile_pic ? (
@@ -343,8 +343,8 @@ export default function InstagramAdmin() {
                                                             />
                                                         </div>
                                                         <div className="space-y-2 text-center sm:text-left">
-                                                            <p className="text-[9px] md:text-[10px] font-bold text-white/40 uppercase italic leading-relaxed">Neural circular cropping active. Maximum visual fidelity recommended.</p>
-                                                            <button className="text-[9px] md:text-[10px] font-black text-primary uppercase tracking-widest hover:underline">Clear Ingest</button>
+                                                            <p className="text-[9px] md:text-[10px] font-bold text-white/40 uppercase italic leading-relaxed">Profile pictures are cropped to a circle.</p>
+                                                            <button className="text-[9px] md:text-[10px] font-black text-primary uppercase tracking-widest hover:underline">Clear Photo</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -360,7 +360,7 @@ export default function InstagramAdmin() {
                                                         />
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-primary italic px-2">Official Designation</label>
+                                                        <label className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-primary italic px-2">Display Name</label>
                                                         <input
                                                             className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl p-4 md:p-6 text-xs md:text-sm text-white outline-none focus:border-primary transition-all font-black italic tracking-tight"
                                                             value={activeProfile.name}
@@ -370,7 +370,7 @@ export default function InstagramAdmin() {
                                                     <div className="flex items-center justify-between bg-white/5 p-4 md:p-6 rounded-xl md:rounded-2xl border border-white/5">
                                                         <div className="flex items-center gap-3 md:gap-4">
                                                             <ShieldCheck className={`${activeProfile.is_verified ? 'text-primary' : 'text-white/20'} md:w-6 md:h-6`} size={20} />
-                                                            <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest italic text-white/50">Verification Status</span>
+                                                            <span className="text-[9px] md:text-[11px] font-black uppercase tracking-widest italic text-white/50">Verified Badge</span>
                                                         </div>
                                                         <button
                                                             onClick={() => updateProfile({ is_verified: !activeProfile.is_verified })}
@@ -383,13 +383,13 @@ export default function InstagramAdmin() {
                                             </div>
 
                                             <div className="space-y-3 md:space-y-4">
-                                                <label className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-primary italic px-2">Neural Narrative Injection (Bio)</label>
+                                                <label className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-primary italic px-2">Bio</label>
                                                 <textarea
                                                     rows={5}
                                                     className="w-full bg-white/5 border border-white/10 rounded-[1.5rem] md:rounded-[2.5rem] p-6 md:p-10 text-xs md:text-sm text-white outline-none focus:border-primary transition-all font-medium italic resize-none leading-relaxed"
                                                     value={activeProfile.bio}
                                                     onChange={e => updateProfile({ bio: e.target.value })}
-                                                    placeholder="Inject core brand architecture narrative. Use '\n' for line breaks..."
+                                                    placeholder="Enter profile bio details..."
                                                 />
                                             </div>
 
@@ -399,11 +399,11 @@ export default function InstagramAdmin() {
                                                         <Save size={18} className="md:w-5 md:h-5" />
                                                     </div>
                                                     <div>
-                                                        <h4 className="text-xs md:text-sm font-black text-white italic">Auto-Save Protocol Active</h4>
-                                                        <p className="text-[8px] md:text-[10px] font-bold text-white/20 uppercase italic">All changes staged to local matrix.</p>
+                                                        <h4 className="text-xs md:text-sm font-black text-white italic">Changes are saved automatically</h4>
+                                                        <p className="text-[8px] md:text-[10px] font-bold text-white/20 uppercase italic">Saved to database.</p>
                                                     </div>
                                                 </div>
-                                                <button className="w-full sm:w-auto px-6 md:px-8 py-3 bg-white text-black rounded-xl font-black text-[9px] uppercase tracking-widest hover:scale-105 transition-all">Manual Commit</button>
+                                                <button className="w-full sm:w-auto px-6 md:px-8 py-3 bg-white text-black rounded-xl font-black text-[9px] uppercase tracking-widest hover:scale-105 transition-all">Save Now</button>
                                             </div>
                                         </div>
                                     ) : (
@@ -435,8 +435,8 @@ export default function InstagramAdmin() {
                                                     </div>
 
                                                     <div className="flex justify-between sm:justify-center xl:justify-start gap-4 sm:gap-8 md:gap-12 border-y border-white/5 py-4 md:py-6">
-                                                        <div className="flex flex-col items-center xl:items-start"><span className="text-xl md:text-2xl font-black text-white italic tracking-tighter leading-tight">{activeProfile.posts?.length || 0}</span><span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white/20 italic">Fragments</span></div>
-                                                        <div className="flex flex-col items-center xl:items-start"><span className="text-xl md:text-2xl font-black text-white italic tracking-tighter leading-tight">1.2M</span><span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white/20 italic">Synchronized</span></div>
+                                                        <div className="flex flex-col items-center xl:items-start"><span className="text-xl md:text-2xl font-black text-white italic tracking-tighter leading-tight">{activeProfile.posts?.length || 0}</span><span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white/20 italic">Posts</span></div>
+                                                        <div className="flex flex-col items-center xl:items-start"><span className="text-xl md:text-2xl font-black text-white italic tracking-tighter leading-tight">1.2M</span><span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white/20 italic">Followers</span></div>
                                                         <div className="flex flex-col items-center xl:items-start"><span className="text-xl md:text-2xl font-black text-white italic tracking-tighter leading-tight">854</span><span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-white/20 italic">Following</span></div>
                                                     </div>
 
@@ -452,13 +452,13 @@ export default function InstagramAdmin() {
                                                 <div className="flex flex-col sm:flex-row justify-between items-center bg-white/[0.02] p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] border border-white/5 shadow-sm gap-4">
                                                     <div className="flex items-center gap-3 md:gap-4">
                                                         <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-primary animate-ping" />
-                                                        <h3 className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-white/30 italic">Neural Content Fragments</h3>
+                                                        <h3 className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-white/30 italic">Profile Posts</h3>
                                                     </div>
                                                     <button
                                                         onClick={handleAddPost}
                                                         className="w-full sm:w-auto justify-center px-6 md:px-10 py-3 md:py-4 bg-primary text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-primary/20 flex items-center gap-2 md:gap-3"
                                                     >
-                                                        <Plus size={14} className="md:w-4 md:h-4" strokeWidth={3} /> Inject Fragment
+                                                        <Plus size={14} className="md:w-4 md:h-4" strokeWidth={3} /> Add Post
                                                     </button>
                                                 </div>
 
@@ -475,7 +475,7 @@ export default function InstagramAdmin() {
                                                                     <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/5 flex items-center justify-center">
                                                                         <ImageIcon className="text-white/10 w-6 h-6 md:w-8 md:h-8" />
                                                                     </div>
-                                                                    <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] text-white/10 italic">Data_Null</span>
+                                                                    <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] text-white/10 italic">Empty Post</span>
                                                                 </div>
                                                             )}
 
@@ -485,7 +485,7 @@ export default function InstagramAdmin() {
                                                                         <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
                                                                             {post.type === 'video' ? <Film size={12} className="md:w-[14px] md:h-[14px]" /> : <Camera size={12} className="md:w-[14px] md:h-[14px]" />}
                                                                         </div>
-                                                                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary italic">Fragment Data</span>
+                                                                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary italic">Post Details</span>
                                                                     </div>
                                                                     <button
                                                                         onClick={(e) => { e.stopPropagation(); handlePostDelete(post.id); }}
@@ -497,9 +497,9 @@ export default function InstagramAdmin() {
 
                                                                 <div className="flex-1 flex flex-col justify-center space-y-3 md:space-y-5">
                                                                     <div className="space-y-1.5 md:space-y-2">
-                                                                        <label className="text-[8px] md:text-[9px] font-black text-white/20 uppercase tracking-widest px-1">Visual Ingest</label>
+                                                                        <label className="text-[8px] md:text-[9px] font-black text-white/20 uppercase tracking-widest px-1">Upload Photo</label>
                                                                         <div className="relative h-10 md:h-12 bg-white/5 rounded-xl border border-white/10 flex items-center justify-center group/btn hover:bg-white/10 transition-all cursor-pointer">
-                                                                            <span className="text-[8px] md:text-[9px] font-black text-white/40 uppercase tracking-widest">Load Media</span>
+                                                                            <span className="text-[8px] md:text-[9px] font-black text-white/40 uppercase tracking-widest">Choose File</span>
                                                                             <input
                                                                                 type="file"
                                                                                 accept="image/*"
@@ -510,10 +510,10 @@ export default function InstagramAdmin() {
                                                                     </div>
 
                                                                     <div className="space-y-1.5 md:space-y-2">
-                                                                        <label className="text-[8px] md:text-[9px] font-black text-white/20 uppercase tracking-widest px-1">Neural Caption</label>
+                                                                        <label className="text-[8px] md:text-[9px] font-black text-white/20 uppercase tracking-widest px-1">Caption</label>
                                                                         <textarea
                                                                             className="w-full bg-white/5 border border-white/10 rounded-xl p-3 md:p-4 text-[9px] md:text-[10px] font-medium text-white outline-none h-16 md:h-24 resize-none placeholder:text-white/10 italic focus:border-primary/50 transition-all"
-                                                                            placeholder="Inject narrative fragment..."
+                                                                            placeholder="Enter caption details..."
                                                                             value={post.caption}
                                                                             onClick={e => e.stopPropagation()}
                                                                             onChange={e => handlePostUpdate(post.id, { caption: e.target.value })}
@@ -523,7 +523,7 @@ export default function InstagramAdmin() {
 
                                                                 <div className="mt-auto pt-3 md:pt-4 border-t border-white/10 flex justify-between items-center text-[7px] md:text-[9px] font-black text-white/20 uppercase tracking-widest italic">
                                                                     <span>TS_{new Date(post.created_at || "").getTime().toString().slice(-4)}</span>
-                                                                    <span className="text-primary/40">Fragment_Locked</span>
+                                                                    <span className="text-primary/40">Saved</span>
                                                                 </div>
                                                             </div>
 
@@ -543,9 +543,9 @@ export default function InstagramAdmin() {
                                 <div className="w-24 h-24 md:w-40 md:h-40 rounded-3xl md:rounded-[3.5rem] bg-white/[0.02] flex items-center justify-center text-white/5 mb-6 md:mb-10 border border-white/5 xl:group-hover:scale-110 xl:group-hover:border-primary/20 xl:group-hover:text-primary/20 transition-all duration-700">
                                     <Instagram className="w-12 h-12 md:w-20 md:h-20" strokeWidth={1} />
                                 </div>
-                                <h2 className="text-3xl md:text-5xl font-black text-white/10 italic tracking-tighter uppercase mb-4">Neural Architecture: Ready</h2>
+                                <h2 className="text-3xl md:text-5xl font-black text-white/10 italic tracking-tighter uppercase mb-4">Instagram Portal</h2>
                                 <p className="text-[9px] md:text-[12px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] text-white/5 max-w-sm italic px-4">
-                                    Access Global Matrix. Initialize new client nodes from the peripheral terminal.
+                                    Select a profile from the list or create a new one to manage its preview.
                                 </p>
                                 <div className="mt-8 md:mt-12 flex gap-2 md:gap-3">
                                     <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-white/5" />
