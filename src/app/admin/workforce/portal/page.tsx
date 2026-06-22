@@ -33,10 +33,10 @@ import {
     AttendanceLog,
     LeaveRequest
 } from "@/lib/workforceStore";
-import { verifyFaceMatch } from "@/lib/biometrics";
+import { verifyFaceMatch, isMockBiometricPhoto } from "@/lib/biometrics";
 
-const MOCK_FACE_PHOTO_IN = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='240' viewBox='0 0 320 240'><rect width='320' height='240' fill='%230D121F'/><circle cx='160' cy='110' r='50' fill='none' stroke='%234ac0e4' stroke-width='3'/><path d='M120 180 Q160 150 200 180' stroke='%234ac0e4' stroke-width='3' fill='none'/><text x='160' y='215' fill='%234ac0e4' font-family='monospace' font-size='10' text-anchor='middle'>BIOMETRIC CLOCK IN SCAN</text></svg>";
-const MOCK_FACE_PHOTO_OUT = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='240' viewBox='0 0 320 240'><rect width='320' height='240' fill='%230D121F'/><circle cx='160' cy='110' r='50' fill='none' stroke='%2322c55e' stroke-width='3'/><path d='M120 180 Q160 160 200 180' stroke='%2322c55e' stroke-width='3' fill='none'/><text x='160' y='215' fill='%2322c55e' font-family='monospace' font-size='10' text-anchor='middle'>BIOMETRIC CLOCK OUT SCAN</text></svg>";
+const MOCK_FACE_PHOTO_IN = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMjAnIGhlaWdodD0nMjQwJyB2aWV3Qm94PScwIDAgMzIwIDI0MCc+PHJlY3Qgd2lkdGg9JzMyMCcgaGVpZ2h0PScyNDAnIGZpbGw9JyMwRDEyMUYnLz48Y2lyY2xlIGN4PScxNjAnIGN5PScxMTAnIHI9JzUwJyBmaWxsPSdub25lJyBzdHJva2U9JyM0YWNlZTQnIHN0cm9rZS13aWR0aD0nMycvPjxwYXRoIGQ9J00xMjAgMTgwIFFxMTYwIDE1MCAyMDAgMTgwJyBzdHJva2U9JyM0YWNlZTQnIHN0cm9rZS13aWR0aD0nMycgZmlsbD0nbm9uZScvPjx0ZXh0IHg9JzE2MCcgeT0nMjE1JyBmaWxsPScjNGFjZWU0JyBmb250LWZhbWlseT0nbW9ub3NwYWNlJyBmb250LXNpemU9JzEwJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJz5CSU9NRVRSSUMgQ0xPQ0sgSU4gU0NBTjwvdGV4dD48L3N2Zz4=";
+const MOCK_FACE_PHOTO_OUT = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMjAnIGhlaWdodD0nMjQwJyB2aWV3Qm94PScwIDAgMzIwIDI0MCc+PHJlY3Qgd2lkdGg9JzMyMCcgaGVpZ2h0PScyNDAnIGZpbGw9JyMwRDEyMUYnLz48Y2lyY2xlIGN4PScxNjAnIGN5PScxMTAnIHI9JzUwJyBmaWxsPSdub25lJyBzdHJva2U9JyMyMmM1NWUnIHN0cm9rZS13aWR0aD0nMycvPjxwYXRoIGQ9J00xMjAgMTgwIFFxMTYwIDE2MCAyMDAgMTgwJyBzdHJva2U9JyMyMmM1NWUnIHN0cm9rZS13aWR0aD0nMycgZmlsbD0nbm9uZScvPjx0ZXh0IHg9JzE2MCcgeT0nMjE1JyBmaWxsPScjMjJjNTVlJyBmb250LWZhbWlseT0nbW9ub3NwYWNlJyBmb250LXNpemU9JzEwJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJz5CSU9NRVRSSUMgQ0xPQ0sgT1VUIFNDQU48L3RleHQ+PC9zdmc+";
 
 // Synth Audio Helper using Web Audio API
 const playSynthSound = (type: "scan" | "success" | "click" | "fail") => {
@@ -495,15 +495,22 @@ export default function EmployeePortal() {
                             } else {
                                 // Real Grayscale comparison comparison!
                                 if (currentEmployee && currentEmployee.enrolledFace) {
-                                    const matchScore = await verifyFaceMatch(currentEmployee.enrolledFace, currentFrameUrl);
-                                    setScanConfidence(matchScore);
-                                    
-                                    if (matchScore >= 75) {
+                                    // If enrolled face is a mock SVG (from bypass enrollment), auto-succeed
+                                    if (isMockBiometricPhoto(currentEmployee.enrolledFace)) {
+                                        setScanConfidence(100);
                                         setScanStep("completed");
                                         playSynthSound("success");
                                     } else {
-                                        setScanStep("failed");
-                                        playSynthSound("fail");
+                                        const matchScore = await verifyFaceMatch(currentEmployee.enrolledFace, currentFrameUrl);
+                                        setScanConfidence(matchScore);
+                                        
+                                        if (matchScore >= 75) {
+                                            setScanStep("completed");
+                                            playSynthSound("success");
+                                        } else {
+                                            setScanStep("failed");
+                                            playSynthSound("fail");
+                                        }
                                     }
                                 } else {
                                     setScanStep("failed");
@@ -640,16 +647,25 @@ export default function EmployeePortal() {
                             playSynthSound("success");
                         } else {
                             if (currentEmployee && currentEmployee.enrolledFace) {
-                                // Grayscale matching will match mock frames perfectly or return seed value
-                                const matchScore = await verifyFaceMatch(currentEmployee.enrolledFace, mockPhoto);
-                                setScanConfidence(matchScore);
-                                
-                                if (matchScore >= 75) {
+                                // If enrolled face is also a mock SVG (from a previous bypass enrollment),
+                                // auto-succeed with 100% confidence to avoid SVG vs JPEG mismatch
+                                const isEnrolledMock = currentEmployee.enrolledFace.startsWith("data:image/svg+xml");
+                                if (isEnrolledMock) {
+                                    setScanConfidence(100);
                                     setScanStep("completed");
                                     playSynthSound("success");
                                 } else {
-                                    setScanStep("failed");
-                                    playSynthSound("fail");
+                                    // Real enrolled face - do grayscale comparison against mock
+                                    const matchScore = await verifyFaceMatch(currentEmployee.enrolledFace, mockPhoto);
+                                    setScanConfidence(matchScore);
+                                    
+                                    if (matchScore >= 75) {
+                                        setScanStep("completed");
+                                        playSynthSound("success");
+                                    } else {
+                                        setScanStep("failed");
+                                        playSynthSound("fail");
+                                    }
                                 }
                             } else {
                                 setScanStep("failed");
@@ -705,7 +721,7 @@ export default function EmployeePortal() {
 
     // Post Shift note/update
     const handlePostShiftNote = async () => {
-        if (!activeLog || !shiftNote.trim()) return;
+        if (!activeLog || !shiftNote.trim() || !currentEmployee) return;
         const note = {
             time: new Date().toISOString(),
             text: shiftNote.trim()
@@ -719,6 +735,7 @@ export default function EmployeePortal() {
         await refreshLogsAndLeaves(currentEmployee.id);
         playSynthSound("success");
     };
+
 
     const formatTime = (date: Date) => {
         return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
@@ -1365,12 +1382,18 @@ export default function EmployeePortal() {
 
                                 {/* Dynamic Portal Attendance Calendar */}
                                 {(() => {
-                                    const daysInMonth = 30;
-                                    const monthName = "June 2026";
+                                    const now = new Date();
+                                    const year = now.getFullYear();
+                                    const month = now.getMonth();
+                                    const daysInMonth = new Date(year, month + 1, 0).getDate();
+                                    const monthName = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+                                    // Calendar starts Monday, so offset: Mon=0, Tue=1, ..., Sun=6
+                                    const firstDayOfWeek = new Date(year, month, 1).getDay();
+                                    const calOffset = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
                                     
-                                    const daySlots = Array.from({ length: 30 }, (_, idx) => {
+                                    const daySlots = Array.from({ length: daysInMonth }, (_, idx) => {
                                         const dayNum = idx + 1;
-                                        const dateStr = `2026-06-${String(dayNum).padStart(2, "0")}`;
+                                        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(dayNum).padStart(2, "0")}`;
                                         const log = attendanceLogs.find(l => l.date === dateStr);
                                         const leave = leaveRequests.find(l => (dateStr >= l.startDate && dateStr <= l.endDate) && l.status === "Approved");
                                         
@@ -1399,8 +1422,12 @@ export default function EmployeePortal() {
                                             </div>
 
                                             <div className="grid grid-cols-7 gap-2">
-                                                {/* June 1, 2026 is Monday, so 0 offset */}
+                                                {/* Empty offset cells */}
+                                                {Array.from({ length: calOffset }).map((_, i) => (
+                                                    <div key={`offset-${i}`} className="aspect-square" />
+                                                ))}
                                                 {daySlots.map((slot, idx) => {
+                                                    const absoluteIdx = calOffset + idx;
                                                     let bgColor = "bg-white/[0.01] hover:bg-white/5 text-white/30";
                                                     let borderColor = "border-white/5";
                                                     
@@ -1420,15 +1447,17 @@ export default function EmployeePortal() {
                                                         }
                                                     }
                                                     
-                                                    const isWeekend = (idx % 7 === 5 || idx % 7 === 6);
+                                                    const isWeekend = (absoluteIdx % 7 === 5 || absoluteIdx % 7 === 6);
                                                     if (isWeekend && !slot.log && !slot.leave) {
                                                         bgColor = "bg-white/[0.003] text-white/10";
                                                     }
 
+                                                    const isToday = slot.day === now.getDate() && month === now.getMonth() && year === now.getFullYear();
+
                                                     return (
                                                         <div
                                                             key={idx}
-                                                            className={`aspect-square rounded-xl border flex flex-col justify-between p-2 transition-all group ${bgColor} ${borderColor}`}
+                                                            className={`aspect-square rounded-xl border flex flex-col justify-between p-2 transition-all group ${bgColor} ${borderColor} ${isToday ? 'ring-1 ring-primary/50' : ''}`}
                                                         >
                                                             <span className="text-[10px] font-mono font-bold self-start">{slot.day}</span>
                                                             {slot.log && (

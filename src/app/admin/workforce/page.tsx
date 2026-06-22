@@ -216,11 +216,11 @@ export default function AdminWorkforceDashboard() {
             employeeDept: emp.department,
             date: overrideDate,
             clockIn: inISO,
-            clockInPhoto: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='240' viewBox='0 0 320 240'><rect width='320' height='240' fill='%230D121F'/><text x='160' y='120' fill='%234ac0e4' font-family='monospace' font-size='10' text-anchor='middle'>MANUAL CLOCK IN OVERRIDE</text></svg>",
+            clockInPhoto: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMjAnIGhlaWdodD0nMjQwJyB2aWV3Qm94PScwIDAgMzIwIDI0MCc+PHJlY3Qgd2lkdGg9JzMyMCcgaGVpZ2h0PScyNDAnIGZpbGw9JyMwRDEyMUYnLz48dGV4dCB4PScxNjAnIHk9JzEyMCcgZmlsbD0nIzRhYzBlNCcgZm9udC1mYW1pbHk9J21vbm9zcGFjZScgZm9udC1zaXplPScxMCcgdGV4dC1hbmNob3I9J21pZGRsZSc+TUFOVUFMIENMT0NLIElOIE9WRVJSSURSPC90ZXh0Pjwvc3ZnPg==",
             clockInVerified: true,
             clockInConfidence: 100.0,
             clockOut: outISO,
-            clockOutPhoto: outISO ? "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='240' viewBox='0 0 320 240'><rect width='320' height='240' fill='%230D121F'/><text x='160' y='120' fill='%2322c55e' font-family='monospace' font-size='10' text-anchor='middle'>MANUAL CLOCK OUT OVERRIDE</text></svg>" : null,
+            clockOutPhoto: outISO ? "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMjAnIGhlaWdodD0nMjQwJyB2aWV3Qm94PScwIDAgMzIwIDI0MCc+PHJlY3Qgd2lkdGg9JzMyMCcgaGVpZ2h0PScyNDAnIGZpbGw9JyMwRDEyMUYnLz48dGV4dCB4PScxNjAnIHk9JzEyMCcgZmlsbD0nIzIyYzU1ZScgZm9udC1mYW1pbHk9J21vbm9zcGFjZScgZm9udC1zaXplPScxMCcgdGV4dC1hbmNob3I9J21pZGRsZSc+TUFOVUFMIENMT0NLIE9VVCBPVkVSUklERTwvdGV4dD48L3N2Zz4=" : null,
             clockOutVerified: outISO ? true : false,
             clockOutConfidence: outISO ? 100.0 : 0,
             totalHours,
@@ -652,6 +652,7 @@ export default function AdminWorkforceDashboard() {
                                             <th className="pb-4">Role / Department</th>
                                             <th className="pb-4 text-center">Shift Schedule</th>
                                             <th className="pb-4 text-center">Leave Balances</th>
+                                            <th className="pb-4 text-center">Biometrics</th>
                                             <th className="pb-4 text-center">Status</th>
                                             <th className="pb-4 text-right">Actions</th>
                                         </tr>
@@ -674,6 +675,16 @@ export default function AdminWorkforceDashboard() {
                                                         <span className="text-[10px] text-white/80">CL: {emp.leaveBalance?.cl ?? 12} | SL: {emp.leaveBalance?.sl ?? 10} | EL: {emp.leaveBalance?.el ?? 15}</span>
                                                         <span className="text-[8px] text-white/30 uppercase tracking-widest">Remaining</span>
                                                     </div>
+                                                </td>
+                                                <td className="py-4 text-center">
+                                                    <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full flex items-center justify-center gap-1 w-fit mx-auto ${
+                                                        emp.enrolledFace
+                                                            ? "bg-green-500/10 text-green-400 border border-green-500/20"
+                                                            : "bg-orange-500/10 text-orange-400 border border-orange-500/20"
+                                                    }`}>
+                                                        <span className={`w-1.5 h-1.5 rounded-full ${emp.enrolledFace ? 'bg-green-400' : 'bg-orange-400'}`} />
+                                                        {emp.enrolledFace ? "Enrolled" : "Pending"}
+                                                    </span>
                                                 </td>
                                                 <td className="py-4 text-center">
                                                     <span className={`text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${
@@ -719,9 +730,28 @@ export default function AdminWorkforceDashboard() {
                                     </tbody>
                                 </table>
 
-                                {filteredEmployees.length === 0 && (
+                                {filteredEmployees.length === 0 && employees.length === 0 ? (
+                                    <div className="py-20 text-center flex flex-col items-center justify-center gap-5 border border-dashed border-white/5 rounded-2xl">
+                                        <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+                                            <Users size={28} className="text-white/20" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-black uppercase tracking-widest text-white/30">No employees registered yet</p>
+                                            <p className="text-[10px] text-white/20 mt-2 max-w-[280px] mx-auto leading-relaxed">
+                                                Add your first employee to start tracking attendance and managing your workforce.
+                                            </p>
+                                        </div>
+                                        <button
+                                            onClick={openAddEmployee}
+                                            className="h-10 px-6 rounded-xl bg-gradient-to-r from-primary to-primary-dark text-white font-black text-[10px] uppercase tracking-widest flex items-center gap-2 hover:shadow-[0_4px_15px_rgba(74,192,228,0.3)] transition-all cursor-pointer"
+                                        >
+                                            <UserPlus size={14} />
+                                            Add First Employee
+                                        </button>
+                                    </div>
+                                ) : filteredEmployees.length === 0 ? (
                                     <p className="text-xs text-white/20 text-center py-10 font-semibold uppercase">No employees found matching filter</p>
-                                )}
+                                ) : null}
                             </div>
                         </motion.div>
                     )}
@@ -1052,8 +1082,15 @@ export default function AdminWorkforceDashboard() {
                                             <option value="Engineering">Engineering</option>
                                             <option value="Design">Design</option>
                                             <option value="Marketing">Marketing</option>
+                                            <option value="Content & Media">Content &amp; Media</option>
+                                            <option value="Social Media">Social Media</option>
+                                            <option value="Video Production">Video Production</option>
+                                            <option value="Photography">Photography</option>
+                                            <option value="Sales">Sales</option>
                                             <option value="Operations">Operations</option>
+                                            <option value="Accounts">Accounts</option>
                                             <option value="HR / Legal">HR / Legal</option>
+                                            <option value="Management">Management</option>
                                         </select>
                                     </div>
                                 </div>
@@ -1429,15 +1466,23 @@ export default function AdminWorkforceDashboard() {
                             </div>
 
                             {(() => {
-                                const daysInMonth = 30;
-                                const monthName = "June 2026";
+                                const now = new Date();
+                                const year = now.getFullYear();
+                                const month = now.getMonth();
+                                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                                const monthName = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+                                // Day of week the 1st falls on (0=Sun, 1=Mon... 6=Sat)
+                                // Calendar starts Monday, so offset: Mon=0, Tue=1, ..., Sun=6
+                                const firstDayOfWeek = new Date(year, month, 1).getDay();
+                                const calOffset = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+
                                 // Get attendance logs and leaves for this selected employee
                                 const empLogs = attendanceLogs.filter(l => l.employeeId === selectedEmpForCalendar.id);
                                 const empLeaves = leaveRequests.filter(l => l.employeeId === selectedEmpForCalendar.id && l.status === "Approved");
 
-                                const daySlots = Array.from({ length: 30 }, (_, idx) => {
+                                const daySlots = Array.from({ length: daysInMonth }, (_, idx) => {
                                     const dayNum = idx + 1;
-                                    const dateStr = `2026-06-${String(dayNum).padStart(2, "0")}`;
+                                    const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(dayNum).padStart(2, "0")}`;
                                     const log = empLogs.find(l => l.date === dateStr);
                                     const leave = empLeaves.find(l => (dateStr >= l.startDate && dateStr <= l.endDate));
                                     
@@ -1466,7 +1511,12 @@ export default function AdminWorkforceDashboard() {
                                         </div>
 
                                         <div className="grid grid-cols-7 gap-2">
+                                            {/* Empty offset cells */}
+                                            {Array.from({ length: calOffset }).map((_, i) => (
+                                                <div key={`offset-${i}`} className="aspect-square" />
+                                            ))}
                                             {daySlots.map((slot, idx) => {
+                                                const absoluteIdx = calOffset + idx;
                                                 let bgColor = "bg-white/[0.01] hover:bg-white/5 text-white/30";
                                                 let borderColor = "border-white/5";
                                                 
@@ -1486,15 +1536,17 @@ export default function AdminWorkforceDashboard() {
                                                     }
                                                 }
                                                 
-                                                const isWeekend = (idx % 7 === 5 || idx % 7 === 6);
+                                                const isWeekend = (absoluteIdx % 7 === 5 || absoluteIdx % 7 === 6);
                                                 if (isWeekend && !slot.log && !slot.leave) {
                                                     bgColor = "bg-white/[0.003] text-white/10";
                                                 }
 
+                                                const isToday = slot.dayNum === now.getDate() && month === now.getMonth() && year === now.getFullYear();
+
                                                 return (
                                                     <div
                                                         key={idx}
-                                                        className={`aspect-square rounded-xl border flex flex-col justify-between p-2 transition-all group ${bgColor} ${borderColor}`}
+                                                        className={`aspect-square rounded-xl border flex flex-col justify-between p-2 transition-all group ${bgColor} ${borderColor} ${isToday ? 'ring-1 ring-primary/50' : ''}`}
                                                     >
                                                         <span className="text-[10px] font-mono font-bold self-start">{slot.day}</span>
                                                         {slot.log && (

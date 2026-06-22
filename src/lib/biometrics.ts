@@ -8,9 +8,14 @@
 function loadImage(src: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
         const img = new Image();
-        img.crossOrigin = "anonymous";
+        if (!src.startsWith("data:")) {
+            img.crossOrigin = "anonymous";
+        }
         img.onload = () => resolve(img);
-        img.onerror = (err) => reject(err);
+        img.onerror = (err) => {
+            console.error("loadImage failed for source length:", src.length, err);
+            reject(err);
+        };
         img.src = src;
     });
 }
@@ -94,14 +99,14 @@ export async function verifyFaceMatch(enrolledBase64: string, currentBase64: str
         // Max difference (black vs white normalized) is 255
         const similarity = Math.max(0, Math.min(100, 100 - (avgDiff / 255) * 100));
 
-        // Scale similarity mapping to make a realistic face match threshold
-        // (typical real-world similarity of aligned same-faces centers around 78-98%)
-        // We stretch the range [50, 100] to give a better biometric comparison variance
-        let adjustedSimilarity = similarity;
-        if (similarity > 50) {
-            adjustedSimilarity = 50 + (similarity - 50) * 2;
+        // For webcam face comparison, the raw similarity is typically in the 60-90% range
+        // for the same person across different lighting/angle conditions.
+        // We use a gentle scaling that maps [40, 100] → [50, 100] to give more realistic scores
+        let adjustedSimilarity: number;
+        if (similarity >= 40) {
+            adjustedSimilarity = 50 + ((similarity - 40) / 60) * 50;
         } else {
-            adjustedSimilarity = similarity * 2;
+            adjustedSimilarity = (similarity / 40) * 50;
         }
 
         return Number(Math.min(100, Math.max(0, adjustedSimilarity)).toFixed(1));
@@ -109,4 +114,16 @@ export async function verifyFaceMatch(enrolledBase64: string, currentBase64: str
         console.error("Biometrics comparison process failure:", e);
         return 50; // Fallback default
     }
+}
+
+/**
+ * Determines whether a stored biometric photo is a mock/bypass SVG placeholder.
+ * Used to allow bypass clock-in/out to auto-succeed when enrollment was also mock.
+ * 
+ * @param photoBase64 The photo data URL to check
+ * @returns True if the photo is a mock SVG placeholder
+ */
+export function isMockBiometricPhoto(photoBase64: string | null | undefined): boolean {
+    if (!photoBase64) return false;
+    return photoBase64.startsWith("data:image/svg+xml");
 }
