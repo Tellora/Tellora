@@ -57,7 +57,8 @@ export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
                 {categories.map((cat) => {
                     if (onlyCore && cat.id !== "core") return null;
                     
-                    const members = team.filter(m => (m.category === cat.id) || (cat.id === "core" && !m.category && ["abhay sehdev", "prakhar saxena"].includes(m.name.toLowerCase())));
+                    const membersRaw = team.filter(m => (m.category === cat.id) || (cat.id === "core" && !m.category && ["abhay sehdev", "prakhar saxena"].includes(m.name.toLowerCase())));
+                    const members = membersRaw.filter((v, i, a) => a.findIndex(t => t.name === v.name) === i);
                     if (members.length === 0) return null;
                     
                     return (
@@ -200,9 +201,6 @@ function TeamCard({ member, idx }: { member: DbTeamMember; idx: number }) {
                             </a>
                             <a href={member.instagram_url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="w-10 h-10 rounded-full bg-white text-black brutalist-border flex items-center justify-center hover:bg-primary hover:text-white transition-all hover:scale-110 active:scale-95 shadow-[2px_2px_0px_#22C55E]">
                                 <Instagram size={16} />
-                            </a>
-                            <a href="#" onClick={e => e.stopPropagation()} className="w-10 h-10 rounded-full bg-white text-black brutalist-border flex items-center justify-center hover:bg-primary hover:text-white transition-all hover:scale-110 active:scale-95 shadow-[2px_2px_0px_#F3E84A]">
-                                <ExternalLink size={16} />
                             </a>
                         </div>
                     </div>

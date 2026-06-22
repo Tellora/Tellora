@@ -34,16 +34,7 @@ export default function Testimonials() {
 
     return (
         <section ref={containerRef} id="testimonials" className="py-32 relative z-10 bg-background border-y-[4px] border-black overflow-hidden">
-            {/* Background Marquee */}
-            <div className="absolute top-1/2 left-0 w-full opacity-5 pointer-events-none -translate-y-1/2 rotate-6">
-                <motion.div
-                    style={{ x: xMarquee }}
-                >
-                    <span className="text-[25rem] font-heading font-black uppercase whitespace-nowrap">
-                        VOUCHERS • VOUCHERS • VOUCHERS •
-                    </span>
-                </motion.div>
-            </div>
+
 
             <div className="container mx-auto px-6 relative z-10">
                 <motion.div style={{ y: yTitle }} className="text-center max-w-4xl mx-auto mb-24">
@@ -57,7 +48,7 @@ export default function Testimonials() {
                 </motion.div>
 
                 <div className="grid md:grid-cols-3 gap-16">
-                    {testimonials.map((test, idx) => (
+                    {testimonials.slice(0, 3).map((test, idx) => (
                         <motion.div
                             key={idx}
                             initial={{ opacity: 0, scale: 0.9, rotate: idx % 2 === 0 ? "-2deg" : "1.5deg" }}

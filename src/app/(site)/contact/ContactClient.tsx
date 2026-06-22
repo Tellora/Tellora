@@ -27,7 +27,7 @@ const contactInfo = [
     {
         icon: <MapPin className="w-6 h-6 text-primary" />,
         label: "Global HQ",
-        value: "South Extension II, New Delhi",
+        value: "9515 West Rohtash Nagar, Shahdara",
         subtitle: "India Office | Global Strategy",
         link: "https://goo.gl/maps/placeholder"
     }

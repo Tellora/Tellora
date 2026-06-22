@@ -41,7 +41,7 @@ export default function FAQ() {
                 </div>
 
                 <div className="grid gap-6">
-                    {faqs.map((faq, index) => (
+                    {faqs.slice(0, 3).map((faq, index) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}

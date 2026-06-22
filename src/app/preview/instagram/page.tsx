@@ -145,7 +145,7 @@ export default function InstagramPreview() {
                             <p className="font-bold text-sm">{profile.name}</p>
                             <p className="text-sm leading-[1.4] whitespace-pre-wrap max-w-md">{profile.bio}</p>
                             {profile.website && (
-                                <a href="#" className="flex items-center justify-center md:justify-start gap-1 text-[#00376b] font-semibold text-sm mt-2">
+                                <a href={profile.website} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center md:justify-start gap-1 text-[#00376b] font-semibold text-sm mt-2">
                                     <ExternalLink size={12} /> {profile.website}
                                 </a>
                             )}

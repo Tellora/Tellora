@@ -30,7 +30,6 @@ import {
     getServices, 
     getTeam, 
     getCaseStudies, 
-    getReels, 
     getActivityLogs 
 } from "@/lib/store";
 
@@ -72,20 +71,18 @@ export default function AdminDashboard() {
     const refreshSystemState = async () => {
         setIsSyncing(true);
 
-        const [teamData, servicesData, csData, reelsData, logsData] = await Promise.all([
+        const [teamData, servicesData, csData, logsData] = await Promise.all([
             getTeam(),
             getServices(),
             getCaseStudies(),
-            getReels(),
             getActivityLogs()
         ]);
 
         const teamCount = teamData.length;
         const servicesCount = servicesData.length;
         const caseStudiesCount = csData.length;
-        const reelsCount = reelsData.length;
 
-        const totalContent = teamCount + servicesCount + caseStudiesCount + reelsCount;
+        const totalContent = teamCount + servicesCount + caseStudiesCount;
 
         setStats([
             { label: "Total Page Views", value: 1240, change: "LIVE", icon: Eye, color: "#4ac0e4", suffix: "", decimals: 0, trend: 'neutral' },
@@ -290,7 +287,6 @@ export default function AdminDashboard() {
             <div className="grid md:grid-cols-3 gap-6">
                 {[
                     { title: "Manage Content", desc: "Update case studies, team, and services in the database.", icon: Database, bg: "bg-primary/10", border: "border-primary/20", text: "text-primary", path: "/admin/services" },
-                    { title: "Traffic Analytics", desc: "View detailed breakdown of your site visitors.", icon: LucideLineChart, bg: "bg-white/5", border: "border-white/10", text: "text-white/60", path: "/admin/analytics" },
                     { title: "Site Settings", desc: "Configure global site parameters and SEO metatags.", icon: LayoutDashboard, bg: "bg-white/5", border: "border-white/10", text: "text-white/60", path: "/admin/settings" },
                 ].map((action, i) => (
                     <motion.div

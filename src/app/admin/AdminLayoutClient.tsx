@@ -18,7 +18,8 @@ import {
     Bell,
     Menu,
     X,
-    Instagram
+    Instagram,
+    Clock
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -39,7 +40,8 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
     const pathname = usePathname();
     const router = useRouter();
     // Use startsWith to handle both /admin/login and /admin/login/ (trailing slash)
-    const isLoginPage = pathname === "/admin/login" || pathname === "/admin/login/" || pathname.startsWith("/admin/login?");
+    const isLoginPage = pathname ? (pathname === "/admin/login" || pathname === "/admin/login/" || pathname.startsWith("/admin/login?")) : false;
+    const isEmployeePortal = pathname ? pathname.startsWith("/admin/workforce/portal") : false;
 
     const loadNotifications = async () => {
         try {
@@ -105,6 +107,8 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
 
     // ── Supabase Auth ──────────────────────────────────────────────────────────
     useEffect(() => {
+        if (!pathname) return;
+        
         const initAuth = async () => {
             const { data: { session } } = await supabase.auth.getSession();
 
@@ -112,7 +116,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
                 setIsAuthenticated(true);
                 const profile = await getAdminProfile(session.user.id);
                 if (profile) setCurrentUser(profile);
-            } else if (!isLoginPage) {
+            } else if (!isLoginPage && !isEmployeePortal) {
                 router.push("/admin/login");
             }
 
@@ -135,7 +139,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
         });
 
         return () => subscription.unsubscribe();
-    }, [isLoginPage, router]);
+    }, [isLoginPage, isEmployeePortal, pathname, router]);
 
     // ── Logout ─────────────────────────────────────────────────────────────────
     const handleLogout = async () => {
@@ -144,8 +148,8 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
     };
 
     // ── Render logic ───────────────────────────────────────────────────────────
-    // Always render login page without the admin shell
-    if (isLoginPage) {
+    // Always render login page or employee portal without the admin shell
+    if (isLoginPage || isEmployeePortal) {
         return <>{children}</>;
     }
 
@@ -187,11 +191,10 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
         { name: "Services", icon: Layers, path: "/admin/services" },
         { name: "Case Studies", icon: ImageIcon, path: "/admin/case-studies" },
         { name: "Team Members", icon: Users, path: "/admin/team" },
+        { name: "Workforce", icon: Clock, path: "/admin/workforce" },
         { name: "Recruitment", icon: PlusCircle, path: "/admin/recruitment" },
-        { name: "Customer Reels", icon: PieChart, path: "/admin/reels" },
         { name: "Inbox", icon: MessageSquare, path: "/admin/inbox" },
         { name: "Instagram Portal", icon: Instagram, path: "/admin/instagram" },
-        { name: "Analytics", icon: BarChart3, path: "/admin/analytics" },
         { name: "Settings", icon: Settings, path: "/admin/settings" },
     ];
 

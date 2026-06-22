@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck, ArrowRight, Lock, Mail, Sparkles, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 export default function AdminLogin() {
@@ -169,6 +170,16 @@ export default function AdminLogin() {
                             )}
                         </button>
                     </form>
+
+                    <div className="mt-8 pt-6 border-t border-white/5 text-center">
+                        <Link
+                            href="/admin/workforce/portal"
+                            className="inline-flex items-center gap-2 text-[10px] font-black text-primary hover:text-white uppercase tracking-widest transition-all hover:gap-3 cursor-pointer"
+                        >
+                            <span>Go to Employee Portal</span>
+                            <ArrowRight size={12} className="text-primary" />
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Footer */}

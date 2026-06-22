@@ -122,8 +122,8 @@ const jsonLd = {
     "priceRange": "$$$",
     "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Tellora Hub, South Extension II",
-        "addressLocality": "New Delhi",
+        "streetAddress": "9515 West Rohtash Nagar",
+        "addressLocality": "Shahdara",
         "addressRegion": "Delhi",
         "postalCode": "110049",
         "addressCountry": "IN"
