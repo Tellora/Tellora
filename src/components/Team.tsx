@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Linkedin, Twitter, ExternalLink, Sparkles, Users, Instagram, Zap, Target } from "lucide-react";
 import Image from "next/image";
 import { getAllTeamMembers } from "@/lib/store";
 import { DbTeamMember } from "@/lib/supabase";
 
-export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
+export default function Team({ onlyCore = false, title }: { onlyCore?: boolean; title?: React.ReactNode }) {
     const [team, setTeam] = useState<DbTeamMember[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -43,7 +43,11 @@ export default function Team({ onlyCore = false }: { onlyCore?: boolean }) {
                             <span className="text-[10px] md:text-[11px] font-black uppercase tracking-widest">Global Talent</span>
                         </div>
                         <h2 className="heading-massive !text-4xl sm:!text-6xl md:!text-8xl tracking-tight leading-none">
-                            MEET THE <br /> <span className="text-primary italic">SQUAD</span>
+                            {title || (
+                                <>
+                                    MEET THE <br /> <span className="text-primary italic">SQUAD</span>
+                                </>
+                            )}
                         </h2>
                     </div>
                     <div className="max-w-xs text-left lg:text-right">

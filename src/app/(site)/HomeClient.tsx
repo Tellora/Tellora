@@ -93,7 +93,14 @@ export default function Home() {
 
                 <ScrollConnector />
 
-                <Team onlyCore={true} />
+                <Team 
+                    onlyCore={true} 
+                    title={
+                        <>
+                            FOUNDER'S <br /> <span className="text-primary italic">CABIN</span>
+                        </>
+                    } 
+                />
 
                 <ParallaxText text="DATA DRIVEN • RESULTS • SCALE •" baseVelocity={30} />
 
@@ -106,10 +113,6 @@ export default function Home() {
                 <ReelsSection />
 
                 <Testimonials />
-
-                <ScrollConnector />
-
-                <ROICalculator />
 
                 <FAQ />
 

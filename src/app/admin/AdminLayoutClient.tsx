@@ -188,9 +188,7 @@ export default function AdminLayoutClient({ children }: { children: React.ReactN
     // ── Nav items ──────────────────────────────────────────────────────────────
     const menuItems = [
         { name: "Overview", icon: LayoutDashboard, path: "/admin/dashboard" },
-        { name: "Services", icon: Layers, path: "/admin/services" },
         { name: "Case Studies", icon: ImageIcon, path: "/admin/case-studies" },
-        { name: "Team Members", icon: Users, path: "/admin/team" },
         { name: "Workforce", icon: Clock, path: "/admin/workforce" },
         { name: "Recruitment", icon: PlusCircle, path: "/admin/recruitment" },
         { name: "Inbox", icon: MessageSquare, path: "/admin/inbox" },

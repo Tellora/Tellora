@@ -103,6 +103,30 @@ const playSynthSound = (type: "scan" | "success" | "click" | "fail") => {
     }
 };
 
+// Helper to extract 32x32 grayscale array from canvas
+function getGrayscaleArrayFromCanvas(canvas: HTMLCanvasElement): number[] {
+    try {
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = 32;
+        tempCanvas.height = 32;
+        const ctx = tempCanvas.getContext("2d");
+        if (!ctx) return new Array(1024).fill(0);
+        
+        ctx.drawImage(canvas, 0, 0, 32, 32);
+        const imgData = ctx.getImageData(0, 0, 32, 32);
+        const d = imgData.data;
+        const gray = [];
+        for (let i = 0; i < d.length; i += 4) {
+            const val = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+            gray.push(val);
+        }
+        return gray;
+    } catch (e) {
+        console.error("Grayscale extraction failed", e);
+        return new Array(1024).fill(0);
+    }
+}
+
 export default function EmployeePortal() {
     // Auth & Navigation States
     const [employees, setEmployees] = useState<Employee[]>([]);
@@ -111,7 +135,17 @@ export default function EmployeePortal() {
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
     const [isLoggingIn, setIsLoggingIn] = useState(false);
-    const [activeTab, setActiveTab] = useState<"dashboard" | "leaves" | "activity">("dashboard");
+    const [activeTab, setActiveTab] = useState<"dashboard" | "leaves" | "activity" | "settings">("dashboard");
+    const [calendarViewDate, setCalendarViewDate] = useState<Date>(new Date());
+    const [noteCategory, setNoteCategory] = useState<"Completed" | "In Progress" | "Blocker">("Completed");
+    
+    // Password Settings State
+    const [oldPassword, setOldPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmNewPassword, setConfirmNewPassword] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [passwordSuccess, setPasswordSuccess] = useState(false);
+    const [isSavingPassword, setIsSavingPassword] = useState(false);
 
     // Dynamic clock / timer state
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -127,6 +161,8 @@ export default function EmployeePortal() {
     const [scanProgress, setScanProgress] = useState(0);
     const [scanConfidence, setScanConfidence] = useState(0);
     const [capturedFrame, setCapturedFrame] = useState<string | null>(null);
+    const [capturedGrayscale, setCapturedGrayscale] = useState<number[] | null>(null);
+    const [isLocating, setIsLocating] = useState(false);
 
     // Advanced sliders and logs settings
     const [brightness, setBrightness] = useState(100);
@@ -155,6 +191,10 @@ export default function EmployeePortal() {
     // List states for local views
     const [attendanceLogs, setAttendanceLogs] = useState<AttendanceLog[]>([]);
     const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+
+    // Daily Focus Tasks state
+    const [focusTasks, setFocusTasks] = useState<{ text: string; completed: boolean }[]>([]);
+    const [newTaskText, setNewTaskText] = useState("");
 
     // Webcam HTML element references
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -196,6 +236,23 @@ export default function EmployeePortal() {
         };
     }, []);
 
+    useEffect(() => {
+        if (currentEmployee) {
+            const stored = localStorage.getItem(`focus_tasks_${currentEmployee.id}`);
+            if (stored) {
+                try {
+                    setFocusTasks(JSON.parse(stored));
+                } catch (e) {
+                    setFocusTasks([]);
+                }
+            } else {
+                setFocusTasks([]);
+            }
+        } else {
+            setFocusTasks([]);
+        }
+    }, [currentEmployee]);
+
     // Ticking timer for active shift duration
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -203,7 +260,18 @@ export default function EmployeePortal() {
             const calculateElapsed = () => {
                 const startTime = new Date(activeLog.clockIn).getTime();
                 const now = new Date().getTime();
-                const diff = Math.max(0, Math.floor((now - startTime) / 1000));
+                
+                // Subtract break time
+                let breakMs = 0;
+                if (activeLog.breaks) {
+                    activeLog.breaks.forEach(b => {
+                        const start = new Date(b.start).getTime();
+                        const end = b.end ? new Date(b.end).getTime() : now;
+                        breakMs += (end - start);
+                    });
+                }
+                
+                const diff = Math.max(0, Math.floor(((now - startTime) - breakMs) / 1000));
                 setElapsedSeconds(diff);
             };
             calculateElapsed();
@@ -482,9 +550,12 @@ export default function EmployeePortal() {
                         setTimeout(async () => {
                             // Take raw snapshot frame from canvas
                             let currentFrameUrl = "";
+                            let grayArray: number[] = [];
                             if (canvasRef.current) {
                                 currentFrameUrl = canvasRef.current.toDataURL("image/jpeg");
                                 setCapturedFrame(currentFrameUrl);
+                                grayArray = getGrayscaleArrayFromCanvas(canvasRef.current);
+                                setCapturedGrayscale(grayArray);
                             }
 
                             if (scanAction === "enroll") {
@@ -501,15 +572,48 @@ export default function EmployeePortal() {
                                         setScanStep("completed");
                                         playSynthSound("success");
                                     } else {
-                                        const matchScore = await verifyFaceMatch(currentEmployee.enrolledFace, currentFrameUrl);
-                                        setScanConfidence(matchScore);
-                                        
-                                        if (matchScore >= 75) {
-                                            setScanStep("completed");
-                                            playSynthSound("success");
-                                        } else {
-                                            setScanStep("failed");
-                                            playSynthSound("fail");
+                                        try {
+                                            const vRes = await fetch("/api/admin/workforce/verify-face", {
+                                                method: "POST",
+                                                headers: { "Content-Type": "application/json" },
+                                                body: JSON.stringify({
+                                                    employeeId: currentEmployee.id,
+                                                    currentGrayscale: grayArray
+                                                })
+                                            });
+                                            if (vRes.ok) {
+                                                const vData = await vRes.json();
+                                                setScanConfidence(vData.confidence);
+                                                if (vData.verified) {
+                                                    setScanStep("completed");
+                                                    playSynthSound("success");
+                                                } else {
+                                                    setScanStep("failed");
+                                                    playSynthSound("fail");
+                                                }
+                                            } else {
+                                                // Fallback to local match
+                                                const matchScore = await verifyFaceMatch(currentEmployee.enrolledFace, currentFrameUrl);
+                                                setScanConfidence(matchScore);
+                                                if (matchScore >= 75) {
+                                                    setScanStep("completed");
+                                                    playSynthSound("success");
+                                                } else {
+                                                    setScanStep("failed");
+                                                    playSynthSound("fail");
+                                                }
+                                            }
+                                        } catch (err) {
+                                            // Fallback to local match
+                                            const matchScore = await verifyFaceMatch(currentEmployee.enrolledFace, currentFrameUrl);
+                                            setScanConfidence(matchScore);
+                                            if (matchScore >= 75) {
+                                                setScanStep("completed");
+                                                playSynthSound("success");
+                                            } else {
+                                                setScanStep("failed");
+                                                playSynthSound("fail");
+                                            }
                                         }
                                     }
                                 } else {
@@ -532,14 +636,80 @@ export default function EmployeePortal() {
     const handleConfirmScan = async () => {
         if (!currentEmployee) return;
 
+        setIsLocating(true);
+        let ipAddress = "127.0.0.1";
+        let locationStr = "Unknown Location";
+
+        try {
+            // 1. Get browser Geolocation coordinates
+            const coords = await new Promise<GeolocationCoordinates | null>((resolve) => {
+                if (!navigator.geolocation) return resolve(null);
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => resolve(pos.coords),
+                    () => resolve(null),
+                    { timeout: 6000 }
+                );
+            });
+
+            if (coords) {
+                // Reverse geocode via Nominatim API
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${coords.latitude}&lon=${coords.longitude}&zoom=14`, {
+                    headers: {
+                        "User-Agent": "Tellora-Workforce-App/1.0"
+                    }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.address) {
+                        const addr = data.address;
+                        const parts = [];
+                        if (addr.suburb) parts.push(addr.suburb);
+                        else if (addr.neighbourhood) parts.push(addr.neighbourhood);
+                        
+                        if (addr.city || addr.town || addr.village) {
+                            parts.push(addr.city || addr.town || addr.village);
+                        }
+                        if (addr.state) parts.push(addr.state);
+                        if (addr.country) parts.push(addr.country);
+                        
+                        if (parts.length > 0) {
+                            locationStr = parts.join(", ");
+                        } else {
+                            locationStr = data.display_name;
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.error("Browser geolocation error:", e);
+        }
+
+        // 2. Fetch IP address & fallback location if needed
+        try {
+            const ipRes = await fetch("https://ipapi.co/json/");
+            if (ipRes.ok) {
+                const ipData = await ipRes.json();
+                if (ipData) {
+                    if (ipData.ip) ipAddress = ipData.ip;
+                    if (locationStr === "Unknown Location" && ipData.city) {
+                        locationStr = `${ipData.city}, ${ipData.region ? ipData.region + ", " : ""}${ipData.country_name || ""}`;
+                    }
+                }
+            }
+        } catch (e) {
+            console.error("IP Geolocation API error:", e);
+        }
+        setIsLocating(false);
+
         const photoToSave = capturedFrame || (scanAction === "in" ? MOCK_FACE_PHOTO_IN : MOCK_FACE_PHOTO_OUT);
         const now = new Date();
 
         if (scanAction === "enroll") {
-            // Save enrollment base64 photo to employee record
+            // Save enrollment base64 photo and signature to employee record
             const updatedEmployee: Employee = {
                 ...currentEmployee,
-                enrolledFace: photoToSave
+                enrolledFace: photoToSave,
+                enrolledFaceSignature: capturedGrayscale || new Array(1024).fill(128)
             };
             
             await saveEmployee(updatedEmployee);
@@ -557,11 +727,6 @@ export default function EmployeePortal() {
             
             const [shiftH, shiftM] = currentEmployee.shiftStart.split(":").map(Number);
             const isLate = checkInHour > shiftH || (checkInHour === shiftH && checkInMinute > 15);
-
-            // Network simulator details
-            const cities = ["Delhi, Shahdara, India", "Mumbai, Maharashtra, India", "Bangalore, Karnataka, India", "Gurugram, Haryana, India", "Noida, Uttar Pradesh, India"];
-            const randomCity = cities[Math.floor(Math.random() * cities.length)];
-            const randomIp = `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
 
             const newLog: AttendanceLog = {
                 id: `ATT-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
@@ -581,8 +746,8 @@ export default function EmployeePortal() {
                 totalHours: null,
                 status: isLate ? "late" : "active",
                 notes: isLate ? `Late clock-in by ${checkInHour * 60 + checkInMinute - (shiftH * 60 + shiftM)} mins.` : "Shift started on time.",
-                ipAddress: randomIp,
-                location: randomCity,
+                ipAddress,
+                location: locationStr,
                 progressUpdates: []
             };
 
@@ -592,9 +757,30 @@ export default function EmployeePortal() {
 
             const clockInTime = new Date(activeLog.clockIn).getTime();
             const clockOutTime = now.getTime();
-            const workedHours = Number(((clockOutTime - clockInTime) / 3600000).toFixed(2));
+            
+            // Subtract break minutes
+            let breakMs = 0;
+            const finalBreaks = activeLog.breaks ? [...activeLog.breaks] : [];
+            const openBreakIdx = finalBreaks.findIndex(b => b.end === null);
+            if (openBreakIdx >= 0) {
+                finalBreaks[openBreakIdx].end = now.toISOString();
+            }
+            finalBreaks.forEach(b => {
+                if (b.start && b.end) {
+                    breakMs += new Date(b.end).getTime() - new Date(b.start).getTime();
+                }
+            });
+
+            const workedMs = (clockOutTime - clockInTime) - breakMs;
+            const workedHours = Number((Math.max(0, workedMs) / 3600000).toFixed(2));
+            const totalBreakMins = Math.floor(breakMs / 60000);
 
             const isUndertime = workedHours < currentEmployee.shiftHours;
+
+            const [endH, endM] = currentEmployee.shiftEnd.split(":").map(Number);
+            const clockOutHour = now.getHours();
+            const clockOutMinute = now.getMinutes();
+            const isOvertime = clockOutHour > endH || (clockOutHour === endH && clockOutMinute > 5);
 
             const updatedLog: AttendanceLog = {
                 ...activeLog,
@@ -603,13 +789,48 @@ export default function EmployeePortal() {
                 clockOutVerified: true,
                 clockOutConfidence: scanConfidence,
                 totalHours: workedHours,
+                breaks: finalBreaks,
+                totalBreakMinutes: totalBreakMins,
                 status: isUndertime ? "undertime" : "completed",
                 notes: isUndertime 
-                    ? `Left early. Worked ${workedHours} hrs instead of ${currentEmployee.shiftHours} hrs.` 
-                    : `Shift completed successfully. Total: ${workedHours} hrs.`
+                    ? `Left early. Worked ${workedHours} hrs (Breaks: ${totalBreakMins} mins) instead of ${currentEmployee.shiftHours} hrs.` 
+                    : `Shift completed successfully. Total: ${workedHours} hrs (Breaks: ${totalBreakMins} mins).`
             };
 
             await saveAttendanceLog(updatedLog);
+
+            // Send Shift Alerts via backend
+            if (isUndertime) {
+                try {
+                    await fetch("/api/admin/workforce/send-alert", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            employeeId: currentEmployee.id,
+                            type: "undertime",
+                            workedHours: workedHours,
+                            expectedHours: currentEmployee.shiftHours
+                        })
+                    });
+                } catch (e) {
+                    console.error("Failed to send undertime alert:", e);
+                }
+            } else if (isOvertime) {
+                try {
+                    await fetch("/api/admin/workforce/send-alert", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            employeeId: currentEmployee.id,
+                            type: "overtime",
+                            workedHours: workedHours,
+                            shiftEnd: currentEmployee.shiftEnd
+                        })
+                    });
+                } catch (e) {
+                    console.error("Failed to send overtime alert:", e);
+                }
+            }
         }
 
         stopCamera();
@@ -640,6 +861,8 @@ export default function EmployeePortal() {
                     setTimeout(async () => {
                         const mockPhoto = scanAction === "in" ? MOCK_FACE_PHOTO_IN : MOCK_FACE_PHOTO_OUT;
                         setCapturedFrame(mockPhoto);
+                        const mockGrayscale = new Array(1024).fill(128);
+                        setCapturedGrayscale(mockGrayscale);
 
                         if (scanAction === "enroll") {
                             setScanConfidence(100);
@@ -655,16 +878,48 @@ export default function EmployeePortal() {
                                     setScanStep("completed");
                                     playSynthSound("success");
                                 } else {
-                                    // Real enrolled face - do grayscale comparison against mock
-                                    const matchScore = await verifyFaceMatch(currentEmployee.enrolledFace, mockPhoto);
-                                    setScanConfidence(matchScore);
-                                    
-                                    if (matchScore >= 75) {
-                                        setScanStep("completed");
-                                        playSynthSound("success");
-                                    } else {
-                                        setScanStep("failed");
-                                        playSynthSound("fail");
+                                    try {
+                                        const vRes = await fetch("/api/admin/workforce/verify-face", {
+                                            method: "POST",
+                                            headers: { "Content-Type": "application/json" },
+                                            body: JSON.stringify({
+                                                employeeId: currentEmployee.id,
+                                                currentGrayscale: mockGrayscale
+                                            })
+                                        });
+                                        if (vRes.ok) {
+                                            const vData = await vRes.json();
+                                            setScanConfidence(vData.confidence);
+                                            if (vData.verified) {
+                                                setScanStep("completed");
+                                                playSynthSound("success");
+                                            } else {
+                                                setScanStep("failed");
+                                                playSynthSound("fail");
+                                            }
+                                        } else {
+                                            // Fallback
+                                            const matchScore = await verifyFaceMatch(currentEmployee.enrolledFace, mockPhoto);
+                                            setScanConfidence(matchScore);
+                                            if (matchScore >= 75) {
+                                                setScanStep("completed");
+                                                playSynthSound("success");
+                                            } else {
+                                                setScanStep("failed");
+                                                playSynthSound("fail");
+                                            }
+                                        }
+                                    } catch (err) {
+                                        // Fallback
+                                        const matchScore = await verifyFaceMatch(currentEmployee.enrolledFace, mockPhoto);
+                                        setScanConfidence(matchScore);
+                                        if (matchScore >= 75) {
+                                            setScanStep("completed");
+                                            playSynthSound("success");
+                                        } else {
+                                            setScanStep("failed");
+                                            playSynthSound("fail");
+                                        }
                                     }
                                 }
                             } else {
@@ -724,7 +979,8 @@ export default function EmployeePortal() {
         if (!activeLog || !shiftNote.trim() || !currentEmployee) return;
         const note = {
             time: new Date().toISOString(),
-            text: shiftNote.trim()
+            text: shiftNote.trim(),
+            category: noteCategory
         };
         const updatedLog: AttendanceLog = {
             ...activeLog,
@@ -735,6 +991,177 @@ export default function EmployeePortal() {
         await refreshLogsAndLeaves(currentEmployee.id);
         playSynthSound("success");
     };
+
+    const handleStartBreak = async (type: "Lunch" | "Short Break") => {
+        if (!activeLog || !currentEmployee) return;
+        playSynthSound("click");
+        const now = new Date();
+        const newBreak = {
+            start: now.toISOString(),
+            end: null,
+            type
+        };
+        const updatedLog: AttendanceLog = {
+            ...activeLog,
+            status: "on_break",
+            breaks: [...(activeLog.breaks || []), newBreak]
+        };
+        await saveAttendanceLog(updatedLog);
+        await refreshLogsAndLeaves(currentEmployee.id);
+        playSynthSound("success");
+    };
+
+    const handleEndBreak = async () => {
+        if (!activeLog || !activeLog.breaks || !currentEmployee) return;
+        playSynthSound("click");
+        const now = new Date();
+        const breaks = [...activeLog.breaks];
+        const activeIdx = breaks.findIndex(b => b.end === null);
+        if (activeIdx >= 0) {
+            breaks[activeIdx].end = now.toISOString();
+        }
+        
+        let totalBreakMins = 0;
+        breaks.forEach(b => {
+            if (b.start && b.end) {
+                const diffMs = new Date(b.end).getTime() - new Date(b.start).getTime();
+                totalBreakMins += Math.floor(diffMs / 60000);
+            }
+        });
+
+        const updatedLog: AttendanceLog = {
+            ...activeLog,
+            status: "active",
+            breaks,
+            totalBreakMinutes: totalBreakMins
+        };
+        await saveAttendanceLog(updatedLog);
+        await refreshLogsAndLeaves(currentEmployee.id);
+        playSynthSound("success");
+    };
+
+    const handleChangePassword = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setPasswordError("");
+        setPasswordSuccess(false);
+
+        if (!currentEmployee) return;
+
+        if (oldPassword !== currentEmployee.password) {
+            setPasswordError("Incorrect current password.");
+            return;
+        }
+
+        if (newPassword.length < 6) {
+            setPasswordError("New password must be at least 6 characters.");
+            return;
+        }
+
+        if (newPassword !== confirmNewPassword) {
+            setPasswordError("Passwords do not match.");
+            return;
+        }
+
+        setIsSavingPassword(true);
+        try {
+            const updatedEmployee: Employee = {
+                ...currentEmployee,
+                password: newPassword
+            };
+            const success = await saveEmployee(updatedEmployee);
+            if (success) {
+                setCurrentEmployee(updatedEmployee);
+                setPasswordSuccess(true);
+                setOldPassword("");
+                setNewPassword("");
+                setConfirmNewPassword("");
+                playSynthSound("success");
+            } else {
+                setPasswordError("Database save failed. Please try again.");
+            }
+        } catch (err) {
+            setPasswordError("Unexpected error occurred.");
+        }
+        setIsSavingPassword(false);
+    };
+
+    const saveFocusTasks = (tasks: { text: string; completed: boolean }[]) => {
+        setFocusTasks(tasks);
+        if (currentEmployee) {
+            localStorage.setItem(`focus_tasks_${currentEmployee.id}`, JSON.stringify(tasks));
+        }
+    };
+
+    const handleAddTask = () => {
+        if (!newTaskText.trim()) return;
+        const updated = [...focusTasks, { text: newTaskText.trim(), completed: false }];
+        saveFocusTasks(updated);
+        setNewTaskText("");
+        playSynthSound("click");
+    };
+
+    const handleToggleTask = (index: number) => {
+        const updated = focusTasks.map((t, idx) => 
+            idx === index ? { ...t, completed: !t.completed } : t
+        );
+        saveFocusTasks(updated);
+        playSynthSound("click");
+    };
+
+    const handleDeleteTask = (index: number) => {
+        const updated = focusTasks.filter((_, idx) => idx !== index);
+        saveFocusTasks(updated);
+        playSynthSound("click");
+    };
+
+    const getDepartmentPresence = () => {
+        if (!currentEmployee) return { total: 0, active: 0 };
+        const sameDeptEmps = employees.filter(e => e.department === currentEmployee.department && e.status === "Active");
+        const todayStr = new Date().toISOString().split("T")[0];
+        
+        const activeCount = attendanceLogs.filter(log => 
+            log.date === todayStr && 
+            log.clockOut === null && 
+            employees.some(e => e.id === log.employeeId && e.department === currentEmployee.department)
+        ).length;
+
+        return {
+            total: sameDeptEmps.length,
+            active: activeCount
+        };
+    };
+
+    const deptPresence = getDepartmentPresence();
+
+    const getWeeklyStats = () => {
+        const now = new Date();
+        const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1)); // Monday
+        startOfWeek.setHours(0,0,0,0);
+        
+        const thisWeekLogs = attendanceLogs.filter(log => {
+            const logDate = new Date(log.date);
+            return logDate >= startOfWeek;
+        });
+
+        const totalHours = thisWeekLogs.reduce((sum, log) => sum + (log.totalHours || 0), 0);
+        
+        const completedLogs = thisWeekLogs.filter(log => log.clockOut !== null);
+        const onTimeLogs = thisWeekLogs.filter(log => log.status !== "late" && log.status !== "undertime" && log.clockIn);
+        const punctualityRate = completedLogs.length > 0
+            ? Math.round((onTimeLogs.length / thisWeekLogs.length) * 100)
+            : 100;
+
+        const totalBreakMins = thisWeekLogs.reduce((sum, log) => sum + (log.totalBreakMinutes || 0), 0);
+
+        return {
+            hours: Number(totalHours.toFixed(1)),
+            punctuality: punctualityRate,
+            breaks: totalBreakMins,
+            shiftsCount: thisWeekLogs.length
+        };
+    };
+
+    const weeklyStats = getWeeklyStats();
 
 
     const formatTime = (date: Date) => {
@@ -978,11 +1405,12 @@ export default function EmployeePortal() {
                 </div>
 
                 {/* Sub tabs navigation */}
-                <div className="flex border-b border-white/5 pb-2">
+                <div className="flex border-b border-white/5 pb-2 overflow-x-auto scrollbar-hide">
                     {[
                         { id: "dashboard", label: "My Shift Status", icon: Activity },
                         { id: "leaves", label: "Request Leave", icon: Calendar },
-                        { id: "activity", label: "Attendance Logs", icon: FileText }
+                        { id: "activity", label: "Attendance Logs", icon: FileText },
+                        { id: "settings", label: "Profile Settings", icon: User }
                     ].map(tab => (
                         <button
                             key={tab.id}
@@ -1106,54 +1534,160 @@ export default function EmployeePortal() {
                                                         <Camera size={16} />
                                                         CLOCK IN SHIFT
                                                     </button>
-                                                ) : (
+                                                ) : activeLog.status === "on_break" ? (
                                                     <button
-                                                        onClick={() => handleTriggerScan("out")}
-                                                        className="w-full sm:w-auto px-10 h-13 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 text-white font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:shadow-[0_6px_25px_rgba(239,68,68,0.3)] transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95"
+                                                        onClick={handleEndBreak}
+                                                        className="w-full sm:w-auto px-8 h-13 rounded-2xl bg-gradient-to-r from-green-500 to-green-600 text-white font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:shadow-[0_6px_25px_rgba(34,197,94,0.3)] transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95"
                                                     >
-                                                        <Camera size={16} />
-                                                        CLOCK OUT SHIFT
+                                                        <Clock size={16} />
+                                                        END BREAK & RESUME
                                                     </button>
+                                                ) : (
+                                                    <div className="flex flex-wrap gap-3 w-full sm:w-auto justify-end">
+                                                        <button
+                                                            onClick={() => handleStartBreak("Lunch")}
+                                                            className="flex-1 sm:flex-none px-6 h-13 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 text-white/80 font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95"
+                                                        >
+                                                            LUNCH BREAK
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleStartBreak("Short Break")}
+                                                            className="flex-1 sm:flex-none px-6 h-13 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 text-white/80 font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95"
+                                                        >
+                                                            TEA BREAK
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleTriggerScan("out")}
+                                                            className="flex-1 sm:flex-none px-6 h-13 rounded-2xl bg-gradient-to-r from-red-500 to-red-600 text-white font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:shadow-[0_6px_25px_rgba(239,68,68,0.3)] transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95"
+                                                        >
+                                                            <Camera size={16} />
+                                                            CLOCK OUT
+                                                        </button>
+                                                    </div>
                                                 )}
                                             </div>
 
                                             {activeLog && (
-                                                <div className="mt-6 p-5 bg-[#080B12] rounded-2xl border border-white/5 space-y-4">
-                                                    <div className="flex justify-between items-center">
-                                                        <h4 className="text-[10px] font-black uppercase text-primary tracking-widest">Active Shift Progress Updates</h4>
-                                                        <span className="text-[9px] text-white/30">Visible to administrators</span>
+                                                <>
+                                                    <div className="mt-6 p-5 bg-[#080B12] rounded-2xl border border-white/5 space-y-4">
+                                                        <div className="flex justify-between items-center">
+                                                            <h4 className="text-[10px] font-black uppercase text-primary tracking-widest">Active Shift Progress Updates</h4>
+                                                            <span className="text-[9px] text-white/30">Visible to administrators</span>
+                                                        </div>
+                                                        <div className="flex flex-col sm:flex-row gap-3">
+                                                            <select
+                                                                value={noteCategory}
+                                                                onChange={(e) => setNoteCategory(e.target.value as any)}
+                                                                className="bg-white/5 border border-white/5 rounded-xl p-2.5 text-xs text-white/80 outline-none focus:border-primary/40 transition-all cursor-pointer"
+                                                            >
+                                                                <option value="Completed" className="bg-[#0D121F]">Completed</option>
+                                                                <option value="In Progress" className="bg-[#0D121F]">In Progress</option>
+                                                                <option value="Blocker" className="bg-[#0D121F]">Blocker</option>
+                                                            </select>
+                                                            <input
+                                                                type="text"
+                                                                placeholder="Standup note (e.g. Fixed location reverse geocoding API)..."
+                                                                value={shiftNote}
+                                                                onChange={(e) => setShiftNote(e.target.value)}
+                                                                className="flex-1 bg-white/5 border border-white/5 rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-primary/40 transition-all placeholder:text-white/20"
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                onClick={handlePostShiftNote}
+                                                                className="bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer"
+                                                            >
+                                                                Post update
+                                                            </button>
+                                                        </div>
+                                                        <div className="space-y-2 max-h-32 overflow-y-auto pr-1">
+                                                            {(!activeLog.progressUpdates || activeLog.progressUpdates.length === 0) ? (
+                                                                <p className="text-[10px] text-white/20 italic">No updates posted for this shift yet.</p>
+                                                            ) : (
+                                                                activeLog.progressUpdates.map((upd, idx) => (
+                                                                    <div key={idx} className="flex justify-between items-start gap-3 p-3 bg-white/[0.01] border border-white/5 rounded-xl text-xs hover:border-white/10 transition-all">
+                                                                        <div className="space-y-1">
+                                                                            <div className="flex items-center gap-2">
+                                                                                <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider ${
+                                                                                    upd.category === "Blocker" ? "bg-red-500/10 text-red-400" :
+                                                                                    upd.category === "In Progress" ? "bg-yellow-500/10 text-yellow-400" :
+                                                                                    "bg-green-500/10 text-green-400"
+                                                                                }`}>
+                                                                                    {upd.category || "Completed"}
+                                                                                </span>
+                                                                                <span className="text-[9px] text-white/30 font-mono">
+                                                                                    {new Date(upd.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                                </span>
+                                                                            </div>
+                                                                            <p className="text-white/70 leading-relaxed italic">{upd.text}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                ))
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                    <div className="flex gap-2">
-                                                        <input
-                                                            type="text"
-                                                            placeholder="Post a status update note (e.g. Completed header refactoring)"
-                                                            value={shiftNote}
-                                                            onChange={(e) => setShiftNote(e.target.value)}
-                                                            className="flex-1 bg-white/5 border border-white/5 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-primary/40 transition-all placeholder:text-white/20"
-                                                        />
-                                                        <button
-                                                            type="button"
-                                                            onClick={handlePostShiftNote}
-                                                            className="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all"
-                                                        >
-                                                            Post
-                                                        </button>
+
+                                                    {/* Daily Focus Tasks Checklist */}
+                                                    <div className="mt-6 p-5 bg-[#080B12] rounded-2xl border border-white/5 space-y-4">
+                                                        <div className="flex justify-between items-center">
+                                                            <h4 className="text-[10px] font-black uppercase text-primary tracking-widest">Daily Focus Tasks Checklist</h4>
+                                                            <span className="text-[9px] text-white/30">Personal check-list for this shift</span>
+                                                        </div>
+                                                        
+                                                        <div className="flex gap-2">
+                                                            <input
+                                                                type="text"
+                                                                placeholder="Add checklist item..."
+                                                                value={newTaskText}
+                                                                onChange={(e) => setNewTaskText(e.target.value)}
+                                                                onKeyDown={(e) => {
+                                                                    if (e.key === "Enter") {
+                                                                        handleAddTask();
+                                                                    }
+                                                                }}
+                                                                className="flex-1 bg-white/5 border border-white/5 rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-primary/40 transition-all placeholder:text-white/20"
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                onClick={handleAddTask}
+                                                                className="bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer"
+                                                            >
+                                                                Add Task
+                                                            </button>
+                                                        </div>
+
+                                                        <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                                                            {focusTasks.length === 0 ? (
+                                                                <p className="text-[10px] text-white/20 italic">No tasks created for this shift yet.</p>
+                                                            ) : (
+                                                                focusTasks.map((t, idx) => (
+                                                                    <div key={idx} className="flex justify-between items-center p-3 bg-white/[0.01] border border-white/5 rounded-xl text-xs hover:border-white/10 transition-all">
+                                                                        <button
+                                                                            onClick={() => handleToggleTask(idx)}
+                                                                            className="flex items-center gap-3 text-left w-full cursor-pointer text-white/70"
+                                                                        >
+                                                                            <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-all ${
+                                                                                t.completed 
+                                                                                    ? "bg-primary border-primary text-white" 
+                                                                                    : "border-white/20 bg-white/5 hover:border-primary/50"
+                                                                            }`}>
+                                                                                {t.completed && <Check size={10} />}
+                                                                            </span>
+                                                                            <span className={`transition-all ${t.completed ? "line-through text-white/30" : "text-white/70"}`}>
+                                                                                {t.text}
+                                                                            </span>
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => handleDeleteTask(idx)}
+                                                                            className="p-1 text-white/20 hover:text-red-400 transition-colors cursor-pointer text-xs"
+                                                                        >
+                                                                            ✕
+                                                                        </button>
+                                                                    </div>
+                                                                ))
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                    <div className="space-y-2 max-h-32 overflow-y-auto pr-1">
-                                                        {(!activeLog.progressUpdates || activeLog.progressUpdates.length === 0) ? (
-                                                            <p className="text-[10px] text-white/20 italic">No updates posted for this shift yet.</p>
-                                                        ) : (
-                                                            activeLog.progressUpdates.map((upd, idx) => (
-                                                                <div key={idx} className="flex justify-between items-start gap-3 p-2.5 bg-white/[0.01] border border-white/5 rounded-lg text-xs">
-                                                                    <p className="text-white/60">{upd.text}</p>
-                                                                    <span className="text-[9px] text-white/30 shrink-0 font-mono">
-                                                                        {new Date(upd.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                                    </span>
-                                                                </div>
-                                                            ))
-                                                        )}
-                                                    </div>
-                                                </div>
+                                                </>
                                             )}
                                         </div>
                                     )}
@@ -1179,6 +1713,58 @@ export default function EmployeePortal() {
                                             </div>
                                         </div>
                                     )}
+                                    
+                                    {/* Weekly Analytics Box */}
+                                    <div className="w-full mt-6 pt-6 border-t border-white/5 space-y-4">
+                                        <h5 className="text-[10px] font-bold text-primary uppercase tracking-widest text-center sm:text-left">
+                                            My Weekly Activity Summary
+                                        </h5>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="bg-white/[0.02] border border-white/5 p-3.5 rounded-2xl">
+                                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest block">Worked Hours</span>
+                                                <span className="text-sm font-mono font-black text-white mt-1 block">{weeklyStats.hours}h</span>
+                                            </div>
+                                            <div className="bg-white/[0.02] border border-white/5 p-3.5 rounded-2xl">
+                                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest block">Punctuality</span>
+                                                <span className="text-sm font-mono font-black text-green-400 mt-1 block">{weeklyStats.punctuality}%</span>
+                                            </div>
+                                            <div className="bg-white/[0.02] border border-white/5 p-3.5 rounded-2xl">
+                                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest block">Break Duration</span>
+                                                <span className="text-sm font-mono font-black text-orange-400 mt-1 block">{weeklyStats.breaks}m</span>
+                                            </div>
+                                            <div className="bg-white/[0.02] border border-white/5 p-3.5 rounded-2xl">
+                                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest block">Shifts Tracked</span>
+                                                <span className="text-sm font-mono font-black text-purple-400 mt-1 block">{weeklyStats.shiftsCount}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Department Presence */}
+                                    <div className="w-full mt-6 pt-6 border-t border-white/5 space-y-4">
+                                        <h5 className="text-[10px] font-bold text-primary uppercase tracking-widest text-center sm:text-left">
+                                            {currentEmployee.department.toUpperCase()} Department Presence
+                                        </h5>
+                                        <div className="bg-white/[0.02] border border-white/5 p-4 rounded-2xl flex items-center justify-between w-full">
+                                            <div>
+                                                <span className="text-sm font-mono font-black text-white">{deptPresence.active} / {deptPresence.total} Active</span>
+                                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest block mt-0.5">On Shift Today</span>
+                                            </div>
+                                            <div className="flex -space-x-1.5 overflow-hidden">
+                                                {employees
+                                                    .filter(e => e.department === currentEmployee.department && e.status === "Active")
+                                                    .slice(0, 4)
+                                                    .map((emp) => (
+                                                        <div 
+                                                            key={emp.id} 
+                                                            className="w-6 h-6 rounded-full border border-[#0D121F] bg-gradient-to-br from-primary-dark to-primary flex items-center justify-center font-black text-[8px] text-white shrink-0"
+                                                            title={emp.name}
+                                                        >
+                                                            {emp.name.split(" ").map(w=>w[0]).join("")}
+                                                        </div>
+                                                    ))}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </motion.div>
                         )}
@@ -1383,10 +1969,10 @@ export default function EmployeePortal() {
                                 {/* Dynamic Portal Attendance Calendar */}
                                 {(() => {
                                     const now = new Date();
-                                    const year = now.getFullYear();
-                                    const month = now.getMonth();
+                                    const year = calendarViewDate.getFullYear();
+                                    const month = calendarViewDate.getMonth();
                                     const daysInMonth = new Date(year, month + 1, 0).getDate();
-                                    const monthName = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+                                    const monthName = calendarViewDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
                                     // Calendar starts Monday, so offset: Mon=0, Tue=1, ..., Sun=6
                                     const firstDayOfWeek = new Date(year, month, 1).getDay();
                                     const calOffset = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
@@ -1407,8 +1993,22 @@ export default function EmployeePortal() {
 
                                     return (
                                         <div className="p-6 bg-[#080B12] rounded-3xl border border-white/5 space-y-4 mb-8">
-                                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                                                <h4 className="text-xs font-black uppercase text-white tracking-widest">{monthName} Attendance Calendar</h4>
+                                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 w-full">
+                                                <div className="flex items-center gap-3">
+                                                    <button 
+                                                        onClick={() => setCalendarViewDate(new Date(year, month - 1, 1))}
+                                                        className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-white flex items-center justify-center text-xs font-black transition-all border border-white/10 cursor-pointer"
+                                                    >
+                                                        ←
+                                                    </button>
+                                                    <h4 className="text-xs font-black uppercase text-white tracking-widest">{monthName}</h4>
+                                                    <button 
+                                                        onClick={() => setCalendarViewDate(new Date(year, month + 1, 1))}
+                                                        className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-white flex items-center justify-center text-xs font-black transition-all border border-white/10 cursor-pointer"
+                                                    >
+                                                        →
+                                                    </button>
+                                                </div>
                                                 <div className="flex flex-wrap gap-3 text-[9px] font-bold text-white/40 uppercase tracking-widest">
                                                     <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded bg-green-500" /> On-Time</span>
                                                     <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded bg-orange-500" /> Late</span>
@@ -1531,6 +2131,167 @@ export default function EmployeePortal() {
                                         <p className="text-xs text-white/20 text-center py-10 font-semibold uppercase">No logs recorded yet</p>
                                     )}
                                 </div>
+                            </motion.div>
+                        )}
+
+                        {/* Tab 4: Settings */}
+                        {activeTab === "settings" && currentEmployee && (
+                            <motion.div
+                                key="settings"
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -15 }}
+                                className="grid md:grid-cols-3 gap-8"
+                            >
+                                {/* Left Profile Card */}
+                                <div className="md:col-span-1 bg-[#0D121F]/60 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-xl space-y-6 flex flex-col justify-between">
+                                    <div className="space-y-4">
+                                        <div className="w-16 h-16 rounded-3xl bg-primary/10 border border-primary/20 flex items-center justify-center font-black text-2xl text-primary mx-auto">
+                                            {currentEmployee.name.split(" ").map(w=>w[0]).join("")}
+                                        </div>
+                                        <div className="text-center">
+                                            <h3 className="text-lg font-black text-white">{currentEmployee.name}</h3>
+                                            <p className="text-[10px] text-white/40 uppercase tracking-widest font-black mt-1">{currentEmployee.role}</p>
+                                        </div>
+                                        
+                                        <div className="h-px bg-white/5 my-4" />
+
+                                        <div className="space-y-3.5 text-xs">
+                                            <div>
+                                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest block">Employee ID</span>
+                                                <span className="font-mono font-bold text-white/80 block mt-0.5">{currentEmployee.id}</span>
+                                            </div>
+                                            <div>
+                                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest block">Department</span>
+                                                <span className="font-bold text-white/80 block mt-0.5">{currentEmployee.department}</span>
+                                            </div>
+                                            <div>
+                                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest block">Shift Schedule</span>
+                                                <span className="font-mono text-white/80 block mt-0.5">{currentEmployee.shiftStart} - {currentEmployee.shiftEnd} ({currentEmployee.shiftHours}H)</span>
+                                            </div>
+                                            <div>
+                                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest block">Email Address</span>
+                                                <span className="text-white/80 block mt-0.5">{currentEmployee.email}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="p-4 bg-white/[0.01] border border-white/5 rounded-2xl text-[9px] text-white/30 font-semibold uppercase tracking-wider leading-relaxed">
+                                        Registered On: {new Date(currentEmployee.created_at || Date.now()).toLocaleDateString([], { dateStyle: 'long' })}
+                                    </div>
+                                </div>
+
+                                {/* Right Password Update & Biometrics Card */}
+                                 <div className="md:col-span-2 space-y-8">
+                                     <div className="bg-[#0D121F]/60 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-xl space-y-6">
+                                         <div>
+                                             <h3 className="text-lg font-black tracking-tight text-white uppercase">Account Security Settings</h3>
+                                             <p className="text-xs text-white/40">Manage your portal credentials and change your password.</p>
+                                         </div>
+
+                                         <div className="h-px bg-white/5" />
+
+                                         <form onSubmit={handleChangePassword} className="space-y-4">
+                                             {passwordError && (
+                                                 <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-2xl flex items-center gap-3 text-xs font-semibold">
+                                                     <AlertTriangle size={16} className="shrink-0" />
+                                                     <span>{passwordError}</span>
+                                                 </div>
+                                             )}
+                                             {passwordSuccess && (
+                                                 <div className="p-4 bg-green-500/10 border border-green-500/20 text-green-400 rounded-2xl flex items-center gap-3 text-xs font-semibold">
+                                                     <CheckCircle2 size={16} className="shrink-0" />
+                                                     <span>Password updated successfully!</span>
+                                                 </div>
+                                             )}
+
+                                             <div className="space-y-1">
+                                                 <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Current Password</label>
+                                                 <input
+                                                     type="password"
+                                                     value={oldPassword}
+                                                     onChange={(e) => setOldPassword(e.target.value)}
+                                                     required
+                                                     className="w-full bg-[#080B12] border border-white/5 rounded-xl p-3 text-white text-xs outline-none focus:border-primary/40 transition-all"
+                                                 />
+                                             </div>
+
+                                             <div className="grid sm:grid-cols-2 gap-4">
+                                                 <div className="space-y-1">
+                                                     <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">New Password</label>
+                                                     <input
+                                                         type="password"
+                                                         value={newPassword}
+                                                         onChange={(e) => setNewPassword(e.target.value)}
+                                                         required
+                                                         className="w-full bg-[#080B12] border border-white/5 rounded-xl p-3 text-white text-xs outline-none focus:border-primary/40 transition-all"
+                                                     />
+                                                 </div>
+
+                                                 <div className="space-y-1">
+                                                     <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Confirm New Password</label>
+                                                     <input
+                                                         type="password"
+                                                         value={confirmNewPassword}
+                                                         onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                                         required
+                                                         className="w-full bg-[#080B12] border border-white/5 rounded-xl p-3 text-white text-xs outline-none focus:border-primary/40 transition-all"
+                                                     />
+                                                 </div>
+                                             </div>
+
+                                             <div className="pt-4 flex justify-end">
+                                                 <button
+                                                     type="submit"
+                                                     disabled={isSavingPassword}
+                                                     className="w-full sm:w-auto px-8 h-12 rounded-2xl bg-gradient-to-r from-primary to-primary-dark text-white font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:shadow-[0_6px_20px_rgba(74,192,228,0.3)] transition-all cursor-pointer disabled:opacity-40"
+                                                 >
+                                                     {isSavingPassword ? "Updating..." : "Update Password"}
+                                                 </button>
+                                             </div>
+                                         </form>
+                                     </div>
+
+                                     <div className="bg-[#0D121F]/60 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-xl space-y-6">
+                                         <div>
+                                             <h3 className="text-lg font-black tracking-tight text-white uppercase">Biometric Registration Profile</h3>
+                                             <p className="text-xs text-white/40">Inspect or update your face matching reference profile data.</p>
+                                         </div>
+
+                                         <div className="h-px bg-white/5" />
+
+                                         <div className="grid sm:grid-cols-3 gap-6 items-center">
+                                             <div className="relative w-24 h-24 rounded-2xl overflow-hidden border border-white/10 bg-black flex items-center justify-center mx-auto sm:mx-0">
+                                                 {currentEmployee.enrolledFace ? (
+                                                     <img src={currentEmployee.enrolledFace} alt="Enrolled Profile Reference" className="w-full h-full object-cover filter grayscale" />
+                                                 ) : (
+                                                     <div className="text-white/20 flex flex-col items-center gap-2">
+                                                         <Camera size={24} />
+                                                         <span className="text-[8px] font-bold uppercase tracking-widest text-center">No Photo</span>
+                                                     </div>
+                                                 )}
+                                             </div>
+
+                                             <div className="sm:col-span-2 space-y-3 text-center sm:text-left">
+                                                 <div>
+                                                     <span className="text-[10px] font-black uppercase text-green-400 tracking-widest">Status: Active Reference Registered</span>
+                                                     <p className="text-xs text-white/50 mt-1">
+                                                         Your face signature is stored as a normalized 32x32 grayscale array (1024 data points). Verification occurs edge-side or server-side during clock-ins.
+                                                     </p>
+                                                 </div>
+                                                 <div className="pt-2">
+                                                     <button
+                                                         type="button"
+                                                         onClick={() => handleTriggerScan("enroll")}
+                                                         className="w-full sm:w-auto px-6 h-11 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 text-[10px] font-black uppercase tracking-[0.15em] text-primary cursor-pointer transition-all active:scale-95"
+                                                     >
+                                                         Re-enroll Face Reference
+                                                     </button>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -1714,13 +2475,21 @@ export default function EmployeePortal() {
                                 )}
 
                                 {scanStep === "completed" && (
-                                    <button
-                                        onClick={handleConfirmScan}
-                                        className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-green-500 to-green-600 text-white font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:shadow-[0_6px_20px_rgba(34,197,94,0.3)] transition-all cursor-pointer"
-                                    >
-                                        {scanAction === "enroll" ? "Authorize Enrollment" : `Authorize Clock ${scanAction === "in" ? "In" : "Out"}`}
-                                    </button>
-                                )}
+                                     <button
+                                         onClick={handleConfirmScan}
+                                         disabled={isLocating}
+                                         className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-green-500 to-green-600 text-white font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:shadow-[0_6px_20px_rgba(34,197,94,0.3)] transition-all cursor-pointer disabled:opacity-50"
+                                     >
+                                         {isLocating ? (
+                                             <>
+                                                 <Loader2 size={14} className="animate-spin text-white" />
+                                                 SECURING LOCATION...
+                                             </>
+                                         ) : (
+                                             scanAction === "enroll" ? "Authorize Enrollment" : `Authorize Clock ${scanAction === "in" ? "In" : "Out"}`
+                                         )}
+                                     </button>
+                                 )}
                             </div>
                         </motion.div>
                     </div>

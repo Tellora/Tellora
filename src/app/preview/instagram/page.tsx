@@ -15,6 +15,9 @@ export default function InstagramPreview() {
     const [selectedPost, setSelectedPost] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const [activeGridTab, setActiveGridTab] = useState<"posts" | "reels" | "tagged">("posts");
+    const [isStoryViewerOpen, setIsStoryViewerOpen] = useState(false);
+    const [activeStoryIndex, setActiveStoryIndex] = useState(0);
 
     useEffect(() => {
         const hash = window.location.hash.slice(1);
@@ -31,7 +34,24 @@ export default function InstagramPreview() {
             }).join(''));
 
             const parsed = JSON.parse(decoded);
-            setProfile(parsed);
+            const normalized = {
+                ...parsed,
+                handle: parsed.handle || parsed.slug || "instagram_user",
+                name: parsed.name || parsed.handle || parsed.slug || "Instagram User",
+                profilePic: parsed.profilePic || parsed.profile_pic || "",
+                isVerified: parsed.isVerified !== undefined ? parsed.isVerified : parsed.is_verified,
+                followers_count: parsed.followers_count || "1.2M",
+                following_count: parsed.following_count || "854",
+                posts: (parsed.posts || []).map((post: any) => ({
+                    ...post,
+                    url: post.url || post.src || "",
+                    type: post.type || "image",
+                    likes: post.likes || 0,
+                    caption: post.caption || "",
+                    created_at: post.created_at || post.timestamp || new Date().toISOString()
+                }))
+            };
+            setProfile(normalized);
             setLoading(false);
         } catch (e) {
             console.error("Failed to decode profile", e);
@@ -76,6 +96,8 @@ export default function InstagramPreview() {
     );
 
     const posts = profile.posts || [];
+    const stories = posts.filter((p: any) => p.type === 'story');
+    const hasStories = stories.length > 0;
 
     return (
         <div className="min-h-screen bg-white text-black font-sans pb-24 selection:bg-pink-100">
@@ -106,11 +128,19 @@ export default function InstagramPreview() {
             <div className="max-w-[935px] mx-auto px-4 pt-6 md:pt-14">
                 {/* Profile Section */}
                 <div className="flex flex-col md:flex-row gap-6 md:gap-24 mb-12 md:mb-16 items-center md:items-start">
-                    {/* Profile Avatar with Story Ring Mockup */}
+                    {/* Profile Avatar with Dynamic Story Ring */}
                     <div className="md:w-[290px] flex justify-center items-center shrink-0">
-                        <div className="w-24 h-24 md:w-40 md:h-40 rounded-full p-1 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 shadow-lg">
-                            <div className="w-full h-full rounded-full bg-white p-1">
-                                <div className="w-full h-full rounded-full bg-gray-100 overflow-hidden flex items-center justify-center border border-gray-200">
+                        <div 
+                            className={`w-24 h-24 md:w-40 md:h-40 rounded-full p-[3px] transition-transform active:scale-95 ${hasStories ? 'bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 cursor-pointer ring-2 ring-offset-2 ring-pink-500/20' : 'border border-gray-200'}`}
+                            onClick={() => {
+                                if (hasStories) {
+                                    setActiveStoryIndex(0);
+                                    setIsStoryViewerOpen(true);
+                                }
+                            }}
+                        >
+                            <div className="w-full h-full rounded-full bg-white p-[2px]">
+                                <div className="w-full h-full rounded-full bg-gray-100 overflow-hidden flex items-center justify-center border border-gray-100">
                                     {profile.profilePic ? (
                                         <img src={profile.profilePic} className="w-full h-full object-cover" />
                                     ) : (
@@ -136,9 +166,9 @@ export default function InstagramPreview() {
                         </div>
 
                         <div className="hidden md:flex gap-10">
-                            <div><span className="font-bold text-lg">{posts.length}</span> <span className="text-gray-600">posts</span></div>
-                            <div><span className="font-bold text-lg">1.2M</span> <span className="text-gray-600">followers</span></div>
-                            <div><span className="font-bold text-lg">854</span> <span className="text-gray-600">following</span></div>
+                            <div><span className="font-bold text-lg">{posts.filter((p: any) => p.type !== 'story').length}</span> <span className="text-gray-600">posts</span></div>
+                            <div><span className="font-bold text-lg">{profile.followers_count || "1.2M"}</span> <span className="text-gray-600">followers</span></div>
+                            <div><span className="font-bold text-lg">{profile.following_count || "854"}</span> <span className="text-gray-600">following</span></div>
                         </div>
 
                         <div className="space-y-1 text-center md:text-left">
@@ -156,74 +186,97 @@ export default function InstagramPreview() {
                 {/* Mobile Meta (Followers/Following) */}
                 <div className="md:hidden flex justify-around py-4 border-t border-gray-100 mb-0">
                     <div className="text-center flex flex-col items-center">
-                        <span className="font-bold text-sm">{posts.length}</span>
+                        <span className="font-bold text-sm">{posts.filter((p: any) => p.type !== 'story').length}</span>
                         <span className="text-gray-400 text-xs">posts</span>
                     </div>
                     <div className="text-center flex flex-col items-center">
-                        <span className="font-bold text-sm">1.2M</span>
+                        <span className="font-bold text-sm">{profile.followers_count || "1.2M"}</span>
                         <span className="text-gray-400 text-xs">followers</span>
                     </div>
                     <div className="text-center flex flex-col items-center">
-                        <span className="font-bold text-sm">854</span>
+                        <span className="font-bold text-sm">{profile.following_count || "854"}</span>
                         <span className="text-gray-400 text-xs">following</span>
                     </div>
                 </div>
 
                 {/* Grid Tabs */}
                 <div className="border-t border-gray-100 flex justify-center gap-14 md:gap-16">
-                    <div className="border-t-[1.5px] border-black -mt-[1.5px] py-4 md:py-5 flex items-center gap-2 cursor-pointer">
-                        <GridIcon size={14} className="md:w-3 md:h-3" strokeWidth={-0.5} />
-                        <span className="text-[12px] font-bold uppercase tracking-[0.1em]">Posts</span>
-                    </div>
-                    <div className="py-4 md:py-5 flex items-center gap-2 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors">
+                    <button 
+                        onClick={() => setActiveGridTab("posts")}
+                        className={`py-4 md:py-5 flex items-center gap-2 cursor-pointer border-t-[1.5px] -mt-[1.5px] transition-colors ${activeGridTab === "posts" ? 'border-black text-black font-bold' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
+                    >
+                        <GridIcon size={14} className="md:w-3 md:h-3" strokeWidth={activeGridTab === "posts" ? -0.5 : 1.5} />
+                        <span className="text-[12px] uppercase tracking-[0.1em]">Posts</span>
+                    </button>
+                    <button 
+                        onClick={() => setActiveGridTab("reels")}
+                        className={`py-4 md:py-5 flex items-center gap-2 cursor-pointer border-t-[1.5px] -mt-[1.5px] transition-colors ${activeGridTab === "reels" ? 'border-black text-black font-bold' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
+                    >
                         <Film size={14} className="md:w-3 md:h-3" />
-                        <span className="text-[12px] font-bold uppercase tracking-[0.1em]">Reels</span>
-                    </div>
-                    <div className="py-4 md:py-5 flex items-center gap-2 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors">
+                        <span className="text-[12px] uppercase tracking-[0.1em]">Reels</span>
+                    </button>
+                    <button 
+                        onClick={() => setActiveGridTab("tagged")}
+                        className={`py-4 md:py-5 flex items-center gap-2 cursor-pointer border-t-[1.5px] -mt-[1.5px] transition-colors ${activeGridTab === "tagged" ? 'border-black text-black font-bold' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
+                    >
                         <Tag size={14} className="md:w-3 md:h-3" />
-                        <span className="text-[12px] font-bold uppercase tracking-[0.1em]">Tagged</span>
-                    </div>
+                        <span className="text-[12px] uppercase tracking-[0.1em]">Tagged</span>
+                    </button>
                 </div>
 
                 {/* Content Grid */}
-                <div className="grid grid-cols-3 gap-[1px] md:gap-8">
-                    {posts.length === 0 ? (
-                        <div className="col-span-3 py-24 flex flex-col items-center justify-center text-center space-y-4">
-                            <div className="w-16 h-16 rounded-full border-2 border-black flex items-center justify-center">
-                                <Camera size={32} />
-                            </div>
-                            <h3 className="text-2xl font-black italic uppercase">No neural fragments</h3>
-                            <p className="text-gray-400 text-sm max-w-[200px]">Fragments will appear here once synchronized with the matrix.</p>
-                        </div>
-                    ) : (
-                        posts.map((post: any) => (
-                            <motion.div
-                                key={post.id}
-                                whileHover={{ opacity: 0.9 }}
-                                className="aspect-square bg-gray-50 overflow-hidden relative group cursor-pointer border border-gray-100 md:rounded-lg shadow-sm"
-                                onClick={() => setSelectedPost(post)}
-                            >
-                                {post.url ? (
-                                    <img src={post.url} alt="Instagram Post" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                                ) : (
-                                    <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 text-gray-100">
-                                        <ImageIcon size={48} />
+                {(() => {
+                    const filteredPosts = posts.filter((p: any) => {
+                        if (activeGridTab === "posts") {
+                            return p.type === 'image' || p.type === 'video' || !p.type;
+                        }
+                        if (activeGridTab === "reels") {
+                            return p.type === 'reel';
+                        }
+                        return false;
+                    });
+
+                    return (
+                        <div className="grid grid-cols-3 gap-[1px] md:gap-8">
+                            {filteredPosts.length === 0 ? (
+                                <div className="col-span-3 py-24 flex flex-col items-center justify-center text-center space-y-4">
+                                    <div className="w-16 h-16 rounded-full border-2 border-black flex items-center justify-center">
+                                        <Camera size={32} />
                                     </div>
-                                )}
-
-                                {/* Overlay Shadow Desktop */}
-                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-all hidden md:flex items-center justify-center gap-8 text-white z-10">
-                                    <div className="flex items-center gap-2 font-black text-lg"><Heart size={24} fill="white" stroke="none" /> {post.likes}</div>
-                                    <div className="flex items-center gap-2 font-black text-lg"><MessageCircle size={24} fill="white" stroke="none" /> {Math.floor(post.likes * 0.08)}</div>
+                                    <h3 className="text-2xl font-black italic uppercase">No fragments in this feed</h3>
+                                    <p className="text-gray-400 text-sm max-w-[200px]">No content matches the selected layout format.</p>
                                 </div>
+                            ) : (
+                                filteredPosts.map((post: any) => (
+                                    <motion.div
+                                        key={post.id}
+                                        whileHover={{ opacity: 0.9 }}
+                                        className="aspect-square bg-gray-50 overflow-hidden relative group cursor-pointer border border-gray-100 md:rounded-lg shadow-sm"
+                                        onClick={() => setSelectedPost(post)}
+                                    >
+                                        {post.url ? (
+                                            <img src={post.url} alt="Instagram Post" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                        ) : (
+                                            <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 text-gray-100">
+                                                <ImageIcon size={48} />
+                                            </div>
+                                        )}
 
-                                {post.type === 'video' && (
-                                    <div className="absolute top-3 right-3 text-white drop-shadow-lg z-20 bg-black/20 rounded p-1.5 backdrop-blur-sm"><Film size={14} strokeWidth={3} /></div>
-                                )}
-                            </motion.div>
-                        ))
-                    )}
-                </div>
+                                        {/* Overlay Shadow Desktop */}
+                                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-all hidden md:flex items-center justify-center gap-8 text-white z-10">
+                                            <div className="flex items-center gap-2 font-black text-lg"><Heart size={24} fill="white" stroke="none" /> {post.likes}</div>
+                                            <div className="flex items-center gap-2 font-black text-lg"><MessageCircle size={24} fill="white" stroke="none" /> {Math.floor(post.likes * 0.08)}</div>
+                                        </div>
+
+                                        {(post.type === 'video' || post.type === 'reel') && (
+                                            <div className="absolute top-3 right-3 text-white drop-shadow-lg z-20 bg-black/20 rounded p-1.5 backdrop-blur-sm"><Film size={14} strokeWidth={3} /></div>
+                                        )}
+                                    </motion.div>
+                                ))
+                            )}
+                        </div>
+                    );
+                })()}
             </div>
 
             {/* Bottom Nav Mock (Mobile) */}
@@ -355,6 +408,126 @@ export default function InstagramPreview() {
                                 </div>
                             </div>
                         </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Story Viewer Modal */}
+            <AnimatePresence>
+                {isStoryViewerOpen && stories.length > 0 && (
+                    <div 
+                        className="fixed inset-0 z-[300] bg-[#0d0d0d] flex flex-col items-center justify-center p-0 md:p-6 overflow-hidden select-none"
+                        onClick={() => setIsStoryViewerOpen(false)}
+                    >
+                        {/* Segments Progress Bar at the top */}
+                        <div className="absolute top-4 left-0 right-0 z-20 flex gap-1 px-4 max-w-lg mx-auto w-full">
+                            {stories.map((s: any, idx: number) => (
+                                <div key={s.id} className="h-1 flex-1 bg-white/20 rounded-full overflow-hidden">
+                                    <motion.div 
+                                        initial={{ width: "0%" }}
+                                        animate={{ width: idx === activeStoryIndex ? "100%" : idx < activeStoryIndex ? "100%" : "0%" }}
+                                        transition={{ duration: idx === activeStoryIndex ? 5 : 0, ease: "linear" }}
+                                        className="h-full bg-white"
+                                        onAnimationComplete={() => {
+                                            if (idx === activeStoryIndex) {
+                                                if (activeStoryIndex < stories.length - 1) {
+                                                    setActiveStoryIndex(activeStoryIndex + 1);
+                                                } else {
+                                                    setIsStoryViewerOpen(false);
+                                                }
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Story Header (Avatar & Handle) */}
+                        <div className="absolute top-8 left-4 right-4 z-20 flex items-center justify-between max-w-lg mx-auto w-full px-4 text-white">
+                            <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20">
+                                    {profile.profilePic && <img src={profile.profilePic} className="w-full h-full object-cover" />}
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="font-bold text-sm tracking-tight drop-shadow-md">{profile.handle}</span>
+                                    {profile.isVerified && <div className="w-3.5 h-3.5 bg-[#0095f6] rounded-full flex items-center justify-center text-white"><Check size={8} strokeWidth={5} /></div>}
+                                    <span className="text-white/60 text-xs drop-shadow-md">2h</span>
+                                </div>
+                            </div>
+                            <button 
+                                onClick={(e) => { e.stopPropagation(); setIsStoryViewerOpen(false); }}
+                                className="text-white hover:text-white/70 p-2 text-xl font-bold cursor-pointer drop-shadow-md"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {/* Left / Right Nav Area on Mobile / Desktop */}
+                        <div 
+                            className="relative w-full max-w-lg h-full flex items-center justify-center bg-black overflow-hidden md:rounded-xl shadow-2xl"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Tap left area to go back */}
+                            <div 
+                                className="absolute left-0 top-0 bottom-0 w-1/4 z-30 cursor-pointer"
+                                onClick={() => {
+                                    if (activeStoryIndex > 0) {
+                                        setActiveStoryIndex(activeStoryIndex - 1);
+                                    }
+                                }}
+                            />
+                            {/* Tap right area to go forward */}
+                            <div 
+                                className="absolute right-0 top-0 bottom-0 w-1/4 z-30 cursor-pointer"
+                                onClick={() => {
+                                    if (activeStoryIndex < stories.length - 1) {
+                                        setActiveStoryIndex(activeStoryIndex + 1);
+                                    } else {
+                                        setIsStoryViewerOpen(false);
+                                    }
+                                }}
+                            />
+
+                            {/* Story Media (Image or Video) */}
+                            <AnimatePresence mode="wait">
+                                <motion.div 
+                                    key={stories[activeStoryIndex].id}
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                    className="w-full h-full flex items-center justify-center"
+                                >
+                                    {stories[activeStoryIndex].url ? (
+                                        stories[activeStoryIndex].url.startsWith("data:video/") || stories[activeStoryIndex].url.includes("mp4") || stories[activeStoryIndex].type === "video" ? (
+                                            <video 
+                                                src={stories[activeStoryIndex].url} 
+                                                className="w-full h-full object-contain" 
+                                                autoPlay 
+                                                playsInline
+                                            />
+                                        ) : (
+                                            <img 
+                                                src={stories[activeStoryIndex].url} 
+                                                className="w-full h-full object-contain" 
+                                                alt="Story" 
+                                            />
+                                        )
+                                    ) : (
+                                        <div className="w-full h-full bg-gradient-to-br from-purple-900 to-indigo-950 flex flex-col items-center justify-center text-white/20 gap-4">
+                                            <ImageIcon size={64} />
+                                            <span className="text-xs uppercase font-bold tracking-widest text-white/30">Empty Story Fragment</span>
+                                        </div>
+                                    )}
+                                </motion.div>
+                            </AnimatePresence>
+
+                            {/* Story Caption Overlay */}
+                            {stories[activeStoryIndex].caption && (
+                                <div className="absolute bottom-10 left-4 right-4 z-20 text-center bg-black/40 backdrop-blur-md text-white p-4 rounded-2xl text-xs border border-white/10 italic">
+                                    {stories[activeStoryIndex].caption}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 )}
             </AnimatePresence>

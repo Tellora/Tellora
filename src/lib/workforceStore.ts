@@ -12,7 +12,8 @@ export interface Employee {
     status: "Active" | "Suspended";
     password?: string; // stored credentials
     created_at: string;
-    enrolledFace?: string | null; // reference face signature
+    enrolledFace?: string | null; // reference face photo base64
+    enrolledFaceSignature?: number[] | null; // 32x32 grayscale array for verification
     leaveBalance?: { cl: number; sl: number; el: number }; // Casual, Sick, Earned
 }
 
@@ -32,11 +33,13 @@ export interface AttendanceLog {
     clockOutVerified: boolean;
     clockOutConfidence: number; // e.g. 99.1
     totalHours: number | null; // calculation of difference
-    status: "active" | "ontime" | "late" | "undertime" | "completed";
+    status: "active" | "ontime" | "late" | "undertime" | "completed" | "on_break";
     notes?: string;
     ipAddress?: string;
     location?: string;
-    progressUpdates?: { time: string; text: string }[];
+    progressUpdates?: { time: string; text: string; category?: "Completed" | "In Progress" | "Blocker" }[];
+    breaks?: { start: string; end: string | null; type: "Lunch" | "Short Break" }[];
+    totalBreakMinutes?: number;
 }
 
 export interface LeaveRequest {
@@ -81,6 +84,9 @@ export async function saveEmployee(employee: Employee): Promise<boolean> {
         if (employee.enrolledFace === undefined && employees[index].enrolledFace) {
             employee.enrolledFace = employees[index].enrolledFace;
         }
+        if (employee.enrolledFaceSignature === undefined && employees[index].enrolledFaceSignature) {
+            employee.enrolledFaceSignature = employees[index].enrolledFaceSignature;
+        }
         // Keep existing leave balance if not updated
         if (!employee.leaveBalance && employees[index].leaveBalance) {
             employee.leaveBalance = employees[index].leaveBalance;
@@ -95,6 +101,9 @@ export async function saveEmployee(employee: Employee): Promise<boolean> {
         }
         if (!employee.enrolledFace) {
             employee.enrolledFace = null;
+        }
+        if (!employee.enrolledFaceSignature) {
+            employee.enrolledFaceSignature = null;
         }
         if (!employee.leaveBalance) {
             employee.leaveBalance = { cl: 12, sl: 10, el: 15 };
@@ -167,4 +176,9 @@ export async function deleteLeaveRequest(id: string): Promise<boolean> {
     const leaves = await getLeaveRequests();
     const filtered = leaves.filter(l => l.id !== id);
     return saveSupabaseData(LEAVE_COLL, filtered);
+}
+
+export async function getEmails(): Promise<any[]> {
+    const data = await getSupabaseData<any[]>("workforce_emails", []);
+    return Array.isArray(data) ? data : [];
 }

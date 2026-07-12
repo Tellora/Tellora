@@ -113,13 +113,6 @@ export default function ServicesPage() {
         });
     }, []);
 
-    // Group services by category
-    const categories = Array.from(new Set(services.map(s => s.category)));
-    const groupedServices = categories.map(cat => ({
-        category: cat,
-        items: services.filter(s => s.category === cat)
-    }));
-
     if (loading) {
         return (
             <div className="bg-background min-h-screen flex items-center justify-center">
@@ -146,133 +139,55 @@ export default function ServicesPage() {
                     subtitle="We showcase custom marketing and growth solutions tailored to your unique business challenges."
                 />
 
-                <section className="py-32 relative bg-black text-white overflow-hidden border-y-[6px] border-primary">
-                    <div className="absolute inset-0 noise-overlay opacity-10 pointer-events-none" />
-                    <div className="container mx-auto px-6 relative z-10">
-                        <div className="mb-20 text-center">
-                            <div className="inline-flex items-center gap-4 mb-6 px-6 py-2 bg-white text-black brutalist-border rounded-full rotate-2 shadow-[4px_4px_0px_#A855F7]">
-                                <Sparkles size={14} className="text-primary fill-current" />
-                                <span className="font-black uppercase tracking-widest text-[10px]">Our Approach</span>
-                            </div>
-                            <h2 className="text-5xl md:text-8xl font-heading font-black tracking-tighter uppercase mb-6 leading-none">
-                                How We Help You <br /> <span className="text-primary italic">Grow</span>
-                            </h2>
-                            <p className="max-w-2xl mx-auto text-white/60 font-medium text-lg leading-relaxed">
-                                We combine search, social, design, and paid ads into a single, high-performing marketing engine. Each service connects to build a seamless customer journey.
-                            </p>
-                        </div>
-                        <div className="grid md:grid-cols-3 gap-8">
-                            {[
-                                { 
-                                    step: "01", 
-                                    title: "Brand Awareness", 
-                                    desc: "We capture attention where your audience hangs out. Through social media posts and creator partnerships, we position your brand at the center of online conversations.",
-                                    services: ["Social Media Marketing", "Influencer Partnerships", "Creative Content"] 
-                                },
-                                { 
-                                    step: "02", 
-                                    title: "Website Traffic", 
-                                    desc: "We direct warm prospects ready to buy. Using search engine optimization (SEO) and paid ads, we capture high-intent searches and scale conversions.",
-                                    services: ["Search Engine Optimization", "Online Advertising", "Paid Advertising"] 
-                                },
-                                { 
-                                    step: "03", 
-                                    title: "Turn Traffic Into Customers", 
-                                    desc: "We convert attention into revenue. We design fast, high-performance websites and write persuasive writing that guide users seamlessly to purchase.",
-                                    services: ["Web Design", "Conversion Optimization", "Brand Copywriting"] 
-                                }
-                            ].map((phase, i) => (
-                                <div key={i} className="p-8 brutalist-card !bg-[#111] hover:bg-primary transition-colors group shadow-[8px_8px_0px_#A855F7] duration-300 flex flex-col justify-between">
-                                    <div>
-                                        <div className="text-4xl font-heading font-black text-white/20 mb-6 group-hover:text-white transition-colors">{phase.step}</div>
-                                        <h3 className="text-2xl font-black uppercase tracking-tight mb-4 text-white">{phase.title}</h3>
-                                        <p className="text-xs font-medium text-white/60 group-hover:text-white uppercase tracking-widest leading-relaxed mb-6">
-                                            {phase.desc}
-                                        </p>
+                <section className="py-24 relative bg-background">
+                    <div className="container mx-auto px-6">
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+                            {services.map((service, i) => (
+                                <motion.div
+                                    key={i}
+                                    initial={{ opacity: 0, y: 40 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: i * 0.08, duration: 0.8 }}
+                                    viewport={{ once: true }}
+                                    className="brutalist-card p-12 bg-white flex flex-col h-full group hover:shadow-[15px_15px_0px_#000]"
+                                >
+                                    <div
+                                        className="w-24 h-24 brutalist-border flex items-center justify-center mb-12 rotate-[-3deg] group-hover:rotate-0 transition-all shadow-[8px_8px_0px_#000]"
+                                        style={{ backgroundColor: service.color }}
+                                    >
+                                        <div className="text-black group-hover:scale-125 transition-transform duration-500">
+                                            {IconMap[service.icon] || <Zap size={24} />}
+                                        </div>
                                     </div>
-                                    <div className="mt-auto border-t border-white/10 group-hover:border-white/30 pt-4 flex flex-wrap gap-2">
-                                        {phase.services.map((srv, sIdx) => (
-                                            <span key={sIdx} className="px-2 py-1 bg-white/5 group-hover:bg-white/20 brutalist-border text-[9px] font-black uppercase tracking-widest text-white">
-                                                {srv}
-                                            </span>
+
+                                    <h3 className="text-3xl font-heading font-black text-black mb-8 leading-none uppercase tracking-tight">
+                                        {service.title}
+                                    </h3>
+
+                                    <p className="text-black font-black uppercase leading-tight opacity-60 mb-12 flex-grow text-sm">
+                                        {service.description}
+                                    </p>
+
+                                    <div className="space-y-4 mb-14">
+                                        {service.features.map((feature, fIdx) => (
+                                            <div key={fIdx} className="flex items-center gap-4">
+                                                <div className="w-3 h-3 bg-black brutalist-border rotate-45" />
+                                                <span className="font-black uppercase tracking-widest text-[10px] opacity-80">{feature}</span>
+                                            </div>
                                         ))}
                                     </div>
-                                </div>
+
+                                    <div className="mt-auto">
+                                        <a href="/contact" className="inline-flex items-center gap-4 text-black font-black uppercase tracking-widest text-xs group-hover:text-primary transition-colors">
+                                            <span>Get Started</span>
+                                            <ArrowRight size={20} className="group-hover:translate-x-3 transition-transform" />
+                                        </a>
+                                    </div>
+                                </motion.div>
                             ))}
                         </div>
                     </div>
                 </section>
-
-                <ScrollConnector />
-
-                {groupedServices.map((group, idx) => {
-                    const displayCategory = group.category === "Organic Growth" || group.category === "Organic" ? "Organic" : 
-                                            group.category === "Digital Experience" || group.category === "Digital Expertise" || group.category === "Digital" ? "Digital" : 
-                                            group.category === "Paid Acquisition" || group.category === "Paid" ? "Paid" : group.category;
-
-                    return (
-                        <section key={idx} className="py-20 relative">
-                            <div className="container mx-auto px-6">
-                                <div className="mb-12">
-                                    <div className="inline-flex items-center gap-4 mb-6 px-6 py-2 bg-black text-white brutalist-border rounded-full -rotate-1 shadow-[4px_4px_0px_#FFD700]">
-                                        <Star size={14} className="text-accent fill-current" />
-                                        <span className="text-[10px] font-black uppercase tracking-[0.4em]">{displayCategory} Services</span>
-                                    </div>
-                                    <h2 className="text-4xl sm:text-6xl md:text-7xl font-heading font-black text-black leading-none tracking-tighter uppercase whitespace-nowrap">
-                                        {displayCategory} <span className="text-primary italic">Solutions</span>
-                                    </h2>
-                                </div>
-
-                                <div className="grid lg:grid-cols-3 gap-12">
-                                    {group.items.map((service, i) => (
-                                        <motion.div
-                                            key={i}
-                                            initial={{ opacity: 0, y: 40 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: i * 0.12, duration: 0.8 }}
-                                            viewport={{ once: true }}
-                                            className="brutalist-card p-12 bg-white flex flex-col h-full group hover:shadow-[15px_15px_0px_#000]"
-                                        >
-                                            <div
-                                                className="w-24 h-24 brutalist-border flex items-center justify-center mb-12 rotate-[-3deg] group-hover:rotate-0 transition-all shadow-[8px_8px_0px_#000]"
-                                                style={{ backgroundColor: service.color }}
-                                            >
-                                                <div className="text-black group-hover:scale-125 transition-transform duration-500">
-                                                    {IconMap[service.icon] || <Zap size={24} />}
-                                                </div>
-                                            </div>
-
-                                            <h3 className="text-3xl font-heading font-black text-black mb-8 leading-none uppercase tracking-tight">
-                                                {service.title}
-                                            </h3>
-
-                                            <p className="text-black font-black uppercase leading-tight opacity-60 mb-12 flex-grow text-sm">
-                                                {service.description}
-                                            </p>
-
-                                            <div className="space-y-4 mb-14">
-                                                {service.features.map((feature, fIdx) => (
-                                                    <div key={fIdx} className="flex items-center gap-4">
-                                                        <div className="w-3 h-3 bg-black brutalist-border rotate-45" />
-                                                        <span className="font-black uppercase tracking-widest text-[10px] opacity-80">{feature}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-
-                                            <div className="mt-auto">
-                                                <a href="/contact" className="inline-flex items-center gap-4 text-black font-black uppercase tracking-widest text-xs group-hover:text-primary transition-colors">
-                                                    <span>Get Started</span>
-                                                    <ArrowRight size={20} className="group-hover:translate-x-3 transition-transform" />
-                                                </a>
-                                            </div>
-                                        </motion.div>
-                                    ))}
-                                </div>
-                            </div>
-                            {idx !== groupedServices.length - 1 && <ScrollConnector />}
-                        </section>
-                    );
-                })}
 
                 <ScrollLine />
 

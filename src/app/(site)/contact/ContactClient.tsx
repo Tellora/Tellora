@@ -33,29 +33,6 @@ const contactInfo = [
     }
 ];
 
-const processSteps = [
-    {
-        title: "Initial Audit",
-        desc: "We analyze your current digital presence and identify immediate growth leaks.",
-        icon: "01"
-    },
-    {
-        title: "Strategy Blueprint",
-        desc: "Our architects design a custom growth roadmap tailored to your KPIs.",
-        icon: "02"
-    },
-    {
-        title: "Precision Execution",
-        desc: "We implement high-impact changes with weekly performance iterations.",
-        icon: "03"
-    },
-    {
-        title: "Scale & Dominate",
-        desc: "Aggressive scaling of winning channels to maximize your ROI.",
-        icon: "04"
-    }
-];
-
 export default function ContactPage() {
     const [currentTime, setCurrentTime] = React.useState(new Date());
 
@@ -170,41 +147,6 @@ export default function ContactPage() {
                     </div>
                 </section>
 
-                <section className="py-32 bg-slate-50 border-y border-slate-100 overflow-hidden relative">
-                    <div className="absolute top-0 right-0 p-40 opacity-[0.03] select-none pointer-events-none transform rotate-12">
-                        <h2 className="text-[20vw] font-black leading-none uppercase">TELLORA</h2>
-                    </div>
-                    
-                    <div className="container mx-auto px-4 relative z-10">
-                        <div className="text-center mb-24">
-                            <span className="text-primary font-black tracking-[0.4em] uppercase text-[10px] mb-6 block">Our Process</span>
-                            <h2 className="text-5xl md:text-7xl font-heading font-black text-text-main mb-8 leading-tight">How We Work</h2>
-                            <p className="text-text-muted text-xl font-bold max-w-3xl mx-auto opacity-70 leading-relaxed">
-                                Our battle-tested process for turning vision into market growth.
-                            </p>
-                        </div>
-
-                        <div className="grid md:grid-cols-4 gap-8">
-                            {processSteps.map((step, idx) => (
-                                <motion.div
-                                    key={idx}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: idx * 0.1 }}
-                                    viewport={{ once: true }}
-                                    className="p-10 rounded-[3rem] bg-white border border-slate-100 shadow-xl shadow-slate-200/40 relative group hover:-translate-y-4 transition-all duration-500"
-                                >
-                                    <div className="text-8xl font-black text-slate-100 absolute bottom-4 right-8 group-hover:text-primary/5 transition-colors duration-500 select-none">{step.icon}</div>
-                                    <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-primary font-black text-lg mb-8 shadow-sm group-hover:bg-primary group-hover:text-white transition-all duration-500">
-                                        {idx + 1}
-                                    </div>
-                                    <h3 className="text-2xl font-black text-text-main mb-4 font-heading uppercase tracking-widest relative z-10">{step.title}</h3>
-                                    <p className="text-text-muted text-sm font-bold opacity-75 leading-relaxed relative z-10">{step.desc}</p>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
 
                 <section className="py-32 bg-white">
                     <div className="container mx-auto px-4 max-w-4xl">
@@ -248,13 +190,13 @@ export default function ContactPage() {
                         </div>
                         <h2 className="text-5xl md:text-[8rem] font-heading font-black text-white mb-16 leading-[0.9] tracking-tighter">Ready to <br /><span className="text-primary italic">Ignite?</span></h2>
                         <div className="flex flex-wrap justify-center gap-8">
-                            <a href="https://wa.me/917678493113" target="_blank" className="group px-12 py-8 bg-white rounded-[2rem] hover:bg-primary transition-all duration-500 shadow-2xl shadow-primary/20 flex items-center gap-6 hover:-translate-y-4">
-                                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-white group-hover:text-primary transition-all duration-500 shadow-sm">
+                            <a href="https://wa.me/917678493113" target="_blank" className="group/wa px-12 py-8 bg-white rounded-[2rem] hover:bg-primary transition-all duration-500 shadow-2xl shadow-primary/20 flex items-center gap-6 hover:-translate-y-4">
+                                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover/wa:bg-white group-hover/wa:text-primary transition-all duration-500 shadow-sm">
                                     <MessageSquare size={24} />
                                 </div>
                                 <div className="text-left">
-                                    <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-white/60 transition-colors">Emergency?</span>
-                                    <span className="font-black text-xl uppercase tracking-widest text-text-main group-hover:text-white transition-colors">WhatsApp Us</span>
+                                    <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover/wa:text-white/60 transition-colors">Emergency?</span>
+                                    <span className="font-black text-xl uppercase tracking-widest text-text-main group-hover/wa:text-white transition-colors">WhatsApp Us</span>
                                 </div>
                             </a>
 

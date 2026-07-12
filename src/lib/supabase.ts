@@ -139,7 +139,7 @@ export interface DbIGProfile {
 export interface DbIGPost {
     id: string;
     profile_id: string;
-    type: "image" | "video";
+    type: "image" | "video" | "reel" | "story";
     src: string;
     caption?: string;
     likes?: number;

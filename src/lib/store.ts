@@ -43,6 +43,8 @@ export interface Job extends DbJob {}
 export interface JobApplication extends DbJobApplication {}
 export interface IGProfile extends DbIGProfile {
     posts?: DbIGPost[];
+    followers_count?: string;
+    following_count?: string;
 }
 
 export interface ActivityLog {
@@ -422,12 +424,45 @@ export async function deleteJobApplication(id: string): Promise<void> {
 }
 
 // ── Instagram Preview ─────────────────────────────────────────────────────────
+function parseBioMetadata(fullBio: string | undefined | null) {
+    if (!fullBio) return { bio: "", followers_count: "1.2M", following_count: "854" };
+    const parts = fullBio.split("\n\n===METADATA===\n");
+    if (parts.length === 2) {
+        try {
+            const metadata = JSON.parse(parts[1]);
+            return {
+                bio: parts[0],
+                followers_count: metadata.followers_count || "1.2M",
+                following_count: metadata.following_count || "854"
+            };
+        } catch (e) {
+            // ignore
+        }
+    }
+    return { bio: fullBio, followers_count: "1.2M", following_count: "854" };
+}
+
+function serializeBioMetadata(bio: string | undefined, followers_count: string | undefined, following_count: string | undefined) {
+    const metadata = { 
+        followers_count: followers_count || "1.2M", 
+        following_count: following_count || "854" 
+    };
+    return `${bio || ""}\n\n===METADATA===\n${JSON.stringify(metadata)}`;
+}
+
 export async function getIGProfiles(): Promise<IGProfile[]> {
     const profiles = await fetchTableData<DbIGProfile[]>("ig_profiles", []);
     // Fetch posts for each profile
     const profilesWithPosts = await Promise.all(profiles.map(async (p) => {
         const { data: posts } = await supabase.from("ig_posts").select("*").eq("profile_id", p.id);
-        return { ...p, posts: posts || [] };
+        const meta = parseBioMetadata(p.bio);
+        return { 
+            ...p, 
+            bio: meta.bio,
+            followers_count: meta.followers_count,
+            following_count: meta.following_count,
+            posts: posts || [] 
+        };
     }));
     return profilesWithPosts;
 }
@@ -436,12 +471,24 @@ export async function getIGProfileBySlug(slug: string): Promise<IGProfile | null
     const { data: profile, error } = await supabase.from("ig_profiles").select("*").eq("slug", slug).single();
     if (error || !profile) return null;
     const { data: posts } = await supabase.from("ig_posts").select("*").eq("profile_id", profile.id);
-    return { ...profile, posts: posts || [] };
+    const meta = parseBioMetadata(profile.bio);
+    return { 
+        ...profile, 
+        bio: meta.bio,
+        followers_count: meta.followers_count,
+        following_count: meta.following_count,
+        posts: posts || [] 
+    };
 }
 
-export async function upsertIGProfile(profile: DbIGProfile): Promise<void> {
-    const dbProfile = { ...profile };
+export async function upsertIGProfile(profile: IGProfile): Promise<void> {
+    const dbProfile = { 
+        ...profile,
+        bio: serializeBioMetadata(profile.bio, profile.followers_count, profile.following_count)
+    };
     delete (dbProfile as any).posts;
+    delete (dbProfile as any).followers_count;
+    delete (dbProfile as any).following_count;
     await upsertTableData("ig_profiles", dbProfile);
 }
 

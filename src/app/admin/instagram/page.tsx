@@ -137,15 +137,36 @@ export default function InstagramAdmin() {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        const isVideo = file.type.startsWith('video/');
+
         const reader = new FileReader();
         reader.onloadend = async () => {
             const rawBase64 = reader.result as string;
-            const compressed = await compressImage(rawBase64);
+            let finalData = rawBase64;
+
+            try {
+                if (target === 'profile') {
+                    finalData = await compressImage(rawBase64, 400, 400);
+                } else if (!isVideo) {
+                    finalData = await compressImage(rawBase64);
+                }
+            } catch (err) {
+                console.warn("Compression failed, using raw data", err);
+            }
 
             if (target === 'profile') {
-                updateProfile({ profile_pic: compressed });
+                updateProfile({ profile_pic: finalData });
             } else {
-                handlePostUpdate(id, { src: compressed });
+                const post = activeProfile?.posts?.find(p => p.id === id);
+                const currentType = post?.type || 'image';
+                const newType = isVideo 
+                    ? (currentType === 'reel' ? 'reel' : 'video')
+                    : (currentType === 'reel' || currentType === 'video' ? 'image' : currentType);
+
+                handlePostUpdate(id, { 
+                    src: finalData,
+                    type: newType as any
+                });
             }
         };
         reader.readAsDataURL(file);
@@ -379,6 +400,26 @@ export default function InstagramAdmin() {
                                                             <div className={`w-4 h-4 md:w-6 md:h-6 rounded-full bg-white shadow-lg transition-all ${activeProfile.is_verified ? 'translate-x-6' : 'translate-x-0'}`} />
                                                         </button>
                                                     </div>
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        <div className="space-y-2">
+                                                            <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-primary italic px-1">Followers Count</label>
+                                                            <input
+                                                                className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-xs font-black italic text-white outline-none focus:border-primary transition-all"
+                                                                value={activeProfile.followers_count || "1.2M"}
+                                                                onChange={e => updateProfile({ followers_count: e.target.value })}
+                                                                placeholder="e.g. 1.2M"
+                                                            />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-primary italic px-1">Following Count</label>
+                                                            <input
+                                                                className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-xs font-black italic text-white outline-none focus:border-primary transition-all"
+                                                                value={activeProfile.following_count || "854"}
+                                                                onChange={e => updateProfile({ following_count: e.target.value })}
+                                                                placeholder="e.g. 854"
+                                                            />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -483,9 +524,16 @@ export default function InstagramAdmin() {
                                                                 <div className="flex items-center justify-between border-b border-white/10 pb-3 md:pb-4">
                                                                     <div className="flex items-center gap-2 md:gap-3">
                                                                         <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
-                                                                            {post.type === 'video' ? <Film size={12} className="md:w-[14px] md:h-[14px]" /> : <Camera size={12} className="md:w-[14px] md:h-[14px]" />}
+                                                                            {post.type === 'reel' ? <Film size={12} className="md:w-[14px] md:h-[14px]" /> :
+                                                                             post.type === 'story' ? <Instagram size={12} className="md:w-[14px] md:h-[14px]" /> :
+                                                                             post.type === 'video' ? <Film size={12} className="md:w-[14px] md:h-[14px]" /> :
+                                                                             <Camera size={12} className="md:w-[14px] md:h-[14px]" />}
                                                                         </div>
-                                                                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary italic">Post Details</span>
+                                                                        <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-primary italic">
+                                                                            {post.type === 'reel' ? 'Reel' :
+                                                                             post.type === 'story' ? 'Story' :
+                                                                             post.type === 'video' ? 'Video' : 'Image Post'}
+                                                                        </span>
                                                                     </div>
                                                                     <button
                                                                         onClick={(e) => { e.stopPropagation(); handlePostDelete(post.id); }}
@@ -497,12 +545,12 @@ export default function InstagramAdmin() {
 
                                                                 <div className="flex-1 flex flex-col justify-center space-y-3 md:space-y-5">
                                                                     <div className="space-y-1.5 md:space-y-2">
-                                                                        <label className="text-[8px] md:text-[9px] font-black text-white/20 uppercase tracking-widest px-1">Upload Photo</label>
+                                                                        <label className="text-[8px] md:text-[9px] font-black text-white/20 uppercase tracking-widest px-1">Upload File (Image/Video)</label>
                                                                         <div className="relative h-10 md:h-12 bg-white/5 rounded-xl border border-white/10 flex items-center justify-center group/btn hover:bg-white/10 transition-all cursor-pointer">
                                                                             <span className="text-[8px] md:text-[9px] font-black text-white/40 uppercase tracking-widest">Choose File</span>
                                                                             <input
                                                                                 type="file"
-                                                                                accept="image/*"
+                                                                                accept="image/*,video/*"
                                                                                 className="absolute inset-0 opacity-0 cursor-pointer"
                                                                                 onChange={(e) => handleFileUpload(e, post.id, 'post')}
                                                                             />
@@ -510,9 +558,24 @@ export default function InstagramAdmin() {
                                                                     </div>
 
                                                                     <div className="space-y-1.5 md:space-y-2">
+                                                                        <label className="text-[8px] md:text-[9px] font-black text-white/20 uppercase tracking-widest px-1">Post Format</label>
+                                                                        <select
+                                                                            value={post.type || 'image'}
+                                                                            onClick={e => e.stopPropagation()}
+                                                                            onChange={e => handlePostUpdate(post.id, { type: e.target.value as any })}
+                                                                            className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-[9px] md:text-[10px] font-bold text-white outline-none focus:border-primary/50 transition-all uppercase tracking-widest"
+                                                                        >
+                                                                            <option value="image" className="bg-[#0D121F] text-white">Standard Image</option>
+                                                                            <option value="video" className="bg-[#0D121F] text-white">Standard Video</option>
+                                                                            <option value="reel" className="bg-[#0D121F] text-white">Instagram Reel (Video)</option>
+                                                                            <option value="story" className="bg-[#0D121F] text-white">Instagram Story</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div className="space-y-1.5 md:space-y-2">
                                                                         <label className="text-[8px] md:text-[9px] font-black text-white/20 uppercase tracking-widest px-1">Caption</label>
                                                                         <textarea
-                                                                            className="w-full bg-white/5 border border-white/10 rounded-xl p-3 md:p-4 text-[9px] md:text-[10px] font-medium text-white outline-none h-16 md:h-24 resize-none placeholder:text-white/10 italic focus:border-primary/50 transition-all"
+                                                                            className="w-full bg-white/5 border border-white/10 rounded-xl p-3 md:p-4 text-[9px] md:text-[10px] font-medium text-white outline-none h-16 resize-none placeholder:text-white/10 italic focus:border-primary/50 transition-all"
                                                                             placeholder="Enter caption details..."
                                                                             value={post.caption}
                                                                             onClick={e => e.stopPropagation()}
@@ -527,8 +590,11 @@ export default function InstagramAdmin() {
                                                                 </div>
                                                             </div>
 
-                                                            {post.type === 'video' && (
+                                                            {(post.type === 'video' || post.type === 'reel') && (
                                                                 <div className="absolute top-4 right-4 md:top-6 md:right-6 text-white drop-shadow-2xl z-10 p-1.5 md:p-2 bg-black/40 backdrop-blur-md rounded-lg"><Film size={14} className="md:w-4 md:h-4" /></div>
+                                                            )}
+                                                            {post.type === 'story' && (
+                                                                <div className="absolute top-4 right-4 md:top-6 md:right-6 text-white drop-shadow-2xl z-10 p-1.5 md:p-2 bg-black/40 backdrop-blur-md rounded-lg"><Instagram size={14} className="md:w-4 md:h-4" /></div>
                                                             )}
                                                         </div>
                                                     ))}

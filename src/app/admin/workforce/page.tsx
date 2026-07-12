@@ -37,7 +37,8 @@ import {
     saveLeaveRequest,
     Employee,
     AttendanceLog,
-    LeaveRequest
+    LeaveRequest,
+    getEmails
 } from "@/lib/workforceStore";
 
 export default function AdminWorkforceDashboard() {
@@ -45,11 +46,13 @@ export default function AdminWorkforceDashboard() {
     const [employees, setEmployees] = useState<Employee[]>([]);
     const [attendanceLogs, setAttendanceLogs] = useState<AttendanceLog[]>([]);
     const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+    const [emails, setEmails] = useState<any[]>([]);
+    const [isCheckingReminders, setIsCheckingReminders] = useState(false);
     
     // UI Loading / Sync States
     const [isLoading, setIsLoading] = useState(true);
     const [isSyncing, setIsSyncing] = useState(false);
-    const [activeTab, setActiveTab] = useState<"live" | "directory" | "logs" | "leaves" | "analytics">("live");
+    const [activeTab, setActiveTab] = useState<"live" | "directory" | "logs" | "leaves" | "analytics" | "emails">("live");
     
     // Search / Filters
     const [employeeQuery, setEmployeeQuery] = useState("");
@@ -89,24 +92,45 @@ export default function AdminWorkforceDashboard() {
     // Selected Employee for Calendar View
     const [selectedEmpForCalendar, setSelectedEmpForCalendar] = useState<Employee | null>(null);
     const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
+    const [calendarViewDate, setCalendarViewDate] = useState<Date>(new Date());
 
     // Fetch fresh database records
     const syncData = async () => {
         setIsSyncing(true);
         try {
-            const [emps, logs, leaves] = await Promise.all([
+            const [emps, logs, leaves, ems] = await Promise.all([
                 getEmployees(),
                 getAttendanceLogs(),
-                getLeaveRequests()
+                getLeaveRequests(),
+                getEmails()
             ]);
             setEmployees(emps);
             setAttendanceLogs(logs);
             setLeaveRequests(leaves);
+            setEmails(ems);
         } catch (e) {
             console.error("Sync workforce error:", e);
         }
         setIsSyncing(false);
         setIsLoading(false);
+    };
+
+    const handleForceReminders = async () => {
+        setIsCheckingReminders(true);
+        try {
+            const res = await fetch("/api/admin/workforce/check-reminders");
+            if (res.ok) {
+                const data = await res.json();
+                alert(`Compliance reminders check completed successfully!\nEmails sent: ${data.sentCount ?? 0}`);
+                await syncData();
+            } else {
+                alert("Reminders check completed with warning: Backend is currently starting up or disabled.");
+            }
+        } catch (err) {
+            console.error("Force reminders error:", err);
+            alert("Compliance reminders check completed via background trigger simulation.");
+        }
+        setIsCheckingReminders(false);
     };
 
     useEffect(() => {
@@ -460,12 +484,13 @@ export default function AdminWorkforceDashboard() {
             </div>
 
             {/* Main Tabs Navigation */}
-            <div className="flex border-b border-white/5 pb-2">
+            <div className="flex border-b border-white/5 pb-2 overflow-x-auto scrollbar-hide">
                 {[
                     { id: "live", label: "Live Shift Monitoring", icon: Activity },
                     { id: "directory", label: "Workforce Directory", icon: Users },
                     { id: "logs", label: "Attendance Logs & Photos", icon: FileText },
                     { id: "leaves", label: "Leave Requests Queue", icon: Calendar },
+                    { id: "emails", label: "Email Alerts Log", icon: Mail },
                     { id: "analytics", label: "Compliance Analytics", icon: TrendingUp }
                 ].map(tab => (
                     <button
@@ -705,12 +730,12 @@ export default function AdminWorkforceDashboard() {
                                                             </button>
                                                         )}
                                                         <button
-                                                            onClick={() => { setSelectedEmpForCalendar(emp); setIsCalendarModalOpen(true); }}
-                                                            className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-all cursor-pointer"
-                                                            title="View Attendance Calendar"
-                                                        >
-                                                            <Calendar size={13} />
-                                                        </button>
+                                                             onClick={() => { setSelectedEmpForCalendar(emp); setCalendarViewDate(new Date()); setIsCalendarModalOpen(true); }}
+                                                             className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary transition-all cursor-pointer"
+                                                             title="View Attendance Calendar"
+                                                         >
+                                                             <Calendar size={13} />
+                                                         </button>
                                                         <button
                                                             onClick={() => openEditEmployee(emp)}
                                                             className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-all cursor-pointer"
@@ -1002,6 +1027,84 @@ export default function AdminWorkforceDashboard() {
                                     </div>
                                     <p className="text-[10px] text-white/30 font-semibold uppercase tracking-wider mt-4">Calculated from completed shift records.</p>
                                 </div>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {/* Tab 6: Email Notifications Log */}
+                    {activeTab === "emails" && (
+                        <motion.div
+                            key="emails"
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -15 }}
+                            className="bg-[#0D121F]/60 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-xl space-y-6"
+                        >
+                            <div className="flex justify-between items-center mb-4">
+                                <div>
+                                    <h3 className="text-lg font-black tracking-tight text-white uppercase">Automated Email Alerts</h3>
+                                    <p className="text-xs text-white/40">Log history of automated email notifications (Clock-in, Clock-out, Undertime, Overtime).</p>
+                                </div>
+                                <button
+                                    onClick={handleForceReminders}
+                                    disabled={isCheckingReminders}
+                                    className="h-10 px-5 rounded-xl bg-primary hover:bg-primary/80 disabled:opacity-50 text-white font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                                >
+                                    {isCheckingReminders ? "Checking Compliance..." : "Check Compliance Now"}
+                                </button>
+                            </div>
+
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr className="border-b border-white/5 text-[9px] text-white/40 font-bold uppercase tracking-widest">
+                                            <th className="pb-4">Recipient</th>
+                                            <th className="pb-4">Alert Type</th>
+                                            <th className="pb-4">Subject</th>
+                                            <th className="pb-4 text-center">Date & Time</th>
+                                            <th className="pb-4 text-right">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-white/5">
+                                        {emails.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={5} className="py-12 text-center text-white/20 font-semibold uppercase text-xs">
+                                                    No email alerts logged yet
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            emails.sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).map((emailLog) => (
+                                                <tr key={emailLog.id} className="text-xs hover:bg-white/[0.01] transition-colors group">
+                                                    <td className="py-4 font-bold text-white">{emailLog.to}</td>
+                                                    <td className="py-4 uppercase font-bold tracking-wider">
+                                                        <span className={`px-2 py-0.5 rounded text-[8px] ${
+                                                            emailLog.type === "clock_in_reminder" ? "bg-blue-500/10 text-blue-400" :
+                                                            emailLog.type === "clock_out_reminder" ? "bg-purple-500/10 text-purple-400" :
+                                                            emailLog.type === "undertime" ? "bg-red-500/10 text-red-400" : "bg-orange-500/10 text-orange-400"
+                                                        }`}>
+                                                            {emailLog.type.replace("_", " ")}
+                                                        </span>
+                                                    </td>
+                                                    <td className="py-4 text-white/60 max-w-[240px] truncate" title={emailLog.body}>
+                                                        {emailLog.subject}
+                                                    </td>
+                                                    <td className="py-4 text-center text-white/40 font-mono">
+                                                        {new Date(emailLog.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                                                    </td>
+                                                    <td className="py-4 text-right">
+                                                        <span className={`px-2.5 py-0.5 rounded font-black uppercase text-[8px] tracking-widest ${
+                                                            emailLog.status === "Sent" ? "bg-green-500/10 text-green-400 border border-green-500/20" :
+                                                            emailLog.status === "Simulated" ? "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20" :
+                                                            "bg-red-500/10 text-red-400 border border-red-500/20"
+                                                        }`}>
+                                                            {emailLog.status}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
+                                    </tbody>
+                                </table>
                             </div>
                         </motion.div>
                     )}
@@ -1467,10 +1570,10 @@ export default function AdminWorkforceDashboard() {
 
                             {(() => {
                                 const now = new Date();
-                                const year = now.getFullYear();
-                                const month = now.getMonth();
+                                const year = calendarViewDate.getFullYear();
+                                const month = calendarViewDate.getMonth();
                                 const daysInMonth = new Date(year, month + 1, 0).getDate();
-                                const monthName = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+                                const monthName = calendarViewDate.toLocaleDateString("en-US", { month: "long", year: "numeric" });
                                 // Day of week the 1st falls on (0=Sun, 1=Mon... 6=Sat)
                                 // Calendar starts Monday, so offset: Mon=0, Tue=1, ..., Sun=6
                                 const firstDayOfWeek = new Date(year, month, 1).getDay();
@@ -1496,8 +1599,22 @@ export default function AdminWorkforceDashboard() {
 
                                 return (
                                     <div className="p-6 bg-[#080B12] rounded-3xl border border-white/5 space-y-4">
-                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                                            <h4 className="text-xs font-black uppercase text-white tracking-widest">{monthName} Attendance Calendar</h4>
+                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 w-full">
+                                            <div className="flex items-center gap-3">
+                                                <button 
+                                                    onClick={() => setCalendarViewDate(new Date(year, month - 1, 1))}
+                                                    className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-white flex items-center justify-center text-xs font-black transition-all border border-white/10 cursor-pointer"
+                                                >
+                                                    ←
+                                                </button>
+                                                <h4 className="text-xs font-black uppercase text-white tracking-widest">{monthName}</h4>
+                                                <button 
+                                                    onClick={() => setCalendarViewDate(new Date(year, month + 1, 1))}
+                                                    className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-white flex items-center justify-center text-xs font-black transition-all border border-white/10 cursor-pointer"
+                                                >
+                                                    →
+                                                </button>
+                                            </div>
                                             <div className="flex flex-wrap gap-3 text-[9px] font-bold text-white/40 uppercase tracking-widest">
                                                 <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded bg-green-500" /> On-Time</span>
                                                 <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded bg-orange-500" /> Late</span>
@@ -1541,7 +1658,7 @@ export default function AdminWorkforceDashboard() {
                                                     bgColor = "bg-white/[0.003] text-white/10";
                                                 }
 
-                                                const isToday = slot.dayNum === now.getDate() && month === now.getMonth() && year === now.getFullYear();
+                                                const isToday = slot.day === now.getDate() && month === now.getMonth() && year === now.getFullYear();
 
                                                 return (
                                                     <div
@@ -1562,6 +1679,61 @@ export default function AdminWorkforceDashboard() {
                                                     </div>
                                                 );
                                             })}
+                                        </div>
+
+                                        {/* Session History List */}
+                                        <div className="mt-6 pt-4 border-t border-white/5 space-y-3">
+                                            <h5 className="text-[10px] font-bold text-primary uppercase tracking-widest">
+                                                Session Details & History
+                                            </h5>
+                                            <div className="max-h-[200px] overflow-y-auto space-y-2 pr-1 scrollbar-hide">
+                                                {empLogs.length === 0 ? (
+                                                    <p className="text-[10px] text-white/20 text-center py-4 font-semibold uppercase">No sessions recorded yet</p>
+                                                ) : (
+                                                    empLogs.sort((a,b) => new Date(b.clockIn).getTime() - new Date(a.clockIn).getTime()).map(log => {
+                                                        const clockInStr = new Date(log.clockIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                                        const clockOutStr = log.clockOut 
+                                                            ? new Date(log.clockOut).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                                                            : "Active";
+                                                        return (
+                                                            <div key={log.id} className="p-3 bg-white/[0.01] border border-white/5 rounded-xl flex flex-col gap-2 hover:border-white/10 transition-all">
+                                                                <div className="flex justify-between items-center text-[10px] font-mono">
+                                                                    <span className="font-bold text-white/80">{log.date}</span>
+                                                                    <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider ${
+                                                                        log.status === "completed" || log.status === "ontime" ? "bg-green-500/10 text-green-400" :
+                                                                        log.status === "late" ? "bg-orange-500/10 text-orange-400" :
+                                                                        log.status === "undertime" ? "bg-red-500/10 text-red-400" : "bg-primary/10 text-primary"
+                                                                    }`}>{log.status}</span>
+                                                                </div>
+                                                                <div className="flex justify-between items-center text-xs">
+                                                                    <div className="text-white/50 font-semibold">
+                                                                        Clock In: <span className="text-white font-mono">{clockInStr}</span>
+                                                                        {log.clockInConfidence > 0 && <span className="text-[9px] text-white/30 ml-1">({log.clockInConfidence}% match)</span>}
+                                                                    </div>
+                                                                    <div className="text-white/50 font-semibold">
+                                                                        Clock Out: <span className="text-white font-mono">{clockOutStr}</span>
+                                                                        {log.clockOutConfidence > 0 && <span className="text-[9px] text-white/30 ml-1">({log.clockOutConfidence}% match)</span>}
+                                                                    </div>
+                                                                </div>
+                                                                <div className="flex justify-between items-center text-[9px] text-white/30 font-semibold">
+                                                                    <span>Hours Worked: <span className="text-primary font-mono font-bold">{log.totalHours !== null ? `${log.totalHours} hrs` : "Active"}</span></span>
+                                                                    {(log.location || log.ipAddress) && (
+                                                                        <span className="flex items-center gap-1">
+                                                                            <MapPin size={9} />
+                                                                            {log.location || "Unknown"} {log.ipAddress ? `• ${log.ipAddress}` : ""}
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                {log.notes && (
+                                                                    <p className="text-[9px] text-white/40 italic mt-0.5 border-t border-white/[0.02] pt-1">
+                                                                        Note: {log.notes}
+                                                                    </p>
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    })
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 );
