@@ -1,22 +1,24 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import Services from "@/components/Services";
-import Process from "@/components/Process";
-import WorkShowcase from "@/components/WorkShowcase";
-import Testimonials from "@/components/Testimonials";
-import ROICalculator from "@/components/ROICalculator";
-import FAQ from "@/components/FAQ";
-import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
-import ReelsSection from "@/components/ReelsSection";
 import { ParallaxText, FloatingElement, ScrollLine, ScrollConnector } from "@/components/animations/ScrollChoreography";
 import { ScrollWordReveal } from "@/components/animations/ScrollWordReveal";
-import Team from "@/components/Team";
-import LogoCloud from "@/components/LogoCloud";
-import { Zap, Sparkles, Star, Rocket } from "lucide-react";
+import { Star } from "lucide-react";
 import Link from "next/link";
+
+// Dynamic imports for below-the-fold heavy components to boost performance & Eliminate lag
+const Services = dynamic(() => import("@/components/Services"), { ssr: true });
+const Process = dynamic(() => import("@/components/Process"), { ssr: true });
+const Team = dynamic(() => import("@/components/Team"), { ssr: true });
+const WorkShowcase = dynamic(() => import("@/components/WorkShowcase"), { ssr: true });
+const LogoCloud = dynamic(() => import("@/components/LogoCloud"), { ssr: true });
+const ReelsSection = dynamic(() => import("@/components/ReelsSection"), { ssr: true });
+const Testimonials = dynamic(() => import("@/components/Testimonials"), { ssr: true });
+const FAQ = dynamic(() => import("@/components/FAQ"), { ssr: true });
+const CTA = dynamic(() => import("@/components/CTA"), { ssr: true });
 
 export default function Home() {
     return (
@@ -34,13 +36,12 @@ export default function Home() {
                     <ScrollLine className="bottom-0" />
                 </section>
 
-
-                {/* Massive Statement with Dynamic Text - Optimized Decor */}
+                {/* Massive Statement with Dynamic Text */}
                 <section className="py-24 md:py-64 bg-black text-white relative flex items-center justify-center overflow-hidden">
                     {/* Background noise texture */}
                     <div className="absolute inset-0 noise-overlay opacity-30 mix-blend-overlay pointer-events-none" />
 
-                    {/* Brutalist graphic elements - Hidden on smaller screens for clarity */}
+                    {/* Brutalist graphic elements */}
                     <FloatingElement speed={0.1} top="15%" left="10%" rotate={12}>
                         <div className="hidden md:block w-32 h-32 border-8 border-primary rounded-full opacity-80" />
                     </FloatingElement>
@@ -57,7 +58,6 @@ export default function Home() {
                         </div>
                     </FloatingElement>
 
-                    {/* New additions for more visual depth */}
                     <FloatingElement speed={0.15} top="80%" left="15%" rotate={45}>
                         <div className="hidden md:block w-16 h-16 border-[6px] border-primary rounded-full opacity-60 mix-blend-multiply" />
                     </FloatingElement>
@@ -97,7 +97,7 @@ export default function Home() {
                     onlyCore={true} 
                     title={
                         <>
-                            FOUNDER'S <br /> <span className="text-primary italic">CABIN</span>
+                            FOUNDER&apos;S <br /> <span className="text-primary italic">CABIN</span>
                         </>
                     } 
                 />
@@ -123,3 +123,4 @@ export default function Home() {
         </div>
     );
 }
+

@@ -10,8 +10,8 @@ import {
 import { DecodeText } from "@/components/animations/ScrollChoreography";
 import { getReels } from "@/lib/store";
 
-// Use local paths since files are in public/reels
-const LOCAL_BASE = "/reels/";
+// Use Supabase Storage public CDN URL for high-speed video streaming on deployed sites
+const LOCAL_BASE = (process.env.NEXT_PUBLIC_SUPABASE_URL || "https://pteassendcvgngkkybjf.supabase.co") + "/storage/v1/object/public/reels/";
 
 const staticReels = [
     { id: "1", src: `${LOCAL_BASE}reel-01.mp4`, title: "Cinema Production #24", author: "@tellora", tag: "Production", likes: "24.5k", comments: "1.2k", color: "#F3E84A" },
@@ -109,8 +109,8 @@ export default function ReelsSection() {
                             <Film className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest">Growth Laboratory</span>
                         </div>
-                        <h2 className="text-4xl sm:text-7xl md:text-9xl lg:text-[11rem] xl:text-[12rem] font-heading font-black leading-[0.88] tracking-tighter uppercase mb-4 sm:mb-6">
-                            BEHIND THE <br /> <span className="text-primary italic">LENS</span>
+                        <h2 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-heading font-black leading-none tracking-tighter uppercase mb-4 sm:mb-6 whitespace-nowrap">
+                            BEHIND THE <span className="text-primary italic">LENS</span>
                         </h2>
                         <p className="text-sm sm:text-xl md:text-3xl font-bold uppercase tracking-tight text-white/50 max-w-2xl leading-tight">
                             High-frequency media production. Witness the technical precision of our viral frameworks.
