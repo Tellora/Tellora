@@ -19,11 +19,17 @@ export function HeroOrb() {
         });
 
         renderer.setSize(480, 480);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         mountRef.current.appendChild(renderer.domElement);
 
+        let isVisible = true;
+        const observer = new IntersectionObserver(([entry]) => {
+            isVisible = entry.isIntersecting;
+        }, { threshold: 0.1 });
+        if (mountRef.current) observer.observe(mountRef.current);
+
         // Primary torus knot
-        const geometry = new THREE.TorusKnotGeometry(1.5, 0.38, 140, 64, 2, 3);
+        const geometry = new THREE.TorusKnotGeometry(1.5, 0.38, 120, 48, 2, 3);
         const material = new THREE.MeshPhysicalMaterial({
             color: 0x4ac0e4,
             metalness: 0.6,
@@ -50,13 +56,13 @@ export function HeroOrb() {
         scene.add(wireKnot);
 
         // Outer ring
-        const ringGeo = new THREE.TorusGeometry(2.8, 0.015, 16, 200);
+        const ringGeo = new THREE.TorusGeometry(2.8, 0.015, 16, 120);
         const ringMat = new THREE.MeshBasicMaterial({ color: 0x4ac0e4, opacity: 0.3, transparent: true });
         const ring = new THREE.Mesh(ringGeo, ringMat);
         ring.rotation.x = Math.PI / 3;
         scene.add(ring);
 
-        const ring2Geo = new THREE.TorusGeometry(2.2, 0.01, 16, 200);
+        const ring2Geo = new THREE.TorusGeometry(2.2, 0.01, 16, 120);
         const ring2Mat = new THREE.MeshBasicMaterial({ color: 0x2e7dbf, opacity: 0.2, transparent: true });
         const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
         ring2.rotation.x = -Math.PI / 4;
@@ -64,7 +70,7 @@ export function HeroOrb() {
         scene.add(ring2);
 
         // Floating particles
-        const particleCount = 60;
+        const particleCount = 40;
         const positions = new Float32Array(particleCount * 3);
         for (let i = 0; i < particleCount; i++) {
             const r = 3 + Math.random() * 1.5;
@@ -102,6 +108,7 @@ export function HeroOrb() {
 
         const animate = () => {
             frameId = requestAnimationFrame(animate);
+            if (!isVisible) return;
             const t = (Date.now() - startTime) / 1000;
 
             torusKnot.rotation.x = t * 0.25;
@@ -129,6 +136,7 @@ export function HeroOrb() {
 
         return () => {
             cancelAnimationFrame(frameId);
+            observer.disconnect();
             if (mountRef.current && renderer.domElement.parentNode) {
                 mountRef.current.removeChild(renderer.domElement);
             }
@@ -141,8 +149,7 @@ export function HeroOrb() {
     return (
         <div
             ref={mountRef}
-            className="w-[480px] h-[480px] flex items-center justify-center"
-            style={{ filter: "drop-shadow(0 0 40px rgba(74,192,228,0.25))" }}
+            className="w-[480px] h-[480px] flex items-center justify-center pointer-events-none"
         />
     );
 }

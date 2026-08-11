@@ -148,10 +148,18 @@ export default function ReelsSection() {
                     >
                         <video 
                             src={reel.src}
-                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100 opacity-70 group-hover:opacity-100"
+                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100 opacity-70 group-hover:opacity-100 pointer-events-none"
                             muted playsInline loop
-                            onMouseEnter={(e) => e.currentTarget.play()}
-                            onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
+                            preload="none"
+                            onMouseEnter={(e) => {
+                                const playPromise = e.currentTarget.play();
+                                if (playPromise !== undefined) {
+                                    playPromise.catch(() => {});
+                                }
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.pause();
+                            }}
                         />
                         
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent p-5 sm:p-8 md:p-10 flex flex-col justify-end">

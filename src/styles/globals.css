@@ -187,12 +187,13 @@
 
     .noise-overlay::after {
         content: "";
-        position: fixed;
+        position: absolute;
         inset: 0;
         pointer-events: none;
-        opacity: 0.08;
-        z-index: 100;
-        background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+        opacity: 0.04;
+        z-index: 10;
+        background-image: radial-gradient(rgba(0, 0, 0, 0.4) 1px, transparent 1px);
+        background-size: 8px 8px;
     }
 
     /* Perspective System for 3D tilts */
@@ -202,15 +203,15 @@
 
     /* High Performance Halftone */
     .halftone-overlay {
-        background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1.5px);
-        background-size: 6px 6px;
+        background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1.5px);
+        background-size: 8px 8px;
         pointer-events: none;
     }
 
     /* Command Center HUD Styles */
     .hud-glass {
-        @apply bg-white/40 backdrop-blur-md border-[2px] border-black/10;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+        @apply bg-white border-[2px] border-black;
+        box-shadow: 4px 4px 0px 0px var(--foreground);
     }
 
     .hud-dot {
