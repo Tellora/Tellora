@@ -1,6 +1,6 @@
 export const SEO_CONFIG = {
     siteName: "Tellora Media",
-    siteUrl: "https://telloramedia.online",
+    siteUrl: "https://telloramediahq.com",
     defaultTitle: "Tellora Media | Digital Marketing Agency in Delhi",
     titleTemplate: "%s | Tellora Media",
     defaultDescription: "Tellora Media is a full-service digital marketing agency in Delhi, India. We architect SEO, performance marketing, social media, and web growth systems for D2C brands and local businesses.",
@@ -9,7 +9,7 @@ export const SEO_CONFIG = {
     locale: "en_IN",
     alternateLocales: ["en_US", "en_GB"],
     organizationName: "Tellora Media",
-    contactEmail: "contact@telloramedia.online",
+    contactEmail: "contact@telloramediahq.com",
     contactPhone: "+91 76784 93113",
     address: {
         city: "Delhi",

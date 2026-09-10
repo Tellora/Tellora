@@ -51,13 +51,13 @@ const HEADERS = {
 // ─── Account Definitions ─────────────────────────────────────────────────────
 const ADMIN_USERS = [
     {
-        email:    'abhay@telloramedia.online',
+        email:    'abhay@telloramediahq.com',
         password: 'abhaytellora22@',
         profile:  { name: 'Abhay',          role: 'CEO & Founder', department: 'Operations & Oversight', initials: 'AB' }
     },
 
     {
-        email:    'prakhar@telloramedia.online',
+        email:    'prakhar@telloramediahq.com',
         password: 'prakhartellora22@',
         profile:  { name: 'Prakhar Saxena', role: 'Co-founder',    department: 'Creative & Content',     initials: 'PS' }
     }

@@ -13,9 +13,9 @@ const contactInfo = [
     {
         icon: <Mail className="w-6 h-6 text-primary" />,
         label: "Direct Email",
-        value: "contact@telloramedia.online",
+        value: "contact@telloramediahq.com",
         subtitle: "General Inquiry",
-        link: "mailto:contact@telloramedia.online"
+        link: "mailto:contact@telloramediahq.com"
     },
     {
         icon: <MessageSquare className="w-6 h-6 text-primary" />,
@@ -200,7 +200,7 @@ export default function ContactPage() {
                                 </div>
                             </a>
 
-                            <a href="mailto:contact@telloramedia.online" className="group px-12 py-8 bg-white/5 border border-white/10 rounded-[2rem] hover:border-primary/50 transition-all duration-500 backdrop-blur-xl flex items-center gap-6 hover:-translate-y-4">
+                            <a href="mailto:contact@telloramediahq.com" className="group px-12 py-8 bg-white/5 border border-white/10 rounded-[2rem] hover:border-primary/50 transition-all duration-500 backdrop-blur-xl flex items-center gap-6 hover:-translate-y-4">
                                 <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-white group-hover:bg-primary transition-all duration-500">
                                     <Mail size={24} />
                                 </div>

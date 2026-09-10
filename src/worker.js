@@ -322,7 +322,7 @@ async function sendEmailHelper(env, to, subject, body, type) {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    from: "Tellora Workforce <workforce@telloramedia.online>",
+                    from: "Tellora Workforce <workforce@telloramediahq.com>",
                     to: [to],
                     subject: subject,
                     text: body

@@ -100,7 +100,7 @@ export default function AdminLogin() {
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="you@telloramedia.online"
+                                    placeholder="you@telloramediahq.com"
                                     disabled={isLoading}
                                     required
                                     autoComplete="email"

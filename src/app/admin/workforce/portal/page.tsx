@@ -1278,7 +1278,7 @@ export default function EmployeePortal() {
                                         type="email"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="yourname@telloramedia.online"
+                                        placeholder="yourname@telloramediahq.com"
                                         disabled={isLoggingIn}
                                         required
                                         className="w-full bg-white/5 border border-white/5 rounded-2xl py-3.5 pl-12 pr-4 text-white font-medium outline-none focus:border-primary/50 focus:bg-white/10 transition-all text-sm"
