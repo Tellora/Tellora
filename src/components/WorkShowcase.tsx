@@ -29,7 +29,7 @@ export default function WorkShowcase() {
         return ["all", ...Array.from(new Set(projects.map(p => p.category)))];
     }, [projects]);
 
-    const filteredProjects = projects.filter(p => filter === "all" || p.category === filter).slice(0, 6);
+    const filteredProjects = projects.filter(p => filter === "all" || p.category === filter).slice(0, 9);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({

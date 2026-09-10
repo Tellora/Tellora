@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Cpu, Activity } from "lucide-react";
 
 export function Preloader() {
-    // Start as TRUE — we want it visible immediately on mount.
     const [isLoading, setIsLoading] = useState(true);
     const [progress, setProgress] = useState(0);
     const [status, setStatus] = useState("Initializing Core...");
@@ -31,7 +30,7 @@ export function Preloader() {
                 idx++;
                 setStatus(statuses[idx]);
             }
-        }, 200);
+        }, 60);
 
         const progressTimer = setInterval(() => {
             setProgress((p) => {
@@ -39,15 +38,15 @@ export function Preloader() {
                     clearInterval(progressTimer);
                     return 100;
                 }
-                return Math.min(p + Math.random() * 15 + 8, 100);
+                return Math.min(p + 35, 100);
             });
-        }, 60);
+        }, 25);
 
-        // Dismiss after 1.2 s
+        // Dismiss smoothly after quick brand pulse
         const done = setTimeout(() => {
             setProgress(100);
-            setTimeout(() => setIsLoading(false), 200);
-        }, 1200);
+            setTimeout(() => setIsLoading(false), 80);
+        }, 280);
 
         return () => {
             clearInterval(statusTimer);
@@ -67,7 +66,7 @@ export function Preloader() {
                     initial={{ opacity: 1 }}
                     exit={{
                         clipPath: "circle(0% at 50% 50%)",
-                        transition: { duration: 0.8, ease: [0.85, 0, 0.15, 1] },
+                        transition: { duration: 0.5, ease: [0.85, 0, 0.15, 1] },
                     }}
                 >
                     {/* Dot grid */}
@@ -97,8 +96,8 @@ export function Preloader() {
                     </div>
 
                     <div className="absolute bottom-12 right-12 hidden md:flex items-center gap-3 bg-black text-white px-6 py-3 brutalist-border shadow-[6px_6px_0px_#A855F7]">
-                        <Activity size={16} className="text-primary animate-bounce" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Secure Sync</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-white/50">BUILD_TAG</span>
+                        <span className="text-xs font-mono font-black text-accent">v2.4.9</span>
                     </div>
 
                     {/* Main content */}
@@ -106,22 +105,22 @@ export function Preloader() {
                         <motion.div
                             initial={{ scale: 0.88, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.5, ease: "easeOut" }}
-                            className="relative mb-12 flex flex-col items-center"
+                            transition={{ duration: 0.3, ease: "easeOut" }}
+                            className="relative mb-8 flex flex-col items-center"
                         >
-                            <div className="mb-8">
+                            <div className="mb-6">
                                 <Image
                                     src="/tellora-logo.png"
                                     alt="Tellora"
-                                    width={280}
-                                    height={100}
+                                    width={160}
+                                    height={58}
                                     className="object-contain drop-shadow-[8px_8px_0px_#A855F7]"
                                     priority
                                 />
                             </div>
-                            <h1 className="text-[4rem] md:text-[6rem] lg:text-[8rem] font-heading font-black tracking-tighter leading-none text-black drop-shadow-[8px_8px_0px_#A855F7] uppercase mt-4">
+                            <div className="text-[3.5rem] md:text-[5rem] lg:text-[6.5rem] font-heading font-black tracking-tighter leading-none text-black drop-shadow-[8px_8px_0px_#A855F7] uppercase mt-2">
                                 TELLORA<br />MEDIA
-                            </h1>
+                            </div>
                             {/* Status badge */}
                             <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-white px-4 py-2 brutalist-border shadow-[6px_6px_0px_#000] -rotate-2 flex items-center gap-2 whitespace-nowrap">
                                 <Sparkles size={14} className="text-accent fill-current" />
@@ -130,14 +129,14 @@ export function Preloader() {
                         </motion.div>
 
                         {/* Progress bar */}
-                        <div className="w-full max-w-sm h-16 bg-white brutalist-border border-[4px] p-1.5 relative overflow-hidden shadow-[12px_12px_0px_#000]">
+                        <div className="w-full max-w-sm h-14 bg-white brutalist-border border-[4px] p-1.5 relative overflow-hidden shadow-[10px_10px_0px_#000]">
                             <motion.div
                                 className="h-full bg-primary"
                                 style={{ width: `${progress}%` }}
                                 transition={{ type: "spring", stiffness: 120, damping: 22 }}
                             />
                             <div className="absolute inset-0 flex items-center justify-center mix-blend-difference pointer-events-none">
-                                <span className="text-white font-black text-3xl font-heading italic tracking-tighter">
+                                <span className="text-white font-black text-2xl font-heading italic tracking-tighter">
                                     {Math.min(Math.round(progress), 100)}%
                                 </span>
                             </div>

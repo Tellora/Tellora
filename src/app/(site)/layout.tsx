@@ -9,6 +9,7 @@ import { FloatingElement } from "@/components/animations/ScrollChoreography";
 import { Star, Cpu, Activity } from "lucide-react";
 import { motion } from "framer-motion";
 import SecretAdminAccess from "@/components/SecretAdminAccess";
+import { SEO_CONFIG } from "@/lib/seo";
 
 export default function SiteLayout({
     children,
@@ -19,9 +20,9 @@ export default function SiteLayout({
     const orgJsonLd = {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "Tellora Media",
-        "url": "https://tellora.media",
-        "logo": "https://tellora.media/logo.png",
+        "name": SEO_CONFIG.organizationName,
+        "url": SEO_CONFIG.siteUrl,
+        "logo": `${SEO_CONFIG.siteUrl}/tellora-logo.png`,
         "description": "Premium digital marketing agency and growth architecture firm specializing in technical SEO, PPC, and performance web design.",
         "sameAs": [
             "https://twitter.com/telloramedia",
@@ -30,7 +31,7 @@ export default function SiteLayout({
         "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "customer support",
-            "email": "hello@tellora.media"
+            "email": SEO_CONFIG.contactEmail
         }
     };
 

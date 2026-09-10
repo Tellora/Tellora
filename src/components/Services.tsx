@@ -96,10 +96,10 @@ export default function Services() {
                             {"We don't do boring. We do high-impact, Gen-Z operated digital scale."}
                         </p>
                         <div className="flex gap-4">
-                            <button className="w-12 h-12 md:w-16 md:h-16 rounded-full brutalist-border flex items-center justify-center hover:bg-black hover:text-white transition-all">
+                            <button aria-label="Previous services" className="w-12 h-12 md:w-16 md:h-16 rounded-full brutalist-border flex items-center justify-center hover:bg-black hover:text-white transition-all">
                                 <ArrowRight className="rotate-180 w-5 h-5 md:w-6 md:h-6" />
                             </button>
-                            <button className="w-12 h-12 md:w-16 md:h-16 rounded-full brutalist-border bg-primary text-white flex items-center justify-center brutalist-shadow-sm hover:translate-y-[-2px] transition-all">
+                            <button aria-label="Next services" className="w-12 h-12 md:w-16 md:h-16 rounded-full brutalist-border bg-primary text-white flex items-center justify-center brutalist-shadow-sm hover:translate-y-[-2px] transition-all">
                                 <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
                             </button>
                         </div>

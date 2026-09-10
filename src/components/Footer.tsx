@@ -41,17 +41,19 @@ export default function Footer() {
 
                             <div className="flex gap-6">
                                 {[
-                                    { icon: Instagram, href: "https://www.instagram.com/telloramedia/" },
-                                    { icon: Linkedin, href: "https://www.linkedin.com/company/tellora-media" },
+                                    { icon: Instagram, href: "https://www.instagram.com/telloramedia/", name: "Instagram" },
+                                    { icon: Linkedin, href: "https://www.linkedin.com/company/tellora-media", name: "LinkedIn" },
                                 ].map((social, i) => (
                                     <a
                                         key={i}
                                         href={social.href}
                                         target="_blank"
                                         rel="noopener noreferrer"
+                                        aria-label={`Follow Tellora Media on ${social.name}`}
                                         className="w-16 h-16 md:w-20 md:h-20 bg-white brutalist-border shadow-[8px_8px_0px_#000] flex items-center justify-center hover:translate-y-[-6px] hover:shadow-[12px_12px_0px_#A855F7] hover:bg-black hover:text-white transition-all group"
                                     >
                                         <social.icon size={28} className="group-hover:scale-125 transition-transform" />
+                                        <span className="sr-only">Tellora Media on {social.name}</span>
                                     </a>
                                 ))}
                             </div>

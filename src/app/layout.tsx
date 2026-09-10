@@ -1,15 +1,18 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Outfit } from "next/font/google";
+import Script from "next/script";
 import "@/styles/globals.css";
 import { SEO_CONFIG } from "@/lib/seo";
 const plusJakartaSans = Plus_Jakarta_Sans({
     subsets: ["latin"],
     variable: "--font-sans",
+    display: "swap",
 });
 
 const outfit = Outfit({
     subsets: ["latin"],
     variable: "--font-heading",
+    display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -111,9 +114,9 @@ export const viewport: Viewport = {
 const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Tellora Media",
-    "url": "https://tellora.media",
-    "logo": "https://tellora.media/tellora-logo.png",
+    "name": SEO_CONFIG.organizationName,
+    "url": SEO_CONFIG.siteUrl,
+    "logo": `${SEO_CONFIG.siteUrl}/tellora-logo.png`,
     "sameAs": [
         "https://www.instagram.com/tellora.media",
         "https://www.linkedin.com/company/tellora-media"
@@ -164,8 +167,10 @@ export default function RootLayout({
                 />
                 {children}
 
-                {/* Axeptio Cookie Setup */}
-                <script
+                {/* Deferred Axeptio Cookie Setup */}
+                <Script
+                    id="axeptio-config"
+                    strategy="lazyOnload"
                     dangerouslySetInnerHTML={{
                         __html: `
                         window.axeptioSettings = {
@@ -181,14 +186,13 @@ export default function RootLayout({
                                 }
                             }
                         };
-                        
-                        (function(d, s) {
-                            var t = d.getElementsByTagName(s)[0], e = d.createElement(s);
-                            e.async = true; e.src = "//static.axept.io/sdk.js";
-                            t.parentNode.insertBefore(e, t);
-                        })(document, "script");
                         `
                     }}
+                />
+                <Script
+                    id="axeptio-sdk"
+                    strategy="lazyOnload"
+                    src="https://static.axept.io/sdk.js"
                 />
             </body>
         </html>

@@ -24,6 +24,88 @@ export interface CaseStudy {
 
 export const caseStudies: CaseStudy[] = [
     {
+        id: "goodlife-diagnostics",
+        title: "Goodlife Diagnostics",
+        clientSummary: "A leading modern diagnostic center and pathology laboratory in Ramnagar offering comprehensive clinical testing, blood diagnostics, and preventive health packages.",
+        industry: "Healthcare",
+        services: ["Digital Marketing", "Local SEO", "Content Creation", "Performance Marketing"],
+        description: "Driving patient acquisition and local healthcare authority for Ramnagar's trusted diagnostic center and pathology laboratory.",
+        impact: "Patient Surge",
+        challenge: "Limited local digital visibility and heavy reliance on traditional doctor referrals in Ramnagar, leading to underutilized diagnostic equipment and low direct walk-in volume.",
+        execution: "Executed hyper-local SEO ranking Goodlife #1 on Google Maps in Ramnagar, created engaging healthcare reels explaining test procedures, and launched targeted Meta Ads for preventive wellness packages.",
+        strategicInsight: "Patients seek rapid report turnaround, hygiene, and local trust. By positioning Goodlife as Ramnagar's highest-tech diagnostic lab with seamless home sample collection, patient bookings accelerated rapidly.",
+        roadmap: [
+            { phase: "Local SEO Dominance", details: "Optimizing Google Business Profile and local keywords for Ramnagar and neighboring areas." },
+            { phase: "Health Awareness Campaigns", details: "Producing educational video content on seasonal health risks and preventive checkups." },
+            { phase: "Home Collection Funnels", details: "Deploying high-converting WhatsApp and call lead generation campaigns." },
+            { phase: "Patient Retention System", details: "Implementing automated test reminder loops and 5-star Google review collection." }
+        ],
+        techStack: ["Local SEO Suite", "Meta Ads Manager", "Google Ads", "WhatsApp Business", "Canva Enterprise"],
+        image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=1200&q=80",
+        color: "#06B6D4",
+        links: {
+            gmb: "https://maps.google.com/?q=Goodlife+Diagnostics+Ramnagar"
+        },
+        stats: [
+            { label: "Patient Leads", value: "+185%" },
+            { label: "Local Rank", value: "#1" }
+        ]
+    },
+    {
+        id: "air-right",
+        title: "Air Right",
+        clientSummary: "An innovative air purification and clean air technology brand delivering advanced multi-stage HEPA filtration solutions for residential and commercial environments.",
+        industry: "CleanTech",
+        services: ["Digital Marketing", "Performance Marketing", "Content Creation", "E-commerce Growth"],
+        description: "Scaling customer acquisition, brand reach, and e-commerce conversions for a premium air purification brand.",
+        impact: "Clean Air Scale",
+        challenge: "High customer acquisition costs (CAC) and saturated direct-to-consumer market competing with legacy consumer appliance giants.",
+        execution: "Engineered high-ROAS Meta and Google performance funnels triggered by real-time regional AQI spikes, paired with 3D product animation reels showcasing filtration superiority.",
+        strategicInsight: "Air purifier purchases are intensely weather and AQI-driven. Dynamic ad creative that updated messaging based on live air pollution indices unlocked 3.8x ROAS and massive buyer urgency.",
+        roadmap: [
+            { phase: "Data & AQI Triggers", details: "Setting up automated ad rules linked to real-time pollution indices in metropolitan hubs." },
+            { phase: "Visual Storytelling", details: "Developing cinematic product demonstration reels highlighting CADR and HEPA tech." },
+            { phase: "Search & Shopping Takeover", details: "Scaling Google Shopping and high-intent commercial intent keywords." },
+            { phase: "Filter Replacement Engine", details: "Building automated subscription and replenishment email/SMS sequences." }
+        ],
+        techStack: ["Shopify Plus", "Meta Ads", "Google Ads", "Klaviyo", "Adobe Premiere Pro"],
+        image: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&w=1200&q=80",
+        color: "#3B82F6",
+        links: {},
+        stats: [
+            { label: "ROAS", value: "3.8x" },
+            { label: "Revenue Surge", value: "+210%" }
+        ]
+    },
+    {
+        id: "ella-creations",
+        title: "Ella Creations",
+        clientSummary: "An exquisite online artificial jewelry brand blending traditional artisanal craftsmanship with contemporary fashion aesthetics for the modern trendsetter.",
+        industry: "Fashion & Jewelry",
+        services: ["Digital Marketing", "Performance Marketing", "Social Media Management", "Influencer Marketing"],
+        description: "Architecting a viral social growth engine and high-converting performance marketing funnels for an online artificial jewelry brand.",
+        impact: "D2C Explosion",
+        challenge: "Fierce online competition in fashion accessories with high cart abandonment and difficulty scaling ad spend profitably beyond break-even.",
+        execution: "Revamped visual brand aesthetics with luxury lookbook photography, launched high-tempo Instagram Reels styling guides, partnered with 30+ fashion micro-influencers, and deployed Meta Advantage+ shopping funnels.",
+        strategicInsight: "Jewelry is an emotional impulse purchase driven by visual desire. Elevating product presentation with studio editorial lighting and unboxing experiences reduced CAC by 42% and delivered 4.2x ROAS.",
+        roadmap: [
+            { phase: "Visual Rebranding", details: "Overhauling aesthetic standards with high-definition styling reels and curated lookbooks." },
+            { phase: "Influencer Seeding", details: "Orchestrating micro-influencer gifting sprints yielding 50+ user-generated styling videos." },
+            { phase: "Performance Scale", details: "Scaling Meta Advantage+ Catalog ads and seasonal festive collection drops." },
+            { phase: "Repeat Purchase Loop", details: "Deploying VIP customer loyalty clubs and WhatsApp early-access drops." }
+        ],
+        techStack: ["Shopify", "Meta Ads", "Instagram Shopping", "Klaviyo", "Canva Enterprise"],
+        image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1200&q=80",
+        color: "#EC4899",
+        links: {
+            instagram: "https://www.instagram.com/ellacreations"
+        },
+        stats: [
+            { label: "ROAS", value: "4.2x" },
+            { label: "D2C Orders", value: "+280%" }
+        ]
+    },
+    {
         id: "dr-cicil-smile-center",
         title: "Dr. Cicil Smile Center",
         clientSummary: "A leading chain of dental clinics focused on accessible, high-end oral healthcare across regional centers.",
@@ -55,7 +137,7 @@ export const caseStudies: CaseStudy[] = [
     {
         id: "astrology-light-for-all",
         title: "Astrology Light for All",
-        clientSummary: "A digital spiritual platform providing subscription-based astrology insights and community and personal guidance.",
+        clientSummary: "A digital spiritual platform providing subscription-based astrology insights, community, and personalized Vedic guidance.",
         industry: "Astrology",
         services: ["Web Development", "Social Media Marketing", "Performance Marketing", "Content Creation"],
         description: "Architecting a viral spiritual growth engine that fueled a subscription-based platform's global expansion.",
@@ -70,7 +152,7 @@ export const caseStudies: CaseStudy[] = [
             { phase: "Ecosystem Sync", details: "Unified data tracking across the web platform and socials." }
         ],
         techStack: ["React", "Custom CRM", "TikTok Ads", "Meta Business", "Hotjar"],
-        image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80",
+        image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80",
         color: "#A855F7",
         links: {
             gmb: "https://share.google/CWgsmkR4kCNVUFVxq",
@@ -85,7 +167,7 @@ export const caseStudies: CaseStudy[] = [
     {
         id: "ksc-tvs",
         title: "Keshav Sales Corp (KSC)",
-        clientSummary: "One of the region's largest automotive dealerships, specializing in TVS motorbikes and community service.",
+        clientSummary: "One of the region's premier TVS two-wheeler dealerships, specializing in authorized motorcycle sales, service, and spare parts.",
         industry: "Automotive",
         services: ["Web Development", "Social Media", "SEO"],
         description: "Engineering a digital-first sales engine for one of the region's leading TVS dealerships.",
@@ -100,7 +182,7 @@ export const caseStudies: CaseStudy[] = [
             { phase: "Lead Routing", details: "Integrating web leads directly into the offline sales team." }
         ],
         techStack: ["Next.js", "Cloudflare", "Local SEO Toolkit", "Meta Ads"],
-        image: "https://images.unsplash.com/photo-1558981403-c5f91cbba527?auto=format&fit=crop&w=1200&q=80",
+        image: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=1200&q=80",
         color: "#FF4D6D",
         links: {
             website: "https://ksc-tvs.github.io/KSC/"

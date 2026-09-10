@@ -40,7 +40,36 @@ export default function ReelsSection() {
     const [activeTag, setActiveTag] = useState("All");
     const [isMuted, setIsMuted] = useState(true);
     const [allReels, setAllReels] = useState<any[]>(staticReels);
+    const [copiedShare, setCopiedShare] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
+
+    const handleShare = async (reel: any, e: React.MouseEvent) => {
+        e.stopPropagation();
+        const shareData = {
+            title: `${reel.title} | Tellora Media`,
+            text: `Watch "${reel.title}" on Tellora Media`,
+            url: typeof window !== "undefined" ? `${window.location.origin}/#reels` : "https://telloramediahq.com/#reels",
+        };
+
+        if (typeof navigator !== "undefined" && navigator.share) {
+            try {
+                await navigator.share(shareData);
+                return;
+            } catch (err: any) {
+                if (err && err.name === "AbortError") return;
+            }
+        }
+
+        if (typeof navigator !== "undefined" && navigator.clipboard) {
+            try {
+                await navigator.clipboard.writeText(shareData.url);
+                setCopiedShare(true);
+                setTimeout(() => setCopiedShare(false), 2200);
+            } catch (err) {
+                console.error("Clipboard copy failed", err);
+            }
+        }
+    };
 
     useEffect(() => {
         async function fetchAdminData() {
@@ -277,8 +306,22 @@ export default function ReelsSection() {
                                                 <MessageCircle size={18} className="text-white fill-current sm:w-6 sm:h-6 group-hover:scale-125 transition-transform" />
                                                 <span className="text-sm sm:text-lg font-black">{filtered[selectedIdx].comments}</span>
                                             </div>
-                                            <button className="flex items-center gap-2 group ml-auto" aria-label="Share reel">
-                                                <Share2 size={18} className="text-white sm:w-6 sm:h-6 hover:text-primary transition-colors" />
+                                            <button 
+                                                onClick={(e) => handleShare(filtered[selectedIdx], e)}
+                                                className="flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all group ml-auto cursor-pointer" 
+                                                aria-label="Share reel"
+                                            >
+                                                {copiedShare ? (
+                                                    <>
+                                                        <Check size={18} className="text-emerald-400 sm:w-5 sm:h-5 animate-pulse" />
+                                                        <span className="text-xs font-black text-emerald-400 uppercase tracking-wider">Link Copied!</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Share2 size={18} className="text-white sm:w-5 sm:h-5 group-hover:text-primary transition-colors" />
+                                                        <span className="text-xs font-black text-white/90 group-hover:text-primary transition-colors uppercase tracking-wider hidden sm:inline">Share</span>
+                                                    </>
+                                                )}
                                             </button>
                                         </div>
                                     </div>

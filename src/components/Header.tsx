@@ -42,6 +42,22 @@ export default function Header() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    // Prevent body scrolling when mobile menu overlay is open
+    useEffect(() => {
+        if (mobileOpen) {
+            const originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = "hidden";
+            const handleKeyDown = (e: KeyboardEvent) => {
+                if (e.key === "Escape") setMobileOpen(false);
+            };
+            window.addEventListener("keydown", handleKeyDown);
+            return () => {
+                document.body.style.overflow = originalOverflow;
+                window.removeEventListener("keydown", handleKeyDown);
+            };
+        }
+    }, [mobileOpen]);
+
     const navLinks = [
         { name: "Home", href: "/" },
         { name: "Services", href: "/services" },
@@ -143,77 +159,88 @@ export default function Header() {
                 </div>
             </div>
 
-            {/* Mobile Nav Overlay - High kinetic transition */}
+            {/* Mobile Nav Overlay - Fully scrollable & responsive across all viewports */}
             <AnimatePresence>
                 {mobileOpen && (
                     <motion.div
                         initial={{ opacity: 0, y: "-100%" }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: "-100%" }}
-                        transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
-                        className="fixed inset-0 z-[110] bg-background flex flex-col p-12 overflow-hidden border-b-[8px] border-black pointer-events-auto"
+                        transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
+                        className="fixed inset-0 z-[110] bg-background overflow-y-auto overscroll-contain border-b-[8px] border-black pointer-events-auto selection:bg-primary selection:text-white"
                     >
                         {/* Background kinetic text */}
-                        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 opacity-5 pointer-events-none -rotate-12">
-                            <span className="text-[25vw] sm:text-[30vw] md:text-[40vw] font-heading font-black uppercase leading-none whitespace-nowrap">
+                        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 opacity-5 pointer-events-none -rotate-12 select-none overflow-hidden">
+                            <span className="text-[25vw] sm:text-[30vw] md:text-[35vw] font-heading font-black uppercase leading-none whitespace-nowrap">
                                 NAVIGATE •
                             </span>
                         </div>
 
-                        <div className="flex justify-between items-center mb-10 md:mb-16 relative z-10">
-                            <span className="font-heading font-black text-2xl md:text-4xl uppercase tracking-tighter">THE CORE</span>
-                            <button onClick={() => setMobileOpen(false)} className="p-4 md:p-6 bg-black text-white brutalist-border shadow-[4px_4px_0px_#A855F7] md:shadow-[8px_8px_0px_#A855F7] hover:shadow-none active:translate-x-1 active:translate-y-1 transition-all">
-                                <X size={32} className="md:w-10 md:h-10" />
-                            </button>
-                        </div>
-
-                        <div className="space-y-4 md:space-y-6 relative z-10 scrollbar-hide overflow-y-auto pb-8">
-                            {navLinks.map((link, idx) => (
-                                <Link
-                                    key={link.name}
-                                    href={link.href}
+                        <div className="min-h-full flex flex-col justify-between p-6 sm:p-10 md:p-14 relative z-10">
+                            {/* Top header bar */}
+                            <div className="flex justify-between items-center mb-6 sm:mb-8 md:mb-12">
+                                <span className="font-heading font-black text-2xl md:text-4xl uppercase tracking-tighter">THE CORE</span>
+                                <button
                                     onClick={() => setMobileOpen(false)}
-                                    className="block group"
+                                    aria-label="Close navigation menu"
+                                    className="p-3 sm:p-4 md:p-5 bg-black text-white brutalist-border shadow-[4px_4px_0px_#A855F7] md:shadow-[6px_6px_0px_#A855F7] hover:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
                                 >
-                                    <motion.div
-                                        initial={{ opacity: 0, x: -50 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: 0.1 * idx }}
-                                        className="flex items-baseline gap-4 md:gap-8"
+                                    <X size={26} className="md:w-8 md:h-8" />
+                                </button>
+                            </div>
+
+                            {/* Nav Links - Responsive scalable typography with clean spacing */}
+                            <div className="space-y-3 sm:space-y-4 md:space-y-5 my-auto py-4 sm:py-6">
+                                {navLinks.map((link, idx) => (
+                                    <Link
+                                        key={link.name}
+                                        href={link.href}
+                                        onClick={() => setMobileOpen(false)}
+                                        className="block group"
                                     >
-                                        <span className="text-[10px] md:text-[12px] font-black opacity-40 uppercase tracking-[0.5em]">0{idx + 1}</span>
-                                        <span className="text-4xl md:text-9xl font-heading font-black uppercase leading-[0.85] tracking-tighter group-hover:text-primary transition-all duration-300 md:group-hover:translate-x-10">
-                                            {link.name}
-                                        </span>
-                                    </motion.div>
+                                        <motion.div
+                                            initial={{ opacity: 0, x: -40 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: 0.04 * idx }}
+                                            className="flex items-baseline gap-3 sm:gap-4 md:gap-6"
+                                        >
+                                            <span className="text-[10px] sm:text-xs font-mono font-black opacity-40 uppercase tracking-[0.3em]">
+                                                0{idx + 1}
+                                            </span>
+                                            <span className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-heading font-black uppercase leading-[0.9] tracking-tighter group-hover:text-primary transition-all duration-300 md:group-hover:translate-x-6">
+                                                {link.name}
+                                            </span>
+                                        </motion.div>
+                                    </Link>
+                                ))}
+                            </div>
+
+                            {/* Bottom CTA / Branding row */}
+                            <div className="pt-6 sm:pt-8 mt-auto grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-10 items-center border-t-2 border-black/10">
+                                <Link
+                                    href="/contact"
+                                    onClick={() => setMobileOpen(false)}
+                                    className="block w-full text-center py-4 sm:py-6 bg-accent brutalist-border shadow-[6px_6px_0px_#000] md:shadow-[10px_10px_0px_#000] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-sm sm:text-base md:text-xl hover:bg-white transition-all sticker-pulse"
+                                >
+                                    GET STARTED! 🔥
                                 </Link>
-                            ))}
-                        </div>
 
-                        <div className="mt-auto relative z-10 grid md:grid-cols-2 gap-6 md:gap-10 pb-8 md:pb-0 pt-4">
-                            <Link
-                                href="/contact"
-                                onClick={() => setMobileOpen(false)}
-                                className="block w-full text-center py-4 md:py-10 bg-accent brutalist-border shadow-[8px_8px_0px_#000] md:shadow-[12px_12px_0px_#000] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] text-base md:text-2xl hover:bg-white transition-all sticker-pulse"
-                            >
-                                GET STARTED! 🔥
-                            </Link>
-
-                            <div className="hidden md:flex flex-col justify-center">
-                                <p className="text-xs font-black uppercase leading-tight max-w-xs">
-                                    {"Creating customized digital marketing solutions for ambitious brands."}
-                                </p>
+                                <div className="hidden md:flex flex-col justify-center">
+                                    <p className="text-xs font-black uppercase leading-tight max-w-sm text-black/70">
+                                        Creating customized digital marketing solutions for ambitious brands.
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
                         {/* Kinetic Stickers in menu */}
                         <motion.div
-                            className="absolute top-1/4 right-1/4 -z-1"
+                            className="absolute top-1/4 right-1/4 -z-1 pointer-events-none"
                             animate={{ rotate: 360 }}
-                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
                         >
-                            <div className="w-64 h-64 border-[1px] border-black/10 rounded-full flex items-center justify-center">
-                                <Star size={100} className="text-black/5" />
+                            <div className="w-64 h-64 border border-black/10 rounded-full flex items-center justify-center">
+                                <Star size={90} className="text-black/5" />
                             </div>
                         </motion.div>
                     </motion.div>

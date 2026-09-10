@@ -218,9 +218,9 @@ export default function Testimonials() {
                                     />
                                 </div>
                                 <div>
-                                    <h4 className="font-heading font-black text-lg uppercase tracking-tighter leading-none mb-1 text-black">
+                                    <h3 className="font-heading font-black text-lg uppercase tracking-tighter leading-none mb-1 text-black">
                                         {test.name}
-                                    </h4>
+                                    </h3>
                                     <p className="text-[9px] font-black uppercase tracking-widest text-black/50">
                                         {test.role} {test.company ? `· ${test.company}` : ''}
                                     </p>

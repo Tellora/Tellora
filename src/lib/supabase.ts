@@ -152,7 +152,6 @@ export async function fetchTableData<T>(table: string, defaultValue: T): Promise
     try {
         const { data, error } = await supabase.from(table).select("*");
         if (error) {
-            console.error(`[Supabase] Error fetching ${table}:`, error);
             return defaultValue;
         }
         return (data as any) || defaultValue;

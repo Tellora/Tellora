@@ -383,15 +383,21 @@ export async function deleteTestimonial(id: string): Promise<void> {
 }
 
 export async function getClients(): Promise<{ name: string; logo_url: string }[]> {
-    return fetchTableData("clients", []);
+    return [];
 }
 
 export async function upsertClient(client: any): Promise<void> {
     await upsertTableData("clients", client);
 }
 
+const DEFAULT_COMPANY_STATS: CompanyStat[] = [
+    { value: "6.4X", label: "AVERAGE AD RETURN", color: "#A855F7" },
+    { value: "100%", label: "REVENUE GROWTH", color: "#22C55E" },
+    { value: "GLOBAL", label: "CLIENT REACH", color: "#F3E84A" }
+];
+
 export async function getCompanyStats(): Promise<CompanyStat[]> {
-    return fetchTableData("company_stats", []);
+    return DEFAULT_COMPANY_STATS;
 }
 
 export async function upsertCompanyStat(stat: CompanyStat): Promise<void> {
