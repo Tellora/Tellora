@@ -3,21 +3,13 @@
 import { motion } from "framer-motion";
 import React from "react";
 
-const SUPABASE_BASE = (process.env.NEXT_PUBLIC_SUPABASE_URL || "https://pteassendcvgngkkybjf.supabase.co") + "/storage/v1/object/public/reels/";
-
-const REEL_VIDEOS = [
-    `${SUPABASE_BASE}reel-01.mp4`,
-    `${SUPABASE_BASE}reel-02.mp4`,
-    `${SUPABASE_BASE}reel-03.mp4`,
-    `${SUPABASE_BASE}reel-04.mp4`,
-    `${SUPABASE_BASE}reel-05.mp4`,
-    `${SUPABASE_BASE}reel-06.mp4`,
-];
+// Optimized film frame indices
+const FILM_FRAMES = [1, 2, 3, 4, 5, 6];
 
 export default function PhysicalFilmReelBackground() {
     // Optimized 6-item track repeated for seamless infinite marquee loop without crushing browser hardware
-    const reelItemsTrack1 = [...REEL_VIDEOS, ...REEL_VIDEOS];
-    const reelItemsTrack2 = [...REEL_VIDEOS].reverse().concat([...REEL_VIDEOS].reverse());
+    const reelItemsTrack1 = [...FILM_FRAMES, ...FILM_FRAMES];
+    const reelItemsTrack2 = [...FILM_FRAMES].reverse().concat([...FILM_FRAMES].reverse());
 
     return (
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-45 sm:opacity-55 mix-blend-screen select-none">
@@ -36,9 +28,8 @@ export default function PhysicalFilmReelBackground() {
                     }}
                     className="flex gap-4 items-center whitespace-nowrap will-change-transform"
                 >
-                    {reelItemsTrack1.map((videoSrc, idx) => {
-                        // Only play live video stream on 2 key frames to save 95% GPU decode budget
-                        const shouldPlayVideo = idx === 0 || idx === 6;
+                    {reelItemsTrack1.map((frameNum, idx) => {
+                        const isFeatured = idx === 0 || idx === 6;
                         return (
                             <div
                                 key={`top-${idx}`}
@@ -57,29 +48,32 @@ export default function PhysicalFilmReelBackground() {
                                 {/* Film Frame Label */}
                                 <div className="absolute top-1 left-2 z-30 flex items-center gap-2">
                                     <span className="text-[8px] md:text-[10px] font-mono font-bold tracking-widest text-primary uppercase">
-                                        KODAK 35MM #0{(idx % 6) + 1}
+                                        KODAK 35MM #0{frameNum}
                                     </span>
                                 </div>
 
-                                {/* Masked Video Aperture */}
+                                {/* Masked Cinematic Aperture */}
                                 <div className="relative w-full aspect-[16/9] overflow-hidden bg-zinc-950 flex items-center justify-center">
-                                    {shouldPlayVideo ? (
-                                        <video
-                                            src={videoSrc}
-                                            className="w-[125%] h-[140%] max-w-none object-cover brightness-90 contrast-125 -translate-y-2 pointer-events-none"
-                                            autoPlay
-                                            muted
-                                            loop
-                                            playsInline
-                                            preload="metadata"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full bg-gradient-to-br from-zinc-900 via-black to-zinc-900 flex items-center justify-center">
-                                            <div className="text-[10px] font-mono font-bold text-white/20 uppercase tracking-widest">
-                                                TELLORA REEL #0{(idx % 6) + 1}
-                                            </div>
+                                    <div className={`w-full h-full flex flex-col items-center justify-center relative overflow-hidden transition-all ${
+                                        isFeatured 
+                                            ? "bg-gradient-to-br from-zinc-900 via-zinc-950 to-black" 
+                                            : "bg-gradient-to-br from-zinc-950 via-black to-zinc-950"
+                                    }`}>
+                                        {isFeatured && (
+                                            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/15 via-transparent to-transparent opacity-80" />
+                                        )}
+                                        <div className="flex items-center gap-2 z-10">
+                                            <span className={`w-1.5 h-1.5 rounded-full ${isFeatured ? "bg-primary animate-pulse" : "bg-white/20"}`} />
+                                            <span className={`text-[10px] md:text-[11px] font-mono font-black uppercase tracking-widest ${
+                                                isFeatured ? "text-primary" : "text-white/25"
+                                            }`}>
+                                                TELLORA REEL #0{frameNum}
+                                            </span>
                                         </div>
-                                    )}
+                                        <div className="text-[7px] md:text-[8px] font-mono text-white/20 uppercase tracking-widest mt-1 z-10">
+                                            CINEMA 4K · 24FPS RAW
+                                        </div>
+                                    </div>
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/70 pointer-events-none" />
                                     <div className="absolute inset-x-0 top-0 h-3 bg-black/60 pointer-events-none" />
                                     <div className="absolute inset-x-0 bottom-0 h-3 bg-black/60 pointer-events-none" />
@@ -111,8 +105,8 @@ export default function PhysicalFilmReelBackground() {
                     }}
                     className="flex gap-4 items-center whitespace-nowrap will-change-transform"
                 >
-                    {reelItemsTrack2.map((videoSrc, idx) => {
-                        const shouldPlayVideo = idx === 1 || idx === 7;
+                    {reelItemsTrack2.map((frameNum, idx) => {
+                        const isFeatured = idx === 1 || idx === 7;
                         return (
                             <div
                                 key={`bot-${idx}`}
@@ -128,25 +122,28 @@ export default function PhysicalFilmReelBackground() {
                                     ))}
                                 </div>
 
-                                {/* Masked Video Aperture */}
+                                {/* Masked Cinematic Aperture */}
                                 <div className="relative w-full aspect-[16/9] overflow-hidden bg-zinc-950 flex items-center justify-center">
-                                    {shouldPlayVideo ? (
-                                        <video
-                                            src={videoSrc}
-                                            className="w-[125%] h-[140%] max-w-none object-cover brightness-85 contrast-125 sepia-[0.25] -translate-y-2 pointer-events-none"
-                                            autoPlay
-                                            muted
-                                            loop
-                                            playsInline
-                                            preload="metadata"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full bg-gradient-to-tr from-black via-zinc-900 to-black flex items-center justify-center">
-                                            <div className="text-[10px] font-mono font-bold text-white/20 uppercase tracking-widest">
-                                                TELLORA REEL #0{(idx % 6) + 1}
-                                            </div>
+                                    <div className={`w-full h-full flex flex-col items-center justify-center relative overflow-hidden transition-all ${
+                                        isFeatured 
+                                            ? "bg-gradient-to-tr from-zinc-900 via-zinc-950 to-black" 
+                                            : "bg-gradient-to-tr from-black via-zinc-900 to-black"
+                                    }`}>
+                                        {isFeatured && (
+                                            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/15 via-transparent to-transparent opacity-80" />
+                                        )}
+                                        <div className="flex items-center gap-2 z-10">
+                                            <span className={`w-1.5 h-1.5 rounded-full ${isFeatured ? "bg-accent animate-pulse" : "bg-white/20"}`} />
+                                            <span className={`text-[10px] md:text-[11px] font-mono font-black uppercase tracking-widest ${
+                                                isFeatured ? "text-accent" : "text-white/25"
+                                            }`}>
+                                                TELLORA REEL #0{frameNum}
+                                            </span>
                                         </div>
-                                    )}
+                                        <div className="text-[7px] md:text-[8px] font-mono text-white/20 uppercase tracking-widest mt-1 z-10">
+                                            COLOR GRADE · LOG C
+                                        </div>
+                                    </div>
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/70 pointer-events-none" />
                                 </div>
 

@@ -36,6 +36,7 @@ const TAGS = ["All", "BTS", "Studio", "Strategy", "Case Study", "Production", "T
 
 export default function ReelsSection() {
     const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
+    const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
     const [activeTag, setActiveTag] = useState("All");
     const [isMuted, setIsMuted] = useState(true);
     const [allReels, setAllReels] = useState<any[]>(staticReels);
@@ -143,24 +144,29 @@ export default function ReelsSection() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: idx * 0.05 }}
+                        onMouseEnter={() => setHoveredIdx(idx)}
+                        onMouseLeave={() => setHoveredIdx(null)}
                         onClick={() => setSelectedIdx(idx)}
-                        className="group flex-shrink-0 snap-center w-[240px] sm:w-[320px] md:w-[400px] aspect-[9/16] rounded-[2rem] sm:rounded-[3rem] md:rounded-[4rem] overflow-hidden relative cursor-pointer border-[3px] sm:border-[4px] border-white/5 hover:border-primary/50 transition-all duration-700 shadow-2xl hover:shadow-primary/20 hover:-translate-y-2 sm:hover:-translate-y-4"
+                        className="group flex-shrink-0 snap-center w-[240px] sm:w-[320px] md:w-[400px] aspect-[9/16] rounded-[2rem] sm:rounded-[3rem] md:rounded-[4rem] overflow-hidden relative cursor-pointer border-[3px] sm:border-[4px] border-white/5 hover:border-primary/50 transition-all duration-700 shadow-2xl hover:shadow-primary/20 hover:-translate-y-2 sm:hover:-translate-y-4 bg-zinc-950"
                     >
-                        <video 
-                            src={reel.src}
-                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100 opacity-70 group-hover:opacity-100 pointer-events-none"
-                            muted playsInline loop
-                            preload="none"
-                            onMouseEnter={(e) => {
-                                const playPromise = e.currentTarget.play();
-                                if (playPromise !== undefined) {
-                                    playPromise.catch(() => {});
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.pause();
-                            }}
-                        />
+                        {hoveredIdx === idx ? (
+                            <video 
+                                src={reel.src}
+                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100 opacity-90 group-hover:opacity-100 pointer-events-none"
+                                autoPlay
+                                muted
+                                playsInline
+                                loop
+                            />
+                        ) : (
+                            <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-zinc-900 via-black to-zinc-950 p-6 relative overflow-hidden">
+                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(168,85,247,0.15),transparent_70%)]" />
+                                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-white/10 bg-white/5 flex items-center justify-center backdrop-blur-sm group-hover:scale-110 group-hover:border-primary/40 transition-all duration-500">
+                                    <Play size={28} className="text-white/40 group-hover:text-primary transition-colors ml-1" fill="currentColor" />
+                                </div>
+                                <span className="mt-4 text-[10px] font-mono tracking-widest uppercase text-white/30 font-bold group-hover:text-primary/70 transition-colors">Hover To Preview</span>
+                            </div>
+                        )}
                         
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent p-5 sm:p-8 md:p-10 flex flex-col justify-end">
                             <div className="flex items-center gap-2 mb-3 sm:mb-6 bg-white/10 backdrop-blur-md w-fit px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-white/10">
