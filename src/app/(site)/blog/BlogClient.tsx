@@ -75,7 +75,7 @@ export default function BlogPage() {
                     subtitle="Deep dives into the strategies, technologies, and data-points driving the world's fastest growing digital brands."
                 />
 
-                <section className="py-24 bg-white">
+                <section className="py-12 md:py-16 bg-white">
                     <div className="container mx-auto px-4 md:px-6">
                         
                         {/* Search & Filter */}
@@ -201,7 +201,7 @@ export default function BlogPage() {
                                 </div>
                             </>
                         ) : (
-                            <div className="py-40 text-center">
+                            <div className="py-16 text-center">
                                 <Search size={64} className="mx-auto text-slate-100 mb-8" />
                                 <h3 className="text-3xl font-black uppercase tracking-tight text-slate-300">No results found for "{searchQuery}"</h3>
                                 <button 

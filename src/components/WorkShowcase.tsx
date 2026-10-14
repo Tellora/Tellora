@@ -41,12 +41,12 @@ export default function WorkShowcase() {
     const yTitle = useTransform(scrollYProgress, [0, 1], [80, -80]);
 
     return (
-        <section ref={containerRef} id="showcase" className="py-32 relative z-10 bg-background border-t-[6px] border-black overflow-hidden gpu-accelerated">
+        <section ref={containerRef} id="showcase" className="py-12 md:py-20 relative z-10 bg-background border-t-[6px] border-black overflow-hidden gpu-accelerated">
             {/* Optimized Background Pattern */}
             <div className="absolute top-0 right-0 w-[400px] h-full bg-transparent halftone-overlay opacity-5 pointer-events-none" />
 
             <div className="container mx-auto px-6 relative z-10">
-                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end mb-24 gap-12">
+                <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end mb-10 md:mb-14 gap-8">
                     <motion.div style={{ y: yTitle }} className="relative">
                         <div className="inline-flex items-center gap-4 px-6 py-2 bg-black text-white brutalist-border rounded-full rotate-[-1deg] mb-8 shadow-[6px_6px_0px_#A855F7]">
                             <Trophy size={14} className="text-primary" />
@@ -126,7 +126,7 @@ export default function WorkShowcase() {
                     </AnimatePresence>
                 </div>
 
-                <div className="mt-24 flex justify-center">
+                <div className="mt-12 flex justify-center">
                     <Link href="/case-studies">
                         <button className="group flex items-center gap-4 md:gap-8 bg-black text-white brutalist-border px-8 md:px-16 py-4 md:py-8 shadow-[6px_6px_0px_#4AC0E4] md:shadow-[10px_10px_0px_#4AC0E4] hover:shadow-[15px_15px_0px_#4AC0E4] hover:-translate-y-2 transition-all">
                             <span className="text-[10px] md:text-sm font-black uppercase tracking-widest">Explore Portfolio</span>

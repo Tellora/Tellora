@@ -50,7 +50,7 @@ export default function Pricing() {
     const yTitle = useTransform(scrollYProgress, [0, 1], [80, -80]);
 
     return (
-        <section ref={containerRef} id="pricing" className="py-24 md:py-48 relative z-10 bg-background border-t-[8px] border-black overflow-hidden">
+        <section ref={containerRef} id="pricing" className="py-12 md:py-24 relative z-10 bg-background border-t-[8px] border-black overflow-hidden">
             {/* Background Marquee with Custom Texture */}
             <div className="absolute top-1/2 left-0 w-full opacity-5 pointer-events-none -translate-y-1/2 rotate-12 flex justify-center overflow-hidden">
                 <motion.div

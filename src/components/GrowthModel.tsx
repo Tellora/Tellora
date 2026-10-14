@@ -54,7 +54,7 @@ export default function GrowthModel() {
     const xMarquee = useTransform(scrollYProgress, [0, 1], [-300, 300]);
 
     return (
-        <section ref={containerRef} id="framework" className="py-20 md:py-32 relative z-10 bg-black text-white overflow-hidden">
+        <section ref={containerRef} id="framework" className="py-20 md:py-20 relative z-10 bg-black text-white overflow-hidden">
             {/* Background Marquee */}
             <div className="absolute top-1/2 left-0 w-full opacity-5 pointer-events-none -translate-y-1/2 -rotate-6">
                 <motion.div style={{ x: xMarquee }}>

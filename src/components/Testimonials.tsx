@@ -123,12 +123,12 @@ export default function Testimonials() {
     };
 
     return (
-        <section ref={containerRef} id="testimonials" className="py-24 md:py-40 relative z-10 bg-background border-y-[4px] border-black overflow-hidden">
+        <section ref={containerRef} id="testimonials" className="py-12 md:py-20 relative z-10 bg-background border-y-[4px] border-black overflow-hidden">
             {/* Ambient Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
             <div className="container mx-auto px-4 sm:px-6 relative z-10">
-                <motion.div style={{ y: yTitle }} className="text-center max-w-4xl mx-auto mb-12 md:mb-20">
+                <motion.div style={{ y: yTitle }} className="text-center max-w-4xl mx-auto mb-8 md:mb-12">
                     {/* Google Rating Badge */}
                     <div className="inline-flex items-center gap-3 mb-6 px-6 py-2 bg-black text-white brutalist-border rounded-full rotate-1 shadow-[4px_4px_0px_#22C55E]">
                         <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
@@ -174,7 +174,7 @@ export default function Testimonials() {
                 {/* Horizontal Scroll Rail of Google Reviews */}
                 <div
                     ref={scrollRef}
-                    className="flex gap-6 overflow-x-auto pb-12 pt-2 px-2 snap-x snap-mandatory scrollbar-hide"
+                    className="flex gap-6 overflow-x-auto pb-6 pt-2 px-2 snap-x snap-mandatory scrollbar-hide"
                 >
                     {ACTUAL_GOOGLE_REVIEWS.map((test, idx) => (
                         <motion.div

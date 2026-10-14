@@ -21,7 +21,7 @@ export default function FAQ() {
     if (loading || faqs.length === 0) return null;
 
     return (
-        <section className="py-32 relative z-10 bg-background border-t-[4px] border-black overflow-hidden">
+        <section className="py-12 md:py-20 relative z-10 bg-background border-t-[4px] border-black overflow-hidden">
             {/* Background Marquee */}
             <div className="absolute top-1/2 left-0 w-full opacity-5 pointer-events-none -translate-y-1/2 rotate-3">
                 <span className="text-[25rem] font-heading font-black uppercase whitespace-nowrap">
@@ -30,7 +30,7 @@ export default function FAQ() {
             </div>
 
             <div className="container mx-auto px-6 max-w-5xl relative z-10">
-                <div className="text-center mb-24">
+                <div className="text-center mb-10 md:mb-14">
                     <div className="inline-flex items-center gap-4 mb-8 px-6 py-2 bg-black text-white brutalist-border rounded-full -rotate-1 shadow-[4px_4px_0px_#A855F7]">
                         <HelpCircle size={14} className="text-primary fill-current" />
                         <span className="font-black uppercase tracking-widest text-[10px]">HELP & FAQ</span>

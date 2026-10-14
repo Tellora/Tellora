@@ -54,7 +54,7 @@ export default function Process() {
         <section
             ref={containerRef}
             id="process"
-            className="py-20 md:py-32 relative z-10 bg-background border-y-[4px] border-black overflow-hidden"
+            className="py-12 md:py-20 relative z-10 bg-background border-y-[4px] border-black overflow-hidden"
         >
             {/* Background Marquee */}
             <div className="absolute top-1/2 left-0 w-full opacity-5 pointer-events-none -translate-y-1/2 -rotate-3">
@@ -68,7 +68,7 @@ export default function Process() {
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
-                <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-10">
+                <div className="mb-10 md:mb-14 flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <motion.div style={{ y: yTitle }} className="max-w-2xl">
                         <div className="inline-flex items-center gap-4 mb-6 px-6 py-2 bg-black text-white brutalist-border rounded-full rotate-2 shadow-[4px_4px_0px_#A855F7]">
                             <Zap size={14} className="text-primary fill-current" />

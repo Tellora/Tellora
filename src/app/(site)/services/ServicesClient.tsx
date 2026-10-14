@@ -139,7 +139,7 @@ export default function ServicesPage() {
                     subtitle="We showcase custom marketing and growth solutions tailored to your unique business challenges."
                 />
 
-                <section className="py-24 relative bg-background">
+                <section className="py-12 md:py-16 relative bg-background">
                     <div className="container mx-auto px-6">
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
                             {services.map((service, i) => (
@@ -191,7 +191,7 @@ export default function ServicesPage() {
 
                 <ScrollLine />
 
-                <section className="py-64 relative bg-black text-white">
+                <section className="py-20 md:py-24 relative bg-black text-white">
                     <div className="absolute inset-0 noise-overlay opacity-10 pointer-events-none" />
                     <div className="container mx-auto px-6 text-center relative z-10">
                         <div className="flex flex-col items-center">

@@ -116,7 +116,7 @@ export default function ReelsSection() {
     }, [selectedIdx, filtered.length]);
 
     return (
-        <section id="reels" className="relative z-10 py-16 sm:py-24 md:py-40 bg-black text-white overflow-hidden border-t-[4px] border-black">
+        <section id="reels" className="relative z-10 py-12 sm:py-16 md:py-24 bg-black text-white overflow-hidden border-t-[4px] border-black">
             {/* Immersive Background Marquee */}
             <div className="absolute top-[30%] left-0 w-full overflow-hidden pointer-events-none opacity-[0.05] -rotate-3 z-0">
                 <motion.div 
@@ -132,7 +132,7 @@ export default function ReelsSection() {
                 </motion.div>
             </div>
 
-            <div className="container mx-auto px-4 sm:px-6 relative z-10 mb-12 sm:mb-20 md:mb-32">
+            <div className="container mx-auto px-4 sm:px-6 relative z-10 mb-8 sm:mb-12 md:mb-16">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 md:gap-12">
                     <div className="max-w-4xl">
                         <div className="inline-flex items-center gap-2.5 px-4 py-1.5 sm:px-6 sm:py-2 bg-primary text-black brutalist-border rounded-full rotate-2 mb-4 sm:mb-8 shadow-[3px_3px_0px_#FFF] sm:shadow-[4px_4px_0px_#FFF]">
@@ -165,7 +165,7 @@ export default function ReelsSection() {
             </div>
 
             {/* Cinematic Scroll Rail */}
-            <div ref={scrollRef} className="flex gap-4 sm:gap-8 md:gap-12 overflow-x-auto pb-12 sm:pb-20 px-4 sm:px-8 md:px-24 snap-x snap-mandatory scrollbar-hide relative z-10">
+            <div ref={scrollRef} className="flex gap-4 sm:gap-8 md:gap-12 overflow-x-auto pb-8 sm:pb-12 px-4 sm:px-8 md:px-24 snap-x snap-mandatory scrollbar-hide relative z-10">
                 {filtered.map((reel, idx) => (
                     <motion.div
                         key={reel.id}

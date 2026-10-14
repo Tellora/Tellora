@@ -73,7 +73,7 @@ export default function ROICalculator() {
     };
 
     return (
-        <section ref={containerRef} id="roi-calculator" className="py-20 md:py-40 relative z-10 bg-[#0A0A0A] text-white overflow-hidden border-t-[4px] border-black">
+        <section ref={containerRef} id="roi-calculator" className="py-20 md:py-20 relative z-10 bg-[#0A0A0A] text-white overflow-hidden border-t-[4px] border-black">
             {/* Terminal Grid Background */}
             <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]" />
             

@@ -38,7 +38,7 @@ export default function Home() {
                 </section>
 
                 {/* Massive Statement with Dynamic Text */}
-                <section data-chapter="Mission" className="py-20 md:py-64 bg-black text-white relative flex items-center justify-center overflow-hidden">
+                <section data-chapter="Mission" className="py-14 md:py-32 bg-black text-white relative flex items-center justify-center overflow-hidden">
                     {/* Background noise texture */}
                     <div className="absolute inset-0 noise-overlay opacity-30 mix-blend-overlay pointer-events-none" />
 
@@ -88,7 +88,7 @@ export default function Home() {
                             className="max-w-7xl mx-auto text-center font-heading font-black !text-[2.5rem] sm:!text-[3.5rem] md:!text-8xl !tracking-tight !leading-[1] uppercase underline decoration-primary decoration-[4px] md:decoration-[8px] underline-offset-4 md:underline-offset-8"
                         />
 
-                        <div className="flex justify-center mt-16 md:mt-32">
+                        <div className="flex justify-center mt-10 md:mt-16">
                             <Link href="/about" className="bg-white brutalist-border px-8 py-4 rotate-2 shadow-[4px_4px_0px_#000] hover:rotate-0 transition-transform cursor-pointer group">
                                 <span className="text-xs font-black uppercase tracking-widest group-hover:text-primary transition-colors text-black">Learn Our Secret Sauce</span>
                             </Link>

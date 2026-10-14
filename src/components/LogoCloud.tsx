@@ -22,10 +22,10 @@ export default function LogoCloud() {
     return (
         <section
             id="partners"
-            className="relative z-10 py-20 md:py-32 overflow-hidden bg-background border-y-[4px] border-black"
+            className="relative z-10 py-12 md:py-20 overflow-hidden bg-background border-y-[4px] border-black"
         >
             {/* ── Section heading ── */}
-            <div className="container mx-auto px-6 relative z-10 mb-12 md:mb-20 text-center">
+            <div className="container mx-auto px-6 relative z-10 mb-8 md:mb-12 text-center">
                 <div className="inline-flex items-center gap-3 px-4 md:px-6 py-2 bg-white brutalist-border rounded-full rotate-2 mb-6 md:mb-8 shadow-[4px_4px_0px_#000]">
                     <Award className="text-primary w-4 h-4 md:w-4 md:h-4" />
                     <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest">Industry Disruptors</span>
@@ -61,7 +61,7 @@ export default function LogoCloud() {
             </div>
 
             {/* ─── Partner CTA card ─── */}
-            <div className="container mx-auto px-6 mt-20 md:mt-32 relative z-10">
+            <div className="container mx-auto px-6 mt-10 md:mt-16 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}

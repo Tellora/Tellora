@@ -163,7 +163,7 @@ export default function CaseStudiesPage() {
                     </div>
                 </section>
 
-                <section className="py-32 relative z-10">
+                <section className="py-14 md:py-20 relative z-10">
                     <div className="container mx-auto px-6">
                         <div className="space-y-40 md:space-y-64">
                             <AnimatePresence mode="wait">
@@ -176,11 +176,11 @@ export default function CaseStudiesPage() {
                 </section>
 
                 <ScrollLine />
-                <div className="py-32 relative overflow-hidden bg-white">
+                <div className="py-14 md:py-20 relative overflow-hidden bg-white">
                     <ParallaxText text="PROVEN RELIABILITY • MEASURABLE ROI • SCALABLE SOLUTIONS •" baseVelocity={-20} />
                 </div>
 
-                <section className="py-64 relative overflow-hidden bg-black text-white text-center">
+                <section className="py-20 md:py-24 relative overflow-hidden bg-black text-white text-center">
                     <div className="absolute inset-0 noise-overlay opacity-10 pointer-events-none" />
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}

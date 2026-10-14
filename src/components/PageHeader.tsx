@@ -6,7 +6,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export function PageHeader({ title, subtitle, breadcrumb }: { title: string, subtitle?: string, breadcrumb?: string }) {
     return (
-        <section className="relative pt-36 sm:pt-44 md:pt-64 pb-16 md:pb-32 overflow-hidden bg-white border-b-[4px] border-black">
+        <section className="relative pt-32 sm:pt-40 md:pt-48 pb-10 md:pb-16 overflow-hidden bg-white border-b-[4px] border-black">
             {/* Background Decorative Marquee (Subtle) */}
             <div className="absolute top-1/2 left-0 w-full opacity-[0.03] pointer-events-none -translate-y-1/2 rotate-2">
                 <span className="text-[9rem] md:text-[20rem] font-heading font-black uppercase whitespace-nowrap">
@@ -66,7 +66,7 @@ export function PageHeader({ title, subtitle, breadcrumb }: { title: string, sub
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
                         transition={{ delay: 0.4, duration: 0.8 }}
-                        className="h-[6px] w-32 bg-primary brutalist-border shadow-[4px_4px_0px_#000] mx-auto mt-10 md:mt-20"
+                        className="h-[6px] w-32 bg-primary brutalist-border shadow-[4px_4px_0px_#000] mx-auto mt-8 md:mt-12"
                     />
                 </div>
             </div>

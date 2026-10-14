@@ -10,7 +10,7 @@ export default function CTA() {
     const y = useTransform(scrollYProgress, [0, 1], [-40, 40]);
 
     return (
-        <section ref={ref} className="py-32 relative z-10 bg-background border-t-[4px] border-black overflow-hidden">
+        <section ref={ref} className="py-12 md:py-20 relative z-10 bg-background border-t-[4px] border-black overflow-hidden">
             {/* Massive Background Text */}
             <div className="absolute top-1/2 left-0 w-full opacity-5 pointer-events-none -translate-y-1/2 -rotate-6">
                 <span className="text-[30rem] font-heading font-black uppercase whitespace-nowrap">
@@ -53,7 +53,7 @@ export default function CTA() {
                             <span className="italic">IGNITE?</span>
                         </h2>
 
-                        <p className="text-xl md:text-3xl font-black text-black uppercase leading-tight mb-16 max-w-3xl mx-auto">
+                        <p className="text-xl md:text-3xl font-black text-black uppercase leading-tight mb-8 md:mb-10 max-w-3xl mx-auto">
                             Stop wasting budget on strategies that don&apos;t scale. Build a predictable engine for massive revenue impact.
                         </p>
 

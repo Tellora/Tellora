@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 
 export default function Footer() {
     return (
-        <footer id="contact" className="relative z-10 pt-48 pb-16 bg-background text-black border-t-[8px] border-black overflow-hidden selection:bg-black selection:text-white">
+        <footer id="contact" className="relative z-10 pt-16 md:pt-24 pb-10 bg-background text-black border-t-[8px] border-black overflow-hidden selection:bg-black selection:text-white">
             {/* Custom Background Patterning */}
             <div className="absolute top-0 right-0 w-[800px] h-full bg-black/[0.03] halftone-overlay pointer-events-none" />
 
@@ -19,7 +19,7 @@ export default function Footer() {
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
-                <div className="grid lg:grid-cols-2 gap-32 xl:gap-40 mb-40 items-start">
+                <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 mb-16 md:mb-20 items-start">
                     {/* Left side: Personalized CTA */}
                     <div className="max-w-2xl relative">
                         <div className="inline-flex items-center gap-4 px-10 py-3 bg-black text-white brutalist-border rounded-full rotate-[-3deg] mb-12 shadow-[12px_12px_0px_#A855F7] hover:rotate-0 transition-transform cursor-help group">

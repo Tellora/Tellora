@@ -11,7 +11,7 @@ export function SectionHeader({ title, subtitle, number }: { title: string, subt
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
-        <div ref={ref} className="relative mb-14 md:mb-32">
+        <div ref={ref} className="relative mb-10 md:mb-16">
             {number && (
                 <div className="absolute -top-10 left-0 md:-top-12 md:-left-6 bg-black text-white brutalist-border px-6 py-2 rotate-6 z-20 shadow-[6px_6px_0px_#4AC0E4]">
                     <span className="text-3xl font-heading font-black italic">{number}</span>
@@ -46,7 +46,7 @@ export function SectionHeader({ title, subtitle, number }: { title: string, subt
                     whileInView={{ width: "200px" }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.5, duration: 1, ease: "circOut" }}
-                    className="h-[6px] mt-12 bg-black brutalist-border shadow-[4px_4px_0px_#4AC0E4]"
+                    className="h-[6px] mt-6 bg-black brutalist-border shadow-[4px_4px_0px_#4AC0E4]"
                 />
             </div>
         </div>
@@ -119,7 +119,7 @@ export function ScrollLine({ className }: { className?: string }) {
 
 export function ScrollConnector() {
     return (
-        <div className="relative h-40 flex justify-center items-center overflow-hidden">
+        <div className="relative h-16 md:h-24 flex justify-center items-center overflow-hidden">
             <div className="w-[4px] h-full bg-black relative">
                 <motion.div
                     className="absolute top-0 left-0 w-full h-1/2 bg-primary select-none pointer-events-none"
