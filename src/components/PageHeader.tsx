@@ -6,10 +6,10 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export function PageHeader({ title, subtitle, breadcrumb }: { title: string, subtitle?: string, breadcrumb?: string }) {
     return (
-        <section className="relative pt-64 pb-32 overflow-hidden bg-white border-b-[4px] border-black">
+        <section className="relative pt-36 sm:pt-44 md:pt-64 pb-16 md:pb-32 overflow-hidden bg-white border-b-[4px] border-black">
             {/* Background Decorative Marquee (Subtle) */}
             <div className="absolute top-1/2 left-0 w-full opacity-[0.03] pointer-events-none -translate-y-1/2 rotate-2">
-                <span className="text-[20rem] font-heading font-black uppercase whitespace-nowrap">
+                <span className="text-[9rem] md:text-[20rem] font-heading font-black uppercase whitespace-nowrap">
                     {title} • {title} • {title} •
                 </span>
             </div>
@@ -21,7 +21,7 @@ export function PageHeader({ title, subtitle, breadcrumb }: { title: string, sub
                         <motion.div
                             initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
                             animate={{ opacity: 1, scale: 1, rotate: 2 }}
-                            className="bg-black text-white px-6 py-2 brutalist-border rounded-full mb-12 shadow-[4px_4px_0px_#4AC0E4] flex items-center gap-3"
+                            className="bg-black text-white px-6 py-2 brutalist-border rounded-full mb-8 md:mb-12 shadow-[4px_4px_0px_#4AC0E4] flex items-center gap-3"
                         >
                             <Sparkles size={14} className="text-primary fill-current" />
                             <span className="font-black tracking-[0.3em] uppercase text-[10px]">
@@ -30,11 +30,11 @@ export function PageHeader({ title, subtitle, breadcrumb }: { title: string, sub
                         </motion.div>
                     )}
 
-                    <div className="relative mb-12">
+                    <div className="relative mb-8 md:mb-12 max-w-full">
                         <motion.h1
                             initial={{ opacity: 0, y: 40 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-5xl sm:text-7xl md:text-[10rem] font-heading font-black text-black leading-none tracking-tighter uppercase text-center"
+                            className="text-[2.6rem] sm:text-7xl md:text-[10rem] break-words max-w-full font-heading font-black text-black leading-none tracking-tighter uppercase text-center"
                         >
                             {title}
                         </motion.h1>
@@ -66,7 +66,7 @@ export function PageHeader({ title, subtitle, breadcrumb }: { title: string, sub
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
                         transition={{ delay: 0.4, duration: 0.8 }}
-                        className="h-[6px] w-32 bg-primary brutalist-border shadow-[4px_4px_0px_#000] mx-auto mt-20"
+                        className="h-[6px] w-32 bg-primary brutalist-border shadow-[4px_4px_0px_#000] mx-auto mt-10 md:mt-20"
                     />
                 </div>
             </div>

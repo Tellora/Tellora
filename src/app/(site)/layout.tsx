@@ -8,6 +8,7 @@ import { BackToTop } from "@/components/BackToTop";
 import { FloatingElement } from "@/components/animations/ScrollChoreography";
 import { Star, Cpu, Activity } from "lucide-react";
 import { motion } from "framer-motion";
+import { MobileDock } from "@/components/MobileDock";
 import SecretAdminAccess from "@/components/SecretAdminAccess";
 import { SEO_CONFIG } from "@/lib/seo";
 
@@ -36,7 +37,7 @@ export default function SiteLayout({
     };
 
     return (
-        <div className="bg-background text-foreground noise-overlay overflow-x-hidden min-h-screen relative selection:bg-black selection:text-white">
+        <div className="bg-background text-foreground noise-overlay overflow-x-hidden min-h-screen relative pb-[calc(56px+env(safe-area-inset-bottom))] md:pb-0 selection:bg-black selection:text-white">
             <meta name="google-site-verification" content="INSERT_GSC_VERIFICATION_TAG_HERE" />
             <script
                 type="application/ld+json"
@@ -70,6 +71,7 @@ export default function SiteLayout({
 
                 <BackToTop />
             </SmoothScroll>
+            <MobileDock />
 
             {/* ── Optimized Custom Command HUD ── */}
             <div className="fixed bottom-12 right-12 z-[400] hidden xl:block pointer-events-auto gpu-accelerated">
@@ -120,7 +122,7 @@ export default function SiteLayout({
             </div>
 
             {/* Architectural Frame - GPU Optimized */}
-            <div className="fixed inset-0 border-[12px] border-black/5 pointer-events-none z-[300] gpu-accelerated translate-z-0" />
+            <div className="fixed inset-0 border-[4px] md:border-[12px] border-black/5 pointer-events-none z-[300] gpu-accelerated translate-z-0" />
         </div>
     );
 }
