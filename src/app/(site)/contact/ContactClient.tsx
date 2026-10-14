@@ -57,7 +57,7 @@ export default function ContactPage() {
                     subtitle="Ready to scale? We're currently taking on 2 new high-growth partners this month. Connect with our team below."
                 />
 
-                <section className="py-24 relative z-10 bg-white">
+                <section className="py-12 md:py-16 relative z-10 bg-white">
                     <div className="container mx-auto px-4 md:px-6">
                         <div className="grid lg:grid-cols-12 gap-16">
                             {/* Contact Sidebar */}
@@ -148,7 +148,7 @@ export default function ContactPage() {
                 </section>
 
 
-                <section className="py-32 bg-white">
+                <section className="py-14 md:py-20 bg-white">
                     <div className="container mx-auto px-4 max-w-4xl">
                         <div className="text-center mb-20">
                             <h2 className="text-4xl md:text-6xl font-heading font-black text-text-main mb-6 uppercase tracking-widest">Growth FAQ</h2>
@@ -181,7 +181,7 @@ export default function ContactPage() {
                     </div>
                 </section>
 
-                <section className="py-32 bg-text-main relative overflow-hidden group">
+                <section className="py-14 md:py-20 bg-text-main relative overflow-hidden group">
                     <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
                     <div className="container mx-auto px-4 text-center relative z-10">
                         <div className="inline-flex items-center gap-3 px-8 py-3 rounded-full bg-white/5 border border-white/10 mb-12 backdrop-blur-xl">

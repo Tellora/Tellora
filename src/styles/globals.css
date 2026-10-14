@@ -24,6 +24,29 @@
 
     html {
         -webkit-overflow-scrolling: touch;
+        -webkit-text-size-adjust: 100%;
+        scroll-padding-top: 6rem;
+    }
+
+    /* Touch ergonomics: no grey tap flash, no double-tap zoom delay, 16px inputs stop iOS zoom */
+    a, button, [role="button"] {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    @media (max-width: 767px) {
+        input, select, textarea {
+            font-size: 16px !important;
+        }
+        img, video, svg {
+            max-width: 100%;
+        }
+    }
+
+    /* Keyboard focus ring in brand colours */
+    :focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
     }
 
     body {
@@ -330,4 +353,28 @@
 
 .animate-marquee:hover {
     animation-play-state: paused;
+}
+
+/* Phones: slimmer chrome, lighter shadows so layouts breathe */
+@media (max-width: 767px) {
+    .brutalist-card { box-shadow: 5px 5px 0 0 var(--foreground); }
+    .brutalist-card:hover { transform: none; box-shadow: 5px 5px 0 0 var(--foreground); }
+    .brutalist-shadow-large { box-shadow: 8px 8px 0 0 var(--foreground); }
+    .animate-marquee { animation-duration: 22s; }
+}
+
+/* Touch devices have no hover: hide the custom cursor artefacts */
+@media (hover: none) {
+    .brutalist-card:hover { transform: none; }
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    .animate-marquee, .animate-marquee-slow { animation: none; }
 }

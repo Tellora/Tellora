@@ -144,7 +144,7 @@ export default function CareersClient() {
                 <div className="absolute bottom-1/4 -right-20 w-[600px] h-[600px] bg-accent/20 rounded-full blur-[120px] animate-pulse delay-700" />
             </div>
 
-            <div className="relative z-10 pt-32 md:pt-64 pb-20 md:pb-32 text-white">
+            <div className="relative z-10 pt-32 md:pt-48 pb-20 md:pb-16 text-white">
                 {/* Hero section */}
                 <section className="container mx-auto px-6 mb-24 md:mb-48">
                     <div className="max-w-7xl mx-auto">

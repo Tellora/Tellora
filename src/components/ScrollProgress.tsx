@@ -16,7 +16,7 @@ export function ScrollProgress() {
     const rotate = useTransform(scrollYProgress, [0, 1], [0, 15]);
 
     return (
-        <div className="fixed top-0 left-0 right-0 h-6 bg-white border-b-[4px] border-black z-[9999] overflow-hidden flex items-center">
+        <div className="fixed top-0 left-0 right-0 h-2 md:h-6 bg-white border-b-[3px] md:border-b-[4px] border-black z-[9999] overflow-hidden flex items-center">
             <motion.div
                 className="h-full bg-primary brutalist-border-r flex items-center justify-end px-4"
                 style={{ width: "100%", scaleX, originX: 0 }}
@@ -31,7 +31,7 @@ export function ScrollProgress() {
                 </motion.div>
             </motion.div>
 
-            <div className="absolute right-6 pointer-events-none">
+            <div className="absolute right-6 pointer-events-none hidden md:block">
                 <span className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Architecting Future</span>
             </div>
         </div>

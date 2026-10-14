@@ -67,7 +67,7 @@ export default function Services() {
     const xMarquee = useTransform(scrollYProgress, [0, 1], [100, -300]);
 
     return (
-        <section ref={containerRef} id="services" className="py-20 md:py-32 relative z-10 bg-background overflow-hidden border-t-[4px] border-black">
+        <section ref={containerRef} id="services" className="py-12 md:py-20 relative z-10 bg-background overflow-hidden border-t-[4px] border-black">
             {/* Background Marquee */}
             <div className="absolute top-1/2 left-0 w-full opacity-[0.02] mix-blend-overlay pointer-events-none select-none -translate-y-1/2 z-0 overflow-hidden">
                 <motion.div
@@ -80,7 +80,7 @@ export default function Services() {
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
-                <div className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-10">
+                <div className="mb-10 md:mb-14 flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <motion.div style={{ y: yTitle }} className="max-w-3xl">
                         <div className="inline-flex items-center gap-4 mb-6 px-4 md:px-6 py-2 bg-black text-white brutalist-border rounded-full -rotate-2">
                             <Zap size={14} className="text-primary fill-current w-3 h-3 md:w-4 md:h-4" />

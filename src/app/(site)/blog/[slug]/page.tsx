@@ -90,7 +90,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                     image: post.image_url,
                 }} 
             />
-            <main className="pt-40 pb-32 container mx-auto px-6">
+            <main className="pt-40 pb-16 container mx-auto px-6">
                 <article className="max-w-4xl mx-auto space-y-12 mb-32">
                     <header className="space-y-8 text-center border-b-[4px] border-black pb-12">
                         <h1 className="text-5xl md:text-8xl font-black tracking-tighter uppercase italic leading-[0.9]">

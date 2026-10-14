@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
-import { ParallaxText, FloatingElement, ScrollLine, ScrollConnector } from "@/components/animations/ScrollChoreography";
+import { ParallaxText, FloatingElement, ScrollLine, ScrollConnector, VelocityMarquee, StickerSlap, ChapterRail } from "@/components/animations/ScrollChoreography";
 import { ScrollWordReveal } from "@/components/animations/ScrollWordReveal";
 import { Star } from "lucide-react";
 import Link from "next/link";
@@ -28,16 +28,17 @@ export default function Home() {
             <div className="fixed inset-0 z-0 noise-overlay opacity-[0.05] pointer-events-none" />
 
             <Header />
+            <ChapterRail />
 
             <main className="relative">
                 {/* HERO SECTION */}
-                <section className="relative overflow-hidden">
+                <section data-chapter="Intro" className="relative overflow-hidden">
                     <Hero />
                     <ScrollLine className="bottom-0" />
                 </section>
 
                 {/* Massive Statement with Dynamic Text */}
-                <section className="py-24 md:py-64 bg-black text-white relative flex items-center justify-center overflow-hidden">
+                <section data-chapter="Mission" className="py-14 md:py-32 bg-black text-white relative flex items-center justify-center overflow-hidden">
                     {/* Background noise texture */}
                     <div className="absolute inset-0 noise-overlay opacity-30 mix-blend-overlay pointer-events-none" />
 
@@ -69,13 +70,25 @@ export default function Home() {
                         </div>
                     </FloatingElement>
 
+                    {/* Phone-sized stickers, choreographed to scroll */}
+                    <div className="md:hidden absolute top-6 right-4 z-0">
+                        <StickerSlap from="right" tilt={14}>
+                            <div className="bg-accent p-3 brutalist-border shadow-[4px_4px_0px_#F3E84A] rotate-6"><Star size={22} className="text-black fill-current" /></div>
+                        </StickerSlap>
+                    </div>
+                    <div className="md:hidden absolute bottom-5 left-4 z-0">
+                        <StickerSlap from="left" tilt={14}>
+                            <div className="bg-white text-black font-heading font-black text-sm leading-tight px-3 py-2 brutalist-border shadow-[4px_4px_0px_#A855F7] -rotate-6">100x ROI</div>
+                        </StickerSlap>
+                    </div>
+
                     <div className="container mx-auto px-6 relative z-10">
                         <ScrollWordReveal
                             text="WE ARE THE GROWTH ARCHITECTS BUILDING HIGH-FREQUENCY REVENUE ENGINES FOR MARKET DOMINATION."
                             className="max-w-7xl mx-auto text-center font-heading font-black !text-[2.5rem] sm:!text-[3.5rem] md:!text-8xl !tracking-tight !leading-[1] uppercase underline decoration-primary decoration-[4px] md:decoration-[8px] underline-offset-4 md:underline-offset-8"
                         />
 
-                        <div className="flex justify-center mt-16 md:mt-32">
+                        <div className="flex justify-center mt-10 md:mt-16">
                             <Link href="/about" className="bg-white brutalist-border px-8 py-4 rotate-2 shadow-[4px_4px_0px_#000] hover:rotate-0 transition-transform cursor-pointer group">
                                 <span className="text-xs font-black uppercase tracking-widest group-hover:text-primary transition-colors text-black">Learn Our Secret Sauce</span>
                             </Link>
@@ -85,38 +98,38 @@ export default function Home() {
 
                 <ScrollConnector />
 
-                <Services />
+                <div data-chapter="Services"><Services /></div>
 
-                <ParallaxText text="STRATEGY • PERFORMANCE • GROWTH •" baseVelocity={-30} />
+                <VelocityMarquee text="STRATEGY ✦ PERFORMANCE ✦ GROWTH ✦ " baseVelocity={-3} />
 
-                <Process />
+                <div data-chapter="Process"><Process /></div>
 
                 <ScrollConnector />
 
-                <Team 
+                <div data-chapter="Founders"><Team 
                     onlyCore={true} 
                     title={
                         <>
                             FOUNDER&apos;S <br /> <span className="text-primary italic">CABIN</span>
                         </>
                     } 
-                />
+                /></div>
 
-                <ParallaxText text="DATA DRIVEN • RESULTS • SCALE •" baseVelocity={30} />
+                <VelocityMarquee text="DATA DRIVEN ✦ RESULTS ✦ SCALE ✦ " baseVelocity={3} />
 
-                <WorkShowcase />
+                <div data-chapter="Work"><WorkShowcase /></div>
 
                 <ScrollConnector />
 
                 <LogoCloud />
 
-                <ReelsSection />
+                <div data-chapter="Reels"><ReelsSection /></div>
 
-                <Testimonials />
+                <div data-chapter="Reviews"><Testimonials /></div>
 
                 <FAQ />
 
-                <CTA />
+                <div data-chapter="Contact"><CTA /></div>
             </main>
 
             <Footer />

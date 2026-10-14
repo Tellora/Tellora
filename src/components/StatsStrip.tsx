@@ -30,7 +30,7 @@ export default function StatsStrip() {
     if (loading || stats.length === 0) return null;
 
     return (
-        <section className="relative z-20 -mt-12 md:-mt-16 mb-24 pointer-events-none">
+        <section className="relative z-20 -mt-12 md:-mt-16 mb-10 md:mb-14 pointer-events-none">
             <div className="container mx-auto px-6">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8 pointer-events-auto items-stretch">
                     {stats.map((stat, i) => (

@@ -17,7 +17,7 @@ export default function SEOCheckerPage() {
 
             <main className="relative pt-32">
                 {/* Custom Page Header with Neobrutalist flair */}
-                <section className="pt-20 pb-32 relative overflow-hidden">
+                <section className="pt-20 pb-16 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                     <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
                     
@@ -66,14 +66,14 @@ export default function SEOCheckerPage() {
                 </section>
 
                 {/* The Main Tool Section */}
-                <section className="py-24 bg-surface/50 border-y-[4px] border-black">
+                <section className="py-12 md:py-16 bg-surface/50 border-y-[4px] border-black">
                     <div className="container mx-auto px-6">
                         <SEOCheckerTool />
                     </div>
                 </section>
 
                 {/* Why Use Our Tool Section */}
-                <section className="py-32 relative overflow-hidden bg-black text-white">
+                <section className="py-14 md:py-20 relative overflow-hidden bg-black text-white">
                     <div className="absolute inset-0 halftone-overlay opacity-10 pointer-events-none" />
                     <div className="container mx-auto px-6 relative z-10">
                         <div className="grid lg:grid-cols-2 gap-24 items-center">

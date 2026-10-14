@@ -26,7 +26,7 @@ export default function AnimatedFeatures() {
             id="features"
             ref={containerRef}
             onMouseMove={handleMouseMove}
-            className="py-32 relative z-10 bg-black text-white border-y-[6px] border-primary overflow-hidden w-full cursor-crosshair"
+            className="py-14 md:py-20 relative z-10 bg-black text-white border-y-[6px] border-primary overflow-hidden w-full cursor-crosshair"
         >
             {/* Background Texture Drop */}
             <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none noise-overlay" />

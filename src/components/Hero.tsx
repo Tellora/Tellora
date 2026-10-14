@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { ArrowRight, Sparkles, Zap, Film, Play, Activity, Globe, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import Magnetic from "@/components/animations/Magnetic";
@@ -27,6 +27,17 @@ export default function Hero() {
 
     const rotateX = useTransform(scrollYProgress, [0, 1], [0, 8]);
     const yHero = useTransform(scrollYProgress, [0, 1], [0, -80]);
+    // Scroll-synced choreography: headline recedes, subtitle/CTAs peel away at different speeds,
+    // stat cards fan out like a dealt hand of stickers.
+    const titleScale = useSpring(useTransform(scrollYProgress, [0, 0.8], [1, 0.82]), { stiffness: 120, damping: 24 });
+    const subY = useTransform(scrollYProgress, [0, 1], [0, -40]);
+    const ctaY = useTransform(scrollYProgress, [0, 1], [0, -90]);
+    const ctaOpacity = useTransform(scrollYProgress, [0.5, 0.95], [1, 0]);
+    const statsY = useTransform(scrollYProgress, [0, 1], [0, -130]);
+    const fan0 = useTransform(scrollYProgress, [0, 1], [0, -5]);
+    const fan1 = useTransform(scrollYProgress, [0, 1], [0, 3]);
+    const fan2 = useTransform(scrollYProgress, [0, 1], [0, 5]);
+    const fans = [fan0, fan1, fan2];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -56,7 +67,7 @@ export default function Hero() {
         <section
             id="home"
             ref={containerRef}
-            className="relative min-h-[100vh] flex flex-col justify-center pt-24 sm:pt-28 md:pt-32 lg:pt-36 pb-10 sm:pb-12 z-10 overflow-hidden bg-background gpu-accelerated"
+            className="relative min-h-[100svh] flex flex-col justify-center pt-32 sm:pt-32 md:pt-32 lg:pt-36 pb-10 sm:pb-12 z-10 overflow-hidden bg-background gpu-accelerated"
         >
             {/* Prominent High-Visibility Continuous Faded Film Reel Background */}
             <PhysicalFilmReelBackground />
@@ -65,7 +76,7 @@ export default function Hero() {
             <div className="absolute top-0 left-0 w-[300px] h-full bg-transparent halftone-overlay -translate-x-1/2 opacity-5 pointer-events-none z-0" />
 
             {/* Kinetic Top Marquee */}
-            <div className="absolute top-16 sm:top-20 md:top-24 left-0 w-full overflow-hidden border-y-[4px] border-black bg-white py-2.5 sm:py-3 md:py-4 -rotate-1 z-30 shadow-[0px_6px_0px_rgba(0,0,0,1)] gpu-accelerated font-heading">
+            <div className="absolute top-[5.25rem] sm:top-24 md:top-28 left-0 w-full overflow-hidden border-y-[4px] border-black bg-white py-2.5 sm:py-3 md:py-4 -rotate-1 z-30 shadow-[0px_6px_0px_rgba(0,0,0,1)] gpu-accelerated font-heading">
                 <div className="flex animate-marquee gap-12 md:gap-24 whitespace-nowrap">
                     {[...Array(4)].map((_, i) => (
                         <div key={i} className="flex items-center gap-6 md:gap-12">
@@ -87,11 +98,11 @@ export default function Hero() {
                     <motion.div
                         initial={{ opacity: 1, scale: 1, y: 0 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        style={{ y: yHero }}
+                        style={{ y: yHero, scale: titleScale }}
                         className="relative mb-4 sm:mb-6 md:mb-8 translate-z-0"
                     >
                         <div className="relative group">
-                            <h1 className="text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-[7.5vw] xl:text-[8.5rem] 2xl:text-[10rem] font-heading font-black tracking-tighter leading-[0.88] text-black select-none uppercase relative z-20 drop-shadow-[0_10px_20px_rgba(255,255,255,0.8)]">
+                            <h1 className="text-[15vw] sm:text-[10vw] md:text-[8vw] lg:text-[7.5vw] xl:text-[8.5rem] 2xl:text-[10rem] font-heading font-black tracking-tighter leading-[0.88] text-black select-none uppercase relative z-20 drop-shadow-[0_10px_20px_rgba(255,255,255,0.8)]">
                                 {heroTitle.split(' ').map((word, i) => (
                                     <span key={i} className={i === 1 ? "animate-red-gradient drop-shadow-[4px_4px_0px_#000] md:drop-shadow-[8px_8px_0px_#000] inline-block -translate-y-1 sm:-translate-y-2 md:-translate-y-4 gpu-accelerated" : ""}>
                                         {word} {i === 0 && <br />}
@@ -106,6 +117,7 @@ export default function Hero() {
                     <motion.div
                         initial={{ opacity: 1, y: 0 }}
                         animate={{ opacity: 1, y: 0 }}
+                        style={{ y: subY }}
                         className="max-w-3xl mb-6 sm:mb-8 md:mb-10 bg-white/90 backdrop-blur-md px-5 sm:px-8 py-3 sm:py-4 rounded-2xl sm:rounded-3xl brutalist-border shadow-[4px_4px_0px_#000] sm:shadow-[6px_6px_0px_#000]"
                     >
                         <p className="text-base sm:text-xl md:text-2xl lg:text-3xl font-black uppercase tracking-tighter leading-snug text-black">
@@ -118,6 +130,7 @@ export default function Hero() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.3 }}
+                        style={{ y: ctaY, opacity: ctaOpacity }}
                         className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mb-8 sm:mb-10 md:mb-12 z-30 relative w-full px-4 sm:px-0"
                     >
                         <Magnetic>
@@ -135,9 +148,10 @@ export default function Hero() {
                     </motion.div>
 
                     {/* Stats Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 w-full max-w-4xl relative z-30 items-stretch">
+                    <motion.div style={{ y: statsY }} className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 w-full max-w-4xl relative z-30 items-stretch">
                         {stats.slice(0, 3).map((stat, i) => (
-                            <TiltCard key={i} className={`h-full ${i === 2 ? 'col-span-2 md:col-span-1' : ''}`}>
+                            <motion.div key={i} style={{ rotate: fans[i] }} className={`h-full ${i === 2 ? 'col-span-2 md:col-span-1' : ''}`}>
+                            <TiltCard className="h-full">
                                 <motion.div
                                     initial={{ opacity: 0, y: 30 }}
                                     whileInView={{ opacity: 1, y: 0 }}
@@ -153,8 +167,9 @@ export default function Hero() {
                                     </div>
                                 </motion.div>
                             </TiltCard>
+                            </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             </div>
         </section>

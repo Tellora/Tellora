@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 export default function Header() {
     const router = useRouter();
     const [scrolled, setScrolled] = useState(false);
+    const [hidden, setHidden] = useState(false);
+    const lastY = useRef(0);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [tapCount, setTapCount] = useState(0);
     const [showTapHint, setShowTapHint] = useState(false);
@@ -37,8 +39,17 @@ export default function Header() {
 
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 50);
-        window.addEventListener("scroll", handleScroll);
+        // Scroll-aware header: tucks away when scrolling down, returns on scroll up
+        const handleScroll = () => {
+            const y = window.scrollY;
+            setScrolled(y > 50);
+            const delta = y - lastY.current;
+            if (Math.abs(delta) > 8) {
+                setHidden(y > 240 && delta > 0);
+                lastY.current = y;
+            }
+        };
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
@@ -70,7 +81,7 @@ export default function Header() {
 
     return (
         <header
-            className={`fixed top-8 left-0 right-0 z-[100] transition-all duration-700 px-6 pointer-events-none text-black`}
+            className={`fixed top-5 md:top-8 left-0 right-0 z-[100] transition-transform duration-500 ease-out px-4 sm:px-6 pointer-events-none text-black ${hidden && !mobileOpen ? "-translate-y-[150%]" : "translate-y-0"}`}
         >
             <div className="container mx-auto flex justify-between items-center pointer-events-auto">
                 {/* Brand Identity - tap 4x on mobile to access admin */}
@@ -79,7 +90,7 @@ export default function Header() {
                     onClick={handleLogoTap}
                 >
                     <Link href="/" onClick={(e) => { /* allow tap tracking but let link work on desktop */ }}>
-                        <div className="bg-white text-black px-3 md:px-5 py-2 brutalist-border shadow-[4px_4px_0px_#A855F7] md:shadow-[8px_8px_0px_#A855F7] -rotate-3 hover:rotate-0 transition-all duration-500 flex items-center justify-center h-[55px] md:h-[70px] relative overflow-hidden">
+                        <div className="bg-white text-black px-3 md:px-5 py-2 brutalist-border shadow-[4px_4px_0px_#A855F7] md:shadow-[8px_8px_0px_#A855F7] -rotate-3 hover:rotate-0 transition-all duration-500 flex items-center justify-center h-[46px] md:h-[70px] relative overflow-hidden">
                             <Image src="/tellora-logo.png" alt="Tellora Logo" width={160} height={70} className="object-contain w-auto h-full" priority />
                             {/* Subtle tap ripple indicators (mobile only) */}
                             {tapCount > 0 && tapCount < 4 && (
@@ -127,7 +138,7 @@ export default function Header() {
                     ))}
                 </nav>
 
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-3 md:gap-6">
                     {/* SEO Audit - High Priority Action */}
                     <Magnetic>
                         <Link
@@ -152,9 +163,9 @@ export default function Header() {
                     <button
                         onClick={() => setMobileOpen(!mobileOpen)}
                         aria-label={mobileOpen ? "Close menu" : "Open menu"}
-                        className="p-5 bg-primary text-white brutalist-border shadow-[6px_6px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all active:scale-95"
+                        className="p-3 md:p-5 min-h-[46px] min-w-[46px] bg-primary text-black md:text-white brutalist-border shadow-[4px_4px_0px_#000] md:shadow-[6px_6px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all active:scale-95"
                     >
-                        {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+                        {mobileOpen ? <X size={22} /> : <Menu size={22} />}
                     </button>
                 </div>
             </div>

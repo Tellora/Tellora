@@ -81,7 +81,7 @@ export default async function JobPage({ params }: { params: { id: string } }) {
                     isRemote: job.location?.toLowerCase().includes("remote")
                 }} 
             />
-            <main className="pt-40 pb-32 container mx-auto px-6">
+            <main className="pt-40 pb-16 container mx-auto px-6">
                 <div className="max-w-4xl mx-auto space-y-12">
                     <div className="space-y-6">
                         <h1 className="text-5xl md:text-8xl font-black tracking-tighter uppercase italic leading-[0.9] text-white">

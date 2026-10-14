@@ -62,7 +62,7 @@ export default function AboutPage() {
                 />
 
                 {/* Culture Section */}
-                <section className="py-24 relative overflow-hidden bg-white">
+                <section className="py-12 md:py-16 relative overflow-hidden bg-white">
                     <div className="container mx-auto px-4 md:px-6">
                         <div className="grid lg:grid-cols-2 gap-20 items-center">
                             <motion.div
@@ -122,7 +122,7 @@ export default function AboutPage() {
                 </section>
 
                 {/* Values Grid */}
-                <section className="py-24 bg-slate-50 relative z-10 border-y border-slate-100 overflow-hidden">
+                <section className="py-12 md:py-16 bg-slate-50 relative z-10 border-y border-slate-100 overflow-hidden">
                     <div className="container mx-auto px-4 text-center mb-20">
                         <span className="text-primary font-black tracking-[0.4em] uppercase text-[10px] mb-4 block">Our DNA</span>
                         <h2 className="text-4xl md:text-6xl font-heading font-black text-text-main">Our Core <span className="text-gradient-primary">Principles</span></h2>
@@ -147,7 +147,7 @@ export default function AboutPage() {
                 </section>
 
                 {/* Team Philosophy Section */}
-                <section className="py-24 bg-white overflow-hidden">
+                <section className="py-12 md:py-16 bg-white overflow-hidden">
                     <div className="container mx-auto px-4 md:px-6">
                         <div className="max-w-5xl mx-auto">
                             <h2 className="text-4xl md:text-7xl font-heading font-black text-text-main mb-16 text-center leading-tight">Driven by <span className="text-gradient-primary">Impact</span></h2>
@@ -179,7 +179,7 @@ export default function AboutPage() {
                 </section>
                 
                 {/* Tech Stack & Deep Execution Grid */}
-                <section className="py-24 bg-slate-50 border-t border-slate-100 overflow-hidden relative">
+                <section className="py-12 md:py-16 bg-slate-50 border-t border-slate-100 overflow-hidden relative">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
                     <div className="container mx-auto px-4 md:px-6 relative z-10">
                         <div className="mb-16">

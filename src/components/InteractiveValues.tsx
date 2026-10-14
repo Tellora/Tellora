@@ -30,7 +30,7 @@ const values = [
 
 export default function InteractiveValues() {
     return (
-        <section className="py-24 md:py-32 bg-background relative z-10 border-b-[4px] border-black overflow-hidden group/section">
+        <section className="py-12 md:py-20 bg-background relative z-10 border-b-[4px] border-black overflow-hidden group/section">
             {/* Background elements */}
             <div className="absolute top-0 right-0 w-[50vh] h-[50vh] bg-primary/20 blur-[120px] rounded-full pointer-events-none -z-10" />
             <div className="absolute bottom-0 left-0 w-[50vh] h-[50vh] bg-accent/20 blur-[120px] rounded-full pointer-events-none -z-10" />

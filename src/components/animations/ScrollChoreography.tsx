@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useInView, useVelocity, useMotionValue, useAnimationFrame, useReducedMotion } from "framer-motion";
 
 /**
  * Neubrutalist SectionHeader
@@ -11,9 +11,9 @@ export function SectionHeader({ title, subtitle, number }: { title: string, subt
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
-        <div ref={ref} className="relative mb-24 md:mb-32">
+        <div ref={ref} className="relative mb-10 md:mb-16">
             {number && (
-                <div className="absolute -top-12 -left-6 bg-black text-white brutalist-border px-6 py-2 rotate-6 z-20 shadow-[6px_6px_0px_#4AC0E4]">
+                <div className="absolute -top-10 left-0 md:-top-12 md:-left-6 bg-black text-white brutalist-border px-6 py-2 rotate-6 z-20 shadow-[6px_6px_0px_#4AC0E4]">
                     <span className="text-3xl font-heading font-black italic">{number}</span>
                 </div>
             )}
@@ -35,7 +35,7 @@ export function SectionHeader({ title, subtitle, number }: { title: string, subt
                         initial={{ opacity: 0, y: 70 }}
                         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 70 }}
                         transition={{ duration: 0.8, ease: [0.33, 1, 0.68, 1], delay: 0.1 }}
-                        className="text-6xl md:text-9xl font-heading font-black text-black leading-[0.9] tracking-tighter uppercase"
+                        className="text-[2.75rem] sm:text-6xl md:text-9xl break-words font-heading font-black text-black leading-[0.9] tracking-tighter uppercase"
                     >
                         {title}
                     </motion.h2>
@@ -46,7 +46,7 @@ export function SectionHeader({ title, subtitle, number }: { title: string, subt
                     whileInView={{ width: "200px" }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.5, duration: 1, ease: "circOut" }}
-                    className="h-[6px] mt-12 bg-black brutalist-border shadow-[4px_4px_0px_#4AC0E4]"
+                    className="h-[6px] mt-6 bg-black brutalist-border shadow-[4px_4px_0px_#4AC0E4]"
                 />
             </div>
         </div>
@@ -62,10 +62,10 @@ export function ParallaxText({ text, baseVelocity = 100 }: { text: string, baseV
     const xSmooth = useSpring(x, { stiffness: 50, damping: 20 });
 
     return (
-        <div className="overflow-hidden whitespace-nowrap flex py-10 md:py-20 pointer-events-none select-none border-y-[4px] border-black bg-white/50 backdrop-blur-sm">
-            <motion.div style={{ x: xSmooth }} className="flex gap-40 will-change-transform">
+        <div className="overflow-hidden whitespace-nowrap flex py-4 md:py-20 pointer-events-none select-none border-y-[4px] border-black bg-white/50 backdrop-blur-sm">
+            <motion.div style={{ x: xSmooth }} className="flex gap-16 md:gap-40 will-change-transform">
                 {[...Array(6)].map((_, i) => (
-                    <span key={i} className="text-[8rem] md:text-[12rem] lg:text-[15rem] font-heading font-black uppercase text-black tracking-tighter leading-none opacity-5">
+                    <span key={i} className="text-[4.5rem] md:text-[12rem] lg:text-[15rem] font-heading font-black uppercase text-black tracking-tighter leading-none opacity-5">
                         {text}
                     </span>
                 ))}
@@ -119,7 +119,7 @@ export function ScrollLine({ className }: { className?: string }) {
 
 export function ScrollConnector() {
     return (
-        <div className="relative h-40 flex justify-center items-center overflow-hidden">
+        <div className="relative h-16 md:h-24 flex justify-center items-center overflow-hidden">
             <div className="w-[4px] h-full bg-black relative">
                 <motion.div
                     className="absolute top-0 left-0 w-full h-1/2 bg-primary select-none pointer-events-none"
@@ -223,5 +223,115 @@ export function ParallaxImage({ src, alt, className = "" }: { src: string, alt: 
                 className="w-full h-full object-cover transform-gpu"
             />
         </div>
+    );
+}
+
+/**
+ * Scroll-scrubbed "sticker slap": the child lands from an exaggerated
+ * scale/rotation with its hard shadow growing in sync with scroll position.
+ * Reverses when scrolling back up. Respects prefers-reduced-motion.
+ */
+export function StickerSlap({ children, className = "", tilt = 4, from = "left" }: { children: React.ReactNode; className?: string; tilt?: number; from?: "left" | "right" | "bottom" }) {
+    const ref = useRef<HTMLDivElement>(null);
+    const reduce = useReducedMotion();
+    const { scrollYProgress } = useScroll({ target: ref, offset: ["start 95%", "start 55%"] });
+    const sx = from === "left" ? -60 : from === "right" ? 60 : 0;
+    const sy = from === "bottom" ? 70 : 24;
+    const x = useTransform(scrollYProgress, [0, 1], [sx, 0]);
+    const y = useTransform(scrollYProgress, [0, 1], [sy, 0]);
+    const rotate = useTransform(scrollYProgress, [0, 1], [from === "right" ? tilt : -tilt, 0]);
+    const scale = useTransform(scrollYProgress, [0, 0.8, 1], [1.12, 1.02, 1]);
+    const opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+    if (reduce) return <div className={className}>{children}</div>;
+    return (
+        <motion.div ref={ref} style={{ x, y, rotate, scale, opacity }} className={`will-change-transform ${className}`}>
+            {children}
+        </motion.div>
+    );
+}
+
+/**
+ * Velocity-synced marquee: scrolls with the page, and skews + speeds up
+ * with scroll velocity like a film strip being pulled through a projector.
+ */
+export function VelocityMarquee({ text, baseVelocity = 2, className = "" }: { text: string; baseVelocity?: number; className?: string }) {
+    const baseX = useMotionValue(0);
+    const { scrollY } = useScroll();
+    const velocity = useVelocity(scrollY);
+    const smooth = useSpring(velocity, { damping: 50, stiffness: 400 });
+    const factor = useTransform(smooth, [0, 1000], [0, 5], { clamp: false });
+    const skew = useTransform(smooth, [-2000, 0, 2000], [-6, 0, 6], { clamp: true });
+    const dir = useRef(1);
+    const reduce = useReducedMotion();
+    const x = useTransform(baseX, (v) => `${wrap(-50, 0, v)}%`);
+
+    useAnimationFrame((_, delta) => {
+        if (reduce) return;
+        let move = dir.current * baseVelocity * (delta / 1000);
+        const f = factor.get();
+        if (f < 0) dir.current = -1;
+        else if (f > 0) dir.current = 1;
+        move += dir.current * move * f;
+        baseX.set(baseX.get() + move);
+    });
+
+    return (
+        <div className={`overflow-hidden whitespace-nowrap flex border-y-[3px] md:border-y-[4px] border-black bg-primary text-black select-none ${className}`} aria-hidden="true">
+            <motion.div style={{ x, skewX: skew }} className="flex will-change-transform">
+                {[...Array(4)].map((_, i) => (
+                    <span key={i} className="py-3 md:py-5 px-6 text-2xl md:text-5xl font-heading font-black uppercase tracking-tighter">
+                        {text}
+                    </span>
+                ))}
+            </motion.div>
+        </div>
+    );
+}
+
+function wrap(min: number, max: number, v: number) {
+    const range = max - min;
+    return ((((v - min) % range) + range) % range) + min;
+}
+
+/**
+ * Chapter rail: a fixed side indicator that tracks which top-level section
+ * is in view. Sections opt in with data-chapter="Label".
+ */
+export function ChapterRail() {
+    const [chapters, setChapters] = useState<string[]>([]);
+    const [active, setActive] = useState(0);
+
+    React.useEffect(() => {
+        const els = Array.from(document.querySelectorAll<HTMLElement>("[data-chapter]"));
+        setChapters(els.map((e) => e.dataset.chapter || ""));
+        const io = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((en) => {
+                    if (en.isIntersecting) setActive(els.indexOf(en.target as HTMLElement));
+                });
+            },
+            { rootMargin: "-45% 0px -50% 0px" }
+        );
+        els.forEach((e) => io.observe(e));
+        return () => io.disconnect();
+    }, []);
+
+    if (chapters.length < 2) return null;
+    return (
+        <nav aria-label="Page chapters" className="fixed right-5 top-1/2 -translate-y-1/2 z-[150] hidden xl:flex flex-col gap-3 items-end">
+            {chapters.map((c, i) => (
+                <button
+                    key={c + i}
+                    onClick={() => document.querySelectorAll("[data-chapter]")[i]?.scrollIntoView({ behavior: "smooth" })}
+                    aria-label={`Jump to ${c}`}
+                    className="group flex items-center gap-2"
+                >
+                    <span className={`text-[10px] font-black uppercase tracking-widest bg-black text-white px-2 py-1 transition-all ${i === active ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"}`}>
+                        {c}
+                    </span>
+                    <span className={`block border-[3px] border-black transition-all duration-300 ${i === active ? "w-6 h-6 bg-primary rotate-45 shadow-[3px_3px_0_#000]" : "w-3 h-3 bg-white"}`} />
+                </button>
+            ))}
+        </nav>
     );
 }

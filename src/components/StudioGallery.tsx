@@ -39,7 +39,7 @@ const GALLERY_SHOTS = [
 
 export default function StudioGallery() {
     return (
-        <section id="gallery" className="py-20 md:py-36 relative z-10 bg-black text-white overflow-hidden border-t-[4px] border-black">
+        <section id="gallery" className="py-20 md:py-20 relative z-10 bg-black text-white overflow-hidden border-t-[4px] border-black">
             <div className="container mx-auto px-6 relative z-10">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
                     <div>

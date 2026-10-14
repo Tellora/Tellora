@@ -48,7 +48,7 @@ export default function TeamsClient() {
                 </div>
 
                 {/* Culture CTA */}
-                <section className="py-32 bg-slate-50 border-t-[4px] border-black overflow-hidden relative">
+                <section className="py-14 md:py-20 bg-slate-50 border-t-[4px] border-black overflow-hidden relative">
                     <div className="container mx-auto px-6 relative z-10">
                         <div className="max-w-4xl mx-auto text-center">
                             <motion.div
