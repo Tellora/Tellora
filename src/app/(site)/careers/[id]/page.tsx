@@ -33,11 +33,11 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
     if (!job) {
         return {
-            title: "Job Not Found | Tellora Media",
+            title: "Job Not Found",
         };
     }
 
-    const title = job.seo_title || `${job.title} | Careers | Tellora Media`;
+    const title = job.seo_title || `${job.title} | Careers`;
     const description = job.seo_description || (job.description?.substring(0, 155) || SEO_CONFIG.defaultDescription);
 
     return {

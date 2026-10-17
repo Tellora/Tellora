@@ -74,9 +74,15 @@ export default function Footer() {
                                     <Zap size={24} className="text-primary fill-current" /> Our Services
                                 </h3>
                                 <ul className="space-y-6">
-                                    {["SEO Optimization", "Social Media", "Web Design", "Performance Ads"].map(s => (
+                                    {[
+                                        { name: "SEO Services Delhi", href: "/services/seo-services-delhi/" },
+                                        { name: "Social Media Marketing", href: "/services/social-media-marketing-agency-delhi/" },
+                                        { name: "Web Design & Development", href: "/services/web-design-development-delhi/" },
+                                        { name: "Performance Marketing", href: "/services/performance-marketing-agency-delhi/" },
+                                        { name: "Content & Video", href: "/services/content-marketing-video-production-delhi/" },
+                                    ].map(({ name: s, href }) => (
                                         <li key={s}>
-                                            <Link href="/services" className="text-[12px] font-black uppercase tracking-[0.4em] hover:text-primary transition-colors flex items-center gap-4 group">
+                                            <Link href={href} className="text-[12px] font-black uppercase tracking-[0.4em] hover:text-primary transition-colors flex items-center gap-4 group">
                                                 <div className="w-2 h-2 bg-black rounded-full group-hover:scale-200 transition-all group-hover:bg-primary" /> {s}
                                             </Link>
                                         </li>
@@ -136,7 +142,7 @@ export default function Footer() {
                 <div className="pt-12 md:pt-16 border-t-[4px] md:border-t-[6px] border-black flex flex-col xl:flex-row justify-between items-center gap-8 md:gap-12 relative z-10 text-center md:text-left">
                     <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
                         <Link href="/">
-                            <Image src="/tellora-logo.png" alt="Tellora" width={160} height={50} className="object-contain md:w-[200px]" />
+                            <Image src="/tellora-logo.png" alt="Tellora" width={160} height={50} className="object-contain md:w-[200px] md:h-[63px]" />
                         </Link>
                         <div className="flex items-center gap-3 px-4 md:px-6 py-2 bg-black text-white text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.5em] mt-4 md:mt-0">
                             © 2026 Tellora Media

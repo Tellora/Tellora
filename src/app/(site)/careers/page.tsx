@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { SEO_CONFIG, getCanonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-    title: "Careers | Join the Tellora Media Growth Team",
+    title: "Careers | Join Our Growth Team",
     description: "Ready to engineer dopamine-driven growth? Explore open roles at Tellora Media. We hire outlier talent in design, development, SEO, and performance marketing.",
     keywords: [
         "digital marketing jobs Delhi",

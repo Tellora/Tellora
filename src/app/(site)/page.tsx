@@ -1,12 +1,11 @@
 import HomeClient from "./HomeClient";
 import { Metadata } from "next";
 import { SEO_CONFIG, getCanonicalUrl } from "@/lib/seo";
-import OrganizationSchema from "@/components/seo/schema/OrganizationSchema";
 import WebSiteSchema from "@/components/seo/schema/WebSiteSchema";
 import LocalBusinessSchema from "@/components/seo/schema/LocalBusinessSchema";
 
 export const metadata: Metadata = {
-    title: "Tellora Media | Digital Marketing Agency in Delhi | Growth Architecture",
+    title: { absolute: "Digital Marketing Agency in Delhi | SEO & Ads | Tellora Media" },
     description: "Tellora Media is a full-service digital marketing agency in Delhi, India. We architect SEO, performance marketing, social media, and web growth systems for D2C brands and local businesses. Deploy core. Scale fast.",
     keywords: [
         "digital marketing agency Delhi",
@@ -47,7 +46,6 @@ export const metadata: Metadata = {
 export default function Home() {
     return (
         <>
-            <OrganizationSchema />
             <WebSiteSchema />
             <LocalBusinessSchema />
             <HomeClient />

@@ -260,7 +260,7 @@ export default function CareersClient() {
                     <div className="relative p-8 sm:p-16 md:p-32 brutalist-border bg-black group overflow-hidden border-white/10">
                         {/* Dynamic background kinetic layer */}
                         <div className="absolute inset-0 opacity-10 pointer-events-none">
-                            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
+                            <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.35)_1px,transparent_1px)] [background-size:6px_6px] mix-blend-overlay" />
                             <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 60, repeat: Infinity, ease: "linear" }}

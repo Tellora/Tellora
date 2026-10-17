@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { SEO_CONFIG, getCanonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-    title: "Contact Us | Partner with Digital Marketing Experts | Tellora Media",
+    title: "Contact Us | Free Marketing Consultation",
     description: "Contact Tellora Media to discuss your custom growth strategy audit. Partner with high-frequency SEO experts and PPC performance architects to scale your startup or enterprise.",
     keywords: ["Hire Digital Marketing Agency", "Tellora Media Contact", "Request SEO Audit", "B2B Performance Marketing Consultation", "Startups Scaling Solutions", "Advertising Expert Contact"],
     alternates: {

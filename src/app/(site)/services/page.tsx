@@ -4,7 +4,7 @@ import { SEO_CONFIG, getCanonicalUrl } from "@/lib/seo";
 import ServicesSchema from "@/components/seo/schema/ServicesSchema";
 
 export const metadata: Metadata = {
-    title: "Digital Marketing Services | SEO, Performance Marketing & More | Tellora Media",
+    title: "Digital Marketing Services in Delhi",
     description: "Tellora Media offers end-to-end digital growth services: SEO, Meta & Google Ads, social media management, content creation, video post-production, and web development. Built for brands that mean business.",
     keywords: [
         "SEO services India",

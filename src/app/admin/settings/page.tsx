@@ -131,7 +131,7 @@ export default function AdminSettings() {
                 </aside>
 
                 {/* Content Area */}
-                <main className="flex-1 bg-[#0D121F]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-8 min-h-[500px]">
+                <section className="flex-1 bg-[#0D121F]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-8 min-h-[500px]">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeTab}
@@ -382,7 +382,7 @@ export default function AdminSettings() {
                             )}
                         </motion.div>
                     </AnimatePresence>
-                </main>
+                </section>
             </div>
         </div>
     );

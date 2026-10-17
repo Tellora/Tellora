@@ -111,37 +111,9 @@ export const viewport: Viewport = {
     maximumScale: 5,
 };
 
-const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": SEO_CONFIG.organizationName,
-    "url": SEO_CONFIG.siteUrl,
-    "logo": `${SEO_CONFIG.siteUrl}/tellora-logo.png`,
-    "sameAs": [
-        "https://www.instagram.com/tellora.media",
-        "https://www.linkedin.com/company/tellora-media"
-    ],
-    "description": "Tellora Media is an elite digital growth agency transforming businesses with high-frequency SEO, performance marketing, and architecture-driven scaling.",
-    "priceRange": "$$$",
-    "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "9515 West Rohtash Nagar",
-        "addressLocality": "Shahdara",
-        "addressRegion": "Delhi",
-        "postalCode": "110049",
-        "addressCountry": "IN"
-    },
-    "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+91-76784-93113",
-        "contactType": "customer service",
-        "areaServed": "Worldwide",
-        "availableLanguage": "English"
-    }
-};
-
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import SocialPixels from "@/components/analytics/SocialPixels";
+import OrganizationSchema from "@/components/seo/schema/OrganizationSchema";
 
 export default function RootLayout({
     children,
@@ -149,7 +121,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en-IN">
             <head>
                 <link rel="preconnect" href="https://www.googletagmanager.com" />
                 <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
@@ -161,10 +133,7 @@ export default function RootLayout({
                 <a href="#main-content" className="sr-only focus:not-sr-only">Skip to content</a>
                 <GoogleAnalytics />
                 <SocialPixels />
-                <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-                />
+                <OrganizationSchema />
                 {children}
 
                 {/* Deferred Axeptio Cookie Setup */}

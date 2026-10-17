@@ -1,56 +1,36 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import Link from "next/link";
+import { staticBlogPosts, formatPostDate } from "@/data/blog-posts";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, ArrowRight, Tag, Search, X } from "lucide-react";
 
-const blogPosts = [
-    {
-        id: 1,
-        title: "The Future of SEO: AI-Driven Search Optimization in 2026",
-        excerpt: "Discover how large language models are fundamentally changing the search landscape and how to stay ahead of the curve.",
-        category: "SEO Strategy",
-        date: "March 15, 2026",
-        readTime: "8 min read",
-        image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80"
-    },
-    {
-        id: 2,
-        title: "Scaling Paid Ads: Why Most Agencies Fail at High Spend",
-        excerpt: "Learn the scientific approach to scaling Meta and Google campaigns without breaking your target CPA benchmarks.",
-        category: "Paid Performance",
-        date: "March 10, 2026",
-        readTime: "12 min read",
-        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
-    },
-    {
-        id: 3,
-        title: "3D Web Experiences: The New Standard for Landing Pages",
-        excerpt: "Why static websites are becoming obsolete and how Three.js is driving conversion increases across high-tech industries.",
-        category: "Web Design",
-        date: "March 05, 2026",
-        readTime: "6 min read",
-        image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80"
-    },
-    {
-        id: 4,
-        title: "Content That Converts: Beyond The SEO Keyword",
-        excerpt: "Stop writing for bots and start architecting content that addresses actual buyer friction points in the decision cycle.",
-        category: "Content Strategy",
-        date: "March 01, 2026",
-        readTime: "10 min read",
-        image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80"
-    }
-];
+const blogPosts = staticBlogPosts.map((p, i) => ({
+    id: i + 1,
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt,
+    category: p.category,
+    date: formatPostDate(p.date),
+    readTime: p.readTime,
+    image: p.image,
+}));
 
-const CATEGORIES = ["All", "SEO Strategy", "Paid Performance", "Web Design", "Content Strategy"];
+const CATEGORIES = ["All", "SEO Strategy", "Local SEO", "Paid Performance", "Web Design", "Content Strategy", "Marketing Strategy"];
 
 export default function BlogPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [activeCategory, setActiveCategory] = useState("All");
+
+    // Support /blog/?q=term (used by the site-wide search action)
+    useEffect(() => {
+        const q = new URLSearchParams(window.location.search).get("q");
+        if (q) setSearchQuery(q);
+    }, []);
 
     const filteredPosts = useMemo(() => {
         return blogPosts.filter(post => {
@@ -141,7 +121,7 @@ export default function BlogPage() {
                                                 </div>
                                             </div>
                                             <h2 className="text-3xl md:text-5xl font-heading font-black text-text-main mb-8 leading-tight group-hover:text-primary transition-colors duration-500">
-                                                {featuredPost.title}
+                                                <Link href={`/blog/${featuredPost.slug}/`} className="after:absolute after:inset-0">{featuredPost.title}</Link>
                                             </h2>
                                             <p className="text-text-muted text-lg mb-10 leading-relaxed font-medium line-clamp-3">
                                                 {featuredPost.excerpt}
@@ -150,9 +130,9 @@ export default function BlogPage() {
                                                 <div className="flex items-center gap-3 text-slate-400 text-[10px] font-black uppercase tracking-widest">
                                                     <Clock size={12} className="text-primary" /> {featuredPost.readTime}
                                                 </div>
-                                                <button className="font-black text-text-main uppercase tracking-[0.2em] text-[10px] flex items-center gap-3 group/link hover:text-primary transition-all duration-300">
+                                                <Link href={`/blog/${featuredPost.slug}/`} className="font-black text-text-main uppercase tracking-[0.2em] text-[10px] flex items-center gap-3 group/link hover:text-primary transition-all duration-300">
                                                     Read Analysis <ArrowRight size={16} className="group-hover/link:translate-x-3 transition-transform duration-500" />
-                                                </button>
+                                                </Link>
                                             </div>
                                         </div>
                                     </motion.div>
@@ -167,7 +147,7 @@ export default function BlogPage() {
                                             initial={{ opacity: 0, scale: 0.9 }}
                                             animate={{ opacity: 1, scale: 1 }}
                                             transition={{ delay: idx * 0.05 }}
-                                            className="group flex flex-col h-full bg-white border border-slate-100 rounded-[3.5rem] overflow-hidden hover:border-primary transition-all duration-500 shadow-2xl shadow-slate-200/50 hover:shadow-primary/10"
+                                            className="group relative flex flex-col h-full bg-white border border-slate-100 rounded-[3.5rem] overflow-hidden hover:border-primary transition-all duration-500 shadow-2xl shadow-slate-200/50 hover:shadow-primary/10"
                                         >
                                             <div className="aspect-[16/11] overflow-hidden relative">
                                                 <img
@@ -187,13 +167,13 @@ export default function BlogPage() {
                                                     <span className="text-slate-600 text-[10px] uppercase font-black tracking-widest">{post.readTime}</span>
                                                 </div>
                                                 <h3 className="text-2xl font-black text-text-main mb-6 font-heading leading-tight group-hover:text-primary transition-colors flex-grow">
-                                                    {post.title}
+                                                    <Link href={`/blog/${post.slug}/`} className="after:absolute after:inset-0">{post.title}</Link>
                                                 </h3>
                                                 <div className="pt-8 border-t border-slate-100 flex items-center justify-between">
                                                     <span className="text-slate-600 text-[10px] font-black tracking-widest uppercase">{post.date}</span>
-                                                    <button className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-text-main hover:bg-primary hover:border-primary hover:text-white transition-all duration-500 hover:shadow-lg hover:shadow-primary/30 group/btn hover:-translate-y-1">
+                                                    <Link href={`/blog/${post.slug}/`} aria-label={`Read ${post.title}`} className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-text-main hover:bg-primary hover:border-primary hover:text-white transition-all duration-500 hover:shadow-lg hover:shadow-primary/30 group/btn hover:-translate-y-1">
                                                         <ArrowRight size={20} className="group-hover/btn:translate-x-2 transition-transform duration-500" />
-                                                    </button>
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </motion.div>
