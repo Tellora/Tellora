@@ -91,7 +91,7 @@ export default function Header() {
                 >
                     <Link href="/" onClick={(e) => { /* allow tap tracking but let link work on desktop */ }}>
                         <div className="bg-white text-black px-3 md:px-5 py-2 brutalist-border shadow-[4px_4px_0px_#A855F7] md:shadow-[8px_8px_0px_#A855F7] -rotate-3 hover:rotate-0 transition-all duration-500 flex items-center justify-center h-[46px] md:h-[70px] relative overflow-hidden">
-                            <Image src="/tellora-logo.png" alt="Tellora Logo" width={160} height={70} className="object-contain w-auto h-full" priority />
+                            <Image src="/tellora-logo.png" alt="Tellora Logo" width={160} height={70} className="object-contain" style={{ width: "auto", height: "100%" }} priority />
                             {/* Subtle tap ripple indicators (mobile only) */}
                             {tapCount > 0 && tapCount < 4 && (
                                 <div className="absolute top-1 right-1 flex gap-1 md:hidden">

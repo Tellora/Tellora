@@ -191,7 +191,7 @@ export default function BlogPage() {
                                                 </h3>
                                                 <div className="pt-8 border-t border-slate-100 flex items-center justify-between">
                                                     <span className="text-slate-600 text-[10px] font-black tracking-widest uppercase">{post.date}</span>
-                                                    <button className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-text-main hover:bg-primary hover:border-primary hover:text-white transition-all duration-500 hover:shadow-lg hover:shadow-primary/30 group/btn hover:-translate-y-1">
+                                                    <button aria-label={`Read ${post.title}`} className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-text-main hover:bg-primary hover:border-primary hover:text-white transition-all duration-500 hover:shadow-lg hover:shadow-primary/30 group/btn hover:-translate-y-1">
                                                         <ArrowRight size={20} className="group-hover/btn:translate-x-2 transition-transform duration-500" />
                                                     </button>
                                                 </div>

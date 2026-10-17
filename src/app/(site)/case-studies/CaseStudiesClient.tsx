@@ -166,7 +166,7 @@ export default function CaseStudiesPage() {
                 <section className="py-14 md:py-20 relative z-10">
                     <div className="container mx-auto px-6">
                         <div className="space-y-40 md:space-y-64">
-                            <AnimatePresence mode="wait">
+                            <AnimatePresence>
                                 {filteredStudies.map((study, idx) => (
                                     <CaseStudyDossier key={study.id} study={study} idx={idx} />
                                 ))}
@@ -358,12 +358,12 @@ function CaseStudyDossier({ study, idx }: { study: CaseStudy; idx: number }) {
 
                     <div className="flex gap-4">
                         {study.links.website && (
-                            <a href={study.links.website} target="_blank" rel="noopener noreferrer" className="w-16 h-16 bg-white brutalist-border flex items-center justify-center shadow-[4px_4px_0px_#000] hover:bg-black hover:text-white transition-all">
+                            <a href={study.links.website} target="_blank" rel="noopener noreferrer" aria-label={`${study.title} website`} className="w-16 h-16 bg-white brutalist-border flex items-center justify-center shadow-[4px_4px_0px_#000] hover:bg-black hover:text-white transition-all">
                                 <Globe size={24} />
                             </a>
                         )}
                         {study.links.instagram && (
-                            <a href={study.links.instagram} target="_blank" rel="noopener noreferrer" className="w-16 h-16 bg-white brutalist-border flex items-center justify-center shadow-[4px_4px_0px_#000] hover:bg-black hover:text-white transition-all">
+                            <a href={study.links.instagram} target="_blank" rel="noopener noreferrer" aria-label={`${study.title} on Instagram`} className="w-16 h-16 bg-white brutalist-border flex items-center justify-center shadow-[4px_4px_0px_#000] hover:bg-black hover:text-white transition-all">
                                 <Instagram size={24} />
                             </a>
                         )}

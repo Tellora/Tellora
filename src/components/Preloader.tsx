@@ -113,7 +113,7 @@ export function Preloader() {
                                     src="/tellora-logo.png"
                                     alt="Tellora"
                                     width={160}
-                                    height={58}
+                                    height={160}
                                     className="object-contain drop-shadow-[8px_8px_0px_#A855F7]"
                                     priority
                                 />
