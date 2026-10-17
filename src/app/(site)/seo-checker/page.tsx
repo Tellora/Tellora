@@ -4,7 +4,7 @@ import { SEO_CONFIG, getCanonicalUrl } from "@/lib/seo";
 import SeoCheckerSchema from "@/components/seo/schema/SeoCheckerSchema";
 
 export const metadata: Metadata = {
-    title: "Free SEO Audit Tool | Technical Website Analyzer | Tellora Media",
+    title: "Free SEO Audit Tool | Website Analyzer",
     description: "Run a comprehensive, 250-point technical SEO audit on your website for free. Analyze Core Web Vitals, semantic structure, security headers, and more in seconds.",
     keywords: [
         "free SEO audit tool",

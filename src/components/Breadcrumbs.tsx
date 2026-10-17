@@ -29,7 +29,7 @@ export function Breadcrumbs() {
                 "@type": "ListItem",
                 "position": index + 2,
                 "name": path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, " "),
-                "item": `${SEO_CONFIG.siteUrl}${buildPath(index).substring(1)}`
+                "item": `${SEO_CONFIG.siteUrl}${buildPath(index)}`
             }))
         ]
     };

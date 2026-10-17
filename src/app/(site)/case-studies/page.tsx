@@ -3,7 +3,7 @@ import { SEO_CONFIG, getCanonicalUrl } from "@/lib/seo";
 import CaseStudiesClient from "./CaseStudiesClient";
 
 export const metadata: Metadata = {
-    title: "SEO & Performance Marketing Case Studies | Tellora Media",
+    title: "Case Studies | SEO & Ads Results",
     description: "Explore how Tellora Media scales D2C brands and B2B tech companies using high-frequency SEO and performance marketing. Real data. Absolute intent.",
     keywords: [
         "digital marketing case studies",

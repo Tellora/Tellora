@@ -74,9 +74,15 @@ export default function Footer() {
                                     <Zap size={24} className="text-primary fill-current" /> Our Services
                                 </h3>
                                 <ul className="space-y-6">
-                                    {["SEO Optimization", "Social Media", "Web Design", "Performance Ads"].map(s => (
+                                    {[
+                                        { name: "SEO Services Delhi", href: "/services/seo-services-delhi/" },
+                                        { name: "Social Media Marketing", href: "/services/social-media-marketing-agency-delhi/" },
+                                        { name: "Web Design & Development", href: "/services/web-design-development-delhi/" },
+                                        { name: "Performance Marketing", href: "/services/performance-marketing-agency-delhi/" },
+                                        { name: "Content & Video", href: "/services/content-marketing-video-production-delhi/" },
+                                    ].map(({ name: s, href }) => (
                                         <li key={s}>
-                                            <Link href="/services" className="text-[12px] font-black uppercase tracking-[0.4em] hover:text-primary transition-colors flex items-center gap-4 group">
+                                            <Link href={href} className="text-[12px] font-black uppercase tracking-[0.4em] hover:text-primary transition-colors flex items-center gap-4 group">
                                                 <div className="w-2 h-2 bg-black rounded-full group-hover:scale-200 transition-all group-hover:bg-primary" /> {s}
                                             </Link>
                                         </li>

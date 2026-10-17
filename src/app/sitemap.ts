@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next';
 import { supabase } from '@/lib/supabase';
 import { SEO_CONFIG } from '@/lib/seo';
+import { servicePages } from '@/data/service-pages';
+import { staticBlogPosts } from '@/data/blog-posts';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = SEO_CONFIG.siteUrl.replace(/\/$/, '');
@@ -63,6 +65,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         },
     ];
 
+    // ── Service landing pages & authored blog articles ──
+    const servicePageRoutes: MetadataRoute.Sitemap = servicePages.map((s) => ({
+        url: `${baseUrl}/services/${s.slug}/`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.9,
+    }));
+    const staticBlogRoutes: MetadataRoute.Sitemap = staticBlogPosts.map((p) => ({
+        url: `${baseUrl}/blog/${p.slug}/`,
+        lastModified: new Date(`${p.date}T00:00:00Z`),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+    }));
+
     // ── Dynamic Routes from Database ──
     let blogRoutes: MetadataRoute.Sitemap = [];
     try {
@@ -122,6 +138,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         // Fallback gracefully
     }
 
-    return [...staticRoutes, ...blogRoutes, ...caseStudyRoutes, ...careerRoutes];
+    // De-duplicate in case a database post shares a slug with an authored article
+    const seen = new Set<string>();
+    return [...staticRoutes, ...servicePageRoutes, ...staticBlogRoutes, ...blogRoutes, ...caseStudyRoutes, ...careerRoutes].filter((r) => {
+        if (seen.has(r.url)) return false;
+        seen.add(r.url);
+        return true;
+    });
 }
 

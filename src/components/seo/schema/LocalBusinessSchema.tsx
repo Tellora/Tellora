@@ -1,12 +1,16 @@
 import { SEO_CONFIG } from "@/lib/seo";
+import { SOCIAL_PROFILES } from "./OrganizationSchema";
 
 export default function LocalBusinessSchema() {
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": ["LocalBusiness", "ProfessionalService"],
+        "@id": `${SEO_CONFIG.siteUrl}/#localbusiness`,
         "name": SEO_CONFIG.organizationName,
         "url": SEO_CONFIG.siteUrl,
         "image": `${SEO_CONFIG.siteUrl}${SEO_CONFIG.defaultOGImage}`,
+        "logo": `${SEO_CONFIG.siteUrl}/tellora-logo.png`,
+        "description": SEO_CONFIG.defaultDescription,
         "priceRange": "₹₹",
         "telephone": SEO_CONFIG.contactPhone,
         "email": SEO_CONFIG.contactEmail,
@@ -14,21 +18,15 @@ export default function LocalBusinessSchema() {
             "@type": "PostalAddress",
             "addressLocality": "New Delhi",
             "addressRegion": "Delhi",
-            "postalCode": "PLACEHOLDER_PINCODE", // TODO: Add actual pincode
             "addressCountry": "IN"
         },
-        "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": "PLACEHOLDER_LAT", // TODO: Add latitude
-            "longitude": "PLACEHOLDER_LNG" // TODO: Add longitude
-        },
-        "openingHoursSpecification": {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-            "opens": "10:00",
-            "closes": "19:00"
-        },
-        "areaServed": ["Delhi", "India", "Global"]
+        "sameAs": SOCIAL_PROFILES,
+        "parentOrganization": { "@id": `${SEO_CONFIG.siteUrl}/#organization` },
+        "areaServed": [
+            { "@type": "City", "name": "Delhi" },
+            { "@type": "AdministrativeArea", "name": "Delhi NCR" },
+            { "@type": "Country", "name": "India" }
+        ]
     };
 
     return (

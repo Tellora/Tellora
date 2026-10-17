@@ -10,39 +10,14 @@ import { Star, Cpu, Activity } from "lucide-react";
 import { motion } from "framer-motion";
 import { MobileDock } from "@/components/MobileDock";
 import SecretAdminAccess from "@/components/SecretAdminAccess";
-import { SEO_CONFIG } from "@/lib/seo";
 
 export default function SiteLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    // Global Organization JSON-LD Strategy
-    const orgJsonLd = {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": SEO_CONFIG.organizationName,
-        "url": SEO_CONFIG.siteUrl,
-        "logo": `${SEO_CONFIG.siteUrl}/tellora-logo.png`,
-        "description": "Premium digital marketing agency and growth architecture firm specializing in technical SEO, PPC, and performance web design.",
-        "sameAs": [
-            "https://twitter.com/telloramedia",
-            "https://linkedin.com/company/telloramedia"
-        ],
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "contactType": "customer support",
-            "email": SEO_CONFIG.contactEmail
-        }
-    };
-
     return (
         <div className="bg-background text-foreground noise-overlay overflow-x-hidden min-h-screen relative pb-[calc(56px+env(safe-area-inset-bottom))] md:pb-0 selection:bg-black selection:text-white">
-            <meta name="google-site-verification" content="INSERT_GSC_VERIFICATION_TAG_HERE" />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
-            />
             {/* Secret admin access — keyboard shortcut & mobile logo tap */}
             <SecretAdminAccess />
             {/* ── Optimized Global Architecture ── */}

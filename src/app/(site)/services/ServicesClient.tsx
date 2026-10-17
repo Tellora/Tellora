@@ -13,6 +13,8 @@ import {
 import { GrowthDashboard } from "@/components/GrowthDashboard";
 import { ScrollLine, HorizontalReveal, FloatingElement, MagneticElement, ScrollConnector } from "@/components/animations/ScrollChoreography";
 import { getServices, Service } from "@/lib/store";
+import Link from "next/link";
+import { servicePages } from "@/data/service-pages";
 
 // Icon mapping helper
 const IconMap: Record<string, React.ReactNode> = {
@@ -99,17 +101,16 @@ const defaultServices: Service[] = [
 ];
 
 export default function ServicesPage() {
-    const [services, setServices] = useState<Service[]>([]);
-    const [loading, setLoading] = useState(true);
+    // Start with the default services so crawlers and users get real content immediately;
+    // live data from the database replaces it as soon as it loads.
+    const [services, setServices] = useState<Service[]>(defaultServices);
+    const [loading] = useState(false);
 
     useEffect(() => {
         getServices().then((data) => {
             if (data && data.length > 0) {
                 setServices(data);
-            } else {
-                setServices(defaultServices);
             }
-            setLoading(false);
         });
     }, []);
 
@@ -186,6 +187,24 @@ export default function ServicesPage() {
                                 </motion.div>
                             ))}
                         </div>
+                    </div>
+                </section>
+
+                {/* Crawlable deep links to service landing pages */}
+                <section className="py-12 md:py-16 relative bg-white border-y-[4px] border-black">
+                    <div className="container mx-auto px-6">
+                        <h2 className="text-3xl md:text-5xl font-heading font-black uppercase tracking-tighter mb-3">Digital Marketing Services in Delhi</h2>
+                        <p className="font-bold max-w-3xl mb-8 text-black/70">Explore each service in detail, with what is included, how we work and answers to common questions.</p>
+                        <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {servicePages.map((sp) => (
+                                <li key={sp.slug}>
+                                    <Link href={`/services/${sp.slug}/`} className="flex items-center justify-between gap-3 bg-white brutalist-border p-4 shadow-[4px_4px_0px_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0px_#A855F7] transition-all font-black uppercase text-sm tracking-wider">
+                                        {sp.label}
+                                        <ArrowRight size={18} />
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </section>
 

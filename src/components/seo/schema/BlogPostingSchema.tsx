@@ -31,7 +31,7 @@ export default function BlogPostingSchema({ post }: { post: BlogPostSchemaProps 
             "name": SEO_CONFIG.organizationName,
             "logo": {
                 "@type": "ImageObject",
-                "url": `${SEO_CONFIG.siteUrl}/logo.png`
+                "url": `${SEO_CONFIG.siteUrl}/tellora-logo.png`
             }
         },
         "image": post.image || `${SEO_CONFIG.siteUrl}${SEO_CONFIG.defaultOGImage}`,

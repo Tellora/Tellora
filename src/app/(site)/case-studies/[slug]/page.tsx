@@ -67,11 +67,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
     if (!study) {
         return {
-            title: "Case Study Not Found | Tellora Media",
+            title: "Case Study Not Found",
         };
     }
 
-    const title = study.seo_title || `${study.title} | Growth Case Study | Tellora Media`;
+    const title = study.seo_title || `${study.title} | Case Study`;
     const description = study.seo_description || (study.description?.substring(0, 155) || SEO_CONFIG.defaultDescription);
 
     return {
