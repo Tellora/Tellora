@@ -9,6 +9,16 @@ import { TiltCard } from "@/components/animations/TiltCard";
 import PhysicalFilmReelBackground from "@/components/animations/PhysicalFilmReelBackground";
 import { getSettings, getCompanyStats, SiteSettings, CompanyStat } from "@/lib/store";
 
+/** Wraps a stat card in a link when it should point somewhere (the GLOBAL / CLIENT REACH stat opens /us). */
+function StatLink({ href, label, children }: { href?: string; label: string; children: React.ReactNode }) {
+    if (!href) return <>{children}</>;
+    return (
+        <Link href={href} aria-label={`${label}: see how we help US businesses`} className="block h-full">
+            {children}
+        </Link>
+    );
+}
+
 const DEFAULT_STATS: CompanyStat[] = [
     { value: "6.4X", label: "AVERAGE AD RETURN", color: "#A855F7" },
     { value: "100%", label: "REVENUE GROWTH", color: "#22C55E" },
@@ -151,6 +161,7 @@ export default function Hero() {
                     <motion.div style={{ y: statsY }} className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 w-full max-w-4xl relative z-30 items-stretch">
                         {stats.slice(0, 3).map((stat, i) => (
                             <motion.div key={i} style={{ rotate: fans[i] }} className={`h-full ${i === 2 ? 'col-span-2 md:col-span-1' : ''}`}>
+                            <StatLink href={/global/i.test(stat.value) || /client reach/i.test(stat.label) ? "/us" : undefined} label={stat.label}>
                             <TiltCard className="h-full">
                                 <motion.div
                                     initial={{ opacity: 0, y: 30 }}
@@ -167,6 +178,7 @@ export default function Hero() {
                                     </div>
                                 </motion.div>
                             </TiltCard>
+                            </StatLink>
                             </motion.div>
                         ))}
                     </motion.div>

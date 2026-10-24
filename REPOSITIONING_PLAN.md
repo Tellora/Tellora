@@ -1,6 +1,6 @@
 # Tellora Media — US-first Repositioning Plan
 
-Status: **Phase 0 and Phase 1 complete (partial: see below). Awaiting answers before Phase 2.**
+Status: **Phase 0 and Phase 1 complete (partial: see below). Phase 2 complete. Awaiting answers before Phase 3.**
 
 ### Phase 1 shipped
 - `/us`, `/for-electrical-contractors`, rebuilt `/case-studies/atoms-electrical/` (real client facts, TODO placeholders for metrics/timeline/testimonial)
@@ -76,3 +76,9 @@ None planned (largest touched: `case-studies.ts` ≈310 lines, `Header.tsx` ≈2
 
 ## Not touched
 `.env*`, `.dev.vars`, `.github/workflows/deploy.yml`, `next.config.js`, `public/_headers`, `node_modules`.
+
+
+### Phase 2 shipped (with the defaults chosen because the Phase 2 questions were not answered)
+- Header: "For US Businesses" appended to the nav (nothing removed/reordered); "US / International →" link in the top bar on desktop. The desktop dock now appears from 1280px up (below that the hamburger shows); this also fixes an existing bug where the hamburger button was pushed off-screen between 768 and 1180px.
+- Homepage: client logo bar under hero (real Atoms logo + text placeholders), India/US/UK strip before How It Works, Atoms pinned first in THE RESULTS (links to its own page), GLOBAL stat card links to /us, dismissible geo hint banner (browser time zone, no external calls, dismissal in localStorage).
+- Footer: "India HQ: Delhi, India" (street address TODO), hours, US contact lines (hidden until values set), trust badges (Google 5.0 only; Clutch/GoodFirms/DesignRush render once a profile URL is set).

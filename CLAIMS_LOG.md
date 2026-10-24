@@ -18,6 +18,9 @@ Status: **Verified** = basis confirmed by Tellora; **Pending** = needs confirmat
 | 11 | Goodlife Diagnostics shown as a transferable India example | `/us` mini cards | Existing site case study. TODO: confirm its details against the real engagement before linking from US pages | Pending |
 | 12 | Delhi-based operations / team in Delhi (IST) | `/us` FAQ and Why Tellora | Company address basis in site footer and schema. TODO: confirm full registered address | Pending address |
 | 13 | Google Local Services Ads / Google Business Profile management are offered services | `/us`, `/for-electrical-contractors` | Owner-listed service lines in brief. Not claimed as part of the Atoms engagement | Capability statement |
+| 14 | "Serving clients across India 🇮🇳, the US 🇺🇸, and the UK 🇬🇧" | Homepage strip near How It Works | Owner-supplied wording. TODO: confirm at least one UK client/engagement exists | Pending (UK) |
+| 15 | "Trusted by brands in India and the US" + logo bar (Atoms, US D2C footwear, Goodlife, Air Right, ALFA, Keshav Sales Corp) | Homepage logo bar | Clients listed on existing site / owner brief. TODO: permission to display each name/logo | Pending permission |
+| 16 | "India: 10am–7pm IST · US: business hours by appointment" | Footer | Owner-supplied hours; US hours softened per owner decision (see #5) | Approved wording |
 
 ## Rules
 - Never convert a capability statement into a results statement without client data and written permission.

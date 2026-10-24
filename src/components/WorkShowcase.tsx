@@ -12,7 +12,9 @@ export default function WorkShowcase() {
     
     // Mapping our case studies to the showcase format
     const projects = useMemo(() => {
-        return caseStudies.map((study, index) => ({
+        // Atoms Electrical Co. (our US proof point) is pinned first; everything else keeps its order
+        const ordered = [...caseStudies].sort((a, b) => (a.id === "atoms-electrical" ? -1 : b.id === "atoms-electrical" ? 1 : 0));
+        return ordered.map((study, index) => ({
             id: study.id,
             title: study.title,
             category: study.industry.toLowerCase(),
@@ -77,7 +79,7 @@ export default function WorkShowcase() {
                         {filteredProjects.map((project) => (
                             <Link
                                 key={project.id}
-                                href="/case-studies"
+                                href={project.id === "atoms-electrical" ? "/case-studies/atoms-electrical/" : "/case-studies"}
                                 className="block"
                             >
                                 <motion.div
