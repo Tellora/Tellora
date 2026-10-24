@@ -20,6 +20,15 @@ export interface CaseStudy {
         gmb?: string;
     };
     stats: { label: string; value: string }[];
+    /** Optional rich-detail fields (used by flagship / international case studies) */
+    location?: string;
+    owner?: string;
+    scope?: { service: string; detail: string }[];
+    timeline?: { period: string; milestone: string }[];
+    results?: { label: string; note: string }[];
+    testimonial?: { quote: string; author: string; role: string };
+    seoTitle?: string;
+    seoDescription?: string;
 }
 
 export const caseStudies: CaseStudy[] = [
@@ -223,32 +232,58 @@ export const caseStudies: CaseStudy[] = [
     },
     {
         id: "atoms-electrical",
-        title: "Atoms Electrical",
-        clientSummary: "Innovative electrical contractors based in Utrecht, focusing on sustainable energy and modern smart-home solutions.",
+        title: "Atoms Electrical Co.",
+        clientSummary: "Atoms Electrical Co. is an electrical contractor in Eureka, Missouri, USA, owned by Adam Holes. The company offers electrical services, lighting and fixtures, and power and renewable energy solutions.",
         industry: "Electrical",
-        services: ["Content Creation", "Social Media Management"],
-        description: "Injecting high-energy digital presence into the Utrecht electrical sector with strategic content deployment.",
-        impact: "Regional Growth",
-        challenge: "New market entry in a highly saturated European city with zero existing digital footprint or brand recognition.",
-        execution: "Localized content strategy targeting high-intent industrial sectors, high-fidelity social reels, and targeted awareness campaigns.",
-        strategicInsight: "Utrecht's market values innovation. We positioned Atoms as the 'Smart Contractor,' focusing content on tech-forward solutions like EV Charging and Home Automation.",
+        services: ["Website Design & Development", "SEO", "Social Media Marketing", "Performance Marketing"],
+        description: "A US electrical contractor in Eureka, MO, supported across website design and development, SEO, social media and performance marketing.",
+        impact: "Web + SEO + Social + Ads",
+        // TODO: client's starting situation / challenge (brief from Adam Holes)
+        challenge: "Detailed challenge write-up coming soon. Atoms Electrical Co. is a local electrical contractor in Eureka, Missouri that needed a stronger online presence to be found and chosen by homeowners and businesses in its service area.",
+        // TODO: confirm specifics of each workstream before publishing
+        execution: "Tellora Media supports Atoms Electrical Co. across four connected workstreams: website design and development, search engine optimization, social media marketing on Facebook and Instagram (posts and reels), and performance marketing.",
+        // TODO: confirm strategic insight with client / team
+        strategicInsight: "Local service businesses win when their website, search presence, social proof and paid campaigns all tell the same story to the same nearby customer.",
         roadmap: [
-            { phase: "Market Entry Plan", details: "Analyzing local competition and identifying gaps." },
-            { phase: "Visual Identity", details: "Creating a high-tech, modern visual language for the brand." },
-            { phase: "Sector Targeting", details: "Launching content specifically for B2B industrial clients." },
-            { phase: "Network Growth", details: "Building local partnerships through digital community work." }
+            { phase: "Website design & development", details: "The company website at atomselectrical.com." },
+            { phase: "SEO", details: "Search optimization to help local customers find the business." },
+            { phase: "Social media marketing", details: "Facebook and Instagram posts and reels showcasing the work." },
+            { phase: "Performance marketing", details: "Paid campaigns to generate enquiries." }
         ],
-        techStack: ["Meta Ads", "LinkedIn Business", "Vimeo", "Squarespace"],
+        techStack: ["Website", "SEO", "Facebook", "Instagram", "Paid Ads"],
         image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=1200&q=80",
         color: "#22C55E",
         links: {
-            facebook: "https://www.facebook.com/AtomsElectricalCo",
-            instagram: "https://www.instagram.com/atomselectrical.co/"
+            website: "https://atomselectrical.com",
+            facebook: "https://www.facebook.com/AtomsElectricalCo/"
         },
-        stats: [
-            { label: "Engagement", value: "12%" },
-            { label: "Awareness", value: "High" }
-        ]
+        // TODO: real before/after metrics (traffic, leads, revenue) and permission to publish numbers
+        stats: [],
+        location: "Eureka, Missouri, USA",
+        owner: "Adam Holes",
+        scope: [
+            { service: "Website Design & Development", detail: "Design and build of the company website, atomselectrical.com." },
+            { service: "SEO", detail: "Search engine optimization for local visibility." },
+            { service: "Social Media Marketing", detail: "Facebook and Instagram posts and reels." },
+            { service: "Performance Marketing", detail: "Paid advertising campaigns." }
+        ],
+        // TODO: engagement start date and current duration; replace with real 90-day / 6-month / 12-month milestones
+        timeline: [
+            { period: "First 90 days", milestone: "Milestones to be added." },
+            { period: "6 months", milestone: "Milestones to be added." },
+            { period: "12 months", milestone: "Milestones to be added." }
+        ],
+        // TODO: real traffic / leads / revenue data (and permission to publish) to replace these placeholders
+        results: [
+            { label: "Organic traffic", note: "Before / after data coming soon" },
+            { label: "Qualified leads", note: "Before / after data coming soon" },
+            { label: "Revenue impact", note: "Shared with client permission" }
+        ],
+        // TODO: testimonial quote from Adam Holes (do not publish until real and approved)
+        testimonial: undefined,
+        // TODO: confirm wording once results are approved
+        seoTitle: "Atoms Electrical Case Study | Web, SEO & Ads",
+        seoDescription: "How Tellora Media supports Atoms Electrical Co., an Eureka, MO electrical contractor, with website design, SEO, social media marketing and performance marketing."
     },
     {
         id: "letters-to-ron",

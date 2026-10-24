@@ -1,6 +1,12 @@
 # Tellora Media — US-first Repositioning Plan
 
-Status: **Phase 0 complete. Awaiting review before Phase 1** (plan touches more than ~30 files).
+Status: **Phase 0 and Phase 1 complete (partial: see below). Awaiting answers before Phase 2.**
+
+### Phase 1 shipped
+- `/us`, `/for-electrical-contractors`, rebuilt `/case-studies/atoms-electrical/` (real client facts, TODO placeholders for metrics/timeline/testimonial)
+- `CLAIMS_LOG.md` created; `US_PAGES_LIVE = false` flag keeps new US pages `noindex` and out of the sitemap until TODOs are filled
+- **Deferred (waiting on facts):** US footwear case study page; ALFA case study (no data exists); polishing Goodlife / Air Right pages (existing copy unverified)
+- Calendly embed deferred (third-party script needs approval); link button used instead
 
 ## Phase 0 — Discovery
 
