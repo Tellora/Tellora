@@ -21,6 +21,7 @@ Status: **Verified** = basis confirmed by Tellora; **Pending** = needs confirmat
 | 14 | "Serving clients across India 🇮🇳, the US 🇺🇸, and the UK 🇬🇧" | Homepage strip near How It Works | Owner-supplied wording. TODO: confirm at least one UK client/engagement exists | Pending (UK) |
 | 15 | "Trusted by brands in India and the US" + logo bar (Atoms, US D2C footwear, Goodlife, Air Right, ALFA, Keshav Sales Corp) | Homepage logo bar | Clients listed on existing site / owner brief. TODO: permission to display each name/logo | Pending permission |
 | 16 | "India: 10am–7pm IST · US: business hours by appointment" | Footer | Owner-supplied hours; US hours softened per owner decision (see #5) | Approved wording |
+| 17 | (Deliberately omitted) AggregateRating / Review structured data for the Google reviews | n/a | Google does not show stars for a business marking up reviews of itself, and misleading markup risks a manual action. The visible "5.0 on Google" badge links to the real profile instead | Omitted by design |
 
 ## Rules
 - Never convert a capability statement into a results statement without client data and written permission.

@@ -119,7 +119,8 @@ export async function addReply(id: string, replyText: string): Promise<void> {
     });
 }
 
-export async function submitContactForm(data: any): Promise<void> {
+/** Returns false if the message could not be saved (callers that ignore the result behave as before). */
+export async function submitContactForm(data: any): Promise<boolean> {
     const msg = {
         sender: data.name,
         email: data.email,
@@ -130,13 +131,14 @@ export async function submitContactForm(data: any): Promise<void> {
         status: "Unread",
         created_at: new Date().toISOString()
     };
-    await upsertTableData("inbox_messages", msg);
+    const saved = await upsertTableData("inbox_messages", msg);
     await addActivityLog({
         type: "create",
         item: `New inquiry from ${data.name}`,
         user_name: "Public",
         status: "Unread"
     });
+    return saved;
 }
 
 // ── Services ──────────────────────────────────────────────────────────────────

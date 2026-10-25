@@ -8,6 +8,8 @@ import { SEO_CONFIG, US_CONTACT, US_PAGES_LIVE, getCanonicalUrl } from "@/lib/se
 import { ELECTRICAL, OWNERSHIP_NOTE, US_HERO } from "@/data/us-market";
 import { caseStudies } from "@/data/case-studies";
 import BreadcrumbSchema from "@/components/seo/schema/BreadcrumbSchema";
+import ProfessionalServiceSchema from "@/components/seo/schema/ProfessionalServiceSchema";
+import TrackedLink from "@/components/us/TrackedLink";
 
 const TITLE = "Marketing Agency for Electrical Contractors | Local SEO & Google Ads";
 const DESCRIPTION =
@@ -37,6 +39,22 @@ export default function ElectricalContractorsPage() {
 
     return (
         <div className="bg-background text-foreground min-h-screen relative overflow-x-hidden">
+            <ProfessionalServiceSchema />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Service",
+                        name: "Local SEO and Google Ads for electrical contractors",
+                        serviceType: "Digital marketing for electrical contractors",
+                        description: DESCRIPTION,
+                        url: getCanonicalUrl("/for-electrical-contractors/"),
+                        provider: { "@id": `${SEO_CONFIG.siteUrl}/#us-service` },
+                        areaServed: { "@type": "Country", name: "United States" },
+                    }),
+                }}
+            />
             <BreadcrumbSchema
                 items={[
                     { name: "Home", url: `${SEO_CONFIG.siteUrl}/` },
@@ -58,12 +76,14 @@ export default function ElectricalContractorsPage() {
                         <p className="text-base md:text-xl font-bold leading-relaxed max-w-3xl mb-8 text-black/80">
                             We help electrical contractors build systems to generate 20+ qualified leads per month through local SEO, Google Ads and a website that converts.
                         </p>
-                        <Link
+                        <TrackedLink
                             href={bookHref}
+                            event="us_audit_booking_click"
+                            eventParams={{ location: "electrical_hero" }}
                             className="inline-flex px-8 py-4 bg-black text-white font-black uppercase tracking-widest text-sm brutalist-border shadow-[6px_6px_0px_#A855F7] hover:-translate-y-1 transition-all items-center gap-3"
                         >
                             {US_HERO.primaryCta} <ArrowRight size={18} />
-                        </Link>
+                        </TrackedLink>
                     </div>
                 </section>
 

@@ -17,6 +17,8 @@ import {
 } from "@/data/us-market";
 import FaqSchema from "@/components/seo/schema/FaqSchema";
 import BreadcrumbSchema from "@/components/seo/schema/BreadcrumbSchema";
+import ProfessionalServiceSchema from "@/components/seo/schema/ProfessionalServiceSchema";
+import TrackedLink from "@/components/us/TrackedLink";
 
 const TITLE = "Digital Marketing Agency for US Home Service Businesses";
 const DESCRIPTION =
@@ -45,6 +47,7 @@ export default function UsLandingPage() {
 
     return (
         <div className="bg-background text-foreground min-h-screen relative overflow-x-hidden">
+            <ProfessionalServiceSchema />
             <FaqSchema questions={US_FAQS.map((f) => ({ question: f.question, answer: f.answer }))} />
             <BreadcrumbSchema
                 items={[
@@ -66,12 +69,14 @@ export default function UsLandingPage() {
                         </h1>
                         <p className="text-base md:text-xl font-bold leading-relaxed max-w-3xl mb-8 text-black/80">{US_HERO.subhead}</p>
                         <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                            <Link
+                            <TrackedLink
                                 href={bookHref}
+                                event="us_audit_booking_click"
+                                eventParams={{ location: "hero" }}
                                 className="px-8 py-4 bg-black text-white font-black uppercase tracking-widest text-sm brutalist-border shadow-[6px_6px_0px_#A855F7] hover:-translate-y-1 transition-all flex items-center justify-center gap-3"
                             >
                                 {US_HERO.primaryCta} <ArrowRight size={18} />
-                            </Link>
+                            </TrackedLink>
                             <Link
                                 href={US_HERO.caseStudyHref}
                                 className="px-8 py-4 bg-white text-black font-black uppercase tracking-widest text-sm brutalist-border shadow-[6px_6px_0px_#F3E84A] hover:-translate-y-1 transition-all flex items-center justify-center"
@@ -206,12 +211,14 @@ export default function UsLandingPage() {
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             {/* TODO: Calendly embed. Needs approval (third-party script); using a link button for now. */}
-                            <Link
+                            <TrackedLink
                                 href={bookHref}
+                                event="us_audit_booking_click"
+                                eventParams={{ location: "footer_cta" }}
                                 className="px-8 py-4 bg-black text-white font-black uppercase tracking-widest text-sm brutalist-border shadow-[6px_6px_0px_#A855F7] hover:-translate-y-1 transition-all"
                             >
                                 {US_HERO.primaryCta}
-                            </Link>
+                            </TrackedLink>
                             {US_CONTACT.email && (
                                 <a
                                     href={`mailto:${US_CONTACT.email}`}

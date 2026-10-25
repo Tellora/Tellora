@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Send, CheckCircle } from "lucide-react";
 import { submitContactForm } from "@/lib/store";
+import { trackEvent } from "@/lib/gtag";
 
 /**
  * Lead magnet: free local SEO audit for electricians.
@@ -19,14 +20,16 @@ export default function LeadAuditForm() {
         const fd = new FormData(form);
         const business = String(fd.get("business") || "");
         try {
-            await submitContactForm({
+            const saved = await submitContactForm({
                 name: fd.get("name") as string,
                 email: fd.get("email") as string,
                 company: business,
                 service: "Free local SEO audit (electricians)",
                 message: `Website: ${fd.get("website")}\nService area: ${fd.get("area")}\nBusiness: ${business}`,
             });
+            if (!saved) throw new Error("save failed");
             setStatus("success");
+            trackEvent("electrical_audit_form_submit", { form: "local_seo_audit" });
             form.reset();
         } catch {
             setStatus("error");

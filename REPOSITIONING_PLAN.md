@@ -82,3 +82,10 @@ None planned (largest touched: `case-studies.ts` ≈310 lines, `Header.tsx` ≈2
 - Header: "For US Businesses" appended to the nav (nothing removed/reordered); "US / International →" link in the top bar on desktop. The desktop dock now appears from 1280px up (below that the hamburger shows); this also fixes an existing bug where the hamburger button was pushed off-screen between 768 and 1180px.
 - Homepage: client logo bar under hero (real Atoms logo + text placeholders), India/US/UK strip before How It Works, Atoms pinned first in THE RESULTS (links to its own page), GLOBAL stat card links to /us, dismissible geo hint banner (browser time zone, no external calls, dismissal in localStorage).
 - Footer: "India HQ: Delhi, India" (street address TODO), hours, US contact lines (hidden until values set), trust badges (Google 5.0 only; Clutch/GoodFirms/DesignRush render once a profile URL is set).
+
+### Phase 3 shipped
+- Meta/OG for `/us`, `/for-electrical-contractors`, Atoms case study (placeholder OG images; wording adjusted per CLAIMS_LOG); `ProfessionalService` (US service-area instance, no address) + existing LocalBusiness (India HQ); `Service` schema on the electrical page (service pages already had it); `FAQPage` on `/us`; `BreadcrumbList` added to careers, careers/[id], seo-checker (other pages already had it)
+- **Not done by design:** AggregateRating/Review schema (Google policy risk); sitemap entries for US pages stay behind `US_PAGES_LIVE`
+- Analytics: `trackEvent` helper + 3 named events, documented in `ANALYTICS.md`. **GA4 may not be firing in production** (build workflow does not pass the Measurement ID). Not changed: deploy config is off-limits
+- Lighthouse (mobile, simulated, gzip, local): `/us` 93, `/for-electrical-contractors` 91, home 89; CLS ~0, TBT 0; **LCP 3.2-3.7s (target 2.5s)**, sitewide cause (see status message)
+- `submitContactForm` now returns whether the save succeeded
