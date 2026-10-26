@@ -2,14 +2,14 @@
 
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { staticBlogPosts, formatPostDate } from "@/data/blog-posts";
+import { publishedBlogPosts, formatPostDate, US_MARKET_CATEGORY } from "@/data/blog-posts";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, ArrowRight, Tag, Search, X } from "lucide-react";
 
-const blogPosts = staticBlogPosts.map((p, i) => ({
+const blogPosts = publishedBlogPosts().map((p, i) => ({
     id: i + 1,
     slug: p.slug,
     title: p.title,
@@ -20,7 +20,10 @@ const blogPosts = staticBlogPosts.map((p, i) => ({
     image: p.image,
 }));
 
-const CATEGORIES = ["All", "SEO Strategy", "Local SEO", "Paid Performance", "Web Design", "Content Strategy", "Marketing Strategy"];
+// "US Market Insights" appears automatically once a non-draft post in that category exists
+const CATEGORIES = [
+    "All", "SEO Strategy", "Local SEO", "Paid Performance", "Web Design", "Content Strategy", "Marketing Strategy", US_MARKET_CATEGORY,
+].filter((c) => c === "All" || blogPosts.some((p) => p.category === c));
 
 export default function BlogPage() {
     const [searchQuery, setSearchQuery] = useState("");

@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { supabase } from '@/lib/supabase';
 import { SEO_CONFIG, US_PAGES_LIVE } from '@/lib/seo';
 import { servicePages } from '@/data/service-pages';
-import { staticBlogPosts } from '@/data/blog-posts';
+import { publishedBlogPosts } from '@/data/blog-posts';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = SEO_CONFIG.siteUrl.replace(/\/$/, '');
@@ -72,7 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: 'monthly' as const,
         priority: 0.9,
     }));
-    const staticBlogRoutes: MetadataRoute.Sitemap = staticBlogPosts.map((p) => ({
+    const staticBlogRoutes: MetadataRoute.Sitemap = publishedBlogPosts().map((p) => ({
         url: `${baseUrl}/blog/${p.slug}/`,
         lastModified: new Date(`${p.date}T00:00:00Z`),
         changeFrequency: 'monthly' as const,

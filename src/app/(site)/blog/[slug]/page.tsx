@@ -6,7 +6,7 @@ import BlogPostingSchema from "@/components/seo/schema/BlogPostingSchema";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { staticBlogPosts, getStaticPost, formatPostDate } from "@/data/blog-posts";
+import { staticBlogPosts, publishedBlogPosts, getStaticPost, formatPostDate } from "@/data/blog-posts";
 import { getServicePage } from "@/data/service-pages";
 import BreadcrumbSchema from "@/components/seo/schema/BreadcrumbSchema";
 
@@ -39,6 +39,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
             title: staticPost.seoTitle,
             description: staticPost.seoDescription,
             alternates: { canonical: url },
+            // Drafts are reachable but kept out of search until published
+            robots: staticPost.draft ? { index: false, follow: true } : undefined,
             openGraph: {
                 title: staticPost.seoTitle,
                 description: staticPost.seoDescription,
@@ -102,7 +104,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     if (staticPost) {
         const url = getCanonicalUrl(`/blog/${staticPost.slug}/`);
         const service = getServicePage(staticPost.serviceSlug);
-        const others = staticBlogPosts.filter((p) => p.slug !== staticPost.slug).slice(0, 3);
+        const others = publishedBlogPosts().filter((p) => p.slug !== staticPost.slug).slice(0, 3);
         return (
             <div className="bg-white text-black min-h-screen selection:bg-primary selection:text-white">
                 <Header />
@@ -129,6 +131,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                                 <Link href="/" className="hover:text-primary">Home</Link> / <Link href="/blog/" className="hover:text-primary">Blog</Link>
                             </nav>
                             <span className="inline-block px-4 py-1.5 bg-primary brutalist-border text-[10px] font-black uppercase tracking-[0.3em] shadow-[4px_4px_0px_#000]">{staticPost.category}</span>
+                            {staticPost.draft && (
+                                <p role="note" className="mx-auto max-w-xl bg-white brutalist-border px-4 py-2 text-[11px] font-black uppercase tracking-widest">
+                                    Draft: not yet published. Body copy is still to be written.
+                                </p>
+                            )}
                             <h1 className="text-3xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase leading-[0.95] break-words">
                                 {staticPost.title}
                             </h1>

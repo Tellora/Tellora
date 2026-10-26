@@ -97,3 +97,7 @@ None planned (largest touched: `case-studies.ts` ≈310 lines, `Header.tsx` ≈2
 - Contact page time zones use real zones (DST-safe) instead of fixed offsets
 - Email routing by region **not implemented** (TODO: Resend via Supabase edge function)
 - Calendly: link button appears once `US_CONTACT.calendlyUrl` is set; no embed (needs third-party script approval)
+
+### Phase 5 shipped
+- Category "US Market Insights" + 3 scaffold posts (title, H2 outline as questions, TODO bodies, proper meta + BlogPosting/Breadcrumb schema)
+- Posts carry `draft: true`: page exists but is `noindex`, hidden from `/blog`, the sitemap and related-post lists, and the category chip stays hidden until a non-draft post exists. Remove `draft` from a post once the body is written and approved

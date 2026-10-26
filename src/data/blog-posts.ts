@@ -13,7 +13,14 @@ export interface StaticBlogPost {
     serviceSlug: string;
     /** Trusted HTML authored in this repo */
     content: string;
+    /**
+     * Draft posts get a page (noindex) but are NOT listed on /blog, in the sitemap, or in related-post lists.
+     * Remove `draft` once the body is written and approved.
+     */
+    draft?: boolean;
 }
+
+export const US_MARKET_CATEGORY = "US Market Insights";
 
 export function formatPostDate(iso: string): string {
     const d = new Date(`${iso}T00:00:00Z`);
@@ -233,7 +240,89 @@ export const staticBlogPosts: StaticBlogPost[] = [
 <p>Every business is different, so we scope each project individually. <a href="/contact/">Contact Tellora Media</a> for a free consultation, explore our <a href="/services/">services</a>, or see how we delivered results in our <a href="/case-studies/">case studies</a>.</p>
 `,
     },
+    // ── US Market Insights (DRAFTS: scaffolds only; bodies are TODO and must be written before publishing) ──
+    {
+        slug: "us-electrical-contractors-local-seo-2026",
+        title: "How US electrical contractors can win local SEO in 2026",
+        excerpt: "A practical look at what helps electrical contractors show up when homeowners search for help nearby.",
+        category: US_MARKET_CATEGORY,
+        date: "2026-10-26",
+        readTime: "TODO min read",
+        image: "/og-us.png", // TODO: designed cover image
+        seoTitle: "Local SEO for US Electrical Contractors in 2026",
+        seoDescription: "How US electrical contractors can improve local search visibility in 2026: Google Business Profile, service-area pages, reviews and more.",
+        serviceSlug: "seo-services-delhi",
+        draft: true,
+        content: `
+<p>TODO: 1-2 line intro. What problem do electrical contractors face getting found locally?</p>
+<h2>What do homeowners actually search for?</h2>
+<p>TODO: write body.</p>
+<h2>Why does your Google Business Profile matter most?</h2>
+<p>TODO: write body.</p>
+<h2>How should service-area pages be structured?</h2>
+<p>TODO: write body.</p>
+<h2>How do reviews affect local rankings?</h2>
+<p>TODO: write body.</p>
+<h2>What should you fix on your website first?</h2>
+<p>TODO: write body.</p>
+`,
+    },
+    {
+        slug: "google-lsas-vs-google-ads-home-services",
+        title: "Google LSAs vs. Google Ads for home service businesses",
+        excerpt: "What is the difference between Local Services Ads and Google Ads, and which fits a home service business?",
+        category: US_MARKET_CATEGORY,
+        date: "2026-10-26",
+        readTime: "TODO min read",
+        image: "/og-us.png", // TODO: designed cover image
+        seoTitle: "Google LSAs vs Google Ads for Home Services",
+        seoDescription: "Google Local Services Ads vs Google Ads for home service businesses: how each works, how they are priced, and how to choose.",
+        serviceSlug: "performance-marketing-agency-delhi",
+        draft: true,
+        content: `
+<p>TODO: 1-2 line intro. Why do home service owners get confused between the two?</p>
+<h2>How do Local Services Ads work?</h2>
+<p>TODO: write body (verify against current Google documentation before publishing).</p>
+<h2>How do standard Google Ads campaigns work?</h2>
+<p>TODO: write body.</p>
+<h2>How does pricing differ?</h2>
+<p>TODO: write body (no figures without a source).</p>
+<h2>Which should you start with?</h2>
+<p>TODO: write body.</p>
+<h2>Can you run both together?</h2>
+<p>TODO: write body.</p>
+`,
+    },
+    {
+        slug: "why-us-small-businesses-hire-indian-marketing-agencies",
+        title: "Why US small businesses are hiring Indian marketing agencies (and what to look for)",
+        excerpt: "What should a US small business consider before hiring a marketing agency based in India?",
+        category: US_MARKET_CATEGORY,
+        date: "2026-10-26",
+        readTime: "TODO min read",
+        image: "/og-us.png", // TODO: designed cover image
+        seoTitle: "Hiring an Indian Marketing Agency: What to Look For",
+        seoDescription: "What US small businesses should look for when hiring a marketing agency based in India: communication, ownership, reporting and pricing.",
+        serviceSlug: "seo-services-delhi",
+        draft: true,
+        content: `
+<p>TODO: 1-2 line intro. Frame as a buyer's guide; avoid unsourced claims about market trends.</p>
+<h2>What are the real benefits and trade-offs?</h2>
+<p>TODO: write body (no statistics without a cited source).</p>
+<h2>How does communication work across time zones?</h2>
+<p>TODO: write body.</p>
+<h2>Who should own your ad accounts, website and data?</h2>
+<p>TODO: write body.</p>
+<h2>What should reporting look like?</h2>
+<p>TODO: write body.</p>
+<h2>What questions should you ask before signing?</h2>
+<p>TODO: write body.</p>
+`,
+    },
 ];
+
+/** Posts that are visible to visitors and search engines. */
+export const publishedBlogPosts = (): StaticBlogPost[] => staticBlogPosts.filter((p) => !p.draft);
 
 export function getStaticPost(slug: string): StaticBlogPost | undefined {
     return staticBlogPosts.find((p) => p.slug === slug);
