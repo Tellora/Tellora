@@ -7,7 +7,9 @@ import { caseStudies as staticCaseStudies } from "@/data/case-studies";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, TrendingUp, Sparkles, ExternalLink } from "lucide-react";
+import { ArrowLeft, CheckCircle2, TrendingUp, Sparkles, ExternalLink, MapPin, Quote } from "lucide-react";
+import ChartPlaceholder from "@/components/us/ChartPlaceholder";
+import BreadcrumbSchema from "@/components/seo/schema/BreadcrumbSchema";
 
 export async function generateStaticParams() {
     const { data: dbCases } = await supabase
@@ -56,9 +58,16 @@ async function getCaseStudyData(slug: string) {
         image: study?.image_url || staticMatch?.image || SEO_CONFIG.defaultOGImage,
         stats: staticMatch?.stats || study?.stats || [],
         links: staticMatch?.links || {},
-        seo_title: study?.seo_title,
-        seo_description: study?.seo_description,
-        created_at: study?.created_at
+        // Static (reviewed) copy wins over database rows for flagship case studies that define their own SEO fields
+        seo_title: staticMatch?.seoTitle || study?.seo_title,
+        seo_description: staticMatch?.seoDescription || study?.seo_description,
+        created_at: study?.created_at,
+        location: staticMatch?.location,
+        owner: staticMatch?.owner,
+        scope: staticMatch?.scope,
+        timeline: staticMatch?.timeline,
+        results: staticMatch?.results,
+        testimonial: staticMatch?.testimonial
     };
 }
 
@@ -116,6 +125,13 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
                     image: study.image,
                 }} 
             />
+            <BreadcrumbSchema
+                items={[
+                    { name: "Home", url: `${SEO_CONFIG.siteUrl}/` },
+                    { name: "Case Studies", url: getCanonicalUrl("/case-studies/") },
+                    { name: study.title, url: getCanonicalUrl(`/case-studies/${params.slug}/`) },
+                ]}
+            />
             <main className="pt-36 sm:pt-44 pb-24 container mx-auto px-4 sm:px-6">
                 <div className="max-w-4xl mx-auto mb-8">
                     <Link href="/case-studies" className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest hover:text-secondary transition-colors mb-6">
@@ -135,6 +151,11 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
                         <p className="text-lg sm:text-2xl font-bold uppercase tracking-tight text-black/70 max-w-2xl mx-auto">
                             {study.description}
                         </p>
+                        {study.location && (
+                            <p className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-black/70">
+                                <MapPin size={14} /> {study.location}{study.owner ? ` · Owner: ${study.owner}` : ""}
+                            </p>
+                        )}
                     </header>
 
                     {study.stats && study.stats.length > 0 && (
@@ -177,6 +198,73 @@ export default async function CaseStudyPage({ params }: { params: { slug: string
                             </h2>
                             <p className="text-base sm:text-lg font-medium text-black/90 italic">"{study.strategicInsight}"</p>
                         </div>
+
+                        {study.scope && study.scope.length > 0 && (
+                            <section>
+                                <h2 className="text-2xl sm:text-3xl font-heading font-black uppercase tracking-tight mb-4">Scope of Work</h2>
+                                <ul className="grid sm:grid-cols-2 gap-4">
+                                    {study.scope.map((item) => (
+                                        <li key={item.service} className="bg-white brutalist-border p-5 shadow-[4px_4px_0px_#000]">
+                                            <h3 className="font-heading font-black uppercase text-lg mb-1">{item.service}</h3>
+                                            <p className="text-sm font-medium text-black/70">{item.detail}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </section>
+                        )}
+
+                        {study.timeline && study.timeline.length > 0 && (
+                            <section>
+                                <h2 className="text-2xl sm:text-3xl font-heading font-black uppercase tracking-tight mb-4">Implementation Timeline</h2>
+                                <ol className="space-y-3">
+                                    {study.timeline.map((t) => (
+                                        <li key={t.period} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 bg-zinc-50 brutalist-border p-4 rounded-xl">
+                                            <span className="shrink-0 w-36 font-heading font-black uppercase text-sm bg-primary brutalist-border px-3 py-1 text-center">{t.period}</span>
+                                            <span className="font-medium text-black/80">{t.milestone}</span>
+                                        </li>
+                                    ))}
+                                </ol>
+                            </section>
+                        )}
+
+                        {study.results && study.results.length > 0 && (
+                            <section>
+                                <h2 className="text-2xl sm:text-3xl font-heading font-black uppercase tracking-tight mb-4">Results</h2>
+                                <div className="grid sm:grid-cols-3 gap-4">
+                                    {study.results.map((r) => (
+                                        <ChartPlaceholder key={r.label} label={r.label} note={r.note} />
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
+                        {study.testimonial && (
+                            <blockquote className="bg-black text-white brutalist-border shadow-[8px_8px_0px_#F3E84A] p-6 sm:p-10 rounded-2xl">
+                                <Quote className="text-primary mb-4" />
+                                <p className="text-xl sm:text-2xl font-heading font-black leading-snug mb-4">&ldquo;{study.testimonial.quote}&rdquo;</p>
+                                <footer className="text-xs font-black uppercase tracking-widest text-white/70">{study.testimonial.author} · {study.testimonial.role}</footer>
+                            </blockquote>
+                        )}
+
+                        {study.links && (study.links.website || study.links.facebook || study.links.instagram) && (
+                            <div className="flex flex-wrap gap-3">
+                                {study.links.website && (
+                                    <a href={study.links.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-white brutalist-border text-xs font-black uppercase tracking-widest hover:bg-primary transition-colors">
+                                        Visit website <ExternalLink size={14} />
+                                    </a>
+                                )}
+                                {study.links.facebook && (
+                                    <a href={study.links.facebook} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-white brutalist-border text-xs font-black uppercase tracking-widest hover:bg-primary transition-colors">
+                                        Facebook <ExternalLink size={14} />
+                                    </a>
+                                )}
+                                {study.links.instagram && (
+                                    <a href={study.links.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-white brutalist-border text-xs font-black uppercase tracking-widest hover:bg-primary transition-colors">
+                                        Instagram <ExternalLink size={14} />
+                                    </a>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </article>
 

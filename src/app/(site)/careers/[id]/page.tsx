@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import BreadcrumbSchema from "@/components/seo/schema/BreadcrumbSchema";
 import { SEO_CONFIG, getCanonicalUrl } from "@/lib/seo";
 import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
@@ -71,6 +72,13 @@ export default async function JobPage({ params }: { params: { id: string } }) {
     return (
         <div className="bg-[#080B12] min-h-screen text-white selection:bg-primary selection:text-white">
             <Header />
+            <BreadcrumbSchema
+                items={[
+                    { name: "Home", url: `${SEO_CONFIG.siteUrl}/` },
+                    { name: "Careers", url: getCanonicalUrl("/careers/") },
+                    { name: job.title, url: getCanonicalUrl(`/careers/${params.id}/`) },
+                ]}
+            />
             <JobPostingSchema 
                 job={{
                     title: job.title,

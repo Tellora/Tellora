@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { Zap } from "lucide-react";
+import Link from "next/link";
 
 export function ScrollProgress() {
     const { scrollYProgress } = useScroll();
@@ -31,8 +32,15 @@ export function ScrollProgress() {
                 </motion.div>
             </motion.div>
 
-            <div className="absolute right-6 pointer-events-none hidden md:block">
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Architecting Future</span>
+            <div className="absolute right-6 hidden md:flex items-center gap-6">
+                {/* US / International entry point (top-right on desktop; phones use the menu and the homepage banner) */}
+                <Link
+                    href="/us"
+                    className="pointer-events-auto text-[10px] font-black uppercase tracking-[0.2em] underline underline-offset-2 decoration-2 decoration-accent hover:text-accent transition-colors"
+                >
+                    US / International →
+                </Link>
+                <span className="pointer-events-none text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Architecting Future</span>
             </div>
         </div>
     );

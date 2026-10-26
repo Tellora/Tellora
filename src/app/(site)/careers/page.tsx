@@ -1,5 +1,6 @@
 import CareersClient from "./CareersClient";
 import { Metadata } from "next";
+import BreadcrumbSchema from "@/components/seo/schema/BreadcrumbSchema";
 import { SEO_CONFIG, getCanonicalUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -39,5 +40,15 @@ export const metadata: Metadata = {
 };
 
 export default function CareersPage() {
-    return <CareersClient />;
+    return (
+        <>
+            <BreadcrumbSchema
+                items={[
+                    { name: "Home", url: `${SEO_CONFIG.siteUrl}/` },
+                    { name: "Careers", url: getCanonicalUrl("/careers/") },
+                ]}
+            />
+            <CareersClient />
+        </>
+    );
 }

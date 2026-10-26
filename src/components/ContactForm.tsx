@@ -4,9 +4,20 @@ import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Send, CheckCircle } from "lucide-react";
 import { submitContactForm } from "@/lib/store";
+import { trackEvent } from "@/lib/gtag";
+import { US_CONTACT } from "@/lib/seo";
+import Link from "next/link";
+
+export const REGIONS = ["India", "United States", "United Kingdom", "Other"] as const;
+
+/** Current time in both offices, using real time zones so daylight saving is handled correctly. */
+function HoursNow() {
+    const fmt = (tz: string) => new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: tz, timeZoneName: "short" });
+    return <span suppressHydrationWarning>Right now: {fmt("Asia/Kolkata")} · {fmt("America/New_York")}</span>;
+}
 
 export default function ContactForm() {
-    const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+    const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const formRef = useRef<HTMLFormElement>(null);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -14,14 +25,30 @@ export default function ContactForm() {
         setStatus("loading");
         const formData = new FormData(e.currentTarget);
 
-        // Save to Supabase Cloud store so it appears in admin inbox
-        await submitContactForm({
-            name: formData.get("name") as string,
-            email: formData.get("email") as string,
-            company: formData.get("company") as string,
-            service: formData.get("service") as string,
-            message: formData.get("message") as string,
-        });
+        // Budget and timeline were collected but never saved before; keep them with the message.
+        const budget = formData.get("budget") as string;
+        const timeline = formData.get("timeline") as string;
+        const details = [budget && `Budget: ${budget}`, timeline && `Timeline: ${timeline}`].filter(Boolean).join("\n");
+
+        // Save to Supabase Cloud store so it appears in admin inbox (region is stored as its own field)
+        let saved = false;
+        try {
+            saved = await submitContactForm({
+                name: formData.get("name") as string,
+                email: formData.get("email") as string,
+                company: formData.get("company") as string,
+                service: formData.get("service") as string,
+                region: formData.get("region") as string,
+                message: `${formData.get("message") as string}${details ? `\n\n${details}` : ""}`,
+            });
+        } catch {
+            saved = false;
+        }
+
+        if (!saved) {
+            setStatus("error");
+            return;
+        }
 
         setTimeout(() => {
             setStatus("success");
@@ -40,7 +67,17 @@ export default function ContactForm() {
                     <CheckCircle className="text-white w-12 h-12" />
                 </div>
                 <h3 className="text-3xl font-black text-text-main mb-4 font-heading uppercase tracking-widest">Message Received!</h3>
-                <p className="text-text-muted text-lg font-medium">Our growth experts will reach out to you <br /> within 24 hours.</p>
+                <p className="text-text-muted text-lg font-medium">{US_CONTACT.responseTime}</p>
+                <p className="mt-4 text-[11px] font-black uppercase tracking-widest text-text-muted/80 leading-relaxed">
+                    Business hours: India 10am–7pm IST · US business hours by appointment <br />
+                    <HoursNow />
+                </p>
+                {US_CONTACT.calendlyUrl && (
+                    <Link href={US_CONTACT.calendlyUrl} className="mt-6 inline-block px-6 py-3 bg-text-main text-white font-black uppercase tracking-widest text-[10px] rounded-xl hover:bg-primary transition-colors">
+                        Book a call now
+                    </Link>
+                )}
+                {/* TODO: Calendly embed once a third-party script is approved; link button above appears when US_CONTACT.calendlyUrl is set */}
                 <button
                     onClick={() => setStatus("idle")}
                     className="mt-10 text-primary font-black uppercase tracking-[0.2em] text-[10px] hover:text-primary-dark transition-colors"
@@ -53,6 +90,28 @@ export default function ContactForm() {
 
     return (
         <form ref={formRef} onSubmit={handleSubmit} className="space-y-8">
+            <div className="group">
+                <label htmlFor="contact-region" className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 ml-1 group-focus-within:text-primary transition-colors">Where are you located?</label>
+                <div className="relative">
+                    <select
+                        id="contact-region"
+                        name="region"
+                        required
+                        defaultValue=""
+                        onChange={(e) => e.target.value && trackEvent("contact_region_selected", { region: e.target.value })}
+                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-5 text-text-main font-bold focus:outline-none focus:border-primary focus:bg-white transition-all appearance-none cursor-pointer hover:bg-slate-100/50 shadow-sm"
+                    >
+                        <option value="" disabled>Select your region</option>
+                        {REGIONS.map((r) => (
+                            <option key={r} value={r}>{r}</option>
+                        ))}
+                    </select>
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                        <Send size={14} className="rotate-90" />
+                    </div>
+                </div>
+            </div>
+
             <div className="grid md:grid-cols-2 gap-8">
                 <div className="group">
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 ml-1 group-focus-within:text-primary transition-colors">Full Name</label>
@@ -146,6 +205,12 @@ export default function ContactForm() {
                     className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-6 py-5 text-text-main font-bold placeholder:text-slate-300 focus:outline-none focus:border-primary focus:bg-white transition-all resize-none hover:bg-slate-100/50 shadow-sm"
                 />
             </div>
+
+            {status === "error" && (
+                <p role="alert" className="text-sm font-bold text-secondary">
+                    We could not send your message. Please try again, or email us at contact@telloramediahq.com.
+                </p>
+            )}
 
             <button
                 type="submit"

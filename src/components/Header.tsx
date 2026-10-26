@@ -77,6 +77,7 @@ export default function Header() {
         { name: "Team", href: "/teams" },
         { name: "Careers", href: "/careers" },
         { name: "Blog", href: "/blog" },
+        { name: "For US Businesses", href: "/us" },
     ];
 
     return (
@@ -123,12 +124,12 @@ export default function Header() {
                 </AnimatePresence>
 
                 {/* Desktop Dock - Centered Floating Navigation */}
-                <nav aria-label="Main navigation" className="hidden md:flex items-center bg-white/90 backdrop-blur-xl brutalist-border rounded-full px-12 py-4 shadow-[10px_10px_0px_rgba(0,0,0,1)] gap-10">
+                <nav aria-label="Main navigation" className="hidden xl:flex items-center bg-white/90 backdrop-blur-xl brutalist-border rounded-full px-8 min-[1700px]:px-12 py-4 shadow-[10px_10px_0px_rgba(0,0,0,1)] gap-5 min-[1700px]:gap-8">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-[11px] text-black font-black uppercase tracking-[0.3em] transition-all duration-300 hover:text-primary relative group/link"
+                            className="text-[10px] min-[1700px]:text-[11px] text-black font-black uppercase tracking-[0.18em] min-[1700px]:tracking-[0.3em] transition-all duration-300 hover:text-primary relative group/link whitespace-nowrap"
                         >
                             {link.name}
                             <motion.span

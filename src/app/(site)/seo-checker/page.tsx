@@ -1,5 +1,6 @@
 import SEOCheckerClient from "./SEOCheckerClient";
 import { Metadata } from "next";
+import BreadcrumbSchema from "@/components/seo/schema/BreadcrumbSchema";
 import { SEO_CONFIG, getCanonicalUrl } from "@/lib/seo";
 import SeoCheckerSchema from "@/components/seo/schema/SeoCheckerSchema";
 
@@ -44,6 +45,12 @@ export default function SEOCheckerPage() {
     return (
         <>
             <SeoCheckerSchema />
+            <BreadcrumbSchema
+                items={[
+                    { name: "Home", url: `${SEO_CONFIG.siteUrl}/` },
+                    { name: "Free SEO Audit", url: getCanonicalUrl("/seo-checker/") },
+                ]}
+            />
             <SEOCheckerClient />
         </>
     );

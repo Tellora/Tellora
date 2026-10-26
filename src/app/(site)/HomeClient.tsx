@@ -8,6 +8,9 @@ import { ParallaxText, FloatingElement, ScrollLine, ScrollConnector, VelocityMar
 import { ScrollWordReveal } from "@/components/animations/ScrollWordReveal";
 import { Star } from "lucide-react";
 import Link from "next/link";
+import ClientLogoBar from "@/components/ClientLogoBar";
+import RegionStrip from "@/components/RegionStrip";
+import GeoHintBanner from "@/components/GeoHintBanner";
 
 // Dynamic imports for below-the-fold heavy components to boost performance & Eliminate lag
 const Services = dynamic(() => import("@/components/Services"), { ssr: true });
@@ -28,6 +31,7 @@ export default function Home() {
             <div className="fixed inset-0 z-0 noise-overlay opacity-[0.05] pointer-events-none" />
 
             <Header />
+            <GeoHintBanner />
             <ChapterRail />
 
             <main className="relative">
@@ -36,6 +40,8 @@ export default function Home() {
                     <Hero />
                     <ScrollLine className="bottom-0" />
                 </section>
+
+                <ClientLogoBar />
 
                 {/* Massive Statement with Dynamic Text */}
                 <section data-chapter="Mission" className="py-14 md:py-32 bg-black text-white relative flex items-center justify-center overflow-hidden">
@@ -101,6 +107,8 @@ export default function Home() {
                 <div data-chapter="Services"><Services /></div>
 
                 <VelocityMarquee text="STRATEGY ✦ PERFORMANCE ✦ GROWTH ✦ " baseVelocity={-3} />
+
+                <RegionStrip />
 
                 <div data-chapter="Process"><Process /></div>
 

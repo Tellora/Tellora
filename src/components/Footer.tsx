@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Instagram, Linkedin, Twitter, Sparkles, Zap, Heart, Globe, Terminal, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
+import TrustBadges from "@/components/TrustBadges";
+import { US_CONTACT } from "@/lib/seo";
 
 export default function Footer() {
     return (
@@ -129,10 +131,22 @@ export default function Footer() {
                                 <div className="flex items-center gap-4">
                                     <Globe size={24} className="text-primary animate-pulse" />
                                     <p className="text-[14px] font-black uppercase leading-tight tracking-widest">
-                                        Global Office <br />
+                                        India HQ: Delhi, India <br />
+                                        {/* TODO: full India HQ address (confirm which address is correct) */}
                                         <span className="text-primary italic">Digital Marketing Agency</span>
                                     </p>
                                 </div>
+                                {(US_CONTACT.email || US_CONTACT.phone) && (
+                                    <p className="text-[12px] font-black uppercase leading-snug tracking-widest">
+                                        US contact: {US_CONTACT.phone}{US_CONTACT.phone && US_CONTACT.email ? " · " : ""}{US_CONTACT.email}
+                                    </p>
+                                )}
+                                {/* TODO: US phone (+1 ...) and US email: set in US_CONTACT (src/lib/seo.ts) and they appear here */}
+                                <p className="text-[11px] font-black uppercase leading-snug tracking-widest opacity-70">
+                                    India: 10am–7pm IST <br />
+                                    US: business hours by appointment
+                                </p>
+                                <TrustBadges className="mt-1" />
                             </div>
                         </div>
                     </div>

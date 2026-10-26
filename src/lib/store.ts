@@ -32,6 +32,8 @@ export interface ContactMessage {
     message: string;
     status: "Unread" | "Read" | "Replied" | "Archived";
     reply_history: { text: string; sentAt: string }[];
+    /** "India" | "United States" | "United Kingdom" | "Other". Older messages have no region. */
+    region?: string;
     created_at: string;
 }
 
@@ -119,7 +121,8 @@ export async function addReply(id: string, replyText: string): Promise<void> {
     });
 }
 
-export async function submitContactForm(data: any): Promise<void> {
+/** Returns false if the message could not be saved (callers that ignore the result behave as before). */
+export async function submitContactForm(data: any): Promise<boolean> {
     const msg = {
         sender: data.name,
         email: data.email,
@@ -130,13 +133,27 @@ export async function submitContactForm(data: any): Promise<void> {
         status: "Unread",
         created_at: new Date().toISOString()
     };
-    await upsertTableData("inbox_messages", msg);
+    // Region is saved in its own column so the admin inbox can filter by it
+    // (run scripts/add-inbox-region.sql in Supabase). If the column does not exist yet the first
+    // write fails, so retry without it and keep the region in the message text: no enquiry is lost.
+    // TODO: email routing by region (India -> abhay@telloramediahq.com, US -> TODO us@ address,
+    // UK/Other -> both). Recommended: Resend via a Supabase edge function. Not implemented.
+    let saved = true;
+    if (data.region) {
+        saved = await upsertTableData("inbox_messages", { ...msg, region: data.region });
+        if (!saved) {
+            saved = await upsertTableData("inbox_messages", { ...msg, message: `[Region: ${data.region}]\n${msg.message}` });
+        }
+    } else {
+        saved = await upsertTableData("inbox_messages", msg);
+    }
     await addActivityLog({
         type: "create",
         item: `New inquiry from ${data.name}`,
         user_name: "Public",
         status: "Unread"
     });
+    return saved;
 }
 
 // ── Services ──────────────────────────────────────────────────────────────────

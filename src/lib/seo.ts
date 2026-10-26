@@ -17,6 +17,21 @@ export const SEO_CONFIG = {
     },
 };
 
+/**
+ * US / international pages (/us, /for-electrical-contractors) are built but kept out of search
+ * (noindex + not in sitemap) until their TODO content is filled in. Flip to true to publish.
+ * See WEBSITE_TODOS.md.
+ */
+export const US_PAGES_LIVE = false;
+
+/** US contact details. TODO: fill in real values before publishing; null values are hidden in the UI. */
+export const US_CONTACT = {
+    email: null as string | null, // TODO: us@telloramediahq.com (confirm mailbox exists)
+    phone: null as string | null, // TODO: US phone (+1 ...)
+    calendlyUrl: null as string | null, // TODO: Calendly US audit link
+    responseTime: "We respond to inquiries within 4 business hours (IST or EST).", // TODO: confirm commitment is realistic
+};
+
 export function getCanonicalUrl(path: string): string {
     const baseUrl = SEO_CONFIG.siteUrl;
     // Ensure consistent trailing slash

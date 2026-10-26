@@ -95,6 +95,7 @@ create table if not exists inbox_messages (
     message text,
     status text default 'Unread', -- Unread, Read, Replied, Archived
     reply_history jsonb default '[]'::jsonb,
+    region text, -- India, United States, United Kingdom, Other (see scripts/add-inbox-region.sql)
     created_at timestamp with time zone default now()
 );
 
