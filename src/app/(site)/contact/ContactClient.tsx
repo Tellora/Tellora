@@ -9,6 +9,7 @@ import { Mail, Phone, MapPin, MessageSquare, Clock, Globe, Send } from "lucide-r
 import { motion } from "framer-motion";
 import { TiltCard } from "@/components/animations/TiltCard";
 import { US_CONTACT } from "@/lib/seo";
+import Testimonials from "@/components/Testimonials";
 
 const contactInfo = [
     {
@@ -219,6 +220,9 @@ export default function ContactPage() {
                         </div>
                     </div>
                 </section>
+            {/* Google reviews (hardcoded for now; live widget slot is documented in Testimonials.tsx) */}
+            <Testimonials />
+
             </main>
 
             <Footer />

@@ -100,6 +100,13 @@ const ACTUAL_GOOGLE_REVIEWS: DbTestimonial[] = [
     }
 ];
 
+/*
+ * TODO: swap for live Google reviews widget.
+ * Decide between Elfsight (~$10/mo, no backend) or Google Places API + Supabase edge function
+ * (free up to quota, needs key management). Until then this component shows the hardcoded reviews above.
+ * To swap: replace the review slider marked LIVE-REVIEWS-WIDGET-SLOT below with the widget embed. The component is shared by the
+ * homepage, /us and /contact, so one change updates all three.
+ */
 export default function Testimonials() {
     const containerRef = useRef<HTMLDivElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -174,7 +181,7 @@ export default function Testimonials() {
                 {/* Horizontal Scroll Rail of Google Reviews */}
                 <div
                     ref={scrollRef}
-                    className="flex gap-6 overflow-x-auto pb-6 pt-2 px-2 snap-x snap-mandatory scrollbar-hide"
+                    className="flex gap-6 overflow-x-auto pb-6 pt-2 px-2 snap-x snap-mandatory scrollbar-hide" // LIVE-REVIEWS-WIDGET-SLOT (see TODO above)
                 >
                     {ACTUAL_GOOGLE_REVIEWS.map((test, idx) => (
                         <motion.div

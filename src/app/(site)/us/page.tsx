@@ -19,6 +19,8 @@ import FaqSchema from "@/components/seo/schema/FaqSchema";
 import BreadcrumbSchema from "@/components/seo/schema/BreadcrumbSchema";
 import ProfessionalServiceSchema from "@/components/seo/schema/ProfessionalServiceSchema";
 import TrackedLink from "@/components/us/TrackedLink";
+import Testimonials from "@/components/Testimonials";
+import TrustBadges from "@/components/TrustBadges";
 
 const TITLE = "Digital Marketing Agency for US Home Service Businesses";
 const DESCRIPTION =
@@ -103,10 +105,8 @@ export default function UsLandingPage() {
                                 >
                                     <Star size={14} className="fill-current" /> {GOOGLE_RATING.text}
                                 </a>
-                                {/* TODO: Clutch badge — swap in the real widget/link once the Clutch profile is live */}
-                                <span className="inline-flex items-center gap-2 px-4 py-2 bg-white border-2 border-dashed border-black/40 text-xs font-black uppercase tracking-widest text-black/50">
-                                    Clutch badge coming soon
-                                </span>
+                                {/* Clutch / GoodFirms / DesignRush badges appear automatically once their profile URLs are set in TrustBadges.tsx */}
+                                <TrustBadges />
                             </div>
                         </div>
                     </div>
@@ -175,6 +175,9 @@ export default function UsLandingPage() {
                         </p>
                     </div>
                 </section>
+
+                {/* Google reviews (hardcoded for now; live widget slot is documented in Testimonials.tsx) */}
+                <Testimonials />
 
                 {/* Ownership */}
                 <section className="py-10 border-b-[4px] border-black bg-primary">

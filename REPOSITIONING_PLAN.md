@@ -101,3 +101,8 @@ None planned (largest touched: `case-studies.ts` ≈310 lines, `Header.tsx` ≈2
 ### Phase 5 shipped
 - Category "US Market Insights" + 3 scaffold posts (title, H2 outline as questions, TODO bodies, proper meta + BlogPosting/Breadcrumb schema)
 - Posts carry `draft: true`: page exists but is `noindex`, hidden from `/blog`, the sitemap and related-post lists, and the category chip stays hidden until a non-draft post exists. Remove `draft` from a post once the body is written and approved
+
+### Phase 6 shipped
+- Existing (hardcoded) Google reviews section now also on `/us` and `/contact`; commented `LIVE-REVIEWS-WIDGET-SLOT` + TODO in `Testimonials.tsx` (shared by all three pages) for the Elfsight vs Places API decision. No new dependency or script
+- `/us` uses `TrustBadges` (Clutch/GoodFirms/DesignRush hidden until a profile URL is set) instead of a visible "coming soon" box
+- Response-time banner (`/contact`, `/us`) and ownership note (`/us`, `/for-electrical-contractors`) were already shipped in Phases 1 and 4
