@@ -1,12 +1,26 @@
-# Tellora Media — US-first Repositioning Plan
+# Tellora Media: US-first Repositioning Plan
 
-Status: **Phase 0 and Phase 1 complete (partial: see below). Phase 2 complete. Awaiting answers before Phase 3.**
+**Final status: Phases 0 to 7 complete on branch `claude/focused-brown-0wajgm` (not merged to `main`).** US pages are `noindex` and out of the sitemap behind `US_PAGES_LIVE` until TODOs are filled. See `WEBSITE_TODOS.md` for open items and `CLAIMS_LOG.md` for the basis of every public claim.
 
-### Phase 1 shipped
-- `/us`, `/for-electrical-contractors`, rebuilt `/case-studies/atoms-electrical/` (real client facts, TODO placeholders for metrics/timeline/testimonial)
-- `CLAIMS_LOG.md` created; `US_PAGES_LIVE = false` flag keeps new US pages `noindex` and out of the sitemap until TODOs are filled
-- **Deferred (waiting on facts):** US footwear case study page; ALFA case study (no data exists); polishing Goodlife / Air Right pages (existing copy unverified)
-- Calendly embed deferred (third-party script needs approval); link button used instead
+## Planned vs shipped
+
+| Phase | Planned | Shipped | Deferred / changed |
+|---|---|---|---|
+| 0 Discovery | Report + plan | Done | Plan exceeded 30 files, so paused for review |
+| 1 Pages | `/us`, `/for-electrical-contractors`, Atoms case study + 4 more case-study pages | `/us`, `/for-electrical-contractors`, real Atoms case study, template extended (scope, timeline, results placeholders, testimonial) | **Not built:** US footwear and ALFA case studies (no data/permission); Goodlife and Air Right rebuild (copy unverified). Calendly embed replaced by link button (third-party script not approved) |
+| 2 Homepage/nav/footer | Nav CTA, geo banner, logo bar, region strip, footer, pin Atoms, GLOBAL stat link | All shipped. Desktop nav dock now shows from 1280px (also fixes an existing tablet bug that pushed the menu button off-screen) | "US / International" link lives in the top bar on desktop; text placeholders for most logos; footer shows "Delhi, India" only until the address is confirmed; directory badges hidden until profiles exist |
+| 3 SEO/schema/tech | Meta, schema, sitemap, analytics, performance | Meta/OG (placeholder images), ProfessionalService (US service-area), Service, FAQPage, BreadcrumbList gaps closed, conversion events + `ANALYTICS.md`, Lighthouse run | **Omitted by design:** AggregateRating/Review schema. Sitemap entries gated by `US_PAGES_LIVE`. LCP target (2.5s) **not met** (3.2-3.7s, site-wide cause). GA4 may not be firing in production (deploy config untouched) |
+| 4 Contact | Region dropdown, routing, Calendly, confirmation | Region dropdown + stored field, admin inbox badge/filter, SQL migration, confirmation with hours, DST-safe times, honest error on failed saves | Email routing **not implemented** (Resend TODO). Calendly link only |
+| 5 Blog | Category + 3 placeholder posts | Done as drafts (noindex, unlisted, not in sitemap) | Bodies are TODO |
+| 6 Trust signals | Live reviews widget, Clutch placeholder, response banner, ownership note | Existing reviews on `/us` and `/contact` with a documented widget slot; banner; ownership note | Live widget not added (needs a paid/third-party service decision) |
+| 7 Deliverables | TODO list, plan update, summary | `WEBSITE_TODOS.md`, this file, `CLAIMS_LOG.md`, `ANALYTICS.md` | none |
+
+## Existing bugs found and fixed along the way
+- Contact form reported success even when the database write failed; budget and timeline were collected but never saved
+- Contact page time-zone widget used fixed offsets (wrong during daylight saving)
+- Header menu button was pushed off-screen between 768 and 1180px
+
+---
 
 ## Phase 0 — Discovery
 
