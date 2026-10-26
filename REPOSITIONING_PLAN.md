@@ -89,3 +89,11 @@ None planned (largest touched: `case-studies.ts` ≈310 lines, `Header.tsx` ≈2
 - Analytics: `trackEvent` helper + 3 named events, documented in `ANALYTICS.md`. **GA4 may not be firing in production** (build workflow does not pass the Measurement ID). Not changed: deploy config is off-limits
 - Lighthouse (mobile, simulated, gzip, local): `/us` 93, `/for-electrical-contractors` 91, home 89; CLS ~0, TBT 0; **LCP 3.2-3.7s (target 2.5s)**, sitewide cause (see status message)
 - `submitContactForm` now returns whether the save succeeded
+
+### Phase 4 shipped
+- `/contact`: required "Where are you located?" dropdown (India / United States / United Kingdom / Other); region saved as its own field; response-time banner; success panel with hours + live IST/ET times; failed saves now show an error (previously false success); budget and timeline are now saved with the message (they were collected but dropped)
+- `scripts/add-inbox-region.sql` + `SUPABASE_MASTER_SCHEMA.sql` updated. **Run the SQL in Supabase before deploying.** Until then the site retries without the column and puts `[Region: X]` in the message text, so no enquiry is lost (tested with a mocked Supabase)
+- Admin inbox: region badge on every row and in the message header, plus a region filter
+- Contact page time zones use real zones (DST-safe) instead of fixed offsets
+- Email routing by region **not implemented** (TODO: Resend via Supabase edge function)
+- Calendly: link button appears once `US_CONTACT.calendlyUrl` is set; no embed (needs third-party script approval)

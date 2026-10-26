@@ -8,7 +8,6 @@ import { trackEvent } from "@/lib/gtag";
 /**
  * Lead magnet: free local SEO audit for electricians.
  * Saved to the same inbox as the contact form (service = "Free local SEO audit (electricians)").
- * TODO (Phase 4): attach region = "United States" once the region field exists in Supabase.
  */
 export default function LeadAuditForm() {
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -25,6 +24,7 @@ export default function LeadAuditForm() {
                 email: fd.get("email") as string,
                 company: business,
                 service: "Free local SEO audit (electricians)",
+                region: "United States",
                 message: `Website: ${fd.get("website")}\nService area: ${fd.get("area")}\nBusiness: ${business}`,
             });
             if (!saved) throw new Error("save failed");

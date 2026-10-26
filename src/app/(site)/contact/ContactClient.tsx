@@ -8,6 +8,7 @@ import ContactForm from "@/components/ContactForm";
 import { Mail, Phone, MapPin, MessageSquare, Clock, Globe, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import { TiltCard } from "@/components/animations/TiltCard";
+import { US_CONTACT } from "@/lib/seo";
 
 const contactInfo = [
     {
@@ -41,9 +42,9 @@ export default function ContactPage() {
         return () => clearInterval(timer);
     }, []);
 
-    const getTimeInTimezone = (offset: number) => {
-        const date = new Date(currentTime.getTime() + (offset * 3600000));
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    // Uses real IANA time zones so daylight saving time is handled correctly (fixed offsets were off by an hour for part of the year)
+    const getTimeInTimezone = (timeZone: string) => {
+        return currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true, timeZone });
     };
 
     return (
@@ -102,12 +103,12 @@ export default function ContactPage() {
                                             <span className="font-bold text-sm tracking-widest">24 / 7 Active</span>
                                         </div>
                                         <div className="flex justify-between items-center py-3 border-b border-white/10">
-                                            <span className="text-[10px] font-black uppercase tracking-widest opacity-60">New York (EST)</span>
-                                            <span className="font-bold text-sm tracking-widest">{getTimeInTimezone(-5)}</span>
+                                            <span className="text-[10px] font-black uppercase tracking-widest opacity-60">New York (ET)</span>
+                                            <span className="font-bold text-sm tracking-widest">{getTimeInTimezone("America/New_York")}</span>
                                         </div>
                                         <div className="flex justify-between items-center py-3">
-                                            <span className="text-[10px] font-black uppercase tracking-widest opacity-60">London (GMT)</span>
-                                            <span className="font-bold text-sm tracking-widest">{getTimeInTimezone(0)}</span>
+                                            <span className="text-[10px] font-black uppercase tracking-widest opacity-60">London (UK)</span>
+                                            <span className="font-bold text-sm tracking-widest">{getTimeInTimezone("Europe/London")}</span>
                                         </div>
                                     </div>
                                     <div className="mt-8 pt-6 border-t border-white/10 text-[10px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-2">
@@ -138,6 +139,12 @@ export default function ContactPage() {
                                         <p className="text-text-muted text-xl font-bold leading-relaxed max-w-2xl opacity-80">
                                             Submit your project details. Our team will analyze your request and return a custom growth plan within <span className="text-primary underline decoration-2 underline-offset-4 font-black">24 hours</span>.
                                         </p>
+                                    </div>
+
+                                    {/* Response-time commitment. TODO: confirm commitment (see CLAIMS_LOG.md #7) */}
+                                    <div className="relative z-10 mb-10 flex items-center gap-3 rounded-2xl border border-primary/30 bg-primary/5 px-5 py-4">
+                                        <Clock className="w-5 h-5 text-primary shrink-0" />
+                                        <p className="text-[11px] md:text-xs font-black uppercase tracking-widest">{US_CONTACT.responseTime}</p>
                                     </div>
 
                                     <ContactForm />

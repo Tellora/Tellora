@@ -13,13 +13,31 @@ import {
 } from "@/lib/store";
 
 const FILTERS = ["All Messages", "Unread", "Replied", "Archived"] as const;
+const REGION_FILTERS = ["All regions", "India", "United States", "United Kingdom", "Other", "Not set"] as const;
+type RegionFilter = typeof REGION_FILTERS[number];
 type Filter = typeof FILTERS[number];
+
+/** Shows where the enquirer is located. Messages sent before the region field existed show "No region". */
+function RegionBadge({ region }: { region?: string }) {
+    const color =
+        region === "United States" ? "bg-blue-500/20 text-blue-300 border-blue-400/30"
+        : region === "India" ? "bg-orange-500/20 text-orange-300 border-orange-400/30"
+        : region === "United Kingdom" ? "bg-purple-500/20 text-purple-300 border-purple-400/30"
+        : region ? "bg-white/10 text-white/60 border-white/10"
+        : "bg-white/5 text-white/25 border-white/5";
+    return (
+        <span className={`text-[8px] md:text-[9px] px-2 md:px-3 py-0.5 md:py-1 rounded-full font-black uppercase tracking-wider border ${color}`}>
+            {region || "No region"}
+        </span>
+    );
+}
 
 export default function AdminInbox() {
     const [messages, setMessages] = useState<ContactMessage[]>([]);
     const [selectedMsg, setSelectedMsg] = useState<ContactMessage | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [activeFilter, setActiveFilter] = useState<Filter>("All Messages");
+    const [regionFilter, setRegionFilter] = useState<RegionFilter>("All regions");
     const [replyText, setReplyText] = useState("");
     const [sending, setSending] = useState(false);
     const [sent, setSent] = useState(false);
@@ -98,6 +116,11 @@ export default function AdminInbox() {
             msg.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
             msg.email.toLowerCase().includes(searchTerm.toLowerCase());
 
+        if (regionFilter !== "All regions") {
+            const r = msg.region || "";
+            if (regionFilter === "Not set" ? r !== "" : r !== regionFilter) return false;
+        }
+
         if (activeFilter === "All Messages") return matchesSearch;
         if (activeFilter === "Unread") return matchesSearch && msg.status === "Unread";
         if (activeFilter === "Replied") return matchesSearch && msg.status === "Replied";
@@ -166,6 +189,19 @@ export default function AdminInbox() {
                                 </button>
                             ))}
                         </div>
+                        <label className="flex items-center gap-3 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-white/40">
+                            Region
+                            <select
+                                value={regionFilter}
+                                onChange={(e) => setRegionFilter(e.target.value as RegionFilter)}
+                                aria-label="Filter messages by region"
+                                className="bg-[#080B12]/80 text-white border border-white/10 rounded-xl px-3 py-2 text-[10px] font-black uppercase tracking-widest focus:outline-none focus:border-primary"
+                            >
+                                {REGION_FILTERS.map((r) => (
+                                    <option key={r} value={r}>{r}</option>
+                                ))}
+                            </select>
+                        </label>
                     </div>
 
                     {/* Message List */}
@@ -205,6 +241,7 @@ export default function AdminInbox() {
                                             <div className="flex justify-between items-start mb-1 md:mb-2">
                                                 <h4 className="text-lg md:text-xl font-black text-white italic tracking-tight flex flex-wrap items-center gap-2 md:gap-3">
                                                     {msg.sender}
+                                                    <RegionBadge region={msg.region} />
                                                     {msg.status === "Unread" && <span className="w-2 md:w-2.5 h-2 md:h-2.5 bg-primary rounded-full shadow-[0_0_10px_#4ac0e4]" />}
                                                     {msg.status === "Replied" && <span className="text-[8px] md:text-[9px] px-2 md:px-3 py-0.5 md:py-1 bg-green-500/20 text-green-400 rounded-full font-black uppercase tracking-wider">Replied</span>}
                                                 </h4>
@@ -267,6 +304,7 @@ export default function AdminInbox() {
                                             {selectedMsg.email} <ExternalLink size={12} />
                                         </a>
                                         <div className="flex items-center gap-4 mt-2 flex-wrap">
+                                            <RegionBadge region={selectedMsg.region} />
                                             <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] italic font-mono">{selectedMsg.created_at ? new Date(selectedMsg.created_at).toLocaleString() : ''}</span>
                                             <span className="text-[9px] px-3 py-1 bg-white/5 text-white/30 rounded-full font-black uppercase tracking-wide border border-white/5">{selectedMsg.service}</span>
                                             {selectedMsg.company && selectedMsg.company !== "N/A" && (
