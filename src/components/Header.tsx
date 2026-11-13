@@ -81,6 +81,7 @@ export default function Header() {
     ];
 
     return (
+        <>
         <header
             className={`fixed top-5 md:top-8 left-0 right-0 z-[100] transition-transform duration-500 ease-out px-4 sm:px-6 pointer-events-none text-black ${hidden && !mobileOpen ? "-translate-y-[150%]" : "translate-y-0"}`}
         >
@@ -162,16 +163,20 @@ export default function Header() {
 
                     {/* Mobile Toggle - Brutalist Block */}
                     <button
-                        onClick={() => setMobileOpen(!mobileOpen)}
+                        type="button"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setMobileOpen((v) => !v); }}
                         aria-label={mobileOpen ? "Close menu" : "Open menu"}
-                        className="p-3 md:p-5 min-h-[46px] min-w-[46px] bg-primary text-black md:text-white brutalist-border shadow-[4px_4px_0px_#000] md:shadow-[6px_6px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all active:scale-95"
+                        aria-expanded={mobileOpen}
+                        className="relative z-[120] cursor-pointer p-3 md:p-5 min-h-[46px] min-w-[46px] bg-primary text-black md:text-white brutalist-border shadow-[4px_4px_0px_#000] md:shadow-[6px_6px_0px_#000] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all active:scale-95"
                     >
                         {mobileOpen ? <X size={22} /> : <Menu size={22} />}
                     </button>
                 </div>
             </div>
+        </header>
 
-            {/* Mobile Nav Overlay - Fully scrollable & responsive across all viewports */}
+        {/* Mobile Nav Overlay — rendered outside <header> so the parent's transform
+            doesn't trap `fixed inset-0` inside the header's small bounding box. */}
             <AnimatePresence>
                 {mobileOpen && (
                     <motion.div
@@ -179,7 +184,7 @@ export default function Header() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: "-100%" }}
                         transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
-                        className="fixed inset-0 z-[110] bg-background overflow-y-auto overscroll-contain border-b-[8px] border-black pointer-events-auto selection:bg-primary selection:text-white"
+                        className="fixed inset-0 z-[500] bg-background overflow-y-auto overscroll-contain border-b-[8px] border-black pointer-events-auto selection:bg-primary selection:text-white"
                     >
                         {/* Background kinetic text */}
                         <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 opacity-5 pointer-events-none -rotate-12 select-none overflow-hidden">
@@ -258,6 +263,6 @@ export default function Header() {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </header>
+        </>
     );
 }
