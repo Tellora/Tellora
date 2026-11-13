@@ -74,22 +74,22 @@ export default function SiteLayout({
                 </motion.div>
             </div>
 
-            {/* ── Minimal Floating Sticker Layer ── */}
-            <div className="fixed inset-0 pointer-events-none z-[200]">
-                <FloatingElement speed={-0.03} top="12%" left="2%">
+            {/* ── Minimal Floating Sticker Layer (xl+ only; below that they collide with content) ── */}
+            <div className="fixed inset-0 pointer-events-none z-[200] hidden xl:block">
+                <FloatingElement speed={-0.03} top="88%" left="1.5%">
                     <div className="bg-white brutalist-border px-4 py-2 shadow-[4px_4px_0px_#000] rotate-[-5deg] flex items-center gap-2 gpu-accelerated pointer-events-auto">
                         <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
                         <span className="text-[9px] font-black uppercase tracking-widest text-black">Vibe Check: Passed</span>
                     </div>
                 </FloatingElement>
 
-                <FloatingElement speed={0.05} top="45%" left="94%">
+                <FloatingElement speed={0.05} top="50%" left="97%">
                     <div className="w-12 h-12 bg-primary brutalist-border flex items-center justify-center rotate-45 shadow-[4px_4px_0px_#000] gpu-accelerated pointer-events-auto group">
                         <Star size={20} className="text-white fill-current -rotate-45" />
                     </div>
                 </FloatingElement>
 
-                <FloatingElement speed={0.08} top="35%" left="4%">
+                <FloatingElement speed={0.08} top="15%" left="1.5%">
                     <div className="p-4 bg-white brutalist-border rounded-full shadow-[4px_4px_0px_#A855F7] -rotate-12 pointer-events-auto">
                         <Activity size={20} className="text-primary" />
                     </div>

@@ -114,7 +114,7 @@ export default function Hero() {
                         <div className="relative group">
                             <h1 className="text-[15vw] sm:text-[10vw] md:text-[8vw] lg:text-[7.5vw] xl:text-[8.5rem] 2xl:text-[10rem] font-heading font-black tracking-tighter leading-[0.88] text-black select-none uppercase relative z-20 drop-shadow-[0_10px_20px_rgba(255,255,255,0.8)]">
                                 {heroTitle.split(' ').map((word, i) => (
-                                    <span key={i} className={i === 1 ? "animate-red-gradient drop-shadow-[4px_4px_0px_#000] md:drop-shadow-[8px_8px_0px_#000] inline-block -translate-y-1 sm:-translate-y-2 md:-translate-y-4 gpu-accelerated" : ""}>
+                                    <span key={i} className={i === 1 ? "animate-red-gradient sm:drop-shadow-[4px_4px_0px_#000] md:drop-shadow-[8px_8px_0px_#000] inline-block sm:-translate-y-2 md:-translate-y-4 gpu-accelerated" : ""}>
                                         {word} {i === 0 && <br />}
                                     </span>
                                 ))}

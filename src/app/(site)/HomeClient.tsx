@@ -6,7 +6,7 @@ import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import { ParallaxText, FloatingElement, ScrollLine, ScrollConnector, VelocityMarquee, StickerSlap, ChapterRail } from "@/components/animations/ScrollChoreography";
 import { ScrollWordReveal } from "@/components/animations/ScrollWordReveal";
-import { Star } from "lucide-react";
+import { Star, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import ClientLogoBar from "@/components/ClientLogoBar";
 import RegionStrip from "@/components/RegionStrip";
@@ -95,8 +95,9 @@ export default function Home() {
                         />
 
                         <div className="flex justify-center mt-10 md:mt-16">
-                            <Link href="/about" className="bg-white brutalist-border px-8 py-4 rotate-2 shadow-[4px_4px_0px_#000] hover:rotate-0 transition-transform cursor-pointer group">
-                                <span className="text-xs font-black uppercase tracking-widest group-hover:text-primary transition-colors text-black">Learn Our Secret Sauce</span>
+                            <Link href="/about" className="bg-white brutalist-border px-10 py-5 rotate-2 shadow-[6px_6px_0px_#000] hover:shadow-[10px_10px_0px_#000] hover:translate-y-[-3px] hover:rotate-0 transition-all cursor-pointer group inline-flex items-center gap-3">
+                                <span className="text-sm md:text-base font-black uppercase tracking-[0.2em] group-hover:text-primary transition-colors text-black">Learn Our Secret Sauce</span>
+                                <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-1 transition-transform" />
                             </Link>
                         </div>
                     </div>

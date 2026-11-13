@@ -5,54 +5,56 @@ import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Search, Share2, Monitor, Speaker, PenTool, Users, ArrowRight, Sparkles, Zap } from "lucide-react";
 
+// Unified 2-tone system: dark cards + 1 light accent card for rhythm.
+// Accent colors cycle through the brand palette consistently.
 const services = [
     {
         title: "SEO Optimization",
         description: "Dominate search rankings with data-backed keyword strategies and technical audits.",
         icon: <Search className="w-8 h-8" />,
-        color: "#FFFFFF",
+        color: "#0A0A0A",
         accent: "#A855F7",
-        rotate: "-1deg"
+        rotate: "-0.6deg"
     },
     {
         title: "Social Media",
         description: "Build a loyal community with engaging content strategies and influencer partnerships.",
         icon: <Share2 className="w-8 h-8" />,
-        color: "#F3E84A",
-        accent: "#000000",
-        rotate: "1deg"
+        color: "#0A0A0A",
+        accent: "#F3E84A",
+        rotate: "0.6deg"
     },
     {
         title: "Web Design",
         description: "Stunning, high-performance websites optimized for conversion, speed, and user experience.",
         icon: <Monitor className="w-8 h-8" />,
-        color: "#22C55E",
-        accent: "#FFFFFF",
-        rotate: "-1.5deg"
+        color: "#F3E84A",
+        accent: "#000000",
+        rotate: "-0.8deg"
     },
     {
         title: "Performance",
         description: "Maximize ROI with precision-targeted PPC campaigns and continuous optimization.",
         icon: <Speaker className="w-8 h-8" />,
-        color: "#A855F7",
-        accent: "#FFFFFF",
-        rotate: "1.2deg"
+        color: "#0A0A0A",
+        accent: "#22C55E",
+        rotate: "0.8deg"
     },
     {
         title: "Content",
         description: "Tell your brand story with compelling narratives that drive engagement and trust.",
         icon: <PenTool className="w-8 h-8" />,
-        color: "#FFFFFF",
-        accent: "#22C55E",
-        rotate: "-0.8deg"
+        color: "#0A0A0A",
+        accent: "#FFFFFF",
+        rotate: "-0.5deg"
     },
     {
         title: "Influencers",
         description: "Leverage authentic voices to amplify your brand message to new audiences.",
         icon: <Users className="w-8 h-8" />,
-        color: "#000000",
-        accent: "#F3E84A",
-        rotate: "2deg"
+        color: "#0A0A0A",
+        accent: "#A855F7",
+        rotate: "1deg"
     }
 ];
 
@@ -123,10 +125,10 @@ export default function Services() {
                                     rotate: "0deg",
                                     zIndex: 20
                                 }}
-                                className="p-4 md:p-10 brutalist-card h-full flex flex-col group relative cursor-pointer"
+                                className="p-5 md:p-10 brutalist-card h-full flex flex-col group relative cursor-pointer"
                                 style={{
                                     background: service.color,
-                                    color: service.color === "#000000" ? "#FFF" : "#000"
+                                    color: (service.color === "#F3E84A" || service.color === "#FFFFFF") ? "#000" : "#FFF"
                                 }}
                             >
                                 <div className="absolute top-3 md:top-4 right-3 md:right-4 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -145,17 +147,17 @@ export default function Services() {
                                     </div>
                                 </div>
 
-                                <h3 className="text-sm md:text-3xl font-heading font-black uppercase mb-1 md:mb-4 tracking-tighter leading-tight">
+                                <h3 className="text-base md:text-3xl font-heading font-black uppercase mb-2 md:mb-4 tracking-tighter leading-tight">
                                     {service.title}
                                 </h3>
-                                <p className="font-black text-[9px] md:text-sm uppercase leading-tight md:leading-relaxed mb-4 md:mb-auto opacity-80 line-clamp-2 md:line-clamp-none">
+                                <p className="font-medium text-[11px] md:text-sm leading-snug md:leading-relaxed mb-4 md:mb-auto opacity-75 line-clamp-3 md:line-clamp-none normal-case">
                                     {service.description}
                                 </p>
 
                                 <div className="mt-auto pt-3 md:pt-8 border-t-[2px] border-current flex items-center justify-between">
-                                    <span className="text-[7px] md:text-[8px] font-black uppercase tracking-widest group-hover:text-primary transition-colors">Launch</span>
-                                    <div className="w-5 h-5 md:w-8 md:h-8 rounded-full brutalist-border flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
-                                        <ArrowRight className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                                    <span className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] group-hover:text-primary transition-colors">Launch</span>
+                                    <div className="w-7 h-7 md:w-9 md:h-9 rounded-full brutalist-border flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+                                        <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
                                     </div>
                                 </div>
                             </motion.div>
